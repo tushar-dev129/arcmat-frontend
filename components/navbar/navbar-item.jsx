@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "./utils";
 
 export const NavbarItem = ({ item, activeItem, onMouseEnter, onMouseLeave, isFirst }) => {
     const isActive = activeItem === item.name;
+    const categoryId = item.id || item._id;
+    const href = categoryId ? `/productlist?category=${categoryId}` : "/productlist";
 
     return (
         <li
@@ -11,9 +14,10 @@ export const NavbarItem = ({ item, activeItem, onMouseEnter, onMouseLeave, isFir
             onMouseEnter={() => onMouseEnter(item.name)}
             onMouseLeave={onMouseLeave}
         >
-            <button
+            <Link
+                href={href}
                 className={cn(
-                    "w-full px-3 py-2 text-[13px] font-bold transition-all duration-200 outline-none rounded-full whitespace-nowrap",
+                    "block px-3 py-2 text-[13px] font-bold transition-all duration-200 outline-none rounded-full whitespace-nowrap text-center",
                     item.isSpecial ? "text-[hsl(15,80%,65%)]" : "text-[hsl(20,10%,15%)]",
                     isActive
                         ? "bg-[#ead4ce] text-[hsl(20,10%,15%)]"
@@ -21,7 +25,7 @@ export const NavbarItem = ({ item, activeItem, onMouseEnter, onMouseLeave, isFir
                 )}
             >
                 {item.name}
-            </button>
+            </Link>
         </li>
     );
 };

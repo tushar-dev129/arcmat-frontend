@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { cn } from "./utils";
 
 export const MegaMenuSidebar = ({ categories, hoveredCategory, setHoveredCategory, itemName, parentCategoryId }) => {
@@ -8,16 +9,19 @@ export const MegaMenuSidebar = ({ categories, hoveredCategory, setHoveredCategor
             <h3 className="text-xl font-bold mb-6 px-6 text-[hsl(20,10%,15%)]">{itemName}</h3>
             <ul className="space-y-0">
                 {categories?.map((category) => {
+                    const categoryId = category.id || category._id;
+                    const href = categoryId ? `/productlist?category=${categoryId}` : "/productlist";
+
                     return (
                         <li key={category.name}>
-                            <button
+                            <Link
+                                href={href}
                                 className={cn(
                                     "w-full flex items-center justify-between px-6 py-3 text-[15px] transition-colors duration-150",
                                     hoveredCategory === category.name
                                         ? "bg-[#ead4ce] text-[hsl(20,10%,15%)] font-bold shadow-sm"
                                         : "hover:bg-[#ead4ce]/50 text-[hsl(20,10%,15%)]/80"
                                 )}
-                                onClick={() => setHoveredCategory(category.name)}
                                 onMouseEnter={() => setHoveredCategory(category.name)}
                             >
                                 <span>{category.name}</span>
@@ -40,7 +44,7 @@ export const MegaMenuSidebar = ({ categories, hoveredCategory, setHoveredCategor
                                         <path d="m9 18 6-6-6-6" />
                                     </svg>
                                 )}
-                            </button>
+                            </Link>
                         </li>
                     );
                 })}

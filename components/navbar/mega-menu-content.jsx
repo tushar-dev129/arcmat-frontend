@@ -11,9 +11,14 @@ export const MegaMenuContent = ({ activeCategory, hoveredCategory, image, catego
                 key={hoveredCategory}
                 className="flex-1 animate-fade-in flex flex-col"
             >
-                <h3 className="text-xl font-bold mb-6 text-[hsl(20,10%,15%)]">
-                    {activeCategory?.name}
-                </h3>
+                <Link 
+                    href={activeCategory?.id ? `/productlist?category=${activeCategory.id}` : "/productlist"}
+                    className="block group/title"
+                >
+                    <h3 className="text-xl font-bold mb-6 text-[hsl(20,10%,15%)] group-hover/title:text-[hsl(20,10%,45%)] transition-colors">
+                        {activeCategory?.name}
+                    </h3>
+                </Link>
 
                 <div className="grid grid-cols-2 gap-x-12 gap-y-8">
                     {activeCategory?.links?.map((column, colIndex) => (

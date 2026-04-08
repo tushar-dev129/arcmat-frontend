@@ -163,6 +163,15 @@ export const MobileMenu = () => {
                                                     className="overflow-hidden bg-[#fafafa] rounded-xl mb-4"
                                                 >
                                                     <ul className="py-2">
+                                                        <li className="px-4 py-2 border-b border-gray-100/50">
+                                                            <Link
+                                                                href={item.id ? `/productlist?category=${item.id}` : "/productlist"}
+                                                                onClick={() => setMobileOpen(false)}
+                                                                className="text-[15px] font-bold text-[#e09a74] hover:underline"
+                                                            >
+                                                                View All {item.name}
+                                                            </Link>
+                                                        </li>
                                                         {item.categories?.map((category, subIndex) => {
                                                             const isSubOpen = openSubIndex === subIndex;
                                                             return (
@@ -195,6 +204,13 @@ export const MobileMenu = () => {
                                                                                 className="overflow-hidden"
                                                                             >
                                                                                 <div className="pl-4 pr-2 py-2 grid grid-cols-1 gap-1">
+                                                                                    <Link
+                                                                                        href={category.id ? `/productlist?category=${category.id}` : "/productlist"}
+                                                                                        onClick={() => setMobileOpen(false)}
+                                                                                        className="block py-2 px-3 text-sm font-bold text-[#e09a74] hover:underline border-b border-gray-100/30 mb-1"
+                                                                                    >
+                                                                                        View All {category.name}
+                                                                                    </Link>
                                                                                     {category.links.flat().map((link) => {
                                                                                         const linkCategoryData = category.children?.find(child => child.name === link);
                                                                                         const categoryId = linkCategoryData?._id || linkCategoryData?.id || '';
