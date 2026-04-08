@@ -163,12 +163,13 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
     const handleDownloadProject = async (e) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsOptionsMenuOpen(false);
 
         try {
             setIsExporting(true);
-            toast.loading('Fetching all project data...', { id: 'project-export-fetch' });
 
             // 1. Fetch moodboard list
+            toast.loading('📂 Loading project spaces…', { id: 'project-export-fetch' });
             const listResponse = await moodboardService.getMoodboardList(_id);
             const spaces = listResponse?.data || [];
 
@@ -178,21 +179,32 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                 return;
             }
 
-            // 2. Fetch full details for each moodboard (products, costs, images)
-            const fullSpaces = await Promise.all(spaces.map(async (space) => {
+            // 2. Fetch full details sequentially so we can show per-space progress
+            const fullSpaces = [];
+            for (let i = 0; i < spaces.length; i++) {
+                const space = spaces[i];
+                toast.loading(
+                    `📥 Fetching space ${i + 1}/${spaces.length}: "${space.moodboard_name || 'Space'}"…`,
+                    { id: 'project-export-fetch' }
+                );
                 const detailResponse = await moodboardService.getMoodboardById(space._id);
-                return detailResponse?.data;
-            }));
+                if (detailResponse?.data) fullSpaces.push(detailResponse.data);
+            }
 
             toast.dismiss('project-export-fetch');
 
-            // 3. Trigger project-wide ZIP export (includes Excel + Renders)
-            await exportProjectToZip(project, fullSpaces.filter(s => s !== null));
+            if (fullSpaces.length === 0) {
+                toast.error('Could not load any space data');
+                return;
+            }
+
+            // 3. Trigger folder-wise ZIP export
+            await exportProjectToZip(project, fullSpaces);
 
         } catch (error) {
-            console.error('Failed to download project:', error);
+            console.error('[ProjectCard] Download failed:', error);
             toast.dismiss('project-export-fetch');
-            toast.error('Failed to fetch project details for export');
+            toast.error('Export failed — please try again');
         } finally {
             setIsExporting(false);
         }
@@ -210,10 +222,21 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             onClick={handleCardClick}
             className="bg-white rounded-[24px] border border-gray-100 p-4 flex flex-col md:flex-row gap-4 hover:shadow-lg hover:border-gray-200 transition-all group relative h-full w-full mx-auto md:mx-0 cursor-pointer"
         >
-            {/* Loader Overlay */}
+            {/* Navigation loader overlay */}
             {isRedirecting && (
                 <div className="absolute inset-0 z-50 bg-white/60 backdrop-blur-[2px] flex items-center justify-center animate-in fade-in duration-200 rounded-[24px]">
                     <Loader2 className="w-8 h-8 text-[#d9a88a] animate-spin" />
+                </div>
+            )}
+
+            {/* Export progress overlay */}
+            {isExporting && (
+                <div className="absolute inset-0 z-50 bg-white/75 backdrop-blur-[3px] flex flex-col items-center justify-center gap-3 rounded-[24px] pointer-events-none">
+                    <Loader2 className="w-9 h-9 text-[#d9a88a] animate-spin" />
+                    <p className="text-xs font-bold text-[#2d3142] animate-pulse text-center px-6">
+                        Exporting project…
+                    </p>
+                    <p className="text-[10px] text-gray-400">Please don't close this window</p>
                 </div>
             )}
             {/* Absolute Action Buttons (Hover) */}
@@ -243,9 +266,19 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                             <button
                                 onClick={handleDownloadProject}
                                 disabled={isExporting}
-                                className={`w-full text-left px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a] flex items-center gap-2 transition-colors cursor-pointer ${isExporting ? 'opacity-50 animate-pulse' : ''}`}
+                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
+                                    isExporting
+                                        ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a]'
+                                }`}
+                                title="Download all spaces as a folder-wise ZIP with Excel + CSV + images"
                             >
-                                <Download className="w-4 h-4" /> Download Project
+                                {isExporting ? (
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                    <Download className="w-4 h-4" />
+                                )}
+                                {isExporting ? 'Exporting…' : 'Download Project (ZIP)'}
                             </button>
                             <button
                                 onClick={handleCreateTemplate}

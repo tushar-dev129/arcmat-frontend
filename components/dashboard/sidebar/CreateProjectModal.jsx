@@ -1,14 +1,53 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { X, ChevronDown } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { X, ChevronDown, CheckCircle2 } from 'lucide-react';
 import clsx from 'clsx';
 import projectOptions from './project-options.json';
 import Button from '@/components/ui/Button';
 import { useCreateProject, useUpdateProject } from '@/hooks/useProject';
 import { useGetTemplates, useUseTemplate, useUpdateTemplate } from '@/hooks/useTemplate';
-import { Loader2, Briefcase, Plus } from 'lucide-react';
+import { Loader2, Briefcase } from 'lucide-react';
 import { toast } from '@/components/ui/Toast';
+
+// ─── Field definitions used by the completion tracker ─────────────────────────
+const SCRATCH_FIELDS = [
+    { key: 'name',             label: 'Project Name', icon: '📌', mandatory: true  },
+    { key: 'clientName',       label: 'Client',       icon: '👤', mandatory: false },
+    { key: 'location.city',    label: 'City',         icon: '📍', mandatory: false },
+    { key: 'type',             label: 'Type',         icon: '🏗️', mandatory: false },
+    { key: 'phase',            label: 'Phase',        icon: '🔁', mandatory: true  },
+    { key: 'size',             label: 'Size',         icon: '📐', mandatory: false },
+    { key: 'budget',           label: 'Budget',       icon: '💰', mandatory: false },
+    { key: 'description',      label: 'Description',  icon: '📝', mandatory: false },
+];
+
+/** Resolve deeply-nested values like 'location.city' from formData */
+function resolveField(formData, key) {
+    if (key.includes('.')) {
+        const [parent, child] = key.split('.');
+        return formData[parent]?.[child] ?? '';
+    }
+    return formData[key] ?? '';
+}
+
+/** Compute per-field filled state + overall % */
+function useFormCompletion(formData, isTemplate, activeTab) {
+    return useMemo(() => {
+        if (isTemplate || activeTab === 'template') return { pct: 0, fields: [], allMandatoryFilled: false };
+
+        const fieldStates = SCRATCH_FIELDS.map(f => ({
+            ...f,
+            filled: String(resolveField(formData, f.key)).trim().length > 0,
+        }));
+
+        const filled  = fieldStates.filter(f => f.filled).length;
+        const pct     = Math.round((filled / fieldStates.length) * 100);
+        const allMandatoryFilled = fieldStates.filter(f => f.mandatory).every(f => f.filled);
+
+        return { pct, fields: fieldStates, allMandatoryFilled };
+    }, [formData, isTemplate, activeTab]);
+}
 
 export default function CreateProjectModal({ isOpen, onClose, project = null, isTemplate = false }) {
     const isEditMode = !!project;
@@ -42,6 +81,8 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
         enabled: isOpen && !isEditMode && activeTab === 'template'
     });
     const [selectedTemplateId, setSelectedTemplateId] = useState('');
+
+    const { pct, fields: completionFields, allMandatoryFilled } = useFormCompletion(formData, isTemplate, activeTab);
 
     useEffect(() => {
         if (project) {
@@ -211,17 +252,74 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                 className="bg-white rounded-4xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200 will-change-transform"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex justify-between items-center p-8 bg-white border-b border-gray-50 shrink-0">
-                    <h2 className="text-3xl font-black text-[#2d3142] tracking-tight">
-                        {isTemplate ? 'Edit Template' : (isEditMode ? 'Edit Project' : 'New Project')}
-                    </h2>
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    >
-                        <X className="w-6 h-6 text-gray-400" />
-                    </button>
+                <div className="flex flex-col p-8 pb-0 bg-white border-b border-gray-50 shrink-0">
+                    {/* Title row */}
+                    <div className="flex justify-between items-start mb-5">
+                        <div>
+                            <h2 className="text-3xl font-black text-[#2d3142] tracking-tight">
+                                {isTemplate ? 'Edit Template' : (isEditMode ? 'Edit Project' : 'New Project')}
+                            </h2>
+                            {!isTemplate && !isEditMode && activeTab === 'scratch' && (
+                                <p className={clsx(
+                                    'text-xs font-bold mt-1 transition-colors',
+                                    pct === 100 ? 'text-green-600' : 'text-gray-400'
+                                )}>
+                                    {pct === 100
+                                        ? '✓ All fields completed — ready to create!'
+                                        : `${pct}% complete — fill all fields for best results`}
+                                </p>
+                            )}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="p-1 hover:bg-gray-100 rounded-full transition-colors shrink-0 ml-4"
+                        >
+                            <X className="w-6 h-6 text-gray-400" />
+                        </button>
+                    </div>
+
+                    {/* Completion tracker — only shown in scratch mode, not edit, not template */}
+                    {!isTemplate && !isEditMode && activeTab === 'scratch' && (
+                        <div className="pb-5">
+                            {/* Progress bar */}
+                            <div className="relative h-1.5 bg-gray-100 rounded-full overflow-hidden mb-3">
+                                <div
+                                    className={clsx(
+                                        'absolute left-0 top-0 h-full rounded-full transition-all duration-500',
+                                        pct === 100 ? 'bg-green-500' : 'bg-[#d9a88a]'
+                                    )}
+                                    style={{ width: `${pct}%` }}
+                                />
+                            </div>
+
+                            {/* Field dots */}
+                            <div className="flex items-center gap-2 flex-wrap">
+                                {completionFields.map((f) => (
+                                    <div
+                                        key={f.key}
+                                        title={f.filled ? `${f.label} ✓` : `${f.label}${f.mandatory ? ' (required)' : ''}`}
+                                        className={clsx(
+                                            'flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold transition-all duration-300',
+                                            f.filled
+                                                ? f.mandatory
+                                                    ? 'bg-[#2d3142] text-white'
+                                                    : 'bg-[#d9a88a]/20 text-[#c2896a]'
+                                                : f.mandatory
+                                                    ? 'bg-red-50 text-red-400 border border-red-100'
+                                                    : 'bg-gray-100 text-gray-400'
+                                        )}
+                                    >
+                                        <span>{f.icon}</span>
+                                        <span>{f.label}</span>
+                                        {f.filled && (
+                                            <CheckCircle2 className="w-2.5 h-2.5 ml-0.5" />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-8 pt-6 space-y-8 custom-scrollbar overscroll-contain">
@@ -512,8 +610,16 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                         type="submit"
                         disabled={createProjectMutation.isPending || updateProjectMutation.isPending || useTemplateMutation.isPending}
                         onClick={handleSubmit}
-                        className="w-full bg-[#d9a88a] hover:bg-white border hover:border-[#d9a88a] hover:text-[#d9a88a] text-white py-5 rounded-2xl text-lg font-bold transition-all shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className={clsx(
+                            'w-full border text-white py-5 rounded-2xl text-lg font-bold transition-all shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2',
+                            !isTemplate && !isEditMode && activeTab === 'scratch' && pct === 100
+                                ? 'bg-green-600 hover:bg-green-700 border-green-600 shadow-green-100'
+                                : 'bg-[#d9a88a] hover:bg-white hover:border-[#d9a88a] hover:text-[#d9a88a] border-[#d9a88a]'
+                        )}
                     >
+                        {!isTemplate && !isEditMode && activeTab === 'scratch' && pct === 100 && (
+                            <CheckCircle2 className="w-5 h-5" />
+                        )}
                         {isTemplate 
                             ? (updateTemplateMutation.isPending ? 'Updating Template...' : 'Update Template')
                             : (isEditMode
