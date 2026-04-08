@@ -16,7 +16,8 @@ import BulkActionsBar from './BulkActionsBar';
 import BulkUploadModal from './BulkUploadModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { getProductImageUrl } from '@/lib/productUtils';
-import { Pencil, Trash2, Lock, Unlock } from 'lucide-react';
+import { Pencil, Trash2, Lock, Unlock, CheckSquare, Square } from 'lucide-react';
+
 
 export default function VendorProductTable({ products = [] }) {
   const router = useRouter();
@@ -28,8 +29,24 @@ export default function VendorProductTable({ products = [] }) {
   const deleteProductMutation = useDeleteProduct();
   const updateProductMutation = useUpdateProduct();
 
-  const { openProductFormModal, openBulkUploadModal } = useUIStore();
-  const { setLoading } = useLoader();
+  const { selectedProducts, toggleSelection, setSelectedProducts, clearSelection } = useProductStore();
+
+  // Select-all for current page
+  const allSelected = products.length > 0 && products.every(p => selectedProducts.includes(p._id || p.id));
+  const someSelected = products.some(p => selectedProducts.includes(p._id || p.id));
+
+  const handleSelectAll = () => {
+    if (allSelected) {
+      // Deselect all on this page
+      const pageIds = products.map(p => p._id || p.id);
+      setSelectedProducts(selectedProducts.filter(id => !pageIds.includes(id)));
+    } else {
+      // Add all on this page to selection
+      const pageIds = products.map(p => p._id || p.id);
+      const merged = [...new Set([...selectedProducts, ...pageIds])];
+      setSelectedProducts(merged);
+    }
+  };
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -73,31 +90,36 @@ export default function VendorProductTable({ products = [] }) {
 
   return (
     <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+      {/* Bulk actions bar — shows when any products selected */}
+      <BulkActionsBar products={products} />
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Image
+              {/* Select-all checkbox */}
+              <th className="w-12 px-4 py-3">
+                <button
+                  onClick={handleSelectAll}
+                  className="text-gray-400 hover:text-[#e09a74] transition-colors"
+                  title={allSelected ? 'Deselect all' : 'Select all'}
+                >
+                  {allSelected ? (
+                    <CheckSquare className="w-5 h-5 text-[#e09a74]" />
+                  ) : someSelected ? (
+                    <CheckSquare className="w-5 h-5 text-[#e09a74] opacity-50" />
+                  ) : (
+                    <Square className="w-5 h-5" />
+                  )}
+                </button>
               </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Product Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Unique Code
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Date Created
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Last Updated
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
-                Actions
-              </th>
+              <th className="px-4 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Image</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Product Name</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Unique Code</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Date Created</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Last Updated</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Status</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -107,9 +129,30 @@ export default function VendorProductTable({ products = [] }) {
               const name = product.product_name || product.name;
               const isActive = product.status === 1 || product.status === 'Active' || product.isActive === true;
               const status = product.status ?? (isActive ? 'Active' : 'Inactive');
+              const isSelected = selectedProducts.includes(id);
 
               return (
-                <tr key={id} className="hover:bg-gray-50">
+                <tr
+                  key={id}
+                  className={clsx(
+                    'transition-colors',
+                    isSelected ? 'bg-[#fef7f2] border-l-4 border-l-[#e09a74]' : 'hover:bg-gray-50 border-l-4 border-l-transparent'
+                  )}
+                >
+                  {/* Row checkbox */}
+                  <td className="w-12 px-4 py-4">
+                    <button
+                      onClick={() => toggleSelection(id)}
+                      className="text-gray-400 hover:text-[#e09a74] transition-colors"
+                    >
+                      {isSelected ? (
+                        <CheckSquare className="w-5 h-5 text-[#e09a74]" />
+                      ) : (
+                        <Square className="w-5 h-5" />
+                      )}
+                    </button>
+                  </td>
+
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="h-12 w-12 bg-gray-100 rounded overflow-hidden">
                       {images?.[0] ? (
@@ -257,7 +300,6 @@ export default function VendorProductTable({ products = [] }) {
           </div> */}
         </div>
       )}
-      <BulkActionsBar products={products} />
       <BulkUploadModal />
 
       <ConfirmationModal

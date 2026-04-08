@@ -3,141 +3,141 @@
 import { useState } from 'react';
 import { useProductStore } from '@/store/useProductStore';
 import { useUIStore } from '@/store/useUIStore';
-import { CATEGORIES } from '@/lib/mockData/categories';
 import { useAuth } from '@/hooks/useAuth';
 import { useUpdateProduct, useDeleteProduct } from '@/hooks/useProduct';
-import { toast } from '../ui/Toast';
+import { toast } from 'sonner';
+import { Trash2, CheckCircle, XCircle, Edit, X, ChevronDown } from 'lucide-react';
+import ConfirmationModal from '@/components/ui/ConfirmationModal';
 
 export default function BulkActionsBar({ products = [] }) {
   const {
     selectedProducts,
-    bulkUpdateStatus,
-    bulkUpdateCategory,
-    bulkDelete,
     clearSelection,
   } = useProductStore();
   const { user } = useAuth();
-  const isAdmin = user?.role === 'admin';
-
   const { openProductFormModal } = useUIStore();
-  const [selectedAction, setSelectedAction] = useState('');
 
-  // If no products selected, don't render anything
-  if (selectedProducts.length === 0) return null;
+  const [selectedAction, setSelectedAction] = useState('');
+  const [isPending, setIsPending] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
 
   const updateProductMutation = useUpdateProduct();
   const deleteProductMutation = useDeleteProduct();
 
-  const handleBulkAction = async () => {
+  // Not visible until something is selected
+  if (selectedProducts.length === 0) return null;
+
+  const handleApply = async () => {
     if (!selectedAction) return;
 
-    try {
-      switch (selectedAction) {
-        case 'edit':
-          if (selectedProducts.length === 1) {
-            const productToEdit = products.find((p) => (p._id || p.id) === selectedProducts[0]);
-            if (productToEdit) {
-              openProductFormModal(productToEdit);
-            }
-          } else {
-            toast.error('Please select only one product to edit');
-          }
-          break;
-
-        case 'activate':
-        case 'deactivate':
-          const isActivate = selectedAction === 'activate';
-          await Promise.all(
-            selectedProducts.map(id =>
-              updateProductMutation.mutateAsync({ id, data: { status: isActivate ? 1 : 0 } })
-            )
-          );
-          toast.success(`${selectedProducts.length} products ${isActivate ? 'activated' : 'deactivated'}`);
-          break;
-
-        case 'delete':
-          if (confirm(`Delete ${selectedProducts.length} products? This action cannot be undone.`)) {
-            await Promise.all(
-              selectedProducts.map(id => deleteProductMutation.mutateAsync(id))
-            );
-            toast.success(`${selectedProducts.length} products deleted`);
-          }
-          break;
-
-        default:
-          toast.info("This bulk action is not yet implemented with the API.");
-      }
-    } catch (error) {
-      toast.error("Failed to complete some bulk actions. Please try again.");
+    if (selectedAction === 'delete') {
+      setIsDeleteConfirmOpen(true);
+      return;
     }
 
-    if (selectedAction !== 'edit') {
-      clearSelection();
-      setSelectedAction('');
-    } else {
+    setIsPending(true);
+    try {
+      if (selectedAction === 'edit') {
+        if (selectedProducts.length === 1) {
+          const p = products.find(p => (p._id || p.id) === selectedProducts[0]);
+          if (p) openProductFormModal(p);
+        } else {
+          toast.error('Select only one product to edit');
+        }
+      } else if (selectedAction === 'activate' || selectedAction === 'deactivate') {
+        const newStatus = selectedAction === 'activate' ? 1 : 0;
+        await Promise.all(
+          selectedProducts.map(id =>
+            updateProductMutation.mutateAsync({ id, data: { status: newStatus } })
+          )
+        );
+        toast.success(
+          `${selectedProducts.length} product${selectedProducts.length !== 1 ? 's' : ''} ${selectedAction === 'activate' ? 'activated' : 'deactivated'}`
+        );
+        clearSelection();
+      }
+    } catch {
+      toast.error('Failed to complete some actions. Please try again.');
+    } finally {
+      setIsPending(false);
       setSelectedAction('');
     }
   };
 
+  const handleConfirmDelete = async () => {
+    setIsPending(true);
+    try {
+      await Promise.all(selectedProducts.map(id => deleteProductMutation.mutateAsync(id)));
+      toast.success(`${selectedProducts.length} product${selectedProducts.length !== 1 ? 's' : ''} deleted`);
+      clearSelection();
+    } catch {
+      toast.error('Failed to delete some products.');
+    } finally {
+      setIsPending(false);
+      setSelectedAction('');
+      setIsDeleteConfirmOpen(false);
+    }
+  };
+
   return (
-    // CHANGED: 'sticky top-0' makes it stick to the top of the scrollable area
-    // 'z-30' ensures it floats above table headers
-    // 'border-b' puts the border on the bottom
-    <div className="sticky top-0 left-0 right-0 z-30 bg-white border-b border-gray-200 shadow-sm mb-4 rounded-lg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-bold text-gray-800 bg-gray-100 px-3 py-1 rounded-full">
+    <>
+      {/* Sticky selection toolbar */}
+      <div className="sticky top-0 z-30 mx-0 mb-0">
+        <div className="flex items-center justify-between gap-4 px-4 py-3 bg-[#2d3142] text-white rounded-t-lg shadow-lg">
+          {/* Left: count + clear */}
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-black bg-white/20 px-3 py-1 rounded-full">
               {selectedProducts.length} selected
             </span>
             <button
               onClick={clearSelection}
-              className="text-sm text-red-600 hover:text-red-800 font-medium transition-colors"
+              className="flex items-center gap-1 text-xs text-white/70 hover:text-white transition-colors font-bold"
             >
-              Clear Selection
+              <X className="w-3 h-3" />
+              Clear
             </button>
           </div>
 
-          <div className="flex items-center gap-3">
-            <select
-              value={selectedAction}
-              onChange={(e) => setSelectedAction(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#d9a88a] text-black"
-            >
-              <option value="">Select Action...</option>
-
-              {/* Only show Edit if exactly 1 item is selected */}
-              {selectedProducts.length === 1 && (
-                <option value="edit">Edit Product</option>
-              )}
-
-              {isAdmin && (
-                <>
-                  <option value="activate">Set Active</option>
-                  <option value="deactivate">Set Inactive</option>
-                </>
-              )}
-              <option value="delete">Delete</option>
-
-              <optgroup label="Move to Category">
-                {CATEGORIES.map((cat) => (
-                  <option key={cat.id} value={`category-${cat.id}`}>
-                    {cat.name}
-                  </option>
-                ))}
-              </optgroup>
-            </select>
+          {/* Right: action picker + apply */}
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <select
+                value={selectedAction}
+                onChange={(e) => setSelectedAction(e.target.value)}
+                className="appearance-none bg-white/10 border border-white/20 text-white text-sm font-bold rounded-xl px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer"
+              >
+                <option value="" className="text-gray-900">Choose action...</option>
+                {selectedProducts.length === 1 && (
+                  <option value="edit" className="text-gray-900">✏️ Edit Product</option>
+                )}
+                <option value="activate" className="text-gray-900">✅ Set Active</option>
+                <option value="deactivate" className="text-gray-900">🔒 Set Inactive</option>
+                <option value="delete" className="text-gray-900">🗑️ Delete Selected</option>
+              </select>
+              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/70 pointer-events-none" />
+            </div>
 
             <button
-              onClick={handleBulkAction}
-              disabled={!selectedAction}
-              className="px-4 py-2 bg-[#DCB095] text-white rounded-lg hover:bg-[#c99775] disabled:opacity-50 disabled:cursor-not-allowed font-medium shadow-sm transition-colors"
+              onClick={handleApply}
+              disabled={!selectedAction || isPending}
+              className="px-5 py-2 bg-[#d9a88a] text-white text-sm font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
             >
-              Apply
+              {isPending ? 'Working...' : 'Apply'}
             </button>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Delete confirmation */}
+      <ConfirmationModal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => { setIsDeleteConfirmOpen(false); setSelectedAction(''); }}
+        onConfirm={handleConfirmDelete}
+        title="Delete Products"
+        message={`Are you sure you want to permanently delete ${selectedProducts.length} product${selectedProducts.length !== 1 ? 's' : ''}? This cannot be undone.`}
+        confirmText={isPending ? 'Deleting...' : 'Delete'}
+        type="danger"
+      />
+    </>
   );
-}
+}
