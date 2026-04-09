@@ -5,7 +5,7 @@ const nextConfig = {
         return [
             {
                 source: '/api/proxy/:path*',
-                destination: 'https://arcmat-api.vercel.app/api/:path*',
+                destination: 'http://54.209.61.106:8000/api/:path*',
                 // destination: 'http://localhost:8000/api/:path*'
             },
         ];

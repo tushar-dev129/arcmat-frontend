@@ -123,6 +123,8 @@ export const useVerifyOtpMutation = () => {
     const flow = searchParams.get('flow');
     const { setLoading } = useLoader();
 
+    const queryClient = useQueryClient();
+
     return useMutation({
         mutationFn: (data) => authService.verifyOtp(data),
         onSuccess: async (data) => {
@@ -135,7 +137,6 @@ export const useVerifyOtpMutation = () => {
 
             // Force a refresh of user info to ensure all stores are in sync
             try {
-                const queryClient = useQueryClient();
                 await queryClient.invalidateQueries({ queryKey: ['user-info'] });
             } catch (e) { }
 
