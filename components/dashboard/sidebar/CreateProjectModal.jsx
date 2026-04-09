@@ -12,14 +12,14 @@ import { toast } from '@/components/ui/Toast';
 
 // ─── Field definitions used by the completion tracker ─────────────────────────
 const SCRATCH_FIELDS = [
-    { key: 'name',             label: 'Project Name', icon: '📌', mandatory: true  },
-    { key: 'clientName',       label: 'Client',       icon: '👤', mandatory: false },
-    { key: 'location.city',    label: 'City',         icon: '📍', mandatory: false },
-    { key: 'type',             label: 'Type',         icon: '🏗️', mandatory: false },
-    { key: 'phase',            label: 'Phase',        icon: '🔁', mandatory: true  },
-    { key: 'size',             label: 'Size',         icon: '📐', mandatory: false },
-    { key: 'budget',           label: 'Budget',       icon: '💰', mandatory: false },
-    { key: 'description',      label: 'Description',  icon: '📝', mandatory: false },
+    { key: 'name',             label: 'Project Name', mandatory: true  },
+    { key: 'clientName',       label: 'Client',       mandatory: false },
+    { key: 'location.city',    label: 'City',         mandatory: false },
+    { key: 'type',             label: 'Type',         mandatory: false },
+    { key: 'phase',            label: 'Phase',        mandatory: true  },
+    { key: 'size',             label: 'Size',         mandatory: false },
+    { key: 'budget',           label: 'Budget',       mandatory: false },
+    { key: 'description',      label: 'Description',  mandatory: false },
 ];
 
 /** Resolve deeply-nested values like 'location.city' from formData */
@@ -282,39 +282,25 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                     {/* Completion tracker — only shown in scratch mode, not edit, not template */}
                     {!isTemplate && !isEditMode && activeTab === 'scratch' && (
                         <div className="pb-5">
-                            {/* Progress bar */}
-                            <div className="relative h-1.5 bg-gray-100 rounded-full overflow-hidden mb-3">
-                                <div
-                                    className={clsx(
-                                        'absolute left-0 top-0 h-full rounded-full transition-all duration-500',
-                                        pct === 100 ? 'bg-green-500' : 'bg-[#d9a88a]'
-                                    )}
-                                    style={{ width: `${pct}%` }}
-                                />
-                            </div>
 
-                            {/* Field dots */}
-                            <div className="flex items-center gap-2 flex-wrap">
+
+                            {/* Field Status Grid */}
+                            <div className="grid grid-cols-4 md:grid-cols-8 gap-x-2 gap-y-3">
                                 {completionFields.map((f) => (
                                     <div
                                         key={f.key}
-                                        title={f.filled ? `${f.label} ✓` : `${f.label}${f.mandatory ? ' (required)' : ''}`}
-                                        className={clsx(
-                                            'flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold transition-all duration-300',
-                                            f.filled
-                                                ? f.mandatory
-                                                    ? 'bg-[#2d3142] text-white'
-                                                    : 'bg-[#d9a88a]/20 text-[#c2896a]'
-                                                : f.mandatory
-                                                    ? 'bg-red-50 text-red-400 border border-red-100'
-                                                    : 'bg-gray-100 text-gray-400'
-                                        )}
+                                        className="flex flex-col gap-1.5"
                                     >
-                                        <span>{f.icon}</span>
-                                        <span>{f.label}</span>
-                                        {f.filled && (
-                                            <CheckCircle2 className="w-2.5 h-2.5 ml-0.5" />
-                                        )}
+                                        <div className={clsx(
+                                            'h-1 rounded-full transition-all duration-500',
+                                            f.filled ? 'bg-[#e09a74]' : (f.mandatory ? 'bg-red-200' : 'bg-gray-100')
+                                        )} />
+                                        <span className={clsx(
+                                            'text-[9px] font-bold uppercase tracking-tight text-center truncate',
+                                            f.filled ? 'text-[#e09a74]' : 'text-gray-400'
+                                        )}>
+                                            {f.label === 'Project Name' ? 'Name' : f.label}
+                                        </span>
                                     </div>
                                 ))}
                             </div>

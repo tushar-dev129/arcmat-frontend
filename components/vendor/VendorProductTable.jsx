@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useProductStore } from '@/store/useProductStore';
 import { useUIStore } from '@/store/useUIStore';
-import { useDeleteProduct, useUpdateProduct } from '@/hooks/useProduct';
+import { useDeleteProduct, useUpdateProduct, useBulkDeleteProducts, useBulkApproveProducts } from '@/hooks/useProduct';
 import { useGetCategories } from '@/hooks/useCategory';
 import { useAuth } from '@/hooks/useAuth';
 import { useLoader } from '@/context/LoaderContext';
@@ -12,22 +12,24 @@ import StatusBadge from '../ui/StatusBadge';
 import { toast } from '../ui/Toast';
 import clsx from 'clsx';
 import Button from '../ui/Button';
-import BulkActionsBar from './BulkActionsBar';
 import BulkUploadModal from './BulkUploadModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import { getProductImageUrl } from '@/lib/productUtils';
-import { Pencil, Trash2, Lock, Unlock, CheckSquare, Square } from 'lucide-react';
+import { Pencil, Trash2, Lock, Unlock, CheckSquare, Square, X } from 'lucide-react';
 
 
 export default function VendorProductTable({ products = [] }) {
   const router = useRouter();
   const { vendorId } = useParams();
   const { user } = useAuth();
+  const { setLoading } = useLoader();
   const isAdmin = user?.role === 'admin';
   const effectiveVendorId = vendorId || user?._id || user?.id;
 
   const deleteProductMutation = useDeleteProduct();
   const updateProductMutation = useUpdateProduct();
+  const bulkDeleteMutation = useBulkDeleteProducts();
+  const bulkApproveMutation = useBulkApproveProducts();
 
   const { selectedProducts, toggleSelection, setSelectedProducts, clearSelection } = useProductStore();
 
@@ -49,6 +51,7 @@ export default function VendorProductTable({ products = [] }) {
   };
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
   const handleDelete = (productId, productName) => {
@@ -65,8 +68,49 @@ export default function VendorProductTable({ products = [] }) {
       toast.error(error.response?.data?.message || `Failed to delete product "${productToDelete.name}"`);
     } finally {
       setProductToDelete(null);
+      setIsDeleteModalOpen(false);
     }
   };
+
+  const handleBulkApprove = async () => {
+    if (selectedProducts.length === 0) return;
+    try {
+      setLoading(true);
+      await bulkApproveMutation.mutateAsync(selectedProducts);
+      toast.success(`${selectedProducts.length} product(s) approved successfully`);
+      clearSelection();
+      setIsApproveModalOpen(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to approve products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedProducts.length === 0) return;
+    try {
+      setLoading(true);
+      await bulkDeleteMutation.mutateAsync(selectedProducts);
+      toast.success(`${selectedProducts.length} product(s) deleted successfully`);
+      clearSelection();
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete products');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (productToDelete) {
+      confirmDeleteProduct();
+    } else if (selectedProducts.length > 0) {
+      handleBulkDelete();
+    }
+  };
+
+
 
   const handleToggleStatus = async (productId, currentStatus) => {
     try {
@@ -89,37 +133,89 @@ export default function VendorProductTable({ products = [] }) {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      {/* Bulk actions bar — shows when any products selected */}
-      <BulkActionsBar products={products} />
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden relative">
+      {/* Inline Bulk Actions Bar (Hidden for Admins as they use the primary top bar) */}
+      {selectedProducts.length > 0 && !isAdmin && (
+        <div className="sticky top-0 z-10 bg-indigo-50/80 backdrop-blur-md px-6 py-4 border-b border-indigo-100 flex items-center justify-between animate-in fade-in slide-in-from-top-4 duration-300">
+          <div className="flex items-center gap-3">
+            <div className="flex -space-x-2">
+              {products.filter(p => selectedProducts.includes(p._id || p.id)).slice(0, 3).map((p, i) => (
+                <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-white overflow-hidden shadow-sm">
+                  <img src={getProductImageUrl((p.product_images || p.images)?.[0])} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+            <div className="text-sm font-black text-indigo-900 leading-none">
+              {selectedProducts.length} <span className="text-indigo-600/70 font-bold uppercase tracking-widest text-[10px] ml-1">Products Selected</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsApproveModalOpen(true)}
+                className="bg-white text-emerald-600 border-emerald-100 hover:bg-emerald-50 hover:border-emerald-200 font-bold rounded-xl px-4 py-2 transition-all active:scale-95"
+              >
+                Approve Selected
+              </Button>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setProductToDelete(null); 
+                setIsDeleteModalOpen(true);
+              }}
+              className="bg-red-500 text-white border-transparent hover:bg-red-600 font-black rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-red-200 transition-all active:scale-95"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Selected</span>
+            </Button>
+            <button 
+              onClick={() => clearSelection()}
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-full transition-colors"
+              title="Clear selection"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              {/* Select-all checkbox */}
-              <th className="w-12 px-4 py-3">
-                <button
-                  onClick={handleSelectAll}
-                  className="text-gray-400 hover:text-[#e09a74] transition-colors"
-                  title={allSelected ? 'Deselect all' : 'Select all'}
-                >
-                  {allSelected ? (
-                    <CheckSquare className="w-5 h-5 text-[#e09a74]" />
-                  ) : someSelected ? (
-                    <CheckSquare className="w-5 h-5 text-[#e09a74] opacity-50" />
-                  ) : (
-                    <Square className="w-5 h-5" />
-                  )}
-                </button>
+              <th className="px-6 py-3 text-left w-12">
+                <input
+                  type="checkbox"
+                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
+                  checked={products.length > 0 && selectedProducts.length === products.length}
+                  onChange={handleSelectAll}
+                />
               </th>
-              <th className="px-4 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Image</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Product Name</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Unique Code</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Date Created</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Last Updated</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Product Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Unique Code
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Date Created
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Last Updated
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-bold text-gray-800 uppercase tracking-wider">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -132,27 +228,15 @@ export default function VendorProductTable({ products = [] }) {
               const isSelected = selectedProducts.includes(id);
 
               return (
-                <tr
-                  key={id}
-                  className={clsx(
-                    'transition-colors',
-                    isSelected ? 'bg-[#fef7f2] border-l-4 border-l-[#e09a74]' : 'hover:bg-gray-50 border-l-4 border-l-transparent'
-                  )}
-                >
-                  {/* Row checkbox */}
-                  <td className="w-12 px-4 py-4">
-                    <button
-                      onClick={() => toggleSelection(id)}
-                      className="text-gray-400 hover:text-[#e09a74] transition-colors"
-                    >
-                      {isSelected ? (
-                        <CheckSquare className="w-5 h-5 text-[#e09a74]" />
-                      ) : (
-                        <Square className="w-5 h-5" />
-                      )}
-                    </button>
+                <tr key={id} className={clsx("hover:bg-gray-50 transition-colors", selectedProducts.includes(id) && "bg-indigo-50/50")}>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <input
+                      type="checkbox"
+                      className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 h-4 w-4 cursor-pointer"
+                      checked={selectedProducts.includes(id)}
+                      onChange={() => toggleSelection(id)}
+                    />
                   </td>
-
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="h-12 w-12 bg-gray-100 rounded overflow-hidden">
                       {images?.[0] ? (
@@ -305,11 +389,25 @@ export default function VendorProductTable({ products = [] }) {
       <ConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={confirmDeleteProduct}
-        title="Delete Product"
-        message={`Are you sure you want to delete "${productToDelete?.name}"? This will also remove all its variants.`}
+        onConfirm={handleConfirmDelete}
+        title={productToDelete ? "Delete Product" : "Delete Selected Products"}
+        message={
+          productToDelete
+            ? `Are you sure you want to delete "${productToDelete.name}"? This will also remove all its variants.`
+            : `Are you sure you want to delete ${selectedProducts.length} selected product(s)? This will also remove all their variants.`
+        }
         confirmText="Delete"
         type="danger"
+      />
+
+      <ConfirmationModal
+        isOpen={isApproveModalOpen}
+        onClose={() => setIsApproveModalOpen(false)}
+        onConfirm={handleBulkApprove}
+        title="Approve Selected Products"
+        message={`This will mark ${selectedProducts.length} product(s) as Active/Approved.`}
+        confirmText="Approve"
+        type="warning"
       />
     </div>
   );

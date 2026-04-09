@@ -19,7 +19,6 @@ import { getProductImageUrl } from '@/lib/productUtils';
 import ProductGrid from '@/components/products/ProductGrid';
 import ProductFilters from '@/components/products/ProductFilters';
 import VendorProductTable from '@/components/vendor/VendorProductTable';
-import BulkActionsBar from '@/components/vendor/BulkActionsBar';
 import AttributeCompletionBanner from '@/components/vendor/AttributeCompletionBanner';
 import Pagination from '@/components/ui/Pagination';
 
@@ -426,7 +425,7 @@ export default function ProductsListPage() {
                         </div>
                     </div>
 
-                    {(isBrand || isAdmin) && <BulkActionsBar products={apiProducts} />}
+                    {isAdmin && <BulkActionsBar products={apiProducts} />}
 
                     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                         <VendorProductTable products={apiProducts} />

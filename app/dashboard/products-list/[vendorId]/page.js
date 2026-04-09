@@ -382,7 +382,7 @@ export default function ProductsListPage() {
               </div>
             </div>
 
-            {isBrand && <BulkActionsBar products={apiProducts} />}
+            {isAdmin && <BulkActionsBar products={apiProducts} />}
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <VendorProductTable products={apiProducts} />

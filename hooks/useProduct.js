@@ -117,6 +117,30 @@ export const useDeleteProduct = () => {
     });
 };
 
+// Hook to bulk delete products
+export const useBulkDeleteProducts = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: productService.bulkDeleteProducts,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.lists() });
+        },
+    });
+};
+
+// Hook to bulk approve products
+export const useBulkApproveProducts = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: productService.bulkApproveProducts,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: PRODUCT_KEYS.lists() });
+        },
+    });
+};
+
 // Hook to bulk import products/variants
 export const useBulkImportProduct = () => {
     const queryClient = useQueryClient();

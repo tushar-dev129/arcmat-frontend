@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Package, Search, ArrowLeft, Plus, Check, Info, Store, X, AlertCircle } from 'lucide-react';
 import clsx from 'clsx';
-import { useGetBrandInventory, useUpsertProductOverride } from '@/hooks/useRetailer';
+import { useGetBrandInventory, useUpsertProductOverride, useBulkAddInventory } from '@/hooks/useRetailer';
 import { getProductImageUrl } from '@/lib/productUtils';
 import Button from '@/components/ui/Button';
 import { toast } from '@/components/ui/Toast';
@@ -31,6 +31,63 @@ export default function BrandInventoryPage() {
     const brandInfo = products[0]?.brand;
 
     const upsertOverride = useUpsertProductOverride();
+    const bulkAddMutation = useBulkAddInventory();
+
+    const [selectedVariants, setSelectedVariants] = useState([]);
+    const [isGlobalSelectAll, setIsGlobalSelectAll] = useState(false);
+    const [excludedVariants, setExcludedVariants] = useState([]);
+
+    const toggleSelectAll = () => {
+        if (isGlobalSelectAll || selectedVariants.length > 0) {
+            setIsGlobalSelectAll(false);
+            setSelectedVariants([]);
+            setExcludedVariants([]);
+        } else {
+            setIsGlobalSelectAll(true);
+            setSelectedVariants([]);
+            setExcludedVariants([]);
+        }
+    };
+
+    const toggleVariant = (productId, variantId) => {
+        if (isGlobalSelectAll) {
+            setExcludedVariants(prev => {
+                if (prev.includes(variantId)) return prev.filter(id => id !== variantId);
+                return [...prev, variantId];
+            });
+        } else {
+            setSelectedVariants(prev => {
+                const exists = prev.find(v => v.variantId === variantId);
+                if (exists) return prev.filter(v => v.variantId !== variantId);
+                return [...prev, { productId, variantId }];
+            });
+        }
+    };
+
+    const handleBulkAdd = async () => {
+        if (!isGlobalSelectAll && !selectedVariants.length) return;
+        try {
+            const result = await bulkAddMutation.mutateAsync({
+                isGlobalSelectAll,
+                brandId,
+                search: searchTerm,
+                excludedVariantIds: excludedVariants,
+                variants: isGlobalSelectAll ? [] : selectedVariants.map(v => ({ productId: v.productId, variantId: v.variantId })),
+                retailerId: retailerIdFromParams
+            });
+            toast.success(result?.message || `Successfully added products`);
+            setIsGlobalSelectAll(false);
+            setSelectedVariants([]);
+            setExcludedVariants([]);
+        } catch (error) {
+            toast.error(error.message || 'Bulk add failed');
+        }
+    };
+
+    const isAnySelected = isGlobalSelectAll || selectedVariants.length > 0;
+    const selectionText = isGlobalSelectAll 
+        ? (excludedVariants.length > 0 ? `All variants selected (except ${excludedVariants.length})` : 'All available brand inventory selected')
+        : `${selectedVariants.length} variants selected`;
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -77,7 +134,28 @@ export default function BrandInventoryPage() {
     };
 
     return (
-        <div className="p-6 space-y-6 max-w-7xl mx-auto">
+        <div className="p-6 space-y-6 max-w-7xl mx-auto relative pb-24">
+            {isAnySelected && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-gray-800 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-6 animate-in slide-in-from-bottom">
+                    <span className="font-bold text-sm whitespace-nowrap">
+                        <span className="text-[#e09a74] mr-1">{isGlobalSelectAll ? 'Global' : selectedVariants.length}</span> {selectionText}
+                    </span>
+                    <Button 
+                        onClick={handleBulkAdd}
+                        isLoading={bulkAddMutation.isPending}
+                        className="bg-[#e09a74] hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                    >
+                        Add Selected
+                    </Button>
+                    <button 
+                        onClick={() => { setIsGlobalSelectAll(false); setSelectedVariants([]); setExcludedVariants([]); }}
+                        className="p-1 hover:bg-gray-800 rounded-full transition-colors flex-shrink-0"
+                        title="Clear selection"
+                    >
+                        <X className="w-5 h-5 text-gray-400" />
+                    </button>
+                </div>
+            )}
             {/* Breadcrumb / Back */}
             <button
                 onClick={() => router.back()}
@@ -144,7 +222,22 @@ export default function BrandInventoryPage() {
                         <thead>
                             <tr className="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 uppercase tracking-widest font-black">
                                 <th className="px-6 py-4 font-bold min-w-[300px]">Product Info</th>
-                                <th className="px-6 py-4 font-bold min-w-[350px]">Available Variants & Actions</th>
+                                <th className="px-6 py-4 font-bold min-w-[350px]">
+                                    <div className="flex items-center justify-between">
+                                        <span>Available Variants & Actions</span>
+                                        {products.flatMap(p => p.variants).filter(v => !v.isAdded).length > 0 && (
+                                            <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors shadow-sm normal-case">
+                                                <input 
+                                                    type="checkbox" 
+                                                    className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74]"
+                                                    checked={isGlobalSelectAll || (selectedVariants.length > 0 && selectedVariants.length === products.flatMap(p => p.variants).filter(v => !v.isAdded).length)}
+                                                    onChange={toggleSelectAll}
+                                                />
+                                                <span className="text-xs font-bold text-gray-700 tracking-normal">Select All</span>
+                                            </label>
+                                        )}
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -182,16 +275,33 @@ export default function BrandInventoryPage() {
                                     </td>
                                     <td className="px-6 py-4 align-top">
                                         <div className="space-y-2">
-                                            {product.variants?.map(variant => (
-                                                <div key={variant._id} className="flex flex-wrap items-center justify-between p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:border-[#e09a74]/30 transition-all gap-4">
-                                                    <div className="min-w-0 flex-1">
-                                                        <p className="text-xs font-bold text-gray-900 truncate">
-                                                            {variant.variant_name || 'Standard Variant'}
-                                                        </p>
-                                                        <div className="text-[10px] text-gray-500 font-mono mt-0.5 flex items-center gap-2">
-                                                            <span>SKU: {variant.skucode || 'N/A'}</span>
-                                                            <span className="text-gray-300">•</span>
-                                                            <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
+                                            {product.variants?.map(variant => {
+                                                const isSelected = isGlobalSelectAll 
+                                                    ? !excludedVariants.includes(variant._id) 
+                                                    : selectedVariants.some(v => v.variantId === variant._id);
+
+                                                return (
+                                                <div key={variant._id} className={clsx(
+                                                    "flex flex-wrap items-center justify-between p-3 rounded-xl border shadow-sm transition-all gap-4",
+                                                    isSelected ? "bg-[#e09a74]/5 border-[#e09a74]/30" : "bg-white border-gray-100 hover:border-[#e09a74]/30"
+                                                )}>
+                                                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                                                        <input 
+                                                            type="checkbox"
+                                                            disabled={variant.isAdded}
+                                                            checked={variant.isAdded ? false : isSelected}
+                                                            onChange={() => toggleVariant(product._id, variant._id)}
+                                                            className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shrink-0"
+                                                        />
+                                                        <div className="min-w-0 flex-1">
+                                                            <p className="text-xs font-bold text-gray-900 truncate">
+                                                                {variant.variant_name || 'Standard Variant'}
+                                                            </p>
+                                                            <div className="text-[10px] text-gray-500 font-mono mt-0.5 flex items-center gap-2">
+                                                                <span>SKU: {variant.skucode || 'N/A'}</span>
+                                                                <span className="text-gray-300">•</span>
+                                                                <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <button
@@ -212,7 +322,7 @@ export default function BrandInventoryPage() {
                                                         )}
                                                     </button>
                                                 </div>
-                                            ))}
+                                            )})}
                                         </div>
                                     </td>
                                 </tr>

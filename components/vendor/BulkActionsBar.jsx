@@ -6,8 +6,11 @@ import { useUIStore } from '@/store/useUIStore';
 import { useAuth } from '@/hooks/useAuth';
 import { useUpdateProduct, useDeleteProduct } from '@/hooks/useProduct';
 import { toast } from 'sonner';
-import { Trash2, CheckCircle, XCircle, Edit, X, ChevronDown } from 'lucide-react';
+import { Trash2, Edit, X, ChevronDown, CheckCircle2 } from 'lucide-react';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
+import { getProductImageUrl } from '@/lib/productUtils';
+import { useBulkApproveProducts } from '@/hooks/useProduct';
+import clsx from 'clsx';
 
 export default function BulkActionsBar({ products = [] }) {
   const {
@@ -23,9 +26,10 @@ export default function BulkActionsBar({ products = [] }) {
 
   const updateProductMutation = useUpdateProduct();
   const deleteProductMutation = useDeleteProduct();
+  const bulkApproveMutation = useBulkApproveProducts();
 
-  // Not visible until something is selected
-  if (selectedProducts.length === 0) return null;
+  // Strictly restricted to Admins and only visible when something is selected
+  if (user?.role !== 'admin' || selectedProducts.length === 0) return null;
 
   const handleApply = async () => {
     if (!selectedAction) return;
@@ -82,47 +86,67 @@ export default function BulkActionsBar({ products = [] }) {
   return (
     <>
       {/* Sticky selection toolbar */}
-      <div className="sticky top-0 z-30 mx-0 mb-0">
-        <div className="flex items-center justify-between gap-4 px-4 py-3 bg-[#2d3142] text-white rounded-t-lg shadow-lg">
-          {/* Left: count + clear */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-black bg-white/20 px-3 py-1 rounded-full">
-              {selectedProducts.length} selected
-            </span>
-            <button
-              onClick={clearSelection}
-              className="flex items-center gap-1 text-xs text-white/70 hover:text-white transition-colors font-bold"
-            >
-              <X className="w-3 h-3" />
-              Clear
-            </button>
+      <div className="sticky top-0 z-30 mx-0 mb-0 animate-in fade-in slide-in-from-top-4 duration-500">
+        <div className="flex items-center justify-between gap-4 px-6 py-4 bg-orange-50/70 backdrop-blur-md text-[#2d3142] rounded-xl shadow-2xl shadow-orange-900/5 border border-[#e09a74]/30">
+          {/* Left: count + thumbnails + clear */}
+          <div className="flex items-center gap-4">
+            <div className="flex -space-x-3">
+              {products.filter(p => selectedProducts.includes(p._id || p.id)).slice(0, 3).map((p, i) => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-white overflow-hidden shadow-sm">
+                  <img src={getProductImageUrl((p.product_images || p.images)?.[0])} alt="" className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+            
+            <div className="flex flex-col">
+              <span className="text-sm font-black leading-none flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="text-[#e09a74]">{selectedProducts.length}</span> Products Selected
+              </span>
+              <button
+                onClick={clearSelection}
+                className="mt-1 flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#e09a74] transition-colors font-bold uppercase tracking-widest text-left"
+              >
+                <X className="w-2.5 h-2.5" />
+                Clear Selection
+              </button>
+            </div>
           </div>
 
           {/* Right: action picker + apply */}
-          <div className="flex items-center gap-2">
-            <div className="relative">
+          <div className="flex items-center gap-3">
+            <div className="relative group">
               <select
                 value={selectedAction}
                 onChange={(e) => setSelectedAction(e.target.value)}
-                className="appearance-none bg-white/10 border border-white/20 text-white text-sm font-bold rounded-xl px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-white/30 cursor-pointer"
+                className="appearance-none bg-white border border-[#e09a74]/20 text-[#2d3142] text-[10px] font-black rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-4 focus:ring-orange-100 cursor-pointer transition-all shadow-sm group-hover:shadow-md uppercase tracking-widest"
               >
-                <option value="" className="text-gray-900">Choose action...</option>
+                <option value="">CHOOSE ACTION...</option>
                 {selectedProducts.length === 1 && (
-                  <option value="edit" className="text-gray-900">✏️ Edit Product</option>
+                  <option value="edit">EDIT PRODUCT</option>
                 )}
-                <option value="activate" className="text-gray-900">✅ Set Active</option>
-                <option value="deactivate" className="text-gray-900">🔒 Set Inactive</option>
-                <option value="delete" className="text-gray-900">🗑️ Delete Selected</option>
+                <option value="activate">SET ACTIVE</option>
+                <option value="deactivate">SET INACTIVE</option>
+                <option value="delete">DELETE PERMANENTLY</option>
               </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/70 pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#e09a74] pointer-events-none" />
             </div>
 
             <button
               onClick={handleApply}
               disabled={!selectedAction || isPending}
-              className="px-5 py-2 bg-[#d9a88a] text-white text-sm font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95"
+              className="px-6 py-3 bg-[#e09a74] text-white text-[10px] font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-lg shadow-orange-200 flex items-center gap-2 uppercase tracking-widest"
             >
-              {isPending ? 'Working...' : 'Apply'}
+              {isPending ? (
+                <>
+                  <div className="w-3 h-3 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Apply Action
+                </>
+              )}
             </button>
           </div>
         </div>

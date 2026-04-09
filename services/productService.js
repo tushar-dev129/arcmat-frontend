@@ -114,18 +114,42 @@ export const productService = {
         return response.data;
     },
 
+    // Bulk Delete Products
+    bulkDeleteProducts: async (productIds) => {
+        const response = await api.post('/product/bulk-delete', { productIds });
+        return response.data;
+    },
+
+    // Bulk Approve Products
+    bulkApproveProducts: async (productIds) => {
+        const response = await api.post('/product/bulk-approve', { productIds });
+        return response.data;
+    },
+
     // Bulk Import Products/Variants
-    bulkImport: async (file, type = 'product', productId = null) => {
+    // importSessionId: optional UUID to tag created records for retry/cleanup
+    bulkImport: async (file, type = 'product', productId = null, importSessionId = null) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('type', type);
         if (productId) {
             formData.append('productId', productId);
         }
+        if (importSessionId) {
+            formData.append('importSessionId', importSessionId);
+        }
         const response = await api.post('/product/bulk-import', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
+        });
+        return response.data;
+    },
+
+    // Clear all products OR variants created under a specific import session (for retry)
+    bulkClearSession: async (sessionId, step) => {
+        const response = await api.delete('/product/bulk-session', {
+            data: { sessionId, step }
         });
         return response.data;
     },

@@ -6,12 +6,18 @@ import { MessageSquare, User, Package, Calendar, MapPin, Phone, Mail, XCircle, L
 import { format } from 'date-fns';
 import { getProductThumbnail } from '@/lib/productUtils';
 
-const Field = ({ label, value, icon: Icon }) => (
+const Field = ({ label, value, icon: Icon, href }) => (
     <div>
         <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">{label}</p>
         <div className="flex items-center gap-2.5 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-[#2d3142]">
             {Icon && <Icon className="w-3.5 h-3.5 text-gray-300 shrink-0" />}
-            <span className="truncate">{value || '—'}</span>
+            {href ? (
+                <a href={href} className="truncate hover:text-[#e09a74] transition-colors font-semibold">
+                    {value || '—'}
+                </a>
+            ) : (
+                <span className="truncate">{value || '—'}</span>
+            )}
         </div>
     </div>
 );
@@ -134,8 +140,8 @@ export default function ProductLeadsPage() {
                                 <div className="grid grid-cols-2 gap-3">
                                     <Field label="Full Name" icon={User} value={`${selectedLead.firstName} ${selectedLead.lastName}`} />
                                     <Field label="Profession" value={`${selectedLead.profession || ''}${selectedLead.company ? ` @ ${selectedLead.company}` : ''}`} />
-                                    <Field label="Email" icon={Mail} value={selectedLead.email} />
-                                    <Field label="Phone" icon={Phone} value={selectedLead.tel} />
+                                    <Field label="Email" icon={Mail} value={selectedLead.email} href={`mailto:${selectedLead.email}`} />
+                                    <Field label="Phone" icon={Phone} value={selectedLead.tel} href={`tel:${selectedLead.tel}`} />
                                 </div>
                             </div>
 

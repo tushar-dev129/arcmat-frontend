@@ -2,31 +2,74 @@ import React, { useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Container from '../ui/Container'
 import Button from '../ui/Button'
-import { useGetCategories } from '@/hooks/useCategory'
+import { useGetCategoryTree } from '@/hooks/useCategory'
 import { useCompareStore } from '@/store/useCompareStore'
 import { Loader2 } from 'lucide-react'
 
+const findNodeAndDetermineDisplay = (tree, targetId) => {
+    if (targetId === 'All' || !targetId) {
+        return { nodesToDisplay: tree, parentNode: null };
+    }
+
+    let foundNode = null;
+    let foundParent = null;
+
+    const traverse = (nodes, parent = null) => {
+        for (const node of nodes) {
+            if (node._id === targetId || node.id === targetId) {
+                foundNode = node;
+                foundParent = parent;
+                return true;
+            }
+            if (node.children?.length > 0) {
+                if (traverse(node.children, node)) return true;
+            }
+        }
+        return false;
+    };
+    
+    traverse(tree);
+
+    if (!foundNode) return { nodesToDisplay: tree, parentNode: null };
+
+    // If the node has children, show its children as the drill-down options
+    if (foundNode.children && foundNode.children.length > 0) {
+        return { nodesToDisplay: foundNode.children, parentNode: foundNode };
+    }
+    
+    // If the node has NO children (it's a leaf node), gracefully fallback to showing its siblings
+    if (foundParent) {
+        return { nodesToDisplay: foundParent.children, parentNode: foundParent };
+    }
+
+    // Edge case: Level 1 node with no children -> show level 1 siblings
+    return { nodesToDisplay: tree, parentNode: null };
+}
+
 const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters, categoryCounts = {} }) => {
-    const { data: categoriesData, isLoading } = useGetCategories({ level: 1 });
+    const { data: treeDataRaw, isLoading } = useGetCategoryTree();
 
     const dynamicCategories = useMemo(() => {
-        if (!categoriesData) return [{ name: 'All', id: 'All', count: categoryCounts['All'] }];
+        const treeData = Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
+        if (!treeData || treeData.length === 0) return [];
+
+        const { nodesToDisplay, parentNode } = findNodeAndDetermineDisplay(treeData, selectedCategory);
 
         const uniqueNames = new Set();
-        const filtered = categoriesData.filter(cat => {
+        const mapped = nodesToDisplay.filter(cat => {
             const isDuplicate = uniqueNames.has(cat.name);
             uniqueNames.add(cat.name);
             return !isDuplicate;
-        });
-
-        const mapped = filtered.map(cat => ({
+        }).map(cat => ({
             name: cat.name,
-            id: cat._id || cat.id,
-            count: categoryCounts[cat._id || cat.id] || 0
+            id: cat._id || cat.id
         }));
 
-        return [{ name: 'All', id: 'All', count: categoryCounts['All'] }, ...mapped];
-    }, [categoriesData, categoryCounts]);
+        const rootId = parentNode ? (parentNode._id || parentNode.id) : 'All';
+        const allPillName = 'All'; // Represents resetting back to the current parent category layer
+        
+        return [{ name: allPillName, id: rootId }, ...mapped];
+    }, [treeDataRaw, selectedCategory]);
 
     const comparedCount = useCompareStore(state => state.comparedProducts.length);
     const openCompareModal = useCompareStore(state => state.openCompareModal);
@@ -66,12 +109,6 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
                                         }`}
                                 >
                                     <span>{cat.name}</span>
-                                    {cat.count && (
-                                        <span className={`text-[12px] px-2 py-0.5 rounded-full font-bold ${selectedCategory === cat.id ? 'bg-black/20 text-white' : 'bg-gray-400 text-white'
-                                            }`}>
-                                            {cat.count}
-                                        </span>
-                                    )}
                                 </button>
                             ))
                         )}

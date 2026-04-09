@@ -46,5 +46,10 @@ export const retailerService = {
     getRetailerProductDetail: async (productId) => {
         const response = await api.get(`/retailer/products/detail/${productId}`);
         return response.data;
+    },
+
+    bulkAddInventory: async (data) => {
+        const response = await api.post('/retailer/inventory/bulk-add', data);
+        return response.data;
     }
 };

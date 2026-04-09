@@ -135,7 +135,11 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
     if (name === "product_name" && !initialData) {
       setFormData(prev => ({
         ...prev,
-        product_url: generateSlug(value)
+        // Append the unique ID to the slug so two products with the same name
+        // always produce different URLs (e.g. "marble-tiles-PRD-ABC-123")
+        product_url: prev.product_unique_id
+          ? `${generateSlug(value)}-${prev.product_unique_id.toLowerCase()}`
+          : generateSlug(value)
       }));
     }
   };
@@ -352,12 +356,21 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
           </div>
 
           <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 border-b pb-2">Product Image (Identification Only)</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-2 border-b pb-2">
+              Product Image (Identification Only) <span className="text-red-500">*</span>
+            </h3>
             <p className="text-xs text-gray-500 mb-6 italic">This is the main image to identify the product. Specific images for individual colors or variants are added in the next step.</p>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-              <label className="aspect-square border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
-                <Upload className="w-6 h-6 text-gray-400 mb-2" />
-                <span className="text-xs text-gray-500">Add Images</span>
+              <label className={clsx(
+                "aspect-square border-2 border-dashed rounded-xl flex flex-col items-center justify-center cursor-pointer transition-colors",
+                errors.images 
+                  ? "border-red-500 bg-red-50" 
+                  : "border-gray-300 hover:bg-gray-50"
+              )}>
+                <Upload className={clsx("w-6 h-6 mb-2", errors.images ? "text-red-500" : "text-gray-400")} />
+                <span className={clsx("text-xs font-semibold", errors.images ? "text-red-600" : "text-gray-500")}>
+                  {errors.images ? "Image Required" : "Add Images"}
+                </span>
                 <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
               </label>
               {previewImages.map((src, idx) => (
@@ -369,6 +382,9 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
                 </div>
               ))}
             </div>
+            {errors.images && (
+              <p className="text-red-500 text-[10px] mt-2 font-bold animate-pulse">! Please upload a representative image to continue.</p>
+            )}
           </div>
 
           {initialData && (

@@ -134,13 +134,17 @@ export default function RetailerContactsPage() {
                                                     {retailer.email && (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                                                             <Mail className="w-4 h-4 text-gray-400" />
-                                                            {retailer.email}
+                                                            <a href={`mailto:${retailer.email}`} className="hover:text-[#e09a74] transition-colors">
+                                                                {retailer.email}
+                                                            </a>
                                                         </div>
                                                     )}
                                                     {retailer.mobile && (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                                                             <Phone className="w-4 h-4 text-gray-400" />
-                                                            {retailer.mobile}
+                                                            <a href={`tel:${retailer.mobile}`} className="hover:text-[#e09a74] transition-colors">
+                                                                {retailer.mobile}
+                                                            </a>
                                                         </div>
                                                     )}
                                                 </div>

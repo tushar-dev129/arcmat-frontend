@@ -71,3 +71,13 @@ export const useDeleteProductOverride = () => {
         },
     });
 };
+
+export const useBulkAddInventory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: retailerService.bulkAddInventory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: RETAILER_KEYS.all });
+        },
+    });
+};

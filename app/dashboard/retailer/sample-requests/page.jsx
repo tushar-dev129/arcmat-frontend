@@ -103,11 +103,11 @@ export default function RetailerSampleRequestsPage() {
                                                 <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
                                                     <div className="flex items-center gap-1.5">
                                                         <Mail className="w-4 h-4" />
-                                                        {request.professionalId?.email}
+                                                        <a href={`mailto:${request.professionalId?.email}`} className="hover:text-[#e09a74] hover:underline transition-colors">{request.professionalId?.email}</a>
                                                     </div>
                                                     <div className="flex items-center gap-1.5">
                                                         <Phone className="w-4 h-4" />
-                                                        {request.professionalId?.mobile}
+                                                        <a href={`tel:${request.professionalId?.mobile}`} className="hover:text-[#e09a74] hover:underline transition-colors">{request.professionalId?.mobile}</a>
                                                     </div>
                                                 </div>
                                             </div>
