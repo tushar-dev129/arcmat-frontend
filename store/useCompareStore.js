@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { toast } from '@/components/ui/Toast';
 
 export const useCompareStore = create(
@@ -97,7 +97,7 @@ export const useCompareStore = create(
         }),
         {
             name: 'compare-storage',
-            getStorage: () => (typeof window !== 'undefined' ? sessionStorage : null),
+            storage: createJSONStorage(() => sessionStorage),
         }
     )
 );

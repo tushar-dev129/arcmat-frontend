@@ -36,16 +36,11 @@ const SEARCH_CATEGORIES = [
 
 // Thumbnail helper for moodboards
 const getBoardThumbnail = (board) => {
-    if (!board?.canvasState?.length) return null;
+    if (!board?.canvasState || !Array.isArray(board.canvasState) || board.canvasState.length === 0) return null;
     const firstMaterial = board.canvasState.find(item => item.type === 'material');
-    if (!firstMaterial?.material) return null;
-
-    const m = firstMaterial.material;
-    if (m.images?.length) return;
-    if (m.variant_images?.length) return;
-    if (typeof m.productId === 'object' && m.productId?.product_images?.length)
-        return;
-
+    if (firstMaterial?.material) {
+        return getProductThumbnail(firstMaterial.material);
+    }
     return null;
 };
 

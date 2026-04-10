@@ -1,6 +1,6 @@
 // store/useSidebarStore.js
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export const useSidebarStore = create(
   persist(
@@ -19,6 +19,7 @@ export const useSidebarStore = create(
     }),
     {
       name: 'sidebar-storage',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({ isCollapsed: state.isCollapsed }),
     }
   )

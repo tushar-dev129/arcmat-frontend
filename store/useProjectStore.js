@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 const useProjectStore = create(
     persist(
@@ -32,6 +32,7 @@ const useProjectStore = create(
         }),
         {
             name: 'active-project-storage',
+            storage: createJSONStorage(() => localStorage),
         }
     )
 );

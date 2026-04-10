@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 export const useCartStore = create()(
     persist(
@@ -66,6 +66,7 @@ export const useCartStore = create()(
         }),
         {
             name: 'arcmat-cart-storage',
+            storage: createJSONStorage(() => localStorage),
         }
     )
 );

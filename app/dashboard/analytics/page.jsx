@@ -282,7 +282,9 @@ export default function AnalyticsDashboard() {
                                                     <div className="w-48 h-2 bg-gray-100 rounded-full overflow-hidden">
                                                         <div
                                                             className="h-full bg-[#E09A74]"
-                                                            style={{ width: `${(stat.count / brandWiseStats.find(b => b.brandName === stat.brandName)?.count * 100) || 0}%` }}
+                                                            style={{
+                                                                width: `${(stat.count / (Array.isArray(brandWiseStats) ? (brandWiseStats.find(b => b.brandName === stat.brandName)?.count || 1) : 1) * 100) || 0}%`
+                                                            }}
                                                         />
                                                     </div>
                                                 </td>
