@@ -65,11 +65,11 @@ function computeStats(project, moodboards) {
     // Phase index (0-4)
     const phaseIdx = Math.max(0, PHASES.indexOf(project?.phase || 'Concept Design'));
 
-    let totalProducts   = 0;  // products from estimatedCostId
-    let totalPhotos     = 0;  // custom photos (non-renders)
-    let totalCustomRows = 0;  // custom rows
-    let totalRenders    = 0;  // renders
-    let specifiedItems  = 0;  // products with status === 'Specified'
+    let totalProducts   = 0;
+    let totalPhotos     = 0;
+    let totalCustomRows = 0;
+    let totalRenders    = 0;
+    let specifiedItems  = 0;
     let pendingApprovals = 0;
 
     for (const mb of moodboards) {
@@ -80,7 +80,6 @@ function computeStats(project, moodboards) {
         totalCustomRows += customRows.length;
         totalRenders    += renders.length;
 
-        // Count specified: check productMetadata for each product in estimatedCostId
         const statusMap = mb?.productMetadata || {};
         for (const p of products) {
             const meta = statusMap[p._id];
@@ -90,25 +89,20 @@ function computeStats(project, moodboards) {
         pendingApprovals += mb?.pendingApprovals || 0;
     }
 
-    // Total billable items = products + photos + custom rows (what shows in the spec sheet)
     const totalItems = totalProducts + totalPhotos + totalCustomRows;
 
-    // Estimated cost — from overview tab (estimatedCostId.costing)
     const totalCost = moodboards.reduce(
         (sum, mb) => sum + (Number(mb?.estimatedCostId?.costing) || 0),
         0
     );
 
-    // Completion %  
-    let pct;
-    if (isCompleted) {
-        pct = 100;
-    } else {
-        const phaseScore     = (phaseIdx / (PHASES.length - 1)) * 50;
-        const materialScore  = totalProducts > 0 ? (specifiedItems / totalProducts) * 30 : 0;
-        const approvalPenalty = totalItems > 0 ? (pendingApprovals / totalItems) * 20 : 0;
-        pct = Math.min(99, Math.max(0, Math.round(phaseScore + materialScore - approvalPenalty)));
-    }
+    // ── Phase-as-matrix: each phase = 20% of total progress ──────────────────
+    //   Concept Design       → 20%
+    //   Design Development   → 40%
+    //   Material Specification → 60%
+    //   Construction         → 80%
+    //   Completed            → 100%
+    const pct = isCompleted ? 100 : (phaseIdx + 1) * 20;
 
     return {
         pct,

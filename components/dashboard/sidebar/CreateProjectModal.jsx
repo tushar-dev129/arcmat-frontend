@@ -12,14 +12,14 @@ import { toast } from '@/components/ui/Toast';
 
 // ─── Field definitions used by the completion tracker ─────────────────────────
 const SCRATCH_FIELDS = [
-    { key: 'name',             label: 'Project Name', mandatory: true  },
-    { key: 'clientName',       label: 'Client',       mandatory: false },
-    { key: 'location.city',    label: 'City',         mandatory: false },
-    { key: 'type',             label: 'Type',         mandatory: false },
-    { key: 'phase',            label: 'Phase',        mandatory: true  },
-    { key: 'size',             label: 'Size',         mandatory: false },
-    { key: 'budget',           label: 'Budget',       mandatory: false },
-    { key: 'description',      label: 'Description',  mandatory: false },
+    { key: 'name',                      label: 'Name',        mandatory: true },
+    { key: 'clientName',                label: 'Client',      mandatory: true },
+    { key: 'location.city',             label: 'City',        mandatory: true },
+    { key: 'type',                      label: 'Type',        mandatory: true },
+    { key: 'phase',                     label: 'Phase',       mandatory: true },
+    { key: 'size',                      label: 'Size',        mandatory: true },
+    { key: 'budget',                    label: 'Budget',      mandatory: true },
+    { key: 'description',               label: 'Description', mandatory: true },
 ];
 
 /** Resolve deeply-nested values like 'location.city' from formData */
@@ -161,7 +161,30 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
             return;
         }
 
-        if (!formData.phase) {
+        if (!isTemplate && !isEditMode && activeTab === 'scratch') {
+            // Check all fields in SCRATCH_FIELDS
+            const missingField = SCRATCH_FIELDS.find(f => {
+                const val = resolveField(formData, f.key);
+                return !String(val).trim();
+            });
+
+            if (missingField) {
+                toast.error(`Please fill in the ${missingField.label}`);
+                return;
+            }
+
+            // Also check fields not in SCRATCH_FIELDS but required
+            if (!formData.location.address?.trim()) {
+                toast.error('Please fill in the Project Address');
+                return;
+            }
+            if (!formData.estimatedDuration.month || !formData.estimatedDuration.year) {
+                toast.error('Please select the Estimated Completion Date');
+                return;
+            }
+        }
+
+        if (!formData.phase && activeTab !== 'template') {
             toast.error('Please select a project phase');
             return;
         }
@@ -262,7 +285,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                             {!isTemplate && !isEditMode && activeTab === 'scratch' && (
                                 <p className={clsx(
                                     'text-xs font-bold mt-1 transition-colors',
-                                    pct === 100 ? 'text-green-600' : 'text-gray-400'
+                                    pct === 100 ? 'text-emerald-600' : (pct > 0 ? 'text-emerald-500' : 'text-gray-400')
                                 )}>
                                     {pct === 100
                                         ? '✓ All fields completed — ready to create!'
@@ -293,11 +316,11 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                                     >
                                         <div className={clsx(
                                             'h-1 rounded-full transition-all duration-500',
-                                            f.filled ? 'bg-[#e09a74]' : (f.mandatory ? 'bg-red-200' : 'bg-gray-100')
+                                            f.filled ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.2)]' : (f.mandatory ? 'bg-red-300' : 'bg-gray-100')
                                         )} />
                                         <span className={clsx(
                                             'text-[9px] font-bold uppercase tracking-tight text-center truncate',
-                                            f.filled ? 'text-[#e09a74]' : 'text-gray-400'
+                                            f.filled ? 'text-emerald-600' : 'text-gray-400'
                                         )}>
                                             {f.label === 'Project Name' ? 'Name' : f.label}
                                         </span>
@@ -426,7 +449,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
 
                             <section>
                                 <label className="block text-xl font-bold text-[#2d3142] mb-3">
-                                    {isTemplate ? 'Template name' : 'Project name'}
+                                    {isTemplate ? 'Template name' : 'Project name'} <span className="text-red-500">*</span>
                                 </label>
                                 <input
                                     name="name"
@@ -441,7 +464,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                             {!isTemplate && (
                                 <>
                                     <section>
-                                        <label className="block text-xl font-bold text-[#2d3142] mb-3">Client name</label>
+                                        <label className="block text-xl font-bold text-[#2d3142] mb-3">Client name <span className="text-red-500">*</span></label>
                                         <input
                                             name="clientName"
                                             placeholder="e.g. John Doe"
@@ -452,7 +475,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                                     </section>
 
                                     <section>
-                                        <label className="block text-xl font-bold text-[#2d3142] mb-3">Project Location</label>
+                                        <label className="block text-xl font-bold text-[#2d3142] mb-3">Project Location <span className="text-red-500">*</span></label>
                                         <div className="space-y-4">
                                             <input
                                                 name="location.address"
@@ -487,7 +510,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                             )}
 
                             <section>
-                                <label className="block text-xl font-bold text-[#2d3142] mb-3">Type</label>
+                                <label className="block text-xl font-bold text-[#2d3142] mb-3">Type <span className="text-red-500">*</span></label>
                                 <SelectionGrid
                                     fieldName="type"
                                     options={projectOptions.types}
@@ -498,7 +521,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
 
                             {!isTemplate && (
                                 <section>
-                                    <label className="block text-xl font-bold text-[#2d3142] mb-3">Phase</label>
+                                    <label className="block text-xl font-bold text-[#2d3142] mb-3">Phase <span className="text-red-500">*</span></label>
                                     <SelectionGrid
                                         fieldName="phase"
                                         options={projectOptions.phases}
@@ -510,7 +533,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
 
                             <section>
                                 <div className="flex items-baseline gap-2 mb-3">
-                                    <label className="text-xl font-bold text-[#2d3142]">Size</label>
+                                    <label className="text-xl font-bold text-[#2d3142]">Size <span className="text-red-500">*</span></label>
                                     <span className="text-sm text-gray-400 font-medium">(The size of the entire project)</span>
                                 </div>
                                 <SelectionGrid
@@ -523,7 +546,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
 
                             {!isTemplate && (
                                 <section>
-                                    <label className="block text-xl font-bold text-[#2d3142] mb-3">Budget Range</label>
+                                    <label className="block text-xl font-bold text-[#2d3142] mb-3">Budget Range <span className="text-red-500">*</span></label>
                                     <SelectionGrid
                                         fieldName="budget"
                                         options={projectOptions.budgets}
@@ -536,7 +559,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                             {!isTemplate && (
                                 <section>
                                     <div className="flex items-baseline gap-2 mb-3">
-                                        <label className="text-xl font-bold text-[#2d3142]">Estimated completion date</label>
+                                        <label className="text-xl font-bold text-[#2d3142]">Estimated completion date <span className="text-red-500">*</span></label>
                                         <span className="text-sm text-gray-400 font-medium">(Project end date)</span>
                                     </div>
                                     <div className="grid grid-cols-2 gap-4">
@@ -572,7 +595,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
 
                             <section>
                                 <div className="flex justify-between mb-3">
-                                    <label className="text-xl font-bold text-[#2d3142]">Project Description</label>
+                                    <label className="text-xl font-bold text-[#2d3142]">Project Description <span className="text-red-500">*</span></label>
                                     <span className="text-sm text-gray-400 font-medium">{formData.description.length}/500 characters</span>
                                 </div>
                                 <textarea

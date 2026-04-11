@@ -2,7 +2,7 @@
 import React from 'react';
 import Container from '@/components/ui/Container';
 import { useGetNotifications, useMarkNotificationRead, useNotificationAction } from '@/hooks/useNotification';
-import { Bell, Check, X, Info, Clock, MapPin, Package, Filter, Search } from 'lucide-react';
+import { Bell, Check, X, Info, Clock, MapPin, Package, Filter, Search, Phone, MessageSquare } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { toast } from '@/components/ui/Toast';
 

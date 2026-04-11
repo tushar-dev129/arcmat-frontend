@@ -94,7 +94,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                 onSuccess: () => {
                     toast.success('Project phase updated');
                     setIsPhaseDropdownOpen(false);
-                    if (newPhase === 'Project Completed') {
+                    if (newPhase === 'Completed') {
                         setIsRatingModalOpen(true);
                     }
                 },

@@ -11,15 +11,15 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 const categories = [
-    { name: 'NEW', image: '/Category/new.jpg' },
-    { name: 'CONSTRUCTION', image: '/Category/construction.jpg' },
-    { name: 'FINISHES', image: '/Category/finish.jpg' },
-    { name: 'LIGHTING', image: '/Category/light.jpg' },
-    { name: 'FURNITURE', image: '/Category/Furniture.jpg' },
-    { name: 'DECOR', image: '/Category/decor.jpg' },
-    { name: 'BATHWARE', image: '/Category/bathware.jpg' },
-    { name: 'SMART', image: '/Category/smart.jpg' },
-    { name: 'APPLIANCES', image: '/Category/appliances.jpg' },
+    { name: 'NEW', image: '/Category/new.jpg', href: '/productlist' },
+    { name: 'CONSTRUCTION', image: '/Category/construction.jpg', href: '/productlist' },
+    { name: 'FINISHES', image: '/Category/finish.jpg', href: '/productlist' },
+    { name: 'LIGHTING', image: '/Category/light.jpg', href: '/productlist' },
+    { name: 'FURNITURE', image: '/Category/Furniture.jpg', href: '/productlist' },
+    { name: 'DECOR', image: '/Category/decor.jpg', href: '/productlist' },
+    { name: 'BATHWARE', image: '/Category/bathware.jpg', href: '/productlist' },
+    { name: 'SMART', image: '/Category/smart.jpg', href: '/productlist' },
+    { name: 'APPLIANCES', image: '/Category/appliances.jpg', href: '/productlist' },
 ];
 
 

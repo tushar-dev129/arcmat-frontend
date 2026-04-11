@@ -14,7 +14,7 @@ import { useGetVariants } from '@/hooks/useVariant';
 import { useGetUsers, usePlatformStats } from '@/hooks/useAuth';
 import { useGetVendors } from '@/hooks/useVendor';
 import { useGetCategories } from '@/hooks/useCategory';
-import { getProductImageUrl, isProfileComplete } from '@/lib/productUtils';
+import { getProductImageUrl, getProductThumbnail, isProfileComplete } from '@/lib/productUtils';
 import { Package, Layout, IndianRupee, ArrowRight, User, FolderPlus, Users, Activity, UserPlus, FolderOpen, Store, Briefcase, AlertTriangle, Lock, Unlock } from 'lucide-react';
 import { useGetProjects } from '@/hooks/useProject';
 import { useGetAllMoodboards } from '@/hooks/useMoodboard';
@@ -170,7 +170,7 @@ export default function DashboardPage() {
         if (user?.role === 'retailer') {
             router.push('/dashboard/retailer');
         } else if (user?.role === 'architect') {
-            router.push('/dashboard/projects');
+            router.push('/dashboard/architect');
         }
     }, [user, router]);
 
