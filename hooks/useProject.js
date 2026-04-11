@@ -1,9 +1,8 @@
-// ─── useProject.js ────────────────────────────────────────────────────────────
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { projectService } from '../services/projectService';
 import { toast } from '@/components/ui/Toast';
-import { RETAILER_REQ_KEYS } from './useRetailerRequest'; // ← ADD THIS IMPORT at the top
+import { RETAILER_REQ_KEYS } from './useRetailerRequest';
+import { NOTIFICATION_KEYS } from './useNotificationCounts';
 
 export const PROJECT_KEYS = {
     all: ['projects'],
@@ -97,12 +96,13 @@ export const useMarkNotificationsRead = () => {
         mutationFn: ({ id, spaceId, materialId, type }) =>
             projectService.markNotificationsRead(id, spaceId, materialId, type),
         onSuccess: (data, variables) => {
-            // ↓ already existed
+            // Refresh project list so unread badges on ProjectCard clear immediately
             queryClient.invalidateQueries({ queryKey: PROJECT_KEYS.all });
+            // Refresh sidebar unread counts badge
+            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.counts() });
 
-            // ↓ ADD THESE TWO — replaces the old bare-string invalidations
-            queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.assigned() }); // FIX 1+2
-            queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.mine() });     // FIX 3
+            queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.assigned() });
+            queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.mine() });
 
             if (variables.id && variables.spaceId) {
                 queryClient.invalidateQueries({
@@ -126,6 +126,8 @@ export const useMarkRetailerChatRead = () => {
             // so unread badges update immediately across the whole app
             queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.assigned() });
             queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.mine() });
+            // Also clear the sidebar counts badge immediately
+            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.counts() });
         },
         onError: (error) => {
             // Non-fatal: silently log - badge will be cleared on next poll

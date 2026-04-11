@@ -23,19 +23,15 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
         }
     };
 
-    // Mark as read when the modal closes or opens
+    // Mark messages as read only when the modal opens (not on every data refresh)
     useEffect(() => {
         if (isOpen && projectId && user) {
             markNotificationsRead({ id: projectId, type: 'general' });
         }
-        return () => {
-            if (isOpen && projectId && user) {
-                 // Trigger once more on unmount
-                markNotificationsRead({ id: projectId, type: 'general' });
-            }
-        };
-    }, [isOpen, projectId, user, markNotificationsRead, data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, projectId]);
 
+    // Auto-scroll to the latest message whenever messages update
     useEffect(() => {
         if (!isLoading) {
             scrollToBottom();

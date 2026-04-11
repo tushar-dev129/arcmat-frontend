@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { discussionService } from '../services/discussionService';
 import { toast } from '@/components/ui/Toast';
+import { PROJECT_KEYS } from './useProject';
+import { NOTIFICATION_KEYS } from './useNotificationCounts';
 
 export const DISCUSSION_KEYS = {
     all: ['discussion'],
@@ -12,7 +14,8 @@ export const useGetComments = (projectId, spaceId = null, options = {}) => {
         queryKey: DISCUSSION_KEYS.project(projectId, spaceId),
         queryFn: () => discussionService.getComments(projectId, spaceId),
         enabled: !!projectId && (options.enabled !== false),
-        refetchInterval: options.refetchInterval ?? 5000, // Default to 5s if not specified
+        // 15s polling — balanced between real-time feel and server load
+        refetchInterval: options.refetchInterval ?? 15000,
         ...options
     });
 };
@@ -22,8 +25,12 @@ export const usePostComment = (projectId) => {
     return useMutation({
         mutationFn: (data) => discussionService.postComment(projectId, data),
         onSuccess: () => {
-            // Invalidate all queries starting with the project ID to catch space-specific discussions
+            // Refresh the discussion thread
             queryClient.invalidateQueries({ queryKey: [...DISCUSSION_KEYS.all, projectId] });
+            // Also refresh project list so unread badges update immediately
+            queryClient.invalidateQueries({ queryKey: PROJECT_KEYS.all });
+            // And refresh sidebar counts badge
+            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.counts() });
         },
         onError: (error) => {
             toast.error(error.response?.data?.message || 'Failed to post comment');
@@ -36,8 +43,9 @@ export const useDeleteComment = (projectId) => {
     return useMutation({
         mutationFn: (commentId) => discussionService.deleteComment(commentId),
         onSuccess: () => {
-            // Invalidate all queries starting with the project ID to catch space-specific discussions
             queryClient.invalidateQueries({ queryKey: [...DISCUSSION_KEYS.all, projectId] });
+            queryClient.invalidateQueries({ queryKey: PROJECT_KEYS.all });
+            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.counts() });
             toast.success('Comment deleted');
         },
         onError: (error) => {
