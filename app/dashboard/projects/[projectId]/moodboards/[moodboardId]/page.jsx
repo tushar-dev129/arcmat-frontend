@@ -1236,6 +1236,28 @@ export default function MoodboardDetailPage() {
                 )
             }
 
+            {/* ── Floating chat button ──────────────────────────────────── */}
+            {activeTab !== 'discussion' && (
+                <button
+                    onClick={() => setActiveTab('discussion')}
+                    className="fixed bottom-8 right-8 z-40 group flex items-center gap-3 bg-[#2d3142] hover:bg-[#d9a88a] text-white pl-4 pr-5 py-3.5 rounded-full shadow-2xl shadow-slate-900/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                    title="Open space discussion"
+                    aria-label="Message client"
+                >
+                    <div className="relative">
+                        <MessageCircle className="w-5 h-5" />
+                        {notificationsData?.generalDiscussions > 0 && (
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 leading-none animate-bounce">
+                                {notificationsData.generalDiscussions > 9 ? '9+' : notificationsData.generalDiscussions}
+                            </span>
+                        )}
+                    </div>
+                    <span className="text-sm font-bold whitespace-nowrap">
+                        {notificationsData?.generalDiscussions > 0 ? `${notificationsData.generalDiscussions} new message${notificationsData.generalDiscussions > 1 ? 's' : ''}` : 'Message Client'}
+                    </span>
+                </button>
+            )}
+
             <DeleteConfirmationModal
                 isOpen={isDeleteModalOpen}
                 onClose={() => setIsDeleteModalOpen(false)}
