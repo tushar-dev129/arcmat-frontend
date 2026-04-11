@@ -10,7 +10,6 @@ import Image from "next/image";
 import { useGetVariants, useGetRetailerProducts } from "@/hooks/useProduct";
 import { useGetMoodboard } from "@/hooks/useMoodboard";
 import { useGetVendors } from "@/hooks/useVendor";
-import { useGetAttributes, useGetAttributesByCategory } from "@/hooks/useAttribute";
 import { resolvePricing, formatCurrency } from "@/lib/productUtils";
 import { Loader2, ArrowLeft, PackageOpen } from "lucide-react";
 import CompareBar from "@/components/ui/CompareBar";
@@ -92,8 +91,6 @@ export default function ProductListPage() {
     }, [moodboardData]);
 
     const { data: brandsData } = useGetVendors({ type: 'frontend' });
-    const { data: globalAttributesData } = useGetAttributes();
-    const { data: categoryAttributesData } = useGetAttributesByCategory(selectedCategory);
 
     const brands = Array.isArray(brandsData) ? brandsData : (brandsData?.data || []);
 
@@ -174,61 +171,19 @@ export default function ProductListPage() {
     }, [apiData, paginationData]);
 
     const availableColors = useMemo(() => {
-        // 1. Try prioritization: extract from "Color" attribute across all categories (global)
-        const colorAttr = (globalAttributesData?.data || []).find(
-            attr => attr.attributeName?.toLowerCase() === 'color' || attr.attributeName?.toLowerCase() === 'colors'
-        );
-        if (colorAttr && colorAttr.attributeValues?.length > 0) {
-            return colorAttr.attributeValues.sort();
+        if (metadata?.availableColors && metadata.availableColors.length > 0) {
+            return metadata.availableColors;
         }
-
-        // 2. Fallback to metadata from current products search
-        if (metadata?.availableColors) return metadata.availableColors;
-
-        // 3. Last fallback: derive from current visible products list
-        const colors = new Set();
-        products.forEach(variant => {
-            if (variant.color) colors.add(variant.color);
-        });
-        return Array.from(colors).sort();
-    }, [products, metadata, globalAttributesData]);
+        return [];
+    }, [metadata]);
 
     const availableAttributes = useMemo(() => {
-        const metadataAttrs = metadata?.availableAttributes || [];
-        const globalAttrs = (globalAttributesData?.data || []).map(attr => ({
-            key: attr.attributeName,
-            values: attr.attributeValues || []
+        const attrs = metadata?.availableAttributes || [];
+        return attrs.map(attr => ({
+            ...attr,
+            values: Array.from(new Set(attr.values)).filter(Boolean).sort() // Deduplicate values natively
         }));
-        const categoryAttrs = (categoryAttributesData?.data || []).map(attr => ({
-            key: attr.attributeName,
-            values: attr.attributeValues || []
-        }));
-
-        // Merge logic: Base is global attributes (as requested to "show all values")
-        // and optionally refine with category attributes if they are different or specific
-        const combinedMap = new Map();
-
-        globalAttrs.forEach(a => combinedMap.set(a.key, new Set(a.values)));
-        categoryAttrs.forEach(a => {
-            if (combinedMap.has(a.key)) {
-                a.values.forEach(v => combinedMap.get(a.key).add(v));
-            } else {
-                combinedMap.set(a.key, new Set(a.values));
-            }
-        });
-        metadataAttrs.forEach(a => {
-            if (combinedMap.has(a.key)) {
-                a.values.forEach(v => combinedMap.get(a.key).add(v));
-            } else {
-                combinedMap.set(a.key, new Set(a.values));
-            }
-        });
-
-        return Array.from(combinedMap.entries()).map(([key, values]) => ({
-            key,
-            values: Array.from(values).sort()
-        }));
-    }, [metadata, globalAttributesData, categoryAttributesData]);
+    }, [metadata]);
 
     return (
         <div className="min-h-screen">

@@ -5,7 +5,6 @@ import { formatCurrency, getColorCode } from '@/lib/productUtils'
 const filterCategories = [
     "Brand",
     "Price Range",
-    "Color",
     "City",
 ]
 
@@ -250,24 +249,7 @@ const ProductSidebar = ({
                             </div>
                         )}
 
-                        {cat === "Color" && (
-                            <div className="flex flex-col gap-2.5 mt-1">
-                                {availableColors.map(color => (
-                                    <label key={color} className="flex items-center gap-3 cursor-pointer group">
-                                        <div className="relative flex items-center">
-                                            <input
-                                                type="checkbox"
-                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-[#e09a74] checked:border-[#e09a74] transition-all"
-                                                checked={activeFilters.colors.includes(color)}
-                                                onChange={(e) => handleColorChange(color, e.target.checked)}
-                                            />
-                                            <svg className="absolute h-3.5 w-3.5 text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                        </div>
-                                        <span className="text-[15px] text-gray-600 group-hover:text-gray-900 transition-colors uppercase">{color}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        )}
+
 
                         {cat === "City" && (
                             <div className="flex flex-col gap-2.5 mt-1">
