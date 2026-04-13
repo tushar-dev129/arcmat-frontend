@@ -280,8 +280,8 @@ export default function ProductsListPage() {
               <div className="flex flex-wrap gap-3">
                 <Button
                   onClick={handleDataExport}
-                  disabled={isExporting}
-                  className="rounded-full bg-white text-blue-600 hover:bg-blue-50 min-w-[130px] h-[42px] px-6 border border-blue-600 shadow-sm transition-all duration-300 font-semibold flex items-center justify-center"
+                  disabled={isExporting || (paginationData?.totalItems || 0) === 0}
+                  className="rounded-full bg-white text-blue-600 hover:bg-blue-50 min-w-[130px] h-[42px] px-6 border border-blue-600 shadow-sm transition-all duration-300 font-semibold flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400 disabled:hover:bg-white"
                 >
                   {isExporting ? (
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />

@@ -28,8 +28,13 @@ const resizeImageForAI = (src, maxDim = 1024) => {
             canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
             resolve(canvas.toDataURL('image/png'));
         };
-        img.onerror = () => resolve(src); // fallback to original on error
-        img.src = src;
+        img.onerror = (err) => {
+            console.error('resizeImageForAI: Image load failed', src, err);
+            resolve(src); // fallback to original on error
+        };
+        // Add cache-buster to ensure fresh CORS headers
+        const cacheBuster = `t=${Date.now()}`;
+        img.src = src.includes('?') ? `${src}&${cacheBuster}` : `${src}?${cacheBuster}`;
     });
 };
 
@@ -518,11 +523,17 @@ export function useFabricCanvas({
 
                 // ── Material / product image ───────────────────────────────────────
             } else {
-                const imgUrl = getUrl(item.material);
+                let imgUrl = getUrl(item.material);
                 const targetW = item.w || DEFAULT_CARD_W;
                 const targetH = item.h || DEFAULT_CARD_H;
 
                 if (imgUrl) {
+                    // Add cache-buster for S3 URLs to bypass stale CORS cache
+                    if (imgUrl.startsWith('http') && !imgUrl.includes('data:')) {
+                        const cacheBuster = `t=${Date.now()}`;
+                        imgUrl = imgUrl.includes('?') ? `${imgUrl}&${cacheBuster}` : `${imgUrl}?${cacheBuster}`;
+                    }
+
                     fabric.Image.fromURL(imgUrl, { crossOrigin: 'anonymous' })
                         .then((img) => {
                             const scaleMath = Math.min(targetW / img.width, targetH / img.height);

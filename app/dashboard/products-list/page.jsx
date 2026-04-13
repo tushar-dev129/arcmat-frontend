@@ -247,8 +247,8 @@ export default function ProductsListPage() {
                             <>
                                 <Button
                                     onClick={handleDataExport}
-                                    disabled={isExporting}
-                                    className="flex items-center rounded-full bg-white text-blue-600 cursor-pointer hover:bg-gray-50 min-w-[120px] py-2 px-4 border border-blue-600 duration-300 ml-2"
+                                    disabled={isExporting || (paginationData?.totalItems || 0) === 0}
+                                    className="flex items-center rounded-full bg-white text-blue-600 cursor-pointer hover:bg-gray-50 min-w-[120px] py-2 px-4 border border-blue-600 duration-300 ml-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400 disabled:hover:bg-white"
                                 >
                                     <Package className="w-4 h-4 mr-2" />
                                     Export Data

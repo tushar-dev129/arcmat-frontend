@@ -197,11 +197,11 @@ export default function ExportTab({
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
-                    {isArchitect && (
+                    {/* {isArchitect && (
                         <button className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-5 py-3 border border-gray-100 bg-white rounded-2xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
                             <Edit2 className="w-4 h-4" /> <span className="hidden sm:inline">Choose template</span><span className="sm:hidden">Template</span>
                         </button>
-                    )}
+                    )} */}
                     {isArchitect && (
                         <button
                             onClick={exportAsCSV}

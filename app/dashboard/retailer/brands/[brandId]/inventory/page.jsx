@@ -418,12 +418,11 @@ export default function BrandInventoryPage() {
 
                                 <div>
                                     <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">
-                                        Initial Stock Quantity (Max: {selectedItem?.variant?.stock || 0})
+                                        Initial Stock Quantity 
                                     </label>
                                     <input
                                         type="number"
                                         required
-                                        // max={selectedItem?.variant?.stock || 0}
                                         value={formData.stock}
                                         onChange={e => setFormData({ ...formData, stock: e.target.value })}
                                         placeholder="Enter Stock"

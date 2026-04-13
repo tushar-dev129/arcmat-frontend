@@ -302,7 +302,7 @@ const CompareSidebar = () => {
                                                 className="w-full h-11 bg-[#e09a74] text-white hover:bg-[#d08963] active:scale-95 transition-all rounded-xl text-sm font-bold flex items-center justify-center shadow-lg shadow-orange-500/20"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" />
-                                                {activeMoodboardName ? `Add to ${activeMoodboardName}` : 'Add to Board'}
+                                                {activeMoodboardName ? `Add to ${activeMoodboardName}` : 'Add to space'}
                                             </button>
                                         ) : (
                                             /* Add to Cart hidden for all users */

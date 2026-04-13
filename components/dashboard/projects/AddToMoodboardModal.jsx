@@ -6,9 +6,9 @@ import Button from '@/components/ui/Button';
 import { useGetMoodboardDropdown } from '@/hooks/useMoodboard';
 import { useGetProjects } from '@/hooks/useProject';
 import { useCreateEstimatedCost, useUpdateEstimatedCost } from '@/hooks/useEstimatedCost';
-import { 
-    useGetTemplates, 
-    useGetMoodboardTemplates, 
+import {
+    useGetTemplates,
+    useGetMoodboardTemplates,
     useUpdateEstimatedCostTemplate,
     useCreateEstimatedCostTemplate
 } from '@/hooks/useTemplate';
@@ -28,7 +28,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
 
     const { data: projectsData, isLoading: projectsLoading } = useGetProjects({ enabled: isOpen && targetType === 'project' });
     const { data: templatesData, isLoading: templatesLoading } = useGetTemplates({ enabled: isOpen && targetType === 'template' });
-    
+
     const { data: moodboardsData, isLoading: moodboardsLoading } = useGetMoodboardDropdown(targetType === 'project' ? selectedProjectId : null);
     const { data: templateSpacesData, isLoading: templateSpacesLoading } = useGetMoodboardTemplates(targetType === 'template' ? selectedProjectId : null);
 
@@ -165,12 +165,12 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                 onSuccess: () => {
                     // Record Material History for each new product (V1)
                     newIds.forEach(id => {
-                        const prodObj = (products || []).find(p => (p.override_id || p._id || p.id) === id) || 
-                                       ((product && (product.override_id || product._id || product.id) === id) ? product : null);
-                        
+                        const prodObj = (products || []).find(p => (p.override_id || p._id || p.id) === id) ||
+                            ((product && (product.override_id || product._id || product.id) === id) ? product : null);
+
                         const name = prodObj?.product_name || prodObj?.productId?.product_name || 'Material';
                         const image = prodObj?.variant_images?.[0]?.secure_url || prodObj?.productId?.product_images?.[0]?.secure_url || prodObj?.secure_url;
-                        
+
                         addMaterialVersionMutation.mutate({
                             spaceId: selectedMoodboardId,
                             spaceName: selectedMb.moodboard_name || 'Space',
@@ -193,12 +193,12 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                 onSuccess: (res) => {
                     // Record Material History for each product (V1)
                     productIdsToSend.forEach(id => {
-                        const prodObj = (products || []).find(p => (p.override_id || p._id || p.id) === id) || 
-                                       ((product && (product.override_id || product._id || product.id) === id) ? product : null);
-                        
+                        const prodObj = (products || []).find(p => (p.override_id || p._id || p.id) === id) ||
+                            ((product && (product.override_id || product._id || product.id) === id) ? product : null);
+
                         const name = prodObj?.product_name || prodObj?.productId?.product_name || 'Material';
                         const image = prodObj?.variant_images?.[0]?.secure_url || prodObj?.productId?.product_images?.[0]?.secure_url || prodObj?.secure_url;
-                        
+
                         addMaterialVersionMutation.mutate({
                             spaceId: selectedMoodboardId,
                             spaceName: selectedMb.moodboard_name || 'Space',
@@ -370,7 +370,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                         {createEstimateMutation.isPending || updateEstimateMutation.isPending || updateTemplateEstimateMutation.isPending || createTemplateEstimateMutation.isPending ? (
                             <Loader2 className="w-5 h-5 animate-spin" />
                         ) : (
-                            'Add to board'
+                            'Add to space'
                         )}
                     </Button>
                 </div>

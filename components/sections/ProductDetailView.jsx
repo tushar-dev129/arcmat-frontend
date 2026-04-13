@@ -815,27 +815,24 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                         title: 'BIM/CAD Files',
                                         content: (
                                             <div className="flex flex-wrap gap-2 p-3">
-                                                <a
-                                                    href="/download/demo.dwg"
-                                                    download
-                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-yellow-50 text-gray-600 border border-gray-100 hover:bg-[#e09a74] hover:text-white transition cursor-pointer"
+                                                <span
+                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-400 border border-gray-100 cursor-not-allowed opacity-70"
+                                                    title="Files coming soon"
                                                 >
                                                     2D CAD (.dwg)
-                                                </a>
-                                                <a
-                                                    href="/download/demo.obj"
-                                                    download
-                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-yellow-50 text-gray-600 border border-gray-100 hover:bg-[#e09a74] hover:text-white transition cursor-pointer"
+                                                </span>
+                                                <span
+                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-400 border border-gray-100 cursor-not-allowed opacity-70"
+                                                    title="Files coming soon"
                                                 >
                                                     3D Model (.obj)
-                                                </a>
-                                                <a
-                                                    href="/download/demo.rfa"
-                                                    download
-                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-yellow-50 text-gray-600 border border-gray-100 hover:bg-[#e09a74] hover:text-white transition cursor-pointer"
+                                                </span>
+                                                <span
+                                                    className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-400 border border-gray-100 cursor-not-allowed opacity-70"
+                                                    title="Files coming soon"
                                                 >
                                                     BIM Object (.rfa)
-                                                </a>
+                                                </span>
                                             </div>
                                         )
                                     }
