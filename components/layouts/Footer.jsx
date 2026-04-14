@@ -9,7 +9,7 @@ const Footer = () => {
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-24">
                     <div className="flex flex-col gap-4 text-[#707075]">
                         <h4 className="font-medium text-lg mb-2 text-gray-900">Explore</h4>
-                        <Link href="/productlist" className="hover:text-gray-800 transition-colors">Products</Link>
+
                         <Link href="/not-found" className="hover:text-gray-800 transition-colors">Brands</Link>
                         <Link href="/not-found" className="hover:text-gray-800 transition-colors">Boards</Link>
                         <Link href="/not-found" className="hover:text-gray-800 transition-colors">Collections</Link>
