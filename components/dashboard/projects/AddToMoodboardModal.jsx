@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { X, Search, Loader2, IndianRupee, Layout, CheckCircle2, Plus } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { useQueryClient } from '@tanstack/react-query';
 import { useGetMoodboardDropdown } from '@/hooks/useMoodboard';
 import { useGetProjects } from '@/hooks/useProject';
 import { useCreateEstimatedCost, useUpdateEstimatedCost } from '@/hooks/useEstimatedCost';
@@ -22,6 +23,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
     const { activeProjectId, activeProjectName, activeMoodboardId, activeMoodboardName } = useProjectStore();
     const { triggerFolderAnimation } = useSidebarStore();
     const { clearSelection, toggleProduct } = useSelectionStore();
+    const queryClient = useQueryClient();
     const [targetType, setTargetType] = useState('project');
     const [selectedProjectId, setSelectedProjectId] = useState(activeProjectId || '');
     const [selectedMoodboardId, setSelectedMoodboardId] = useState(activeMoodboardId || '');
@@ -98,6 +100,10 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                 const isSelected = useSelectionStore.getState().selectedProducts.some(p => (p.override_id || p._id || p.id) === (product.override_id || product._id || product.id));
                 if (isSelected) toggleProduct(product);
             }
+            // Force invalidate query keys to update UI immediately
+            queryClient.invalidateQueries({ queryKey: ['moodboards'] });
+            queryClient.invalidateQueries({ queryKey: ['project-templates'] });
+            
             triggerFolderAnimation();
             onClose();
         };

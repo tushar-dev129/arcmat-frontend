@@ -735,27 +735,35 @@ export function useFabricCanvas({
         canvas.requestRenderAll();
     }, [onRemoveItem]);
 
-    // ─── Export High-Res ──────────────────────────────────────────────────────
+    // ─── Export High-Res / DataURL ──────────────────────────────────────────────
     const exportHighRes = useCallback((fileName = 'moodboard', format = 'jpeg') => {
+        const dataURL = getDataURL(format);
+        if (!dataURL) return;
+
+        const link = document.createElement('a');
+        link.download = `${fileName}-design.${format}`;
+        link.href = dataURL;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }, []);
+
+    const getDataURL = useCallback((format = 'jpeg') => {
         const canvas = fabricRef.current;
-        if (!canvas) return;
+        if (!canvas) return null;
         const objects = canvas.getObjects();
-        if (!objects.length) return;
+        if (!objects.length) return null;
 
         const originalVPT = [...canvas.viewportTransform];
         const originalSelection = canvas.selection;
 
-        // ── BUG FIX: Reset zoom/pan before calculating bounds for export ──────
-        // This ensures export is zoom-independent
         canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
 
-        // Hide internal notes from export
         const internalObjs = objects.filter(o => o.isInternal);
         internalObjs.forEach(o => o.set('opacity', 0));
         canvas.renderAll();
 
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-        // Filter out internal objects from bounds calculation
         objects.filter(o => !o.isInternal).forEach(obj => {
             const br = obj.getBoundingRect(true, true);
             if (br.left < minX) minX = br.left;
@@ -771,26 +779,18 @@ export function useFabricCanvas({
         const height = isFinite(maxY) ? (maxY - minY) + padding * 2 : canvas.height;
 
         try {
-            const dataURL = canvas.toDataURL({
+            return canvas.toDataURL({
                 format,
-                quality: 1.0,
-                multiplier: 2,
+                quality: 0.9,
+                multiplier: 1.5, // Slightly lower for snapshot to keep size small
                 left, top, width, height,
                 enableRetinaScaling: true
             });
-
-            const link = document.createElement('a');
-            link.download = `${fileName}-design.${format}`;
-            link.href = dataURL;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         } catch (err) {
-            console.error('Export failed:', err);
-            alert('High-res export failed (possibly CORS). Try again or check image sources.');
+            console.error('DataURL generation failed:', err);
+            return null;
         } finally {
             internalObjs.forEach(o => o.set('opacity', 1));
-            // Restore original zoom and pan
             canvas.setViewportTransform(originalVPT);
             canvas.selection = originalSelection;
             canvas.renderAll();
@@ -1002,6 +1002,7 @@ export function useFabricCanvas({
         activeMenuConfig,
         showGrid,
         setShowGrid,
-        getSerializedState
+        getSerializedState,
+        getDataURL
     };
 }

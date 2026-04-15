@@ -9,6 +9,7 @@ import Button from "@/components/ui/Button";
 import Image from "next/image";
 import { useGetVariants, useGetRetailerProducts } from "@/hooks/useProduct";
 import { useGetMoodboard } from "@/hooks/useMoodboard";
+import { useGetMoodboardTemplateById } from "@/hooks/useTemplate";
 import { useGetVendors } from "@/hooks/useVendor";
 import { normalizeAvailableAttributes, normalizeAttributeKey, resolvePricing } from "@/lib/productUtils";
 import { Loader2, ArrowLeft, PackageOpen } from "lucide-react";
@@ -32,7 +33,7 @@ export default function ProductListPage() {
     const pathname = usePathname();
     const { user } = useAuth();
     const { clearSelection } = useSelectionStore();
-    const { activeProjectId, activeMoodboardId } = useProjectStore();
+    const { activeProjectId, activeMoodboardId, isActiveTemplate } = useProjectStore();
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [isDrawerOpen, setDrawerOpen] = useState(false);
@@ -78,20 +79,28 @@ export default function ProductListPage() {
     });
 
     // OPTIMIZATION: Fetch active moodboard at page level to avoid N+1 fetches in ProductCard
-    const { data: moodboardData } = useGetMoodboard(activeMoodboardId, { enabled: !!activeMoodboardId });
+    const { data: moodboardData } = useGetMoodboard(activeMoodboardId, { enabled: !!activeMoodboardId && !isActiveTemplate });
+    const { data: templateSpaceData } = useGetMoodboardTemplateById(activeMoodboardId, { enabled: !!activeMoodboardId && isActiveTemplate });
+
     const addedProductIdsMap = useMemo(() => {
-        const prodIds = moodboardData?.data?.estimatedCostId?.productIds || [];
+        const spaceData = isActiveTemplate ? templateSpaceData?.data : moodboardData?.data;
+        const prodIds = spaceData?.estimatedCostId?.productIds || spaceData?.estimation?.productIds || [];
+        
         const idSet = new Set();
         prodIds.forEach(p => {
             if (p) {
-                // Only store specific variant ID (RetailerProduct _id)
-                // Avoid using root product ID (p.productId) for the map to prevent spreading
-                const specificId = typeof p === 'object' ? p._id : p;
-                if (specificId) idSet.add(String(specificId));
+                if (typeof p === 'object') {
+                    if (p._id) idSet.add(String(p._id));
+                    // Also store the root product ID if this is a retailer product object
+                    const rootId = p.productId?._id || p.productId;
+                    if (rootId) idSet.add(String(rootId));
+                } else {
+                    idSet.add(String(p));
+                }
             }
         });
         return idSet;
-    }, [moodboardData]);
+    }, [moodboardData, templateSpaceData, isActiveTemplate]);
 
     const { data: brandsData } = useGetVendors({ type: 'frontend' });
 
@@ -234,14 +243,23 @@ export default function ProductListPage() {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-8">
                             {displayedProducts.map((product, i) => {
-                                const isAlreadyAdded = addedProductIdsMap.has(String(product?._id));
+                                // Match against any possible ID field (RetailerProduct ID, Root Product ID, etc.)
+                                const possibleIds = [
+                                    product.override_id,
+                                    product._id,
+                                    product.id,
+                                    product.productId?._id,
+                                    product.productId
+                                ].filter(Boolean).map(String);
+
+                                const isAlreadyAdded = possibleIds.some(id => addedProductIdsMap.has(id));
 
                                 return (
                                     <ProductCard 
                                         key={`${product._id || product.id || 'p'}-${i}`} 
                                         product={product} 
                                         isAlreadyAdded={isAlreadyAdded}
-                                        moodboard={moodboardData?.data}
+                                        moodboard={isActiveTemplate ? templateSpaceData?.data : moodboardData?.data}
                                     />
                                 );
                             })}

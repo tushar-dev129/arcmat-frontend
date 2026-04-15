@@ -150,7 +150,8 @@ export default function MoodboardDetailPage() {
                 moodboard._id,
                 moodboard.moodboard_name,
                 moodboard.projectId?._id || moodboard.projectId,
-                moodboard.projectId?.projectName || moodboard.projectId?.name
+                moodboard.projectId?.projectName || moodboard.projectId?.name,
+                false // isActiveTemplate
             );
         }
     }, [moodboard, isMounted, setActiveMoodboard]);
@@ -245,23 +246,30 @@ export default function MoodboardDetailPage() {
     }, [boardItems]);
 
     /* ── Backend save ───────────────────────────── */
-    const saveToBackend = useCallback((items, bg = canvasBg) => {
+    const saveToBackend = useCallback((items, bg = canvasBg, snapshot = null) => {
         if (!moodboardId || !isDataLoaded.current) {
             return;
         }
         setIsSaving(true);
 
-
         const budget = items.filter(i => i.type !== 'text').reduce((sum, item) => {
             return sum + (Number(item.price) || 0) * (Number(item.quantity) || 1);
         }, 0);
+
+        const data = {
+            canvasState: items,
+            totalBudget: budget,
+            canvasBackgroundColor: bg
+        };
+
+        // If a snapshot was generated, include it as the cover image
+        if (snapshot) {
+            data.coverImage = snapshot;
+        }
+
         updateMoodboard({
             id: moodboardId,
-            data: {
-                canvasState: items,
-                totalBudget: budget,
-                canvasBackgroundColor: bg
-            }
+            data
         }, {
             onSettled: () => setTimeout(() => setIsSaving(false), 2000)
         });
@@ -312,30 +320,33 @@ export default function MoodboardDetailPage() {
     }, []);
 
     const handleSave = useCallback(() => {
-
-
         toast.promise(
-            new Promise((resolve, reject) => {
+            new Promise(async (resolve, reject) => {
                 try {
+                    let snapshot = null;
+                    if (canvasRef.current && canvasRef.current.getSnapshot) {
+                        snapshot = canvasRef.current.getSnapshot();
+                    }
+
                     if (canvasRef.current && canvasRef.current.getLatestState) {
                         const latest = canvasRef.current.getLatestState();
                         setBoardItems(latest);
-                        saveToBackend(latest);
+                        saveToBackend(latest, canvasBg, snapshot);
                     } else {
-                        saveToBackend(boardItems);
+                        saveToBackend(boardItems, canvasBg, snapshot);
                     }
-                    setTimeout(resolve, 800); // UI delay for clarity
+                    setTimeout(resolve, 800);
                 } catch (err) {
                     reject(err);
                 }
             }),
             {
-                loading: 'Saving canvas state...',
-                success: 'Canvas saved successfully!',
+                loading: 'Capturing design and saving...',
+                success: 'Design saved successfully!',
                 error: 'Could not manually save canvas'
             }
         );
-    }, [boardItems, saveToBackend]);
+    }, [boardItems, saveToBackend, canvasBg]);
 
     // --- Debounced Auto-Saves for Export Data (Custom Rows, Photos, Metadata) ---
     useEffect(() => {

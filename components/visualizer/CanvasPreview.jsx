@@ -82,6 +82,9 @@ const CanvasPreview = forwardRef((props, ref) => {
         },
         getLatestState: () => {
             return getSerializedState();
+        },
+        getSnapshot: (format = 'jpeg') => {
+            return getDataURL(format);
         }
     }));
 

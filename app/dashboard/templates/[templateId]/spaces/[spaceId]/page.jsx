@@ -57,7 +57,8 @@ export default function TemplateSpaceDetailPage() {
                 spaceId, 
                 moodboard.moodboard_name, 
                 templateId, 
-                templateId // We don't have template name here easily, templateId is fine
+                templateId, // We don't have template name here easily, templateId is fine
+                true // isActiveTemplate
             );
 
             if (!isDataLoaded.current) {
