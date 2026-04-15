@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import * as fabric from 'fabric';
 import { removeBackground, preload } from '@imgly/background-removal';
-import { getProductImageUrl, getVariantImageUrl, getProductName, getProductCategory } from '@/lib/productUtils';
+import { getProductImageUrl, getVariantImageUrl, getProductName, getProductCategory, getProductThumbnail } from '@/lib/productUtils';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const DEFAULT_CARD_W = 148;
@@ -32,22 +32,20 @@ const resizeImageForAI = (src, maxDim = 1024) => {
             console.error('resizeImageForAI: Image load failed', src, err);
             resolve(src); // fallback to original on error
         };
-        // Add cache-buster to ensure fresh CORS headers
-        const cacheBuster = `t=${Date.now()}`;
-        img.src = src.includes('?') ? `${src}&${cacheBuster}` : `${src}?${cacheBuster}`;
+        // Add cache-buster for external images to ensure fresh CORS headers
+        if (src.startsWith('http') && !src.includes('data:') && !src.includes('blob:')) {
+            const cacheBuster = `t=${Date.now()}`;
+            img.src = src.includes('?') ? `${src}&${cacheBuster}` : `${src}?${cacheBuster}`;
+        } else {
+            img.src = src;
+        }
     });
 };
 
 // ─── Helper: get image URL from material object ───────────────────────────────
 const getUrl = (v) => {
     if (!v) return null;
-    if (v.isCustomPhoto && v.photoUrl) return v.photoUrl;
-    const first = v.images?.[0];
-    if (first) return first.startsWith('blob:') || first.startsWith('data:') ? first : getProductImageUrl(first);
-    if (v.variant_images?.length) return getVariantImageUrl(v.variant_images[0]);
-    if (typeof v.productId === 'object' && v.productId?.product_images?.length)
-        return getProductImageUrl(v.productId.product_images[0]);
-    return null;
+    return getProductThumbnail(v);
 };
 
 // ─── Main Hook ────────────────────────────────────────────────────────────────
@@ -528,8 +526,8 @@ export function useFabricCanvas({
                 const targetH = item.h || DEFAULT_CARD_H;
 
                 if (imgUrl) {
-                    // Add cache-buster for S3 URLs to bypass stale CORS cache
-                    if (imgUrl.startsWith('http') && !imgUrl.includes('data:')) {
+                    // Add cache-buster for external images to bypass stale CORS cache
+                    if (imgUrl.startsWith('http') && !imgUrl.includes('data:') && !imgUrl.includes('blob:')) {
                         const cacheBuster = `t=${Date.now()}`;
                         imgUrl = imgUrl.includes('?') ? `${imgUrl}&${cacheBuster}` : `${imgUrl}?${cacheBuster}`;
                     }

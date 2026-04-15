@@ -10,7 +10,7 @@ import { useUpdateProject } from '@/hooks/useProject';
 import { toast } from '@/components/ui/Toast';
 import CoverSelectionModal from './CoverSelectionModal';
 import RetailerRatingModal from './RetailerRatingModal';
-import { exportProjectToZip, downloadImage } from '@/lib/exportUtils';
+import { exportProjectToZip, exportProjectToCSV, downloadImage } from '@/lib/exportUtils';
 import { getImageUrl } from '@/lib/productUtils';
 import { moodboardService } from '@/services/moodboardService';
 import { useCreateTemplateFromProject } from '@/hooks/useTemplate';
@@ -210,6 +210,33 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
         }
     };
 
+    const handleDownloadProjectCSV = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsOptionsMenuOpen(false);
+
+        try {
+            setIsExporting(true);
+            toast.loading('📂 Loading project spaces…', { id: 'project-export-fetch' });
+            const listResponse = await moodboardService.getMoodboardList(_id);
+            const spaces = listResponse?.data || [];
+            
+            const fullSpaces = [];
+            for (let i = 0; i < spaces.length; i++) {
+                const detailResponse = await moodboardService.getMoodboardById(spaces[i]._id);
+                if (detailResponse?.data) fullSpaces.push(detailResponse.data);
+            }
+            toast.dismiss('project-export-fetch');
+            await exportProjectToCSV(project, fullSpaces);
+        } catch (error) {
+            console.error('[ProjectCard] CSV Download failed:', error);
+            toast.dismiss('project-export-fetch');
+            toast.error('Export failed');
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const handleCreateTemplate = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -279,6 +306,19 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                     <Download className="w-4 h-4" />
                                 )}
                                 {isExporting ? 'Exporting…' : 'Download Project (ZIP)'}
+                            </button>
+                            <button
+                                onClick={handleDownloadProjectCSV}
+                                disabled={isExporting}
+                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
+                                    isExporting
+                                        ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a]'
+                                }`}
+                                title="Download a consolidated CSV of all project materials"
+                            >
+                                <FileText className="w-4 h-4" />
+                                {isExporting ? 'Exporting…' : 'Download Materials (CSV)'}
                             </button>
                             <button
                                 onClick={handleCreateTemplate}
