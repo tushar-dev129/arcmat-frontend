@@ -72,7 +72,7 @@ export default function RetailerProductsPage() {
             <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                     <h3 className="text-[11px] font-medium text-gray-400 leading-tight mb-1 line-clamp-1 min-h-[1rem]">
-                        {(typeof brand === 'object' && brand !== null ? brand.name : brand) || 'Generic'}
+                        Retailer Inventory
                     </h3>
                     <h1 className="text-2xl font-bold text-gray-900">My Inventory</h1>
                     <p className="text-gray-500 text-sm mt-1">
