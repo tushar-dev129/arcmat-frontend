@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Search, Package, Store, Plus, X, Edit2, AlertCircle, Trash2 } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { useGetRetailerProducts, useUpsertProductOverride, useDeleteProductOverride } from '@/hooks/useRetailer';
-import { getProductImageUrl } from '@/lib/productUtils';
+import { getProductImageUrl, getSpecifications } from '@/lib/productUtils';
 import Pagination from '@/components/ui/Pagination';
 import Link from 'next/link';
 import { toast } from '@/components/ui/Toast';
@@ -71,6 +71,9 @@ export default function RetailerProductsPage() {
             {/* Header */}
             <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
+                    <h3 className="text-[11px] font-medium text-gray-400 leading-tight mb-1 line-clamp-1 min-h-[1rem]">
+                        {(typeof brand === 'object' && brand !== null ? brand.name : brand) || 'Generic'}
+                    </h3>
                     <h1 className="text-2xl font-bold text-gray-900">My Inventory</h1>
                     <p className="text-gray-500 text-sm mt-1">
                         Manage your custom pricing and stock for reselling products.
@@ -155,9 +158,21 @@ export default function RetailerProductsPage() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 align-middle">
-                                            <span className="inline-flex items-center px-2 py-1 bg-gray-50 border border-gray-100 text-gray-600 rounded-lg text-[10px] font-bold tracking-wider uppercase">
-                                                {variant.variant_name || 'Standard'}
-                                            </span>
+                                            <div className="flex flex-col gap-1">
+                                                {(() => {
+                                                    const attrs = getSpecifications(product, variant).filter(a => a.label !== 'SKU');
+                                                    return (
+                                                        <div className="flex flex-wrap items-center gap-1 min-h-[1rem]">
+                                                            {attrs.length > 0 && attrs.map((attr, idx) => (
+                                                                <span key={idx} className="flex items-center gap-1 uppercase">
+                                                                    <span className="text-[9px] font-normal text-[#e09a74]">{attr.value}</span>
+                                                                    {idx < attrs.length - 1 && <span className="text-[9px] text-[#e09a74]/80">||</span>}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+                                                    );
+                                                })()}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 align-middle">
                                             <div className="flex flex-col gap-0.5">

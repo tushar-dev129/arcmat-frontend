@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useGetVariants, useGetRetailerProducts } from "@/hooks/useProduct";
 import { useGetMoodboard } from "@/hooks/useMoodboard";
 import { useGetVendors } from "@/hooks/useVendor";
-import { resolvePricing, formatCurrency } from "@/lib/productUtils";
+import { normalizeAvailableAttributes, normalizeAttributeKey, resolvePricing } from "@/lib/productUtils";
 import { Loader2, ArrowLeft, PackageOpen } from "lucide-react";
 import CompareBar from "@/components/ui/CompareBar";
 import Pagination from "@/components/ui/Pagination";
@@ -67,7 +67,10 @@ export default function ProductListPage() {
         // Spread dynamic attributes with attr_ prefix
         ...Object.entries(activeFilters.attributes || {}).reduce((acc, [key, values]) => {
             if (values && values.length > 0) {
-                acc[`attr_${key}`] = values.join(',');
+                acc[`attr_${normalizeAttributeKey(key)}`] = values
+                    .map((value) => String(value || '').trim().replace(/\s+/g, ' '))
+                    .filter(Boolean)
+                    .join(',');
             }
             return acc;
         }, {}),
@@ -178,11 +181,7 @@ export default function ProductListPage() {
     }, [metadata]);
 
     const availableAttributes = useMemo(() => {
-        const attrs = metadata?.availableAttributes || [];
-        return attrs.map(attr => ({
-            ...attr,
-            values: Array.from(new Set(attr.values)).filter(Boolean).sort() // Deduplicate values natively
-        }));
+        return normalizeAvailableAttributes(metadata?.availableAttributes || []);
     }, [metadata]);
 
     return (

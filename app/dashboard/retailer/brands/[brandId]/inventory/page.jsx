@@ -4,7 +4,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Package, Search, ArrowLeft, Plus, Check, Info, Store, X, AlertCircle } from 'lucide-react';
 import clsx from 'clsx';
 import { useGetBrandInventory, useUpsertProductOverride, useBulkAddInventory } from '@/hooks/useRetailer';
-import { getProductImageUrl } from '@/lib/productUtils';
+import { getProductImageUrl, getSpecifications } from '@/lib/productUtils';
 import Button from '@/components/ui/Button';
 import { toast } from '@/components/ui/Toast';
 import Pagination from '@/components/ui/Pagination';
@@ -176,6 +176,9 @@ export default function BrandInventoryPage() {
                         )}
                     </div>
                     <div>
+                        <h3 className="text-[11px] font-medium text-gray-400 leading-tight mb-1 line-clamp-1 min-h-[1rem]">
+                            {(typeof brandInfo === 'object' && brandInfo !== null ? brandInfo.name : brandInfo) || 'Generic'}
+                        </h3>
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight">
                             {brandInfo?.name || 'Brand'} Inventory
                         </h1>
@@ -297,9 +300,22 @@ export default function BrandInventoryPage() {
                                                             <p className="text-xs font-bold text-gray-900 truncate">
                                                                 {variant.variant_name || 'Standard Variant'}
                                                             </p>
-                                                            <div className="text-[10px] text-gray-500 font-mono mt-0.5 flex items-center gap-2">
+                                                            {(() => {
+                                                                const attrs = getSpecifications(product, variant).filter(a => a.label !== 'SKU');
+                                                                return (
+                                                                    <div className="flex flex-wrap items-center gap-1 mt-0.5 min-h-[1rem]">
+                                                                        {attrs.length > 0 && attrs.map((attr, idx) => (
+                                                                            <span key={idx} className="flex items-center gap-1 uppercase">
+                                                                                <span className="text-[9px] font-semibold text-[#e09a74]">{attr.value}</span>
+                                                                                {idx < attrs.length - 1 && <span className="text-[9px] text-[#e09a74]/80">||</span>}
+                                                                            </span>
+                                                                        ))}
+                                                                    </div>
+                                                                );
+                                                            })()}
+                                                            <div className="text-[10px] text-gray-400 font-mono mt-0.5 flex items-center gap-2">
                                                                 <span>SKU: {variant.skucode || 'N/A'}</span>
-                                                                <span className="text-gray-300">•</span>
+                                                                <span className="text-gray-200">•</span>
                                                                 <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
                                                             </div>
                                                         </div>

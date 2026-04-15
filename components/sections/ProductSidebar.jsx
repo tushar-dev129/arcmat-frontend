@@ -1,12 +1,14 @@
 "use client"
 import React, { useState } from 'react'
-import { formatCurrency, getColorCode } from '@/lib/productUtils'
+import { normalizeAttributeKey, normalizeAttributeValue } from '@/lib/productUtils'
 
 const filterCategories = [
     "Brand",
     "Price Range",
     "City",
 ]
+
+const normalizedStaticCategories = filterCategories.map((category) => normalizeAttributeKey(category));
 
 const ToggleSwitch = ({ label, checked, onChange }) => (
     <div className="flex items-center justify-between py-3 border-b border-gray-100">
@@ -87,19 +89,21 @@ const ProductSidebar = ({
 
     const handleAttributeChange = (key, value, checked) => {
         setActiveFilters(prev => {
-            const currentValues = (prev.attributes || {})[key] || [];
+            const normalizedKey = normalizeAttributeKey(key);
+            const normalizedValue = String(value || '').trim().replace(/\s+/g, ' ');
+            const currentValues = (prev.attributes || {})[normalizedKey] || [];
             const newValues = checked
-                ? [...currentValues, value]
-                : currentValues.filter(v => v !== value);
+                ? Array.from(new Set([...currentValues, normalizedValue]))
+                : currentValues.filter(v => normalizeAttributeValue(v) !== normalizeAttributeValue(normalizedValue));
 
             const updatedAttributes = {
                 ...(prev.attributes || {}),
-                [key]: newValues
+                [normalizedKey]: newValues
             };
 
             // Remove key if empty
             if (newValues.length === 0) {
-                delete updatedAttributes[key];
+                delete updatedAttributes[normalizedKey];
             }
 
             return {
@@ -138,7 +142,7 @@ const ProductSidebar = ({
     const allCategories = React.useMemo(() => {
         const dynamicCats = availableAttributes.map(attr => attr.key);
         // Avoid duplicates if a dynamic attribute has the same name as a static one
-        const filteredDynamic = dynamicCats.filter(cat => !filterCategories.includes(cat));
+        const filteredDynamic = dynamicCats.filter(cat => !normalizedStaticCategories.includes(normalizeAttributeKey(cat)));
         return [...filterCategories, ...filteredDynamic];
     }, [availableAttributes]);
 
@@ -182,7 +186,7 @@ const ProductSidebar = ({
                 {allCategories.map((cat, idx) => (
                     <AccordionItem
                         key={idx}
-                        title={cat}
+                        title={availableAttributes.find(a => a.key === cat)?.label || cat}
                         isOpen={openSections[cat]}
                         onToggle={() => toggleSection(cat)}
                     >
@@ -279,7 +283,7 @@ const ProductSidebar = ({
                                             <input
                                                 type="checkbox"
                                                 className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-[#e09a74] checked:border-[#e09a74] transition-all"
-                                                checked={((activeFilters.attributes || {})[cat] || []).includes(val)}
+                                                checked={((activeFilters.attributes || {})[cat] || []).some(selected => normalizeAttributeValue(selected) === normalizeAttributeValue(val))}
                                                 onChange={(e) => handleAttributeChange(cat, val, e.target.checked)}
                                             />
                                             <svg className="absolute h-3.5 w-3.5 text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
