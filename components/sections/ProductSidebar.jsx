@@ -164,7 +164,7 @@ const ProductSidebar = ({
                     )}
             </div>
 
-            <div className="flex flex-col mb-4">
+{/* <div className="flex flex-col mb-4">
                 <ToggleSwitch
                     label="Commercial"
                     checked={activeFilters.toggles.commercial}
@@ -180,7 +180,7 @@ const ProductSidebar = ({
                     checked={activeFilters.toggles.allColorways}
                     onChange={(val) => handleToggleChange('allColorways', val)}
                 />
-            </div>
+            </div> */}
 
             <div className="mt-2">
                 {allCategories.map((cat, idx) => (
