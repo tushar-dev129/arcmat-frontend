@@ -14,8 +14,9 @@ import NotificationCenter from '../dashboard/NotificationCenter';
 import { useGetProducts, useGetRetailerProducts } from '@/hooks/useProduct';
 import { getProductThumbnail, resolvePricing, formatCurrency } from '@/lib/productUtils';
 import { useGetWishlist } from '@/hooks/useWishlist';
-import { useCartStore } from '@/store/useCartStore';
 import { useGetCartCount } from '@/hooks/useCart';
+import useProjectStore from '@/store/useProjectStore';
+import { useCartStore } from '@/store/useCartStore';
 const MotionFolder = motion(Folder);
 
 const Header = ({ variant = 'default' }) => {
@@ -31,6 +32,7 @@ const Header = ({ variant = 'default' }) => {
     const [mounted, setMounted] = useState(false);
     const pathname = usePathname();
     const { toggleMobileSidebar, isFolderAnimating } = useSidebarStore();
+    const { activeProjectId, activeMoodboardId } = useProjectStore();
 
     useEffect(() => {
         setMounted(true);
@@ -303,9 +305,15 @@ const Header = ({ variant = 'default' }) => {
 
                             {mounted && user?.role === 'architect' && (
                                 <Link 
-                                    href="/dashboard/projects"
+                                    href={
+                                        activeProjectId && activeMoodboardId
+                                            ? `/dashboard/projects/${activeProjectId}/moodboards/${activeMoodboardId}`
+                                            : activeProjectId
+                                                ? `/dashboard/projects/${activeProjectId}/moodboards`
+                                                : "/dashboard/projects"
+                                    }
                                     className='p-2 hover:bg-gray-50 rounded-full hidden sm:flex shrink-0'
-                                    title="All Projects"
+                                    title={activeMoodboardId ? "Return to Space" : "All Projects"}
                                 >
                                     <MotionFolder
                                         size={22}
@@ -474,7 +482,13 @@ const Header = ({ variant = 'default' }) => {
 
                                         {(!user || user.role !== 'brand') && (
                                             <Link
-                                                href="/dashboard"
+                                                href={
+                                                    activeProjectId && activeMoodboardId
+                                                        ? `/dashboard/projects/${activeProjectId}/moodboards/${activeMoodboardId}`
+                                                        : activeProjectId
+                                                            ? `/dashboard/projects/${activeProjectId}/moodboards`
+                                                            : "/dashboard/projects"
+                                                }
                                                 onClick={() => setProfileOpen(false)}
                                                 className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74]"
                                             >
@@ -499,7 +513,7 @@ const Header = ({ variant = 'default' }) => {
                                                         ease: "easeInOut"
                                                     }}
                                                 />
-                                                Projects
+                                                {activeMoodboardId ? "Return to Space" : "Projects"}
                                             </Link>
                                         )}
 
