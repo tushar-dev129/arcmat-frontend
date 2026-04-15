@@ -115,7 +115,6 @@ export default function ProductListPage() {
         const max = Math.ceil(Math.max(...prices) / 100) * 100;
         return { minPrice: min, maxPrice: max, priceStep: 100 };
     }, [products, metadata]);
-    Vinc:
 
     useEffect(() => {
         const parsed = parseFiltersFromURL(searchParams);
@@ -235,14 +234,7 @@ export default function ProductListPage() {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-8">
                             {displayedProducts.map((product, i) => {
-                                // Match the product ID derivation logic in ProductCard
-                                const isVariantCentric = Boolean(product.productId && typeof product.productId === 'object');
-                                const rootProduct = isVariantCentric ? product.productId : product;
-                                
-                                const rootId = String(rootProduct?._id || rootProduct?.id);
-                                const overrideId = String(product?.override_id || product?._id);
-
-                                const isAlreadyAdded = addedProductIdsMap.has(overrideId);
+                                const isAlreadyAdded = addedProductIdsMap.has(String(product?._id));
 
                                 return (
                                     <ProductCard 
