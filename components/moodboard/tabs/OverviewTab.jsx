@@ -1,6 +1,7 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Download, ChevronDown, Search, Tag, ShoppingCart, Plus, ImagePlus, List, Building2, MessageCircle, AlertCircle } from 'lucide-react';
+import { useGetCategoryTree } from '@/hooks/useCategory';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -69,6 +70,15 @@ export default function OverviewTab({
 }) {
     const { user } = useAuth();
     const isClient = user?.role === 'customer';
+
+    // Fetch category tree to get the 2nd category for redirect
+    const { data: treeDataRaw } = useGetCategoryTree();
+    const defaultCategoryId = useMemo(() => {
+        const tree = Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
+        if (tree.length >= 2) return tree[1]._id || tree[1].id;
+        if (tree.length >= 1) return tree[0]._id || tree[0].id;
+        return 'All';
+    }, [treeDataRaw]);
 
     const [brandFilterOpen, setBrandFilterOpen] = useState(false);
     const [selectedBrands, setSelectedBrands] = useState([]);
@@ -276,7 +286,7 @@ export default function OverviewTab({
                             <button
                                 onClick={() => {
                                     useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '');
-                                    router.push('/productlist');
+                                    router.push(`/productlist?category=${defaultCategoryId}`);
                                 }}
                                 className="px-6 py-3 bg-[#1a1a2e] text-white font-bold rounded-2xl hover:bg-[#2d2d4a] transition-colors flex items-center gap-2"
                             >
@@ -311,7 +321,7 @@ export default function OverviewTab({
                                         onClick={() => {
                                             setAddCardOpen(false);
                                             useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '');
-                                            router.push('/productlist');
+                                            router.push(`/productlist?category=${defaultCategoryId}`);
                                         }}
                                         className="w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 flex items-center gap-3"
                                     >

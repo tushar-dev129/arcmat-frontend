@@ -16,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth';
 import useProjectStore from '@/store/useProjectStore';
 import { useSidebarStore } from '@/store/useSidebarStore';
 import { resolvePricing } from '@/lib/productUtils';
+import { useGetCategoryTree } from '@/hooks/useCategory';
 
 import { ArrowLeft, Loader2, Edit2, Check, X, ImagePlus } from 'lucide-react';
 
@@ -40,6 +41,15 @@ export default function TemplateSpaceDetailPage() {
     const updateMoodboardMutation = useUpdateMoodboardTemplate();
     const updateEstimationMutation = useUpdateEstimatedCostTemplate();
     const queryClient = useQueryClient();
+
+    // Fetch category tree to get the 2nd category for redirect
+    const { data: treeDataRaw } = useGetCategoryTree();
+    const defaultCategoryId = useMemo(() => {
+        const tree = Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
+        if (tree.length >= 2) return tree[1]._id || tree[1].id;
+        if (tree.length >= 1) return tree[0]._id || tree[0].id;
+        return 'All';
+    }, [treeDataRaw]);
 
     const moodboard = spaceData?.data;
     const estimation = moodboard?.estimation;
@@ -212,7 +222,7 @@ export default function TemplateSpaceDetailPage() {
                         </div>
                         <div className="flex items-center gap-4">
                             <button
-                                onClick={() => router.push('/productlist')}
+                                onClick={() => router.push(`/productlist?category=${defaultCategoryId}`)}
                                 className="px-6 py-2.5 bg-[#3c4153] hover:bg-[#2d3142] text-white rounded-xl font-bold text-sm shadow-xl transition-all"
                             >
                                 Add Products

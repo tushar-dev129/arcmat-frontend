@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import ProductFilterBar from "@/components/sections/ProductFilterBar";
+import CategoryBreadcrumb from "@/components/sections/CategoryBreadcrumb";
 import ProductSidebar from "@/components/sections/ProductSidebar";
 import ProductCard from "@/components/cards/ProductCard";
 import Container from "@/components/ui/Container";
@@ -218,18 +219,17 @@ export default function ProductListPage() {
                 </div>
 
                 <main className="flex-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                        <div className="flex flex-col gap-1">
-                            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">All Products</h1>
-                            <p className="text-sm text-gray-500 font-medium">Browse our latest collection.</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                        </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-3 ">
+                        <CategoryBreadcrumb 
+                            selectedCategory={selectedCategory} 
+                            onCategoryChange={handleCategoryChange} 
+                        />
+                       
                     </div>
 
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 text-gray-400 hover:text-[#e09a74] transition-colors mb-6 group"
+                        className="flex items-center gap-2 text-gray-400 hover:text-[#e09a74] transition-colors mb-10 group"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         <span className="text-xs font-bold uppercase tracking-widest">Back</span>

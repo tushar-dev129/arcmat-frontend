@@ -5,6 +5,7 @@ import Button from '../ui/Button'
 import { useGetCategoryTree } from '@/hooks/useCategory'
 import { useCompareStore } from '@/store/useCompareStore'
 import { Loader2 } from 'lucide-react'
+import { getCategoryPath } from '@/lib/productUtils'
 
 const findNodeAndDetermineDisplay = (tree, targetId) => {
     if (targetId === 'All' || !targetId) {
@@ -46,26 +47,6 @@ const findNodeAndDetermineDisplay = (tree, targetId) => {
     return { nodesToDisplay: tree, parentNode: null };
 }
 
-const getCategoryPath = (tree, targetId) => {
-    if (!targetId || targetId === 'All') return [];
-
-    let path = [];
-    const traverse = (nodes, currentPath = []) => {
-        for (const node of nodes) {
-            const nextPath = [...currentPath, { name: node.name, id: node._id || node.id }];
-            if (node._id === targetId || node.id === targetId) {
-                path = nextPath;
-                return true;
-            }
-            if (node.children?.length > 0) {
-                if (traverse(node.children, nextPath)) return true;
-            }
-        }
-        return false;
-    };
-    traverse(tree);
-    return path;
-}
 
 const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters, categoryCounts = {} }) => {
     const { data: treeDataRaw, isLoading } = useGetCategoryTree();
@@ -78,13 +59,13 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
         return getCategoryPath(treeData, selectedCategory);
     }, [treeData, selectedCategory]);
 
-    const dynamicCategories = useMemo(() => {
-        if (!treeData || treeData.length === 0) return [];
+    const { dynamicCategories, parentNode } = useMemo(() => {
+        if (!treeData || treeData.length === 0) return { dynamicCategories: [], parentNode: null };
 
-        const { nodesToDisplay } = findNodeAndDetermineDisplay(treeData, selectedCategory);
+        const { nodesToDisplay, parentNode: pNode } = findNodeAndDetermineDisplay(treeData, selectedCategory);
 
         const uniqueNames = new Set();
-        return nodesToDisplay.filter(cat => {
+        const filtered = nodesToDisplay.filter(cat => {
             const isDuplicate = uniqueNames.has(cat.name);
             uniqueNames.add(cat.name);
             return !isDuplicate;
@@ -92,6 +73,8 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
             name: cat.name,
             id: cat._id || cat.id
         }));
+
+        return { dynamicCategories: filtered, parentNode: pNode };
     }, [treeData, selectedCategory]);
 
     const comparedCount = useCompareStore(state => state.comparedProducts.length);
@@ -115,35 +98,33 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
                 </Button>
 
                 <div className="flex-1 min-w-0 overflow-hidden">
-                    <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scroll-smooth py-1 px-1">
+                    <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scroll-smooth py-1 px-1 custom-scrollbar">
                         {isLoading ? (
                             <div className="flex items-center gap-2 px-4 py-2">
                                 <Loader2 className="w-4 h-4 text-[#e09a74] animate-spin" />
                                 <span className="text-sm text-gray-400">Loading categories...</span>
                             </div>
                         ) : (
-                            <div className="flex items-center gap-2 sm:gap-3">
+                            <div className="flex items-center gap-2 ml-4 sm:gap-3">
                                 {/* Breadcrumb Context Area */}
-                                <div className="flex items-center bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-2xl mr-2 shadow-inner">
                                     <button
-                                        onClick={() => setSelectedCategory('All')}
-                                        className={`text-[14px] sm:text-[15px] font-bold transition-all px-2 py-0.5 rounded-lg hover:bg-gray-200 cursor-pointer ${selectedCategory === 'All' ? 'text-[#e09a74]' : 'text-gray-500'}`}
+                                        onClick={() => {
+                                            if (selectedCategory !== 'All' && categoryPath.length > 0) {
+                                                // If we are deep, 'All' shows all products of the parent level
+                                                // If at top-level (no parent), stay on current category; otherwise go up one level
+                                            const parentId = categoryPath.length > 1 ? categoryPath[categoryPath.length - 2].id : selectedCategory;
+                                                setSelectedCategory(parentId);
+                                            } else {
+                                                setSelectedCategory('All');
+                                            }
+                                        }}
+                                        className={`text-[14px] sm:text-[16px] font-semibold transition-all  cursor-pointer ${
+                                            // Highlighted if we are at root or explicitly at a parent state with sub-options
+                                            (selectedCategory === 'All' || (parentNode && (parentNode._id === selectedCategory || parentNode.id === selectedCategory))) 
+                                            ? 'text-[#e09a74]' : 'text-gray-500'}`}
                                     >
                                         All
                                     </button>
-                                    
-                                    {categoryPath.map((pathItem, idx) => (
-                                        <React.Fragment key={pathItem.id}>
-                                            <span className="text-gray-300 mx-1 font-light">/</span>
-                                            <button
-                                                onClick={() => setSelectedCategory(pathItem.id)}
-                                                className={`text-[14px] sm:text-[15px] font-bold transition-all px-2 py-0.5 rounded-lg hover:bg-gray-200 cursor-pointer ${selectedCategory === pathItem.id ? 'text-[#e09a74]' : 'text-gray-500'}`}
-                                            >
-                                                {pathItem.name}
-                                            </button>
-                                        </React.Fragment>
-                                    ))}
-                                </div>
 
                                 {/* Divider for drill-down */}
                                 {dynamicCategories.length > 0 && <div className="h-6 w-[1px] bg-gray-200 mx-1 shrink-0"></div>}
@@ -168,20 +149,6 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
 
                 <div className="flex items-center gap-1 sm:gap-3 shrink-0">
 
-                    <div className="hidden md:block h-8 w-[1px] bg-gray-200 mx-1"></div>
-
-                    <Button
-                        className="p-2 hover:bg-gray-50 rounded-full transition-colors cursor-pointer relative"
-                    >
-                        <Image src="/Icons/Search.svg" width={20} height={20} alt="Search" className="opacity-60" />
-                    </Button>
-
-                    <Button
-                        className="p-2 flex sm:hidden hover:bg-gray-50 rounded-full transition-colors relative"
-                    >
-                        <Image src="/Icons/Vector_2.svg" width={15} height={15} alt="Search" className="opacity-60" />
-                    </Button>
-
                     <Button
                         onClick={() => openCompareModal()}
                         className="hidden sm:block ml-1 sm:ml-2 px-4 sm:px-7 py-2 sm:py-2.5 bg-white border border-gray-200 rounded-2xl hover:bg-[#e09a74] hover:text-white transition-colors text-[14px] sm:text-[15px] font-bold text-gray-700 shadow-sm cursor-pointer whitespace-nowrap"
@@ -193,6 +160,22 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
             </Container>
 
             <style jsx>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    height: 4px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #e5e7eb;
+                    border-radius: 10px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: #d1d5db;
+                }
+                .custom-scrollbar::-webkit-scrollbar-button {
+                    display: none;
+                }
                 .no-scrollbar::-webkit-scrollbar {
                     display: none;
                 }

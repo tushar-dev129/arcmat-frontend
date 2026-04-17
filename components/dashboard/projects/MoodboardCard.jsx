@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
     Layout, IndianRupee, ArrowRight, Trash2, Plus, Edit2, Check, X,
     MonitorPlay, Camera, Copy, Download, FileText, MessageCircle, AlertCircle,
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import CoverSelectionModal from './CoverSelectionModal';
 import { exportMoodboardToZip, exportMoodboardToCSV } from '@/lib/exportUtils';
 import { moodboardService } from '@/services/moodboardService';
+import { useGetCategoryTree } from '@/hooks/useCategory';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Export progress label shown while downloading
@@ -59,6 +60,15 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
 
     const { mutate: updateMoodboard, isPending } = useUpdateMoodboard();
     const { mutate: duplicateSpace, isPending: isDuplicating } = useDuplicateMoodboard();
+
+    // Fetch category tree to get the 2nd category for redirect
+    const { data: treeDataRaw } = useGetCategoryTree();
+    const defaultCategoryId = useMemo(() => {
+        const tree = Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
+        if (tree.length >= 2) return tree[1]._id || tree[1].id;
+        if (tree.length >= 1) return tree[0]._id || tree[0].id;
+        return 'All';
+    }, [treeDataRaw]);
 
     const exportStageLabel = useExportStage(isExporting);
     const exportMenuRef = useRef(null);
@@ -508,7 +518,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     <div className="flex items-center gap-2">
                         {isArchitect && (
                             <Link
-                                href="/productlist"
+                                href={`/productlist?category=${defaultCategoryId}`}
                                 onClick={() => useProjectStore.getState().setActiveMoodboard(_id, moodboard_name, projectId, '')}
                                 className="p-2.5 bg-[#fef7f2] text-[#d9a88a] hover:bg-[#d9a88a] hover:text-white rounded-xl transition-all"
                                 title="Add Items"

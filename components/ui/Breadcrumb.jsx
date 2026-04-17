@@ -12,15 +12,15 @@ const Breadcrumb = ({ items, className }) => {
 
     return (
         <nav className={clsx("flex overflow-x-auto no-scrollbar py-2", className)} aria-label="Breadcrumb">
-            <ol className="flex items-center space-x-2 sm:space-x-3">
+            <ol className="flex items-center space-x-1 sm:space-x-1">
                 
                 
                 {items.map((item, index) => (
-                    <li key={index} className="flex items-center space-x-2 sm:space-x-3">
+                    <li key={index} className="flex items-center space-x-1 sm:space-x-1">
                         {index > 0 && <ChevronRight className="w-3.5 h-3.5 text-gray-300 shrink-0" />}
                         {index === items.length - 1 ? (
                             <span 
-                                className="text-xs sm:text-sm font-black text-[#e09a74] uppercase tracking-widest whitespace-nowrap"
+                                className="text-md sm:text-xl font-semibold text-[#e09a74]  tracking-wider whitespace-nowrap"
                                 aria-current="page"
                             >
                                 {item.label}
@@ -28,7 +28,7 @@ const Breadcrumb = ({ items, className }) => {
                         ) : (
                             <button
                                 onClick={() => item.onClick && item.onClick()}
-                                className="text-xs sm:text-sm font-bold text-gray-400 hover:text-gray-900 transition-colors uppercase tracking-widest whitespace-nowrap cursor-pointer"
+                                className="text-md sm:text-xl font-semibold text-[#e09a74] hover:opacity-80 transition-opacity tracking-wider whitespace-nowrap cursor-pointer"
                             >
                                 {item.label}
                             </button>

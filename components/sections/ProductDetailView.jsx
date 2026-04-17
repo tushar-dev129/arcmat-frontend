@@ -787,31 +787,29 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                             <section className="bg-white rounded-xl border border-gray-100 p-2">
                                 <Accordion items={[
                                     {
-                                        title: 'Dimensions', content: <div className="space-y-4 p-3">
-                                            <ul className="space-y-2">
-                                                {(product.dimensions || ['Standard sizing applies', 'Contact brand for custom dimensions']).map((dim, idx) => (
-                                                    <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
-                                                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-gray-400" />{dim}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            {displayWeight && (
-                                                <div className="flex justify-between items-center text-sm p-3 rounded-lg bg-blue-50 border border-blue-100">
-                                                    <span className="font-semibold text-blue-700">Estimated Weight</span>
-                                                    <span className="text-blue-900">{displayWeight}</span>
+                                        title: 'Meta Details', 
+                                        content: <div className="space-y-4 p-5">
+                                            {product.meta_title && (
+                                                <div className="text-lg font-bold text-gray-900 leading-tight">
+                                                    {product.meta_title}
                                                 </div>
+                                            )}
+                                            {product.meta_keywords && (
+                                                <div className="text-sm text-[#e09a74] font-medium tracking-wide">
+                                                    {product.meta_keywords}
+                                                </div>
+                                            )}
+                                            {product.meta_description && (
+                                                <div className="text-sm text-gray-600 leading-relaxed border-t border-gray-50 pt-3">
+                                                    {product.meta_description}
+                                                </div>
+                                            )}
+                                            {(!product.meta_title && !product.meta_keywords && !product.meta_description) && (
+                                                <div className="text-sm text-gray-400 italic">No additional details available.</div>
                                             )}
                                         </div>
                                     },
                                     {
-                                        title: 'Materials & Tags', content: <div className="flex flex-wrap gap-2 p-3">
-                                            {(product.tags || product.category_name || 'Arcmat Collection').split(',').map((tag, idx) => (
-                                                <span key={idx} className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-50 text-gray-600 border border-gray-100 hover:bg-[#e09a74] hover:text-white transition cursor-pointer">
-                                                    #{tag.trim()}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    }, {
                                         title: 'BIM/CAD Files',
                                         content: (
                                             <div className="flex flex-wrap gap-2 p-3">
