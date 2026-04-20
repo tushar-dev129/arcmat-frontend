@@ -90,6 +90,17 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
         enabled: isAlreadyAddedProp === undefined && !!activeMoodboardId
     });
 
+    // For storefront-grouped products, override_id lives on each variant, not the root product.
+    const resolveRetailerProductId = (p) => {
+        if (!p) return null;
+        if (p.override_id) return String(p.override_id);
+        if (p.variants && p.variants.length > 0) {
+            const v = p.variants.find(v => v.override_id) || p.variants[0];
+            if (v?.override_id) return String(v.override_id);
+        }
+        return String(p._id || p.id || '');
+    };
+
     // Safety check: ensure productId is mapped properly
     const rawId = rootProduct._id || rootProduct.id;
     const isAlreadyAdded = React.useMemo(() => {
@@ -97,11 +108,11 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
         if (!moodboardData?.data?.estimatedCostId?.productIds) return false;
         const addedIds = moodboardData.data.estimatedCostId.productIds;
 
-        // Handle case where productIds might be populated objects vs raw string IDs
-        const currentSpecificId = String(product.override_id || product._id || product.id);
+        // The ID we stored: the retailer product ID resolved from the product object
+        const currentRetailerId = resolveRetailerProductId(product);
         return addedIds.some(p => {
             const addedId = typeof p === 'object' && p !== null ? p._id : p;
-            return String(addedId) === currentSpecificId;
+            return String(addedId) === currentRetailerId;
         });
     }, [isAlreadyAddedProp, moodboardData, rawId]);
 
@@ -203,14 +214,12 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
 
         const existingRetailerProductIds = currentMoodboard.estimatedCostId.productIds || [];
 
-        // We must filter out BOTH the root product ID and the RetailerProduct ID (override_id)
-        // because the item might be stored as either depending on how it was added.
-        const overrideId = product.override_id || product._id;
+        // Resolve the correct RetailerProduct ID (override_id is on variants for storefront products)
+        const overrideId = resolveRetailerProductId(product);
 
         const updatedIds = existingRetailerProductIds.filter(p => {
             const addedId = typeof p === 'object' && p !== null ? p._id : p;
-            const addedIdStr = String(addedId);
-            return addedIdStr !== String(overrideId);
+            return String(addedId) !== overrideId;
         }).map(p => typeof p === 'object' ? p._id : p); // Ensure we send back an array of IDs
 
         updateEstimateMutation({

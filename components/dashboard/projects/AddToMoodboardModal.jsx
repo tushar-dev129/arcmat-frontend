@@ -60,14 +60,29 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
         }
     }, [selectedProjectId, activeProjectId, activeMoodboardId, targetType]);
 
+    // Extract the correct RetailerProduct ID from a product object.
+    // For storefront-grouped products the `override_id` lives on each variant
+    // (product.variants[n].override_id), NOT on the root product itself.
+    // For variant-centric flows (product detail page) it may be on product.override_id directly.
+    const resolveRetailerProductId = (p) => {
+        // Direct override_id (variant-centric / already-resolved)
+        if (p.override_id) return p.override_id;
+        // Storefront-grouped: override_id is on the first (cheapest) variant
+        if (p.variants && p.variants.length > 0) {
+            const variant = p.variants.find(v => v.override_id) || p.variants[0];
+            if (variant?.override_id) return variant.override_id;
+        }
+        // Fallback: use the product's own _id (should not reach here in normal flow)
+        return p._id || p.id;
+    };
+
     // Handle extraction of single or multiple product IDs
     const getProductIds = () => {
         if (products && products.length > 0) {
-            return products.map(p => p.override_id || p._id || p.id).filter(Boolean);
+            return products.map(p => resolveRetailerProductId(p)).filter(Boolean);
         }
         if (product) {
-            // Restore previous logic for single product matching
-            const id = product.override_id || product._id || product.id;
+            const id = resolveRetailerProductId(product);
             return id ? [id] : [];
         }
         return [];
@@ -103,6 +118,11 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             // Force invalidate query keys to update UI immediately
             queryClient.invalidateQueries({ queryKey: ['moodboards'] });
             queryClient.invalidateQueries({ queryKey: ['project-templates'] });
+            // Also invalidate the specific moodboard detail so the overview tab refreshes
+            if (selectedMoodboardId) {
+                queryClient.invalidateQueries({ queryKey: ['moodboards', 'detail', selectedMoodboardId] });
+                queryClient.invalidateQueries({ queryKey: ['moodboard', selectedMoodboardId] });
+            }
             
             triggerFolderAnimation();
             onClose();
@@ -112,8 +132,11 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             const existingCostId = selectedMb?.estimation?._id;
             if (existingCostId) {
                 const existingProductIds = selectedMb.estimation.productIds || [];
-                const normalizedExisting = existingProductIds.map(p => typeof p === 'object' ? (p.productId?._id || p._id) : p);
-                const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id));
+                // Stringify both sides to ensure ObjectId vs string comparisons work correctly
+                const normalizedExisting = existingProductIds.map(p =>
+                    String(typeof p === 'object' && p !== null ? (p._id || p) : p)
+                );
+                const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(String(id)));
 
                 if (newIds.length === 0) {
                     toast.success("Products already exist in this template space!");
@@ -151,10 +174,13 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
         if (selectedMb?.estimatedCostId) {
             // UPDATING existing estimation for PROJECT
             const existingRetailerProductIds = selectedMb.estimatedCostId.productIds || [];
-            const normalizedExisting = existingRetailerProductIds.map(p => typeof p === 'object' ? (p.productId?._id || p._id) : p);
+            // Stringify both sides to ensure ObjectId vs string comparisons work correctly
+            const normalizedExisting = existingRetailerProductIds.map(p =>
+                String(typeof p === 'object' && p !== null ? (p._id || p) : p)
+            );
 
             // Filter out products that are already in the list
-            const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id));
+            const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(String(id)));
 
             if (newIds.length === 0) {
                 toast.success("Products already exist in this moodboard!");
