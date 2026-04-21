@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { getProductImageUrl, getVariantImageUrl, getColorCode, resolvePricing, calculateDiscount, formatCurrency } from '@/lib/productUtils'
+import { getProductImageUrl, getVariantImageUrl, getColorCode, isLightColorName, resolvePricing, calculateDiscount, formatCurrency } from '@/lib/productUtils'
 import { Heart, ShoppingCart, X, Check, Plus, CheckCircle2 } from 'lucide-react'
 import { useAddToWishlist, useGetWishlist } from '@/hooks/useWishlist'
 import { useAuth } from '@/hooks/useAuth'
@@ -427,11 +427,14 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                                     {isColor && colorCode && (
                                         <>
                                             <span className="text-gray-500 font-bold">Color:</span>
-                                            <span
-                                                className="w-3.5 h-3.5 rounded-full border border-gray-100 shadow-sm"
-                                                style={{ backgroundColor: colorCode }}
-                                                title={attr.value}
-                                            />
+                                            <span className="inline-flex items-center gap-1.5">
+                                                <span
+                                                    className={`w-3.5 h-3.5 rounded-full border shadow-sm ${isLightColorName(attr.value) ? 'border-gray-300' : 'border-gray-100'}`}
+                                                    style={{ backgroundColor: colorCode }}
+                                                    title={attr.value}
+                                                />
+                                                <span className="text-gray-500">{attr.value}</span>
+                                            </span>
                                         </>
                                     )}
                                 </span>
