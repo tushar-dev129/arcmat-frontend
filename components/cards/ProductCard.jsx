@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination, Autoplay } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
-import { getProductImageUrl, getVariantImageUrl, getColorCode, isLightColorName, resolvePricing, calculateDiscount, formatCurrency } from '@/lib/productUtils'
+import { getProductImageUrl, getVariantImageUrl, getColorCode, resolvePricing, calculateDiscount, formatCurrency } from '@/lib/productUtils'
 import { Heart, ShoppingCart, X, Check, Plus, CheckCircle2 } from 'lucide-react'
 import { useAddToWishlist, useGetWishlist } from '@/hooks/useWishlist'
 import { useAuth } from '@/hooks/useAuth'
@@ -19,6 +19,7 @@ import { toast } from '@/components/ui/Toast'
 import useProjectStore from '@/store/useProjectStore'
 import { useSelectionStore } from '@/store/useSelectionStore'
 import { useGetMoodboard } from '@/hooks/useMoodboard'
+import { useGetMoodboardTemplateById } from '@/hooks/useTemplate';
 import { useUpdateEstimatedCost } from '@/hooks/useEstimatedCost';
 import dynamic from 'next/dynamic'
 const AddToMoodboardModal = dynamic(() => import('@/components/dashboard/projects/AddToMoodboardModal'), { ssr: false })
@@ -66,13 +67,15 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
     const hasMultipleImages = images.length > 1;
     const [isAdded, setIsAdded] = React.useState(false);
 
+    const effectiveOverrideId = displayVariant?.override_id || product.override_id;
+
     const toggleSelection = useSelectionStore((state) => state.toggleProduct);
     const isSelected = useSelectionStore((state) => {
         const getProductId = (p) => {
             const id = p?.override_id || p?._id || p?.id || (typeof p?.productId === 'string' ? p.productId : p?.productId?._id);
             return String(id);
         };
-        const currentId = getProductId(product);
+        const currentId = effectiveOverrideId || getProductId(product);
         return state.selectedProducts.some(p => getProductId(p) === currentId);
     });
 
@@ -80,41 +83,35 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
     const { isAuthenticated, user } = useAuth();
     const router = useRouter();
 
-    const { activeProjectId, activeMoodboardName, activeMoodboardId } = useProjectStore();
+    const { activeProjectId, activeMoodboardName, activeMoodboardId, isActiveTemplate } = useProjectStore();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const { mutate: updateEstimateMutation } = useUpdateEstimatedCost();
 
     // Check if product is already in the active moodboard
     // Only fetch if isAlreadyAddedProp is not provided (for backward compatibility)
     const { data: moodboardData } = useGetMoodboard(activeMoodboardId, {
-        enabled: isAlreadyAddedProp === undefined && !!activeMoodboardId
+        enabled: isAlreadyAddedProp === undefined && !!activeMoodboardId && !isActiveTemplate
     });
 
-    // For storefront-grouped products, override_id lives on each variant, not the root product.
-    const resolveRetailerProductId = (p) => {
-        if (!p) return null;
-        if (p.override_id) return String(p.override_id);
-        if (p.variants && p.variants.length > 0) {
-            const v = p.variants.find(v => v.override_id) || p.variants[0];
-            if (v?.override_id) return String(v.override_id);
-        }
-        return String(p._id || p.id || '');
-    };
+    const { data: templateData } = useGetMoodboardTemplateById(activeMoodboardId, {
+        enabled: isAlreadyAddedProp === undefined && !!activeMoodboardId && !!isActiveTemplate
+    });
 
     // Safety check: ensure productId is mapped properly
     const rawId = rootProduct._id || rootProduct.id;
     const isAlreadyAdded = React.useMemo(() => {
         if (isAlreadyAddedProp !== undefined) return isAlreadyAddedProp;
-        if (!moodboardData?.data?.estimatedCostId?.productIds) return false;
-        const addedIds = moodboardData.data.estimatedCostId.productIds;
+        
+        const spaceData = isActiveTemplate ? templateData?.data : (moodboardProp || moodboardData?.data);
+        const addedIds = spaceData?.estimatedCostId?.productIds || spaceData?.estimation?.productIds || [];
 
-        // The ID we stored: the retailer product ID resolved from the product object
-        const currentRetailerId = resolveRetailerProductId(product);
+        // Handle case where productIds might be populated objects vs raw string IDs
+        const currentSpecificId = String(effectiveOverrideId || product._id || product.id);
         return addedIds.some(p => {
             const addedId = typeof p === 'object' && p !== null ? p._id : p;
-            return String(addedId) === currentRetailerId;
+            return String(addedId) === currentSpecificId || String(p.productId?._id || p.productId) === String(product._id);
         });
-    }, [isAlreadyAddedProp, moodboardData, rawId]);
+    }, [isAlreadyAddedProp, moodboardData, templateData, moodboardProp, isActiveTemplate, product, effectiveOverrideId]);
 
     const activeContextText = isAlreadyAdded
         ? "In Spaces"
@@ -214,12 +211,14 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
 
         const existingRetailerProductIds = currentMoodboard.estimatedCostId.productIds || [];
 
-        // Resolve the correct RetailerProduct ID (override_id is on variants for storefront products)
-        const overrideId = resolveRetailerProductId(product);
+        // We must filter out BOTH the root product ID and the RetailerProduct ID (override_id)
+        // because the item might be stored as either depending on how it was added.
+        const overrideId = effectiveOverrideId || product._id;
 
         const updatedIds = existingRetailerProductIds.filter(p => {
             const addedId = typeof p === 'object' && p !== null ? p._id : p;
-            return String(addedId) !== overrideId;
+            const addedIdStr = String(addedId);
+            return addedIdStr !== String(overrideId);
         }).map(p => typeof p === 'object' ? p._id : p); // Ensure we send back an array of IDs
 
         updateEstimateMutation({
@@ -370,7 +369,10 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                                     checked={isSelected}
                                     onChange={(e) => {
                                         e.stopPropagation();
-                                        toggleSelection(product);
+                                        toggleSelection({
+                                            ...product,
+                                            override_id: effectiveOverrideId
+                                        });
                                     }}
                                     className="hidden"
                                 />
@@ -427,14 +429,11 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                                     {isColor && colorCode && (
                                         <>
                                             <span className="text-gray-500 font-bold">Color:</span>
-                                            <span className="inline-flex items-center gap-1.5">
-                                                <span
-                                                    className={`w-3.5 h-3.5 rounded-full border shadow-sm ${isLightColorName(attr.value) ? 'border-gray-300' : 'border-gray-100'}`}
-                                                    style={{ backgroundColor: colorCode }}
-                                                    title={attr.value}
-                                                />
-                                                <span className="text-gray-500">{attr.value}</span>
-                                            </span>
+                                            <span
+                                                className="w-3.5 h-3.5 rounded-full border border-gray-100 shadow-sm"
+                                                style={{ backgroundColor: colorCode }}
+                                                title={attr.value}
+                                            />
                                         </>
                                     )}
                                 </span>
@@ -504,7 +503,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                 <AddToMoodboardModal
                     isOpen={isAddModalOpen}
                     onClose={() => setIsAddModalOpen(false)}
-                    product={product}
+                    product={{ ...product, override_id: effectiveOverrideId }}
                 />
             )}
 

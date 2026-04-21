@@ -51,5 +51,10 @@ export const retailerService = {
     bulkAddInventory: async (data) => {
         const response = await api.post('/retailer/inventory/bulk-add', data);
         return response.data;
+    },
+
+    bulkRemoveInventory: async (data) => {
+        const response = await api.post('/retailer/inventory/bulk-remove', data);
+        return response.data;
     }
 };

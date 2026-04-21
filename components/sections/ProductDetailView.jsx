@@ -22,7 +22,7 @@ import { ShoppingCart, Check, Heart, User, Package, ExternalLink, MapPin, Send, 
 import { useCartStore } from '@/store/useCartStore'
 import { useAddToCart } from '@/hooks/useCart'
 import { toast } from '@/components/ui/Toast';
-import { getProductImageUrl, getVariantImageUrl, getColorCode, isLightColorName, resolvePricing, calculateDiscount, getSpecifications, formatNumber, formatCurrency } from '@/lib/productUtils'
+import { getProductImageUrl, getVariantImageUrl, getColorCode, resolvePricing, calculateDiscount, getSpecifications, formatNumber, formatCurrency } from '@/lib/productUtils'
 import { useAddToWishlist, useGetWishlist } from '@/hooks/useWishlist'
 import { useCreateNotification } from '@/hooks/useNotification'
 import { useGetProjects, useCreateProject } from '@/hooks/useProject'
@@ -223,35 +223,6 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
     const images = rawImages.filter(Boolean).map(img => isFromVariant ? getVariantImageUrl(img) : getProductImageUrl(img))
     const displayImages = images.length ? images : ['/Icons/arcmatlogo.svg']
 
-    const getVariantAttributeValue = (variant, key) => {
-        if (!variant || !key) return ''
-        if (variant[key]) return variant[key]
-        return variant.dynamicAttributes?.find(attr => attr.key?.toLowerCase() === key.toLowerCase())?.value || ''
-    }
-
-    const getVariantLabel = (variant, index) => {
-        const explicitName = String(variant?.variant_name || '').trim()
-        if (explicitName && !/^standard variant$/i.test(explicitName)) return explicitName
-
-        const colorName = getVariantAttributeValue(variant, 'color')
-        const sizeName = getVariantAttributeValue(variant, 'size')
-        const finishName = getVariantAttributeValue(variant, 'finish')
-
-        return colorName || sizeName || finishName || variant?.skucode || `Variant ${index + 1}`
-    }
-
-    const getVariantMeta = (variant, index) => {
-        const parts = [
-            getVariantAttributeValue(variant, 'color'),
-            getVariantAttributeValue(variant, 'size'),
-            getVariantAttributeValue(variant, 'finish')
-        ].filter(Boolean)
-
-        const meta = parts.join(' / ')
-        const label = getVariantLabel(variant, index)
-        return meta && meta !== label ? meta : ''
-    }
-
     const handleAddToCart = () => {
         if (!inStock) {
             toast.warning("This product is currently out of stock");
@@ -442,45 +413,31 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                         ? getVariantImageUrl(v.variant_images[0])
                                                         : getProductImageUrl(displayImages[0]);
                                                     const isSelected = selectedVariant?._id === v._id;
-                                                    const variantColor = getVariantAttributeValue(v, 'color')
+                                                    const variantColor = v.color || v.dynamicAttributes?.find(a => a.key?.toLowerCase() === 'color')?.value
                                                     const variantColorCode = variantColor ? getColorCode(variantColor) : null
-                                                    const variantLabel = getVariantLabel(v, idx)
-                                                    const variantMeta = getVariantMeta(v, idx)
-                                                    const showSwatchOutline = variantColor ? isLightColorName(variantColor) : false
 
                                                     return (
                                                         <button
                                                             key={`${v._id || 'v'}-${idx}`}
                                                             onClick={() => handleVariantSelect(v)}
-                                                            className={`group relative w-[96px] rounded-2xl border-2 transition-all p-1.5 bg-white text-left ${isSelected
+                                                            className={`group relative w-16 h-16 rounded-xl border-2 transition-all p-1 bg-white ${isSelected
                                                                 ? 'border-[#e09a74] ring-2 ring-[#e09a74]/20 shadow-sm'
                                                                 : 'border-gray-100 hover:border-gray-300'
                                                                 }`}
-                                                            title={variantMeta ? `${variantLabel} - ${variantMeta}` : variantLabel}
                                                         >
-                                                            <div className="relative w-full h-16 rounded-xl overflow-hidden flex items-center justify-center bg-gray-50">
+                                                            <div className="relative w-full h-full rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
                                                                 {!hasVariantImg && variantColorCode ? (
                                                                     <div
-                                                                        className={`w-full h-full transition-transform group-hover:scale-110 duration-300 ${showSwatchOutline ? 'border border-gray-200' : ''}`}
+                                                                        className="w-full h-full transition-transform group-hover:scale-110 duration-300"
                                                                         style={{ backgroundColor: variantColorCode }}
                                                                     />
                                                                 ) : (
                                                                     <Image
                                                                         src={img}
-                                                                        alt={variantLabel}
+                                                                        alt={`Variant ${idx + 1}`}
                                                                         fill
                                                                         className="object-cover group-hover:scale-110 transition-transform duration-300"
                                                                     />
-                                                                )}
-                                                            </div>
-                                                            <div className="px-0.5 pt-2">
-                                                                <p className="text-[11px] font-semibold text-gray-800 leading-tight line-clamp-2">
-                                                                    {variantLabel}
-                                                                </p>
-                                                                {variantMeta && (
-                                                                    <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 mt-0.5">
-                                                                        {variantMeta}
-                                                                    </p>
                                                                 )}
                                                             </div>
                                                             {isSelected && (
@@ -534,7 +491,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                 if (attrKey.toLowerCase() === 'color') {
                                                                     // Color Swatch style
                                                                     const colorCode = getColorCode(value)
-                                                                    const needsBorder = isLightColorName(value)
+                                                                    const isWhite = value.toLowerCase() === 'white'
 
                                                                     return (
                                                                         <button
@@ -553,7 +510,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                             title={value}
                                                                         >
                                                                             <span
-                                                                                className={`w-7 h-7 rounded-full border ${needsBorder ? 'border-gray-200' : 'border-transparent'}`}
+                                                                                className={`w-7 h-7 rounded-full border ${isWhite ? 'border-gray-200' : 'border-transparent'}`}
                                                                                 style={{ backgroundColor: colorCode }}
                                                                             />
                                                                             {isSelected && (

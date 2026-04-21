@@ -169,74 +169,77 @@ export default function RetailerBrandsPage() {
                     </p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {filteredBrands.map(brand => {
                         const isJoined = myBrandIds.includes(brand._id || brand.id);
                         return (
                             <div
                                 key={brand._id || brand.id}
-                                className="bg-white rounded-3xl border border-gray-50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all p-8 flex flex-col group relative overflow-hidden"
+                                className="group bg-white rounded-3xl border border-gray-100 shadow-[1px_5px_40px_0px_rgba(224,154,116,0.08)] hover:shadow-[1px_5px_60px_0px_rgba(224,154,116,0.2)] transition-all duration-500 flex flex-col relative overflow-hidden items-center p-6 pt-0"
                             >
-                                <div className="flex-1">
-                                {/* Decorative circle */}
-                                <div className="absolute -top-12 -right-12 w-32 h-32 bg-gray-50 rounded-full group-hover:bg-[#e09a74]/5 transition-colors" />
+                                {/* card-border-top */}
+                                <div className="w-[60%] h-2.5 bg-[#e09a74] mx-auto rounded-b-2xl shadow-[0_4px_15px_rgba(224,154,116,0.4)]" />
 
-                                <div className="flex items-start justify-between relative">
-                                    <div className="w-20 h-20 rounded-2xl bg-white border border-gray-100 shadow-inner flex items-center justify-center overflow-hidden p-2">
-                                        {brand.logo ? (
-                                            <img src={getBrandImageUrl(brand.logo)} alt={brand.name} className="w-full h-full object-contain" />
-                                        ) : (
-
-                                            <Store className="w-8 h-8 text-gray-200" />
-                                        )}
-                                    </div>
+                                {/* Status badge (Left) */}
+                                <div className="absolute top-4 left-4">
                                     <span className={clsx(
-                                        "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider",
-                                        brand.isActive == 1 ? "bg-green-50 text-green-600" : "bg-gray-100 text-gray-400"
+                                        "px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-wider border",
+                                        brand.isActive == 1 ? "bg-green-50 text-green-700 border-green-100" : "bg-gray-50 text-gray-500 border-gray-200"
                                     )}>
-                                        {'Active '}
+                                        {brand.isActive == 1 ? 'Live' : 'Inactive'}
                                     </span>
                                 </div>
 
-                                <div className="mt-8">
-                                    <h2 className="text-2xl font-black text-gray-900 tracking-tight leading-none">{brand.name}</h2>
-                                    <p className="text-sm text-gray-500 mt-4 line-clamp-2 leading-relaxed h-fit italic">
-                                        {brand.description || "Leading supplier of premium architectural materials and decorative elements."}
+                                {/* Disconnect Icon (Top Right) */}
+                                {isJoined && !retailerId && (
+                                    <div className="absolute top-3 right-3">
+                                        <button
+                                            onClick={() => handleLeaveBrand(brand._id || brand.id)}
+                                            className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition-colors"
+                                            title="End Partnership"
+                                        >
+                                            <XIcon className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                )}
+
+                                {/* Img */}
+                                <div className="w-24 h-24 bg-gray-50 border border-gray-100 rounded-2xl mx-auto mt-8 flex items-center justify-center p-3 shadow-inner group-hover:-translate-y-1 transition-transform duration-300">
+                                    {brand.logo ? (
+                                        <img src={getBrandImageUrl(brand.logo)} alt={brand.name} className="w-full h-full object-contain" />
+                                    ) : (
+                                        <Store className="w-10 h-10 text-[#e09a74] opacity-50 group-hover:opacity-100 transition-opacity" />
+                                    )}
+                                </div>
+
+                                {/* Name & Desc */}
+                                <div className="flex-1 w-full flex flex-col items-center mt-5">
+                                    <h2 className="font-bold text-gray-900 text-center text-lg leading-tight line-clamp-1 w-full">
+                                        {brand.name}
+                                    </h2>
+                                    <p className="font-normal text-gray-500 text-center mt-1.5 text-xs line-clamp-2 leading-relaxed px-2">
+                                        {brand.description || "Premium architectural materials and decorative elements."}
                                     </p>
-
-                                   
-                                </div>
                                 </div>
 
-                                <div className=" flex gap-3 pt-6 border-t border-gray-50">
+                                {/* Buttons */}
+                                <div className="w-full mt-6">
                                     {isJoined ? (
-                                        <>
+                                        <div className="flex gap-2">
                                             <Link
                                                 href={`/dashboard/retailer/brands/${brand._id || brand.id}/inventory${retailerId ? `?retailerId=${retailerId}` : ''}`}
-                                                className="flex-1 flex items-center justify-center gap-2 py-4 bg-[#e09a74]/90 text-white rounded-2xl text-sm font-bold hover:bg-[#e09a74] transition-all shadow-lg"
+                                                className="flex-1 flex justify-center items-center py-2.5 bg-[#e09a74] text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-[#e09a74]/20"
                                             >
-                                                <Package className="w-4 h-4" />
-                                                Inventory
+                                                Explore Products
                                             </Link>
-                                            {!retailerId && (
-                                                <button
-                                                    onClick={() => handleLeaveBrand(brand._id || brand.id)}
-                                                    className="px-4 py-3 border border-red-50 text-white bg-red-500     rounded-2xl hover:bg-red-600 transition-colors"
-                                                    title="Leave Brand"
-                                                >
-                                                    <XIcon className="w-6 h-6" strokeWidth={3} />
-                                                </button>
-                                            )}
-                                        </>
+                                        </div>
                                     ) : (
                                         !retailerId && (
                                             <button
                                                 onClick={() => handleJoinBrand(brand._id || brand.id)}
-                                                className="flex-1 flex items-center justify-center gap-3 py-4 bg-[#e09a74] text-white rounded-2xl text-sm font-black hover:bg-[#d08a64] transition-all shadow-lg shadow-[#e09a74]/20"
+                                                className="w-full block mx-auto py-2.5 bg-[#e09a74] text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-[#e09a74]/20"
                                             >
-                                                <Plus className="w-5 h-5" />
-                                                Partner with Brand
-                                                <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                                               Become a partner
                                             </button>
                                         )
                                     )}

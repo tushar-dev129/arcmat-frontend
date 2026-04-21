@@ -9,6 +9,64 @@ import clsx from 'clsx';
 import { getVariantImageUrl, formatSKU } from '@/lib/productUtils';
 import { useGetAttributes } from '@/hooks/useAttribute';
 
+const ComboboxInput = ({ value, onChange, options, placeholder, disabled }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [filteredOptions, setFilteredOptions] = useState([]);
+    const wrapperRef = React.useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        if (!value) {
+            setFilteredOptions(options);
+        } else {
+            setFilteredOptions(options.filter(opt => opt.toLowerCase().includes(value.toLowerCase())));
+        }
+    }, [value, options]);
+
+    return (
+        <div ref={wrapperRef} className="relative w-full">
+            <input
+                value={value}
+                onChange={(e) => {
+                    onChange(e.target.value);
+                    setIsOpen(true);
+                }}
+                onFocus={() => setIsOpen(true)}
+                placeholder={placeholder}
+                disabled={disabled}
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#e09a74] text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                autoComplete="off"
+            />
+            {isOpen && filteredOptions.length > 0 && (
+                <ul className="absolute z-20 w-full mt-1 bg-white border border-gray-100 rounded-lg shadow-xl max-h-60 overflow-auto py-1">
+                    {filteredOptions.map((opt, i) => (
+                        <li
+                            key={i}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                                onChange(opt);
+                                setIsOpen(false);
+                            }}
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#e09a74] cursor-pointer transition-colors"
+                        >
+                            {opt}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+};
+
 export default function VariantForm({ productId, vendorId, onComplete, editingVariant = null, onCancel }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
@@ -309,68 +367,23 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                             return (
                                 <div key={idx} className="space-y-2 pb-2 border-b border-gray-50 last:border-0">
                                     <div className="flex gap-3 items-center">
-                                        <div className="flex-1 flex flex-col gap-1">
-                                            <select
-                                                value={allAttributes.some(a => a.attributeName === attr.key) ? attr.key : (attr.key === '' ? '' : 'CUSTOM_KEY')}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val === 'CUSTOM_KEY') {
-                                                        handleAttributeChange(idx, 'key', ''); 
-                                                    } else {
-                                                        handleAttributeChange(idx, 'key', val);
-                                                        handleAttributeChange(idx, 'value', ''); 
-                                                    }
-                                                }}
-                                                className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50/50 focus:ring-2 focus:ring-[#e09a74] text-sm appearance-none"
-                                            >
-                                                <option value="">Select Attribute</option>
-                                                {allAttributes
-                                                    .filter(a => !otherSelectedKeys.includes(a.attributeName))
-                                                    .map(a => (
-                                                        <option key={a._id} value={a.attributeName}>{a.attributeName}</option>
-                                                    ))}
-                                                <option value="CUSTOM_KEY">+ Custom Attribute</option>
-                                            </select>
-                                            
-                                            {(!allAttributes.some(a => a.attributeName === attr.key) && attr.key !== 'CUSTOM_KEY') && (
-                                                <input
-                                                    placeholder="Attribute name (e.g. Thickness)"
-                                                    value={attr.key}
-                                                    onChange={(e) => handleAttributeChange(idx, 'key', e.target.value)}
-                                                    className="px-4 py-2 rounded-lg border border-orange-100 bg-orange-50/30 focus:ring-1 focus:ring-[#e09a74] text-sm"
-                                                />
-                                            )}
+                                        <div className="flex-1 flex flex-col gap-1 relative">
+                                            <ComboboxInput
+                                                value={attr.key}
+                                                onChange={(val) => handleAttributeChange(idx, 'key', val)}
+                                                options={allAttributes.filter(a => !otherSelectedKeys.includes(a.attributeName)).map(a => a.attributeName)}
+                                                placeholder="Attribute name (e.g. Color)"
+                                            />
                                         </div>
 
-                                        <div className="flex-1 flex flex-col gap-1">
-                                            <select
-                                                value={availableValues.includes(attr.value) ? attr.value : (attr.value === '' ? '' : 'CUSTOM_VALUE')}
-                                                onChange={(e) => {
-                                                    const val = e.target.value;
-                                                    if (val === 'CUSTOM_VALUE') {
-                                                        handleAttributeChange(idx, 'value', '');
-                                                    } else {
-                                                        handleAttributeChange(idx, 'value', val);
-                                                    }
-                                                }}
-                                                className="w-full px-4 py-2 rounded-lg border border-gray-100 bg-gray-50/50 focus:ring-2 focus:ring-[#e09a74] text-sm appearance-none disabled:opacity-50"
+                                        <div className="flex-1 flex flex-col gap-1 relative">
+                                            <ComboboxInput
+                                                value={attr.value}
+                                                onChange={(val) => handleAttributeChange(idx, 'value', val)}
+                                                options={availableValues}
+                                                placeholder="Attribute value (e.g. Red)"
                                                 disabled={!attr.key}
-                                            >
-                                                <option value="">Select Value</option>
-                                                {availableValues.map(v => (
-                                                    <option key={v} value={v}>{v}</option>
-                                                ))}
-                                                <option value="CUSTOM_VALUE">+ Custom Value</option>
-                                            </select>
-
-                                            {(attr.key && !availableValues.includes(attr.value) && attr.value !== 'CUSTOM_VALUE') && (
-                                                <input
-                                                    placeholder="Enter custom value"
-                                                    value={attr.value}
-                                                    onChange={(e) => handleAttributeChange(idx, 'value', e.target.value)}
-                                                    className="px-4 py-2 rounded-lg border border-orange-100 bg-orange-50/30 focus:ring-1 focus:ring-[#e09a74] text-sm"
-                                                />
-                                            )}
+                                            />
                                         </div>
                                         
                                         <button type="button" onClick={() => removeAttribute(idx)} className="p-2 text-gray-300 hover:text-red-500 transition-colors shrink-0">

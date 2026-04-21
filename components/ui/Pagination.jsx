@@ -8,8 +8,8 @@ const Pagination = ({
     currentPage = 1,
     totalPages = 1,
     pageSize = 12,
-    onPageChange,
-    onPageSizeChange,
+    onPageChange = () => {},
+    onPageSizeChange = () => {},
     totalItems = 0
 }) => {
     const pageSizes = [12, 20, 50];

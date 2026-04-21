@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Image from 'next/image';
 import { Search, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import {
     getProductImageUrl,
@@ -142,13 +141,16 @@ export default function MaterialPanel({ materials, selectedMaterial, stagedMater
                                         className={`group text-left rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white cursor-grab active:cursor-grabbing ${isStaged ? 'border-orange-400 shadow-md shadow-orange-400/20 ring-2 ring-orange-300 ring-offset-1' : isSelected ? 'border-[#e09a74] shadow-md shadow-[#e09a74]/20' : 'border-transparent hover:border-gray-300 hover:shadow-sm'}`}
                                     >
                                         <div className="relative aspect-square bg-gray-100 overflow-hidden">
-                                            <Image
-                                                src={imgUrl}
+                                            <img
+                                                src={imgUrl || '/Icons/arcmatlogo.svg'}
                                                 alt={productName}
-                                                fill
-                                                sizes="(max-width: 240px) 50vw, 120px"
-                                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                                                onError={e => { e.target.src = '/Icons/arcmatlogo.svg'; }}
+                                                loading="lazy"
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                                onError={e => {
+                                                    if (!e.target.src.includes('arcmatlogo.svg')) {
+                                                        e.target.src = '/Icons/arcmatlogo.svg';
+                                                    }
+                                                }}
                                             />
                                             <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/60 text-white text-[10px] font-medium rounded backdrop-blur-sm">
                                                 {badge}

@@ -7,7 +7,6 @@ import {
     getProductImageUrl,
     getVariantImageUrl,
     getColorCode,
-    isLightColorName,
     getSpecifications,
     resolvePricing,
     formatCurrency,
@@ -23,13 +22,6 @@ import { toast } from '@/components/ui/Toast';
 
 function getVariantColor(v) {
     return v?.color || v?.dynamicAttributes?.find(a => a.key?.toLowerCase() === 'color')?.value;
-}
-
-function getVariantLabel(v, index) {
-    const explicitName = String(v?.variant_name || '').trim();
-    if (explicitName && !/^standard variant$/i.test(explicitName)) return explicitName;
-
-    return getVariantColor(v) || v?.size || v?.skucode || `Variant ${index + 1}`;
 }
 
 export default function DetailsPanel({
@@ -172,13 +164,11 @@ export default function DetailsPanel({
                         {colorOptions.length} Color{colorOptions.length !== 1 ? 's' : ''} Available
                     </p>
                     <div className="grid grid-cols-3 gap-3">
-                        {colorOptions.map((v, index) => {
+                        {colorOptions.map((v) => {
                             const isSelected = selectedMaterial._id === v._id;
                             const colorName = getVariantColor(v);
                             const code = getColorCode(colorName);
                             const vImg = getProductThumbnail(v);
-                            const variantLabel = getVariantLabel(v, index);
-                            const variantMeta = colorName && colorName !== variantLabel ? colorName : '';
 
                             return (
                                 <button
@@ -189,16 +179,12 @@ export default function DetailsPanel({
                                     <div className="w-full rounded-lg overflow-hidden" style={{ aspectRatio: '1/1' }}>
                                         {vImg && vImg !== '/Icons/arcmatlogo.svg' ? (
                                             // eslint-disable-next-line @next/next/no-img-element
-                                            <img src={vImg} alt={variantLabel} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                                            <img src={vImg} alt={colorName || 'variant'} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                                         ) : (
-                                            <div
-                                                className={`w-full h-full ${isLightColorName(colorName) ? 'border border-gray-200' : ''}`}
-                                                style={{ backgroundColor: code || '#e5e7eb' }}
-                                            />
+                                            <div className="w-full h-full" style={{ backgroundColor: code || '#e5e7eb' }} />
                                         )}
                                     </div>
-                                    <span className="text-[10px] text-gray-700 font-semibold text-center leading-tight line-clamp-2 w-full">{variantLabel}</span>
-                                    {variantMeta && <span className="text-[10px] text-gray-500 text-center leading-tight line-clamp-2 w-full">{variantMeta}</span>}
+                                    {colorName && <span className="text-[10px] text-gray-600 font-medium text-center leading-tight truncate w-full">{colorName}</span>}
                                     {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-[#e09a74]" />}
                                 </button>
                             );

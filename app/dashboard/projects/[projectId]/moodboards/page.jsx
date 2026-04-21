@@ -10,11 +10,10 @@ import CreateMoodboardModal from '@/components/dashboard/projects/CreateMoodboar
 import InviteClientModal from '@/components/dashboard/projects/InviteClientModal';
 import PrivacySettingsModal from '@/components/dashboard/projects/PrivacySettingsModal';
 import ProjectDiscussionModal from '@/components/dashboard/projects/ProjectDiscussionModal';
-import ProjectDiscussionTab from '@/components/dashboard/projects/ProjectDiscussionTab';
 import ProjectAnalyticsPanel from '@/components/dashboard/projects/ProjectAnalyticsPanel';
 import {
     Loader2, Plus, ArrowLeft, Layout, Search, ChevronDown, Filter, Shield,
-    MessageCircle, CheckCircle, BarChart3,
+    MessageCircle, CheckCircle,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
@@ -32,7 +31,7 @@ export default function MoodboardsPage() {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [moodboardToDelete, setMoodboardToDelete] = useState(null);
     const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
-    const [activeTab, setActiveTab] = useState('spaces'); // 'spaces' | 'analytics' | 'discussion'
+    const [isDiscussionOpen, setIsDiscussionOpen] = useState(false);
 
     // ── filter/sort state ────────────────────────────────────────────────────
     const [searchQuery, setSearchQuery]         = useState('');
@@ -178,151 +177,111 @@ export default function MoodboardsPage() {
                     </p>
                 </div>
 
-                {/* search + sort UI is now managed inside the 'Spaces' tab section below */}
-            </div>
+                {/* search + sort */}
+                <div className="flex items-center gap-3">
+                    <div className="relative">
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <input
+                            type="text"
+                            placeholder="Search spaces..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl text-sm font-bold text-gray-700 w-48 focus:ring-2 focus:ring-[#d9a88a]/20 transition-all outline-none"
+                        />
+                    </div>
 
-            {/* ── Tab Navigation ───────────────────────────────────────── */}
-            <div className="flex items-center gap-2 mb-10 border-b border-gray-100 overflow-x-auto hide-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-                {[
-                    { id: 'spaces', label: 'All Spaces', icon: Layout },
-                    { id: 'analytics', label: 'Project Analytics', icon: BarChart3 },
-                    { id: 'discussion', label: 'Project Chat', icon: MessageCircle },
-                ].map((tab) => {
-                    const isActive = activeTab === tab.id;
-                    const hasUnread = tab.id === 'discussion' && unreadMessages > 0;
-                    
-                    return (
+                    <div className="relative">
                         <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-6 py-4 text-sm font-bold border-b-2 transition-all relative whitespace-nowrap ${
-                                isActive 
-                                    ? 'border-[#1a1a2e] text-[#1a1a2e]' 
-                                    : 'border-transparent text-gray-400 hover:text-gray-600'
-                            }`}
+                            onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
+                            className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-2xl text-sm font-bold text-gray-500 hover:text-[#d9a88a] transition-all"
                         >
-                            <tab.icon className={`w-4 h-4 ${isActive ? 'text-[#d9a88a]' : ''}`} />
-                            {tab.label}
-                            {hasUnread && (
-                                <span className="flex items-center justify-center bg-red-500 text-white text-[10px] font-black h-4 min-w-[16px] px-1 rounded-full ml-1.5 animate-pulse">
-                                    {unreadMessages}
-                                </span>
-                            )}
+                            <Filter className="w-4 h-4" />
+                            {sortBy === 'newest' ? 'Newest' : 'Name'}
+                            <ChevronDown className={`w-4 h-4 transition-transform ${isSortDropdownOpen ? 'rotate-180' : ''}`} />
                         </button>
-                    );
-                })}
-            </div>
 
-            {/* ── Tab Content ───────────────────────────────────────────── */}
-            <div className="space-y-6">
-                
-                {/* SPACES TAB */}
-                {activeTab === 'spaces' && (
-                    <>
-                        {/* Search and Sort controls moved here for clarity */}
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                           <div className="flex items-center gap-3">
-                                <div className="relative">
-                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Search spaces..."
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl text-sm font-bold text-gray-700 w-48 focus:ring-2 focus:ring-[#d9a88a]/20 transition-all outline-none"
-                                    />
-                                </div>
-
-                                <div className="relative">
-                                    <button
-                                        onClick={() => setIsSortDropdownOpen(!isSortDropdownOpen)}
-                                        className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-2xl text-sm font-bold text-gray-500 hover:text-[#d9a88a] transition-all"
-                                    >
-                                        <Filter className="w-4 h-4" />
-                                        {sortBy === 'newest' ? 'Newest' : 'Name'}
-                                        <ChevronDown className={`w-4 h-4 transition-transform ${isSortDropdownOpen ? 'rotate-180' : ''}`} />
-                                    </button>
-
-                                    {isSortDropdownOpen && (
-                                        <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-2xl rounded-2xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
-                                            <button
-                                                onClick={() => { setSortBy('newest'); setIsSortDropdownOpen(false); }}
-                                                className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${sortBy === 'newest' ? 'text-[#d9a88a] bg-[#fef7f2]' : 'text-gray-500 hover:bg-gray-50'}`}
-                                            >Newest</button>
-                                            <button
-                                                onClick={() => { setSortBy('name'); setIsSortDropdownOpen(false); }}
-                                                className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${sortBy === 'name' ? 'text-[#d9a88a] bg-[#fef7f2]' : 'text-gray-500 hover:bg-gray-50'}`}
-                                            >Name</button>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Space grid */}
-                        {filteredMoodboards.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                                {filteredMoodboards.map((mb) => (
-                                    <MoodboardCard
-                                        key={mb._id}
-                                        moodboard={mb}
-                                        projectId={projectId}
-                                        onDelete={handleDeleteClick}
-                                        isArchitect={isArchitect}
-                                        projectPrivacy={project?.privacyControls}
-                                    />
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[40px] border border-dashed border-gray-200 text-center">
-                                <div className="w-24 h-24 bg-[#fef7f2] rounded-3xl flex items-center justify-center mb-8">
-                                    <Layout className="w-12 h-12 text-[#d9a88a]" />
-                                </div>
-                                <h3 className="text-2xl font-bold text-[#2d3142] mb-3">
-                                    {searchQuery ? 'No matching spaces' : 'No spaces yet'}
-                                </h3>
-                                <p className="text-gray-400 font-medium max-w-sm mx-auto mb-10">
-                                    {searchQuery
-                                        ? `We couldn't find any spaces matching "${searchQuery}"`
-                                        : 'Start by creating your first space to organize your design ideas and costs.'}
-                                </p>
-                                {!searchQuery && isArchitect && (
-                                    <Button
-                                        onClick={() => setIsModalOpen(true)}
-                                        className="bg-[#d9a88a] text-white px-10 py-4 rounded-2xl font-black"
-                                    >
-                                        Create Your First Space
-                                    </Button>
-                                )}
+                        {isSortDropdownOpen && (
+                            <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-2xl rounded-2xl border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                                <button
+                                    onClick={() => { setSortBy('newest'); setIsSortDropdownOpen(false); }}
+                                    className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${sortBy === 'newest' ? 'text-[#d9a88a] bg-[#fef7f2]' : 'text-gray-500 hover:bg-gray-50'}`}
+                                >Newest</button>
+                                <button
+                                    onClick={() => { setSortBy('name'); setIsSortDropdownOpen(false); }}
+                                    className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${sortBy === 'name' ? 'text-[#d9a88a] bg-[#fef7f2]' : 'text-gray-500 hover:bg-gray-50'}`}
+                                >Name</button>
                             </div>
                         )}
-                    </>
-                )}
-
-                {/* ANALYTICS TAB */}
-                {activeTab === 'analytics' && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <ProjectAnalyticsPanel
-                            project={project}
-                            moodboards={moodboards}
-                            isArchitect={isArchitect}
-                        />
                     </div>
-                )}
-
-                {/* DISCUSSION TAB */}
-                {activeTab === 'discussion' && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <ProjectDiscussionTab 
-                            projectId={projectId}
-                            projectName={project?.projectName}
-                            moodboards={moodboards}
-                        />
-                    </div>
-                )}
+                </div>
             </div>
 
+            {/* ── Analytics Panel ───────────────────────────────────────── */}
+            <ProjectAnalyticsPanel
+                project={project}
+                moodboards={moodboards}
+                isArchitect={isArchitect}
+            />
 
+            {/* ── Space grid ────────────────────────────────────────────── */}
+            {filteredMoodboards.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">
+                    {filteredMoodboards.map((mb) => (
+                        <MoodboardCard
+                            key={mb._id}
+                            moodboard={mb}
+                            projectId={projectId}
+                            onDelete={handleDeleteClick}
+                            isArchitect={isArchitect}
+                            projectPrivacy={project?.privacyControls}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="flex flex-col items-center justify-center py-24 bg-white rounded-[40px] border border-dashed border-gray-200 text-center">
+                    <div className="w-24 h-24 bg-[#fef7f2] rounded-3xl flex items-center justify-center mb-8">
+                        <Layout className="w-12 h-12 text-[#d9a88a]" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#2d3142] mb-3">
+                        {searchQuery ? 'No matching spaces' : 'No spaces yet'}
+                    </h3>
+                    <p className="text-gray-400 font-medium max-w-sm mx-auto mb-10">
+                        {searchQuery
+                            ? `We couldn't find any spaces matching "${searchQuery}"`
+                            : 'Start by creating your first space to organize your design ideas and costs.'}
+                    </p>
+                    {!searchQuery && isArchitect && (
+                        <Button
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-[#d9a88a] text-white px-10 py-4 rounded-2xl font-black"
+                        >
+                            Create Your First Space
+                        </Button>
+                    )}
+                </div>
+            )}
+
+            {/* ── Floating chat button ──────────────────────────────────── */}
+            <button
+                onClick={() => setIsDiscussionOpen(true)}
+                className="fixed bottom-8 right-8 z-40 group flex items-center gap-3 bg-[#2d3142] hover:bg-[#d9a88a] text-white pl-4 pr-5 py-3.5 rounded-full shadow-2xl shadow-slate-900/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                title="Open project discussion"
+                aria-label="Message client"
+            >
+                {/* Icon */}
+                <div className="relative">
+                    <MessageCircle className="w-5 h-5" />
+                    {unreadMessages > 0 && (
+                        <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 leading-none animate-bounce">
+                            {unreadMessages > 9 ? '9+' : unreadMessages}
+                        </span>
+                    )}
+                </div>
+                {/* Label */}
+                <span className="text-sm font-bold whitespace-nowrap">
+                    {unreadMessages > 0 ? `${unreadMessages} new message${unreadMessages > 1 ? 's' : ''}` : 'Message Client'}
+                </span>
+            </button>
 
             {/* ── Modals ────────────────────────────────────────────────── */}
             <CreateMoodboardModal
@@ -344,7 +303,12 @@ export default function MoodboardsPage() {
                 project={project}
             />
 
-
+            <ProjectDiscussionModal
+                isOpen={isDiscussionOpen}
+                onClose={() => setIsDiscussionOpen(false)}
+                projectId={projectId}
+                projectName={project?.projectName}
+            />
 
             <ConfirmationModal
                 isOpen={isDeleteModalOpen}

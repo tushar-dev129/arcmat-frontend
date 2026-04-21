@@ -14,13 +14,14 @@ import clsx from 'clsx';
 export default function RetailerProductsPage() {
     const searchParams = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12);
     const [searchTerm, setSearchTerm] = useState('');
     const [editingItem, setEditingItem] = useState(null);
     const [deletingItem, setDeletingItem] = useState(null);
 
     const { data: apiResponse, isLoading, refetch } = useGetRetailerProducts({
         page: currentPage,
-        limit: 12,
+        limit: pageSize,
         search: searchTerm || undefined,
     });
 
@@ -241,9 +242,13 @@ export default function RetailerProductsPage() {
                     <Pagination
                         currentPage={pagination.currentPage || 1}
                         totalPages={pagination.totalPages}
-                        pageSize={pagination.limit}
+                        pageSize={pageSize}
                         totalItems={pagination.totalRecords}
                         onPageChange={setCurrentPage}
+                        onPageSizeChange={(size) => {
+                            setPageSize(size);
+                            setCurrentPage(1);
+                        }}
                     />
                 </div>
             )}

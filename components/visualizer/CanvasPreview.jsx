@@ -61,8 +61,7 @@ const CanvasPreview = forwardRef((props, ref) => {
         activeMenuConfig,
         showGrid,
         setShowGrid,
-        getSerializedState,
-        getDataURL
+        getSerializedState
     } = useFabricCanvas({
         canvasContainerRef,
         boardItems,

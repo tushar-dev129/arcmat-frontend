@@ -6,8 +6,7 @@ export default function DownloadTab({
     boardItems,
     exportAsCSV,
     setActiveTab,
-    downloadCanvas,
-    onDownloadZip
+    downloadCanvas
 }) {
     return (
         <div className="h-full overflow-y-auto p-8">
@@ -39,14 +38,6 @@ export default function DownloadTab({
                     onClick={exportAsCSV}
                     color="green"
                 />
-                <DownloadCard
-                    title="Full Space ZIP"
-                    description="Professional ZIP with Excel, CSV, layout snapshots and photos"
-                    icon={<svg className="w-7 h-7 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>}
-                    label="Download ZIP"
-                    onClick={onDownloadZip}
-                    color="blue"
-                />
             </div>
         </div>
     );
@@ -56,12 +47,10 @@ function DownloadCard({ title, description, icon, label, onClick, color }) {
     const colors = {
         orange: 'border-[#d9a88a]/20 hover:border-[#d9a88a] bg-[#fef7f2]/50 hover:bg-[#fef7f2]',
         green: 'border-green-200 hover:border-green-400 bg-green-50/50 hover:bg-green-50',
-        blue: 'border-blue-200 hover:border-blue-400 bg-blue-50/50 hover:bg-blue-50',
     };
     const btnColors = {
         orange: 'bg-[#d9a88a] hover:bg-[#c59678] text-white',
         green: 'bg-green-600 hover:bg-green-700 text-white',
-        blue: 'bg-blue-600 hover:bg-blue-700 text-white',
     };
     return (
         <div className={`flex flex-col gap-4 p-6 border-2 rounded-3xl transition-all ${colors[color]}`}>

@@ -835,7 +835,7 @@ export default function DashboardPage() {
                                     <Link
                                         key={board._id}
                                         href={`/dashboard/projects/${projId}/moodboards/${board._id}`}
-                                        onClick={() => useProjectStore.getState().setActiveMoodboard(board._id, board.moodboard_name, projId, board.projectId?.projectName)}
+                                        onClick={() => useProjectStore.getState().setActiveMoodboard(board._id, board.moodboard_name, projId, board.projectId?.projectName, false)}
                                         className="group"
                                     >
                                         {/* Board Thumbnail Image */}

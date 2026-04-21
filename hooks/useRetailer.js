@@ -81,3 +81,13 @@ export const useBulkAddInventory = () => {
         },
     });
 };
+
+export const useBulkRemoveInventory = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: retailerService.bulkRemoveInventory,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: RETAILER_KEYS.all });
+        },
+    });
+};

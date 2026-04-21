@@ -81,7 +81,7 @@ export default function ProductListPage() {
 
     // OPTIMIZATION: Fetch active moodboard at page level to avoid N+1 fetches in ProductCard
     const { data: moodboardData } = useGetMoodboard(activeMoodboardId, { enabled: !!activeMoodboardId && !isActiveTemplate });
-    const { data: templateSpaceData } = useGetMoodboardTemplateById(activeMoodboardId, { enabled: !!activeMoodboardId && isActiveTemplate });
+    const { data: templateSpaceData } = useGetMoodboardTemplateById(activeMoodboardId, { enabled: !!activeMoodboardId && !!isActiveTemplate });
 
     const addedProductIdsMap = useMemo(() => {
         const spaceData = isActiveTemplate ? templateSpaceData?.data : moodboardData?.data;
@@ -243,13 +243,13 @@ export default function ProductListPage() {
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-x-4 gap-y-8">
                             {displayedProducts.map((product, i) => {
-                                // Match against any possible ID field (RetailerProduct ID, Root Product ID, etc.)
                                 const possibleIds = [
                                     product.override_id,
                                     product._id,
                                     product.id,
                                     product.productId?._id,
-                                    product.productId
+                                    product.productId,
+                                    ...(product.variants || []).map(v => v.override_id || v._id)
                                 ].filter(Boolean).map(String);
 
                                 const isAlreadyAdded = possibleIds.some(id => addedProductIdsMap.has(id));

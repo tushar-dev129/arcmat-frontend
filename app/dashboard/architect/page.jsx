@@ -155,7 +155,7 @@ function ProjectRowCard({ project, allBoards }) {
         >
             <Link
                 href={`/dashboard/projects/${project._id}/moodboards`}
-                onClick={() => useProjectStore.getState().setActiveProject(project._id, project.projectName)}
+                onClick={() => useProjectStore.getState().setActiveProject(project._id, project.projectName, false)}
                 className="flex items-center gap-4 p-4 rounded-2xl hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-100 transition-all"
             >
                 {/* Cover / Avatar */}

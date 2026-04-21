@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import ExcelJS from 'exceljs';
 import { getProductImageUrl, getProductName, getProductCategory, getProductBrand, getProductThumbnail } from '@/lib/productUtils';
-import { exportMoodboardToExcel, downloadImage, exportMoodboardToZip } from '@/lib/exportUtils';
+import { exportMoodboardToExcel, downloadImage } from '@/lib/exportUtils';
 
 // Visualizer components
 import OverviewTab from '@/components/moodboard/tabs/OverviewTab';
@@ -105,7 +105,6 @@ export default function MoodboardDetailPage() {
     const [productStatuses, setProductStatuses] = useState({});
     const [isPanelOpen, setIsPanelOpen] = useState(true);
     const canvasRef = useRef(null);
-    const lastSnapshotRef = useRef(Date.now());
 
     // Canvas state (Design Desk)
     const [boardItems, setBoardItems] = useState([]);
@@ -277,24 +276,12 @@ export default function MoodboardDetailPage() {
     }, [moodboardId, updateMoodboard, canvasBg]);
 
     useEffect(() => {
-        if (!isDataLoaded.current) return;
+        if (!isDataLoaded.current || boardItems.length === 0) return;
         
+        // Use a longer debounce for auto-saves (5 seconds) to prevent sync loops
         const timer = setTimeout(() => {
-            let snapshot = null;
-            const now = Date.now();
-            
-            // Auto-capture a snapshot if it has been more than 45s since the last one
-            // This ensures cards have a fresh visual without hammering the DB every second.
-            if (now - lastSnapshotRef.current > 45000) {
-                if (canvasRef.current?.getSnapshot) {
-                    snapshot = canvasRef.current.getSnapshot();
-                    lastSnapshotRef.current = now;
-                    console.log('[DesignDesk] Auto-capturing visual snapshot for dashboard sync');
-                }
-            }
-
-            saveToBackend(boardItems, canvasBg, snapshot);
-        }, 1000);
+            saveToBackend(boardItems, canvasBg);
+        }, 5000);
         
         return () => clearTimeout(timer);
     }, [boardItems, canvasBg, saveToBackend]);
@@ -344,7 +331,6 @@ export default function MoodboardDetailPage() {
                     let snapshot = null;
                     if (canvasRef.current && canvasRef.current.getSnapshot) {
                         snapshot = canvasRef.current.getSnapshot();
-                        lastSnapshotRef.current = Date.now(); // Sync manual save time
                     }
 
                     if (canvasRef.current && canvasRef.current.getLatestState) {
@@ -470,40 +456,45 @@ export default function MoodboardDetailPage() {
             brand: 'Custom Upload',
         };
 
-        setCustomPhotos(prev => [...prev, newPhoto]);
-        handleDrop(pseudoMaterial, 300, 300);
-        toast.success(`"${title}" uploaded to Design Desk!`);
-    }, [handleDrop, moodboardId, updateMoodboard]);
+        const { price: defaultPrice } = resolvePricing(pseudoMaterial);
+        const itemPrice = price || defaultPrice;
 
-    const handleDownloadZip = useCallback(() => {
-        if (!moodboard) return;
-        
-        toast.promise(
-            new Promise(async (resolve, reject) => {
-                try {
-                    let snapshot = null;
-                    if (canvasRef.current && canvasRef.current.getSnapshot) {
-                        snapshot = canvasRef.current.getSnapshot();
+        setCustomPhotos(prev => {
+            const nextPhotos = [...prev, newPhoto];
+
+            setBoardItems(prevItems => {
+                const newItem = {
+                    id: Date.now() + Math.random(),
+                    type: 'material',
+                    material: pseudoMaterial,
+                    x: 400,
+                    y: 300,
+                    scale: 1,
+                    rotation: 0,
+                    quantity: quantity || 1,
+                    price: itemPrice
+                };
+                const nextItems = [...prevItems, newItem];
+
+                // Single update to backend
+                updateMoodboard({
+                    id: moodboardId,
+                    data: {
+                        customPhotos: nextPhotos,
+                        canvasState: nextItems,
+                        totalBudget: nextItems.filter(i => i.type !== 'text').reduce((sum, item) => sum + (Number(item.price) || 0) * (Number(item.quantity) || 1), 0)
                     }
-                    
-                    // Sync the snapshot to the backend before downloading 
-                    // so that future "Outside" downloads are also updated.
-                    if (snapshot) saveToBackend(boardItems, canvasBg, snapshot);
+                });
 
-                    // Trigger ZIP export with the live snapshot
-                    await exportMoodboardToZip(moodboard, project, [], snapshot);
-                    resolve();
-                } catch (err) {
-                    reject(err);
-                }
-            }),
-            {
-                loading: 'Generating professional ZIP package...',
-                success: 'ZIP package downloaded!',
-                error: 'Failed to generate ZIP'
-            }
-        );
-    }, [moodboard, project, boardItems, canvasBg, saveToBackend]);
+                return nextItems;
+            });
+
+            return nextPhotos;
+        });
+
+        triggerFolderAnimation();
+        toast.success(`"${title}" added to Overview and Canvas!`);
+    }, [moodboardId, updateMoodboard]);
 
     /* ── Export Custom Rows Handlers ───────────── */
     const handleAddCustomRow = useCallback(() => {
@@ -1129,7 +1120,6 @@ export default function MoodboardDetailPage() {
                             exportAsCSV={exportAsCSV}
                             setActiveTab={setActiveTab}
                             downloadCanvas={() => canvasRef.current?.download('jpeg')}
-                            onDownloadZip={handleDownloadZip}
                         />
                     )
                 }

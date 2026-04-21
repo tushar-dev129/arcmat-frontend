@@ -29,19 +29,7 @@ const resizeImageForAI = (src, maxDim = 1024) => {
             resolve(canvas.toDataURL('image/png'));
         };
         img.onerror = (err) => {
-            if (img.crossOrigin === 'anonymous') {
-                console.warn('resizeImageForAI: CORS load failed, retrying without crossOrigin...', src);
-                img.crossOrigin = null;
-                // Re-apply src to trigger reload without CORS
-                if (src.startsWith('http') && !src.includes('data:') && !src.includes('blob:')) {
-                    const cacheBuster = `t=${Date.now()}`;
-                    img.src = src.includes('?') ? `${src}&${cacheBuster}` : `${src}?${cacheBuster}`;
-                } else {
-                    img.src = src;
-                }
-                return;
-            }
-            console.error('resizeImageForAI: Image load failed even without CORS', src, err);
+            console.error('resizeImageForAI: Image load failed', src, err);
             resolve(src); // fallback to original on error
         };
         // Add cache-buster for external images to ensure fresh CORS headers
@@ -78,6 +66,7 @@ export function useFabricCanvas({
     const initialCenterDone = useRef(false);
     const panModeRef = useRef(false);
     const showGridRef = useRef(false);
+    const failedUrls = useRef(new Set());
 
     const [zoom, setZoom] = useState(1);
     const [panMode, setPanMode] = useState(false);
@@ -544,16 +533,12 @@ export function useFabricCanvas({
                         imgUrl = imgUrl.includes('?') ? `${imgUrl}&${cacheBuster}` : `${imgUrl}?${cacheBuster}`;
                     }
 
-                    // ── ROBUST IMAGE LOADER: Cors -> Non-Cors Fallback ──────
-                    const loadWithFallback = (url) => {
-                        return fabric.Image.fromURL(url, { crossOrigin: 'anonymous' })
-                            .catch(err => {
-                                console.warn(`CORS load failed for ${url}, retrying without CORS. Note: this will taint the canvas.`, err);
-                                return fabric.Image.fromURL(url);
-                            });
-                    };
+                    if (failedUrls.current.has(imgUrl)) {
+                        console.warn(`Skipping known failing URL: ${imgUrl}`);
+                        return;
+                    }
 
-                    loadWithFallback(imgUrl)
+                    fabric.Image.fromURL(imgUrl, { crossOrigin: 'anonymous' })
                         .then((img) => {
                             const scaleMath = Math.min(targetW / img.width, targetH / img.height);
 
@@ -601,7 +586,8 @@ export function useFabricCanvas({
                             canvas.requestRenderAll();
                         })
                         .catch(err => {
-                            console.error(`CRITICAL: Image load failed even without CORS for item ${item.id}:`, err);
+                            console.error(`Failed to load image for item ${item.id}:`, err);
+                            failedUrls.current.add(imgUrl);
                             // Fallback placeholder
                             const rect = new fabric.Rect({
                                 id: item.id,

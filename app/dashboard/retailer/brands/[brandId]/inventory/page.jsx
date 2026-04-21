@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { Package, Search, ArrowLeft, Plus, Check, Info, Store, X, AlertCircle } from 'lucide-react';
 import clsx from 'clsx';
-import { useGetBrandInventory, useUpsertProductOverride, useBulkAddInventory } from '@/hooks/useRetailer';
+import { useGetBrandInventory, useUpsertProductOverride, useBulkAddInventory, useBulkRemoveInventory } from '@/hooks/useRetailer';
 import { getProductImageUrl, getSpecifications } from '@/lib/productUtils';
 import Button from '@/components/ui/Button';
 import { toast } from '@/components/ui/Toast';
@@ -17,12 +17,13 @@ export default function BrandInventoryPage() {
     const searchParams = useSearchParams();
     const retailerIdFromParams = searchParams.get('retailerId');
     const [currentPage, setCurrentPage] = useState(1);
+    const [pageSize, setPageSize] = useState(12);
     const [searchTerm, setSearchTerm] = useState('');
 
     const { data: inventoryData, isLoading } = useGetBrandInventory(brandId, {
         retailerId: retailerIdFromParams,
         page: currentPage,
-        limit: 12,
+        limit: pageSize,
         search: searchTerm || undefined
     });
 
@@ -32,24 +33,27 @@ export default function BrandInventoryPage() {
 
     const upsertOverride = useUpsertProductOverride();
     const bulkAddMutation = useBulkAddInventory();
+    const bulkRemoveMutation = useBulkRemoveInventory();
 
-    const [selectedVariants, setSelectedVariants] = useState([]);
+    const [selectedVariants, setSelectedVariants] = useState([]); // { productId, variantId, isAdded }
     const [isGlobalSelectAll, setIsGlobalSelectAll] = useState(false);
     const [excludedVariants, setExcludedVariants] = useState([]);
 
     const toggleSelectAll = () => {
-        if (isGlobalSelectAll || selectedVariants.length > 0) {
-            setIsGlobalSelectAll(false);
+        const allVariants = products.flatMap(p => p.variants.map(v => ({ 
+            productId: p._id, 
+            variantId: v._id, 
+            isAdded: v.isAdded 
+        })));
+        
+        if (selectedVariants.length === allVariants.length && allVariants.length > 0) {
             setSelectedVariants([]);
-            setExcludedVariants([]);
         } else {
-            setIsGlobalSelectAll(true);
-            setSelectedVariants([]);
-            setExcludedVariants([]);
+            setSelectedVariants(allVariants);
         }
     };
 
-    const toggleVariant = (productId, variantId) => {
+    const toggleVariant = (productId, variantId, isAdded) => {
         if (isGlobalSelectAll) {
             setExcludedVariants(prev => {
                 if (prev.includes(variantId)) return prev.filter(id => id !== variantId);
@@ -59,35 +63,50 @@ export default function BrandInventoryPage() {
             setSelectedVariants(prev => {
                 const exists = prev.find(v => v.variantId === variantId);
                 if (exists) return prev.filter(v => v.variantId !== variantId);
-                return [...prev, { productId, variantId }];
+                return [...prev, { productId, variantId, isAdded }];
             });
         }
     };
 
+    const selectedToAdd = selectedVariants.filter(v => !v.isAdded);
+    const selectedToRemove = selectedVariants.filter(v => v.isAdded);
+
     const handleBulkAdd = async () => {
-        if (!isGlobalSelectAll && !selectedVariants.length) return;
+        if (!isGlobalSelectAll && !selectedToAdd.length) return;
         try {
             const result = await bulkAddMutation.mutateAsync({
                 isGlobalSelectAll,
                 brandId,
                 search: searchTerm,
                 excludedVariantIds: excludedVariants,
-                variants: isGlobalSelectAll ? [] : selectedVariants.map(v => ({ productId: v.productId, variantId: v.variantId })),
+                variants: isGlobalSelectAll ? [] : selectedToAdd.map(v => ({ productId: v.productId, variantId: v.variantId })),
                 retailerId: retailerIdFromParams
             });
             toast.success(result?.message || `Successfully added products`);
             setIsGlobalSelectAll(false);
-            setSelectedVariants([]);
+            setSelectedVariants(prev => prev.filter(v => v.isAdded)); // keep the ones to remove
             setExcludedVariants([]);
         } catch (error) {
             toast.error(error.message || 'Bulk add failed');
         }
     };
 
-    const isAnySelected = isGlobalSelectAll || selectedVariants.length > 0;
-    const selectionText = isGlobalSelectAll 
-        ? (excludedVariants.length > 0 ? `All variants selected (except ${excludedVariants.length})` : 'All available brand inventory selected')
-        : `${selectedVariants.length} variants selected`;
+    const handleBulkRemove = async () => {
+        if (!selectedToRemove.length) return;
+        try {
+            const result = await bulkRemoveMutation.mutateAsync({
+                variants: selectedToRemove.map(v => ({ variantId: v.variantId })),
+                retailerId: retailerIdFromParams
+            });
+            toast.success(result?.message || `Successfully removed products`);
+            setSelectedVariants(prev => prev.filter(v => !v.isAdded)); // keep the ones to add
+        } catch (error) {
+            toast.error(error.message || 'Bulk remove failed');
+        }
+    };
+
+    const isAnySelected = selectedVariants.length > 0;
+    const selectionText = `${selectedVariants.length} variants selected`;
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -138,21 +157,34 @@ export default function BrandInventoryPage() {
             {isAnySelected && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-gray-800 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-6 animate-in slide-in-from-bottom">
                     <span className="font-bold text-sm whitespace-nowrap">
-                        <span className="text-[#e09a74] mr-1">{isGlobalSelectAll ? 'Global' : selectedVariants.length}</span> {selectionText}
+                        <span className="text-[#e09a74] mr-1">{selectedVariants.length}</span> {selectedVariants.length === 1 ? 'variant selected' : 'variants selected'}
                     </span>
-                    <Button 
-                        onClick={handleBulkAdd}
-                        isLoading={bulkAddMutation.isPending}
-                        className="bg-[#e09a74] hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
-                    >
-                        Add Selected
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {selectedToAdd.length > 0 && (
+                            <Button 
+                                onClick={handleBulkAdd}
+                                isLoading={bulkAddMutation.isPending}
+                                className="bg-[#e09a74] hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                            >
+                                Add  ({selectedToAdd.length})
+                            </Button>
+                        )}
+                        {selectedToRemove.length > 0 && (
+                            <Button 
+                                onClick={handleBulkRemove}
+                                isLoading={bulkRemoveMutation.isPending}
+                                className="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                            >
+                                Remove  ({selectedToRemove.length})
+                            </Button>
+                        )}
+                    </div>
                     <button 
-                        onClick={() => { setIsGlobalSelectAll(false); setSelectedVariants([]); setExcludedVariants([]); }}
-                        className="p-1 hover:bg-gray-800 rounded-full transition-colors flex-shrink-0"
+                        onClick={() => { setSelectedVariants([]); }}
+                        className="p-1 hover:bg-gray-800 rounded-full transition-colors flex-shrink-0 border border-gray-700"
                         title="Clear selection"
                     >
-                        <X className="w-5 h-5 text-gray-400" />
+                        <X className="w-4 h-4 text-gray-400" />
                     </button>
                 </div>
             )}
@@ -228,12 +260,12 @@ export default function BrandInventoryPage() {
                                 <th className="px-6 py-4 font-bold min-w-[350px]">
                                     <div className="flex items-center justify-between">
                                         <span>Available Variants & Actions</span>
-                                        {products.flatMap(p => p.variants).filter(v => !v.isAdded).length > 0 && (
+                                        {products.length > 0 && (
                                             <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors shadow-sm normal-case">
                                                 <input 
                                                     type="checkbox" 
                                                     className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74]"
-                                                    checked={isGlobalSelectAll || (selectedVariants.length > 0 && selectedVariants.length === products.flatMap(p => p.variants).filter(v => !v.isAdded).length)}
+                                                    checked={selectedVariants.length > 0 && selectedVariants.length === products.flatMap(p => p.variants).length}
                                                     onChange={toggleSelectAll}
                                                 />
                                                 <span className="text-xs font-bold text-gray-700 tracking-normal">Select All</span>
@@ -279,9 +311,7 @@ export default function BrandInventoryPage() {
                                     <td className="px-6 py-4 align-top">
                                         <div className="space-y-2">
                                             {product.variants?.map(variant => {
-                                                const isSelected = isGlobalSelectAll 
-                                                    ? !excludedVariants.includes(variant._id) 
-                                                    : selectedVariants.some(v => v.variantId === variant._id);
+                                                const isSelected = selectedVariants.some(v => v.variantId === variant._id);
 
                                                 return (
                                                 <div key={variant._id} className={clsx(
@@ -291,10 +321,9 @@ export default function BrandInventoryPage() {
                                                     <div className="flex items-center gap-3 min-w-0 flex-1">
                                                         <input 
                                                             type="checkbox"
-                                                            disabled={variant.isAdded}
-                                                            checked={variant.isAdded ? false : isSelected}
-                                                            onChange={() => toggleVariant(product._id, variant._id)}
-                                                            className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shrink-0"
+                                                            checked={isSelected}
+                                                            onChange={() => toggleVariant(product._id, variant._id, variant.isAdded)}
+                                                            className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74] cursor-pointer shrink-0"
                                                         />
                                                         <div className="min-w-0 flex-1">
                                                             <p className="text-xs font-bold text-gray-900 truncate">
@@ -354,9 +383,13 @@ export default function BrandInventoryPage() {
                     <Pagination
                         currentPage={pagination.currentPage || 1}
                         totalPages={pagination.totalPages}
-                        pageSize={pagination.limit}
+                        pageSize={pageSize}
                         totalItems={pagination.totalItems}
                         onPageChange={setCurrentPage}
+                        onPageSizeChange={(size) => {
+                            setPageSize(size);
+                            setCurrentPage(1);
+                        }}
                     />
                 </div>
             )}
@@ -434,11 +467,10 @@ export default function BrandInventoryPage() {
 
                                 <div>
                                     <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">
-                                        Initial Stock Quantity 
+                                        Initial Stock Quantity <span className="text-gray-300 normal-case font-normal">(Optional)</span>
                                     </label>
                                     <input
                                         type="number"
-                                        required
                                         value={formData.stock}
                                         onChange={e => setFormData({ ...formData, stock: e.target.value })}
                                         placeholder="Enter Stock"

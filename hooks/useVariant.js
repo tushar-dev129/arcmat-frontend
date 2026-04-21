@@ -29,6 +29,7 @@ export const useCreateVariant = (productId) => {
         mutationFn: variantService.createVariant,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: VARIANT_KEYS.list(productId) });
+            queryClient.invalidateQueries({ queryKey: ['attributes'] });
         },
     });
 };
@@ -45,6 +46,7 @@ export const useUpdateVariant = (productId, variantId) => {
             if (vId) {
                 queryClient.invalidateQueries({ queryKey: VARIANT_KEYS.detail(vId) });
             }
+            queryClient.invalidateQueries({ queryKey: ['attributes'] });
         },
     });
 };

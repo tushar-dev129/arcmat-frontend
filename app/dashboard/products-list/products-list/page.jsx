@@ -34,7 +34,7 @@ export default function ProductsListPage() {
     const { setLoading } = useLoader();
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(12);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
     const [orderBy, setOrderBy] = useState('updatedAt');
@@ -434,7 +434,7 @@ export default function ProductsListPage() {
                             <Pagination
                                 currentPage={paginationData?.currentPage || 1}
                                 totalPages={paginationData?.totalPages || 1}
-                                pageSize={paginationData?.pageSize || 10}
+                                pageSize={pageSize}
                                 totalItems={paginationData?.totalItems || 0}
                                 onPageChange={handlePageChange}
                                 onPageSizeChange={handlePageSizeChange}

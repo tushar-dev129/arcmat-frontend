@@ -10,12 +10,12 @@ const useProjectStore = create(
             activeMoodboardName: null,
             isActiveTemplate: false,
 
-            setActiveProject: (id, name) => set({
+            setActiveProject: (id, name, isTemplate = false) => set({
                 activeProjectId: id,
                 activeProjectName: name,
                 activeMoodboardId: null, // Clear moodboard if project changes
                 activeMoodboardName: null,
-                isActiveTemplate: false
+                isActiveTemplate: !!isTemplate
             }),
 
             setActiveMoodboard: (id, name, projectId, projectName, isTemplate = false) => set({
@@ -23,7 +23,7 @@ const useProjectStore = create(
                 activeProjectName: projectName || null,
                 activeMoodboardId: id,
                 activeMoodboardName: name,
-                isActiveTemplate: isTemplate
+                isActiveTemplate: !!isTemplate
             }),
 
             clearActiveProject: () => set({

@@ -25,9 +25,9 @@ function StatusBadge({ status }) {
 
 export default function RetailerOrdersPage() {
     const [currentPage, setCurrentPage] = useState(1);
-    const limit = 10;
+    const [pageSize, setPageSize] = useState(12);
 
-    const { data: ordersData, isLoading } = useGetOrders({ page: currentPage, limit });
+    const { data: ordersData, isLoading } = useGetOrders({ page: currentPage, limit: pageSize });
 
     const orders = ordersData?.data?.data || ordersData?.data || [];
     const pagination = ordersData?.data?.pagination;
@@ -103,9 +103,10 @@ export default function RetailerOrdersPage() {
                 <Pagination
                     currentPage={pagination.page || 1}
                     totalPages={pagination.totalPages}
-                    pageSize={limit}
+                    pageSize={pageSize}
                     totalItems={pagination.total}
                     onPageChange={p => { setCurrentPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    onPageSizeChange={s => { setPageSize(s); setCurrentPage(1); }}
                 />
             )}
         </div>
