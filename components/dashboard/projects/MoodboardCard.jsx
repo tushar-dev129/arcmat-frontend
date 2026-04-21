@@ -21,11 +21,11 @@ import { useGetCategoryTree } from '@/hooks/useCategory';
 // Export progress label shown while downloading
 // ─────────────────────────────────────────────────────────────────────────────
 const EXPORT_STAGES = [
-    '📊 Building Excel…',
-    '📄 Building CSV…',
-    '🖼 Fetching images…',
-    '🎨 Fetching renders…',
-    '📦 Compressing…',
+    '📁 Preparing professional folder structure…',
+    '📊 Building detailed Excel report…',
+    '📄 Generating Material List CSV…',
+    '🖼 Fetching high-quality images…',
+    '📦 Finalizing ZIP package…',
 ];
 
 function useExportStage(isExporting) {
@@ -51,10 +51,10 @@ function useExportStage(isExporting) {
 export default function MoodboardCard({ moodboard, projectId, onDelete, isArchitect, projectPrivacy }) {
     const { _id, moodboard_name, estimatedCostId } = moodboard;
 
-    const [isEditing, setIsEditing]           = useState(false);
-    const [editName, setEditName]             = useState(moodboard_name);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editName, setEditName] = useState(moodboard_name);
     const [isCoverModalOpen, setIsCoverModalOpen] = useState(false);
-    const [isExporting, setIsExporting]       = useState(false);
+    const [isExporting, setIsExporting] = useState(false);
     const [isCSVExporting, setIsCSVExporting] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
 
@@ -85,10 +85,10 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
     }, []);
 
     // ── Item counts (derived from existing data — no extra fetch) ──────────
-    const itemCount      = moodboard.canvasState?.filter(i => i.type === 'material').length || 0;
-    const renderCount    = (moodboard?.customPhotos || []).filter(p => (p.tags || []).includes('Render')).length;
-    const photoCount     = (moodboard?.customPhotos || []).filter(p => !(p.tags || []).includes('Render')).length;
-    const hasContent     = itemCount + renderCount + photoCount > 0;
+    const itemCount = moodboard.canvasState?.filter(i => i.type === 'material').length || 0;
+    const renderCount = (moodboard?.customPhotos || []).filter(p => (p.tags || []).includes('Render')).length;
+    const photoCount = (moodboard?.customPhotos || []).filter(p => !(p.tags || []).includes('Render')).length;
+    const hasContent = itemCount + renderCount + photoCount > 0;
 
     // ── Preview grid images ────────────────────────────────────────────────
     const previewImages = (moodboard?.canvasState || [])
@@ -101,7 +101,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
         if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
             e.preventDefault();
             if (isArchitect && !isExporting) {
-                handleDownloadZip({ preventDefault: () => {}, stopPropagation: () => {} });
+                handleDownloadZip({ preventDefault: () => { }, stopPropagation: () => { } });
             }
         }
         if (e.key === 'Escape') setShowExportMenu(false);
@@ -161,7 +161,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
         try {
             setIsExporting(true);
 
-            const response      = await moodboardService.getMoodboardById(_id);
+            const response = await moodboardService.getMoodboardById(_id);
             const fullMoodboard = response?.data;
 
             if (!fullMoodboard) {
@@ -169,7 +169,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                 return;
             }
 
-            await exportMoodboardToZip(fullMoodboard, fullMoodboard.projectId);
+            await exportMoodboardToZip(fullMoodboard, { _id: fullMoodboard.projectId, projectName: 'ArcMat Project' });
         } catch (error) {
             console.error('[MoodboardCard] ZIP export failed:', error);
             toast.error('Failed to export space — please try again');
@@ -191,7 +191,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
 
         try {
             setIsCSVExporting(true);
-            const response      = await moodboardService.getMoodboardById(_id);
+            const response = await moodboardService.getMoodboardById(_id);
             const fullMoodboard = response?.data;
 
             if (!fullMoodboard) {
@@ -268,10 +268,10 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                 <div className="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.15)] border border-gray-100 py-2 z-50 animate-in fade-in zoom-in-95 duration-200">
                                     <button
                                         onClick={handleDownloadZip}
-                                        className="w-full text-left px-4 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a] flex items-center gap-2.5 transition-colors"
+                                        className="w-full text-left px-4 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a] flex items-center gap-2.5 transition-colors group/zip"
                                     >
-                                        <FolderArchive className="w-4 h-4 text-orange-400" />
-                                        <span>Full Export (ZIP)</span>
+                                        <FolderArchive className="w-4 h-4 text-orange-400 group-hover/zip:scale-110 transition-transform" />
+                                        <span>Full Space ZIP</span>
                                     </button>
                                     <button
                                         onClick={handleDownloadCSV}
@@ -484,7 +484,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                         <p className="text-xs text-gray-400 font-bold tracking-tight">
                             {itemCount} {itemCount === 1 ? 'item' : 'items'}
                             {renderCount > 0 && ` · ${renderCount} render${renderCount !== 1 ? 's' : ''}`}
-                            {photoCount  > 0 && ` · ${photoCount} photo${photoCount !== 1 ? 's' : ''}`}
+                            {photoCount > 0 && ` · ${photoCount} photo${photoCount !== 1 ? 's' : ''}`}
                             {' '}• ArcMat
                         </p>
                     </div>

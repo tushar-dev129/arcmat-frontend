@@ -169,7 +169,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             setIsExporting(true);
 
             // 1. Fetch moodboard list
-            toast.loading('📂 Loading project spaces…', { id: 'project-export-fetch' });
+            toast.loading('📁 Preparing professional project export…', { id: 'project-export-fetch' });
             const listResponse = await moodboardService.getMoodboardList(_id);
             const spaces = listResponse?.data || [];
 
@@ -184,7 +184,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             for (let i = 0; i < spaces.length; i++) {
                 const space = spaces[i];
                 toast.loading(
-                    `📥 Fetching space ${i + 1}/${spaces.length}: "${space.moodboard_name || 'Space'}"…`,
+                    `⏳ Fetching data for "${space.moodboard_name || 'Space'}" (${i + 1}/${spaces.length})…`,
                     { id: 'project-export-fetch' }
                 );
                 const detailResponse = await moodboardService.getMoodboardById(space._id);
@@ -199,6 +199,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             }
 
             // 3. Trigger folder-wise ZIP export
+            toast.loading('📦 Finalizing professional ZIP package…', { id: 'project-export-fetch' });
             await exportProjectToZip(project, fullSpaces);
 
         } catch (error) {
@@ -486,18 +487,28 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
 
                     </div>
 
-                    <div className="mt-auto">
+                    <div className="mt-auto flex flex-col gap-2">
                         {isArchitect && (
-                            <Link
-                                href="/productlist"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    useProjectStore.getState().setActiveProject(project._id, project.projectName);
-                                }}
-                                className="inline-flex items-center justify-center px-4 py-2 bg-[#D9A88A] text-white text-[12px] font-bold rounded-full hover:bg-[#D9A88A] shadow-sm transition-colors whitespace-nowrap"
-                            >
-                                See all products
-                            </Link>
+                            <>
+                                <Link
+                                    href="/productlist"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        useProjectStore.getState().setActiveProject(project._id, project.projectName);
+                                    }}
+                                    className="inline-flex items-center justify-center px-4 py-2 bg-[#D9A88A] text-white text-[12px] font-bold rounded-full hover:bg-[#D9A88A] shadow-sm transition-colors whitespace-nowrap"
+                                >
+                                    See all products
+                                </Link>
+                                <button
+                                    onClick={handleDownloadProject}
+                                    disabled={isExporting}
+                                    className={`inline-flex items-center justify-center gap-2 px-4 py-2 bg-white border border-[#D9A88A] text-[#D9A88A] text-[12px] font-bold rounded-full hover:bg-orange-50 transition-all whitespace-nowrap ${isExporting ? 'opacity-60 animate-pulse cursor-wait' : ''}`}
+                                >
+                                    {isExporting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+                                    {isExporting ? 'Exporting…' : 'Download ZIP'}
+                                </button>
+                            </>
                         )}
                     </div>
                 </div>
