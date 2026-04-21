@@ -165,7 +165,8 @@ function ProgressRing({ pct, size = 88, stroke = 7 }) {
 function PhaseSteps({ phaseIdx, isCompleted }) {
     const active = isCompleted ? PHASES.length - 1 : phaseIdx;
     return (
-        <div className="flex items-center gap-0 w-full">
+        <div className="overflow-x-auto hide-scrollbar -mx-2 px-2">
+            <div className="flex items-center gap-0 min-w-[450px] py-2">
             {PHASES.map((phase, i) => {
                 const done    = i < active;
                 const current = i === active;
@@ -202,6 +203,7 @@ function PhaseSteps({ phaseIdx, isCompleted }) {
                     </div>
                 );
             })}
+            </div>
         </div>
     );
 }
@@ -223,7 +225,7 @@ function StatCard({ icon: Icon, label, value, sub, color = 'orange', warn = fals
                 <Icon className="w-4 h-4" />
             </div>
             <div className="min-w-0">
-                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider leading-none mb-0.5 truncate">
+                <p className="text-[9px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider leading-none mb-1 truncate">
                     {label}
                 </p>
                 <p className={`text-lg font-black leading-none ${warn ? 'text-red-500' : 'text-[#2d3142]'}`}>
@@ -260,41 +262,43 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
         : 'text-blue-600 bg-blue-50 border-blue-100';
 
     return (
-        <div className="bg-white rounded-[28px] border border-gray-100 shadow-sm mb-10 overflow-hidden transition-all duration-300">
+        <div className="bg-white rounded-[24px] sm:rounded-[28px] border border-gray-100 shadow-sm mb-10 overflow-hidden transition-all duration-300">
             {/* ── Header row ──────────────────────────────────────────────── */}
             <button
                 onClick={() => setCollapsed(c => !c)}
-                className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50/60 transition-colors"
+                className="w-full flex items-center justify-between px-4 sm:px-6 py-4 hover:bg-gray-50/60 transition-colors"
                 aria-expanded={!collapsed}
             >
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-xl bg-[#fef7f2] flex items-center justify-center">
+                <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-[#fef7f2] flex items-center justify-center shrink-0">
                         <BarChart2 className="w-4 h-4 text-[#d9a88a]" />
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="font-extrabold text-[#2d3142] text-sm">Project Progress</span>
-                        <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border uppercase tracking-wide ${statusColor}`}>
-                            {statusLabel}
-                        </span>
-                        {stats.pendingApprovals > 0 && (
-                            <span className="text-[10px] font-black px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1">
-                                <AlertTriangle className="w-3 h-3" />
-                                {stats.pendingApprovals} pending {stats.pendingApprovals === 1 ? 'approval' : 'approvals'}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 items-start">
+                        <span className="font-extrabold text-[#2d3142] text-xs sm:text-sm">Project Progress</span>
+                        <div className="flex items-center gap-2">
+                            <span className={`text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded-full border uppercase tracking-wide shrink-0 ${statusColor}`}>
+                                {statusLabel}
                             </span>
-                        )}
+                            {stats.pendingApprovals > 0 && (
+                                <span className="text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1 shrink-0">
+                                    <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                                    {stats.pendingApprovals}
+                                </span>
+                            )}
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    <span className="text-sm font-black text-[#d9a88a]">{stats.pct}%</span>
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                    <span className="text-xs sm:text-sm font-black text-[#d9a88a]">{stats.pct}%</span>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${collapsed ? '' : 'rotate-180'}`} />
                 </div>
             </button>
 
             {/* ── Collapsible body ────────────────────────────────────────── */}
-            <div className={`transition-all duration-300 ease-in-out ${collapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[500px] opacity-100'}`}>
-                <div className="px-6 pb-6 space-y-6">
+            <div className={`transition-all duration-300 ease-in-out ${collapsed ? 'max-h-0 opacity-0 pointer-events-none' : 'max-h-[1200px] opacity-100'}`}>
+                <div className="px-4 sm:px-6 pb-6 space-y-6">
                     {/* Row 1: ring + phase stepper */}
-                    <div className="flex items-start gap-6">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                         {/* Progress ring */}
                         <div className="flex flex-col items-center gap-2 shrink-0">
                             <ProgressRing pct={stats.pct} />
@@ -315,10 +319,10 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                             {/* Progress bar */}
                             <div className="mt-6">
                                 <div className="flex items-center justify-between mb-1.5">
-                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wide">
+                                    <span className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wide">
                                         Overall completion
                                     </span>
-                                    <span className="text-[10px] font-black text-[#d9a88a]">{stats.pct}%</span>
+                                    <span className="text-[9px] sm:text-[10px] font-black text-[#d9a88a]">{stats.pct}%</span>
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <div
@@ -406,30 +410,32 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                     const pending = mb?.pendingApprovals || 0;
 
                                     return (
-                                        <div key={mb._id} className="flex items-center gap-3 bg-gray-50/60 rounded-2xl px-4 py-2.5">
-                                            <div className="w-2 h-2 rounded-full bg-[#d9a88a] shrink-0" />
-                                            <span className="text-sm font-bold text-[#2d3142] truncate flex-1 min-w-0">
-                                                {mb.moodboard_name}
-                                            </span>
-                                            <div className="flex items-center gap-4 shrink-0">
-                                                <span className="text-[11px] text-gray-400 font-bold w-20 text-right">
+                                        <div key={mb._id} className="flex flex-col sm:flex-row sm:items-center gap-3 bg-gray-50/60 rounded-2xl px-4 py-3">
+                                            <div className="flex items-center gap-3 flex-1 min-w-0">
+                                               <div className="w-2 h-2 rounded-full bg-[#d9a88a] shrink-0" />
+                                               <span className="text-sm font-bold text-[#2d3142] truncate">
+                                                   {mb.moodboard_name}
+                                               </span>
+                                            </div>
+                                            <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
+                                                <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold sm:w-20 sm:text-right">
                                                     {products.length}p
                                                     {photos.length > 0 ? ` · ${photos.length}ph` : ''}
                                                     {customRows.length > 0 ? ` · ${customRows.length}r` : ''}
                                                 </span>
-                                                <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="hidden sm:block w-16 sm:w-24 h-1 bg-gray-200 rounded-full overflow-hidden">
                                                     <div
                                                         className="h-full bg-[#d9a88a] rounded-full transition-all duration-700"
                                                         style={{ width: `${specPct}%` }}
                                                     />
                                                 </div>
-                                                <span className="text-[11px] font-black text-[#d9a88a] w-8">{specPct}%</span>
+                                                <span className="text-[10px] sm:text-[11px] font-black text-[#d9a88a] w-8">{specPct}%</span>
                                                 {pending > 0 && (
-                                                    <span className="text-[10px] bg-red-50 text-red-500 font-bold px-2 py-0.5 rounded-full border border-red-100">
+                                                    <span className="text-[9px] sm:text-[10px] bg-red-50 text-red-500 font-bold px-2 py-0.5 rounded-full border border-red-100">
                                                         {pending} ⏳
                                                     </span>
                                                 )}
-                                                <span className="text-[11px] text-gray-400 font-bold w-20 text-right">
+                                                <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold sm:w-20 text-right">
                                                     ₹{cost.toLocaleString('en-IN')}
                                                 </span>
                                             </div>

@@ -110,27 +110,27 @@ export default function MoodboardsPage() {
     return (
         <Container className="py-8">
             {/* ── Top bar ───────────────────────────────────────────────── */}
-            <div className="flex items-center justify-between mb-10">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
                 <button
                     onClick={() => router.push('/dashboard/projects')}
-                    className="flex items-center gap-2 text-gray-400 hover:text-[#d9a88a] font-bold transition-colors group"
+                    className="flex items-center gap-2 text-gray-400 hover:text-[#d9a88a] font-bold transition-colors group shrink-0"
                 >
                     <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                     Back to Projects
                 </button>
 
                 {isArchitect && (
-                    <div className="flex items-center gap-3 flex-wrap justify-end">
+                    <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-1 sm:pb-0 hide-scrollbar w-full md:w-auto">
                         <Button
                             onClick={() => setIsPrivacyModalOpen(true)}
-                            className="bg-white border text-gray-700 px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 text-sm"
+                            className="bg-white border text-gray-700 px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 text-[11px] sm:text-sm whitespace-nowrap shrink-0"
                         >
-                            <Shield className="w-4 h-4 text-[#d9a88a]" />
+                            <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#d9a88a]" />
                             Client Settings
                         </Button>
                         <Button
                             onClick={() => setIsInviteModalOpen(true)}
-                            className="bg-[#2d3142] hover:bg-white hover:text-[#2d3142] border border-[#2d3142] text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 text-sm"
+                            className="bg-[#2d3142] hover:bg-white hover:text-[#2d3142] border border-[#2d3142] text-white px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 text-[11px] sm:text-sm whitespace-nowrap shrink-0"
                         >
                             Invite Client
                         </Button>
@@ -138,17 +138,17 @@ export default function MoodboardsPage() {
                             <Button
                                 onClick={() => setIsCompleteModalOpen(true)}
                                 disabled={completeMutation.isPending}
-                                className="bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all text-sm disabled:opacity-50"
+                                className="bg-emerald-50 text-emerald-600 border border-emerald-200 hover:bg-emerald-600 hover:text-white px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all text-[11px] sm:text-sm disabled:opacity-50 whitespace-nowrap shrink-0"
                             >
                                 {completeMutation.isPending
-                                    ? <Loader2 className="w-4 h-4 animate-spin" />
-                                    : <CheckCircle className="w-4 h-4" />}
+                                    ? <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin" />
+                                    : <CheckCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />}
                                 Mark Complete
                             </Button>
                         )}
                         <Button
                             onClick={() => setIsModalOpen(true)}
-                            className="bg-[#d9a88a] hover:bg-white hover:text-[#d9a88a] border border-[#d9a88a] text-white px-5 py-3 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-orange-100 text-sm"
+                            className="bg-[#d9a88a] hover:bg-white hover:text-[#d9a88a] border border-[#d9a88a] text-white px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-orange-100 text-[11px] sm:text-sm whitespace-nowrap shrink-0"
                         >
                             <Plus className="w-4 h-4" />
                             New Space
