@@ -6,13 +6,14 @@ import { NOTIFICATION_KEYS } from './useNotificationCounts';
 
 export const DISCUSSION_KEYS = {
     all: ['discussion'],
-    project: (projectId, spaceId = null) => [...DISCUSSION_KEYS.all, projectId, spaceId ? `space-${spaceId}` : 'general'],
+    project: (projectId, spaceId = null, aggregate = null) => [...DISCUSSION_KEYS.all, projectId, spaceId ? `space-${spaceId}` : 'general', aggregate ? 'aggregated' : 'specific'],
 };
 
 export const useGetComments = (projectId, spaceId = null, options = {}) => {
+    const aggregate = options.aggregate || null;
     return useQuery({
-        queryKey: DISCUSSION_KEYS.project(projectId, spaceId),
-        queryFn: () => discussionService.getComments(projectId, spaceId),
+        queryKey: DISCUSSION_KEYS.project(projectId, spaceId, aggregate),
+        queryFn: () => discussionService.getComments(projectId, spaceId, null, null, null, aggregate),
         enabled: !!projectId && (options.enabled !== false),
         // 15s polling — balanced between real-time feel and server load
         refetchInterval: options.refetchInterval ?? 15000,

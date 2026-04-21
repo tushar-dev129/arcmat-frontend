@@ -217,7 +217,7 @@ export default function OverviewTab({
                     currentStatus={
                         contextMenu.isPhoto
                             ? customPhotos.find(p => p.id === contextMenu.itemId)?.status ?? 'Considering'
-                            : (typeof productStatuses[contextMenu.itemId] === 'object' ? productStatuses[contextMenu.itemId].status : productStatuses[contextMenu.itemId]) ?? 'Considering'
+                            : productStatuses[contextMenu.itemId] ?? 'Considering'
                     }
                     onStatusChange={(status) => {
                         if (contextMenu.isPhoto) handlePhotoStatusChange(contextMenu.itemId, status);
@@ -291,7 +291,7 @@ export default function OverviewTab({
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => {
-                                    useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '', !!isTemplate);
+                                    useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '');
                                     router.push(`/productlist?category=${defaultCategoryId}`);
                                 }}
                                 className="px-6 py-3 bg-[#1a1a2e] text-white font-bold rounded-2xl hover:bg-[#2d2d4a] transition-colors flex items-center gap-2"
@@ -326,7 +326,7 @@ export default function OverviewTab({
                                     <button
                                         onClick={() => {
                                             setAddCardOpen(false);
-                                            useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '', !!isTemplate);
+                                            useProjectStore.getState().setActiveMoodboard(moodboardId, moodboard?.moodboard_name, projectId, project?.projectName || '');
                                             router.push(`/productlist?category=${defaultCategoryId}`);
                                         }}
                                         className="w-full text-left px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-50 flex items-center gap-3"

@@ -3,7 +3,7 @@ import api from '@/lib/api';
 export const isValidId = (id) => !!(id && typeof id === 'string' && /^[0-9a-fA-F]{24}$/.test(id));
 
 export const discussionService = {
-    getComments: async (projectId, spaceId = null, retailerId = null, materialId = null, isInternal = null) => {
+    getComments: async (projectId, spaceId = null, retailerId = null, materialId = null, isInternal = null, aggregate = null) => {
         if (!isValidId(projectId) && (!retailerId || !materialId)) {
             console.error('Missing required context in getComments:', { projectId, retailerId, materialId });
             return { data: [] };
@@ -13,6 +13,7 @@ export const discussionService = {
         if (retailerId) params.retailerId = retailerId;
         if (materialId) params.materialId = materialId;
         if (isInternal !== null) params.isInternal = isInternal;
+        if (aggregate !== null) params.aggregate = aggregate;
         const response = await api.get(`/discussion/${projectId}`, { params });
         return response.data;
     },

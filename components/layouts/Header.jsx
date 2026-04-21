@@ -17,6 +17,7 @@ import { useGetWishlist } from '@/hooks/useWishlist';
 import { useGetCartCount } from '@/hooks/useCart';
 import useProjectStore from '@/store/useProjectStore';
 import { useCartStore } from '@/store/useCartStore';
+import { toast } from '@/components/ui/Toast';
 const MotionFolder = motion(Folder);
 
 const Header = ({ variant = 'default' }) => {
@@ -101,6 +102,10 @@ const Header = ({ variant = 'default' }) => {
     const handleChange = (e) => {
         setSearchText(e.target.value)
     }
+
+    const handleAiToolsClick = () => {
+        toast.info("AI tools are coming soon.", "Coming Soon");
+    };
 
     const desktopProfileRef = useRef(null);
     const mobileProfileRef = useRef(null);
@@ -238,7 +243,13 @@ const Header = ({ variant = 'default' }) => {
                     {mounted && isAuthenticated && (
                         <>
                             {(!isDashboard || user?.role !== 'brand') && (
-                                <button className='p-2 hover:bg-gray-50 rounded-full transition-colors hidden sm:flex shrink-0'>
+                                <button
+                                    onClick={handleAiToolsClick}
+                                    className='p-2 hover:bg-gray-50 rounded-full transition-colors hidden sm:flex shrink-0'
+                                    title="AI tools coming soon"
+                                    aria-label="AI tools coming soon"
+                                    type="button"
+                                >
                                     <Image src="/Icons/ai_icon.png" alt="AI Tools" width={28} height={28} />
                                 </button>
                             )}
