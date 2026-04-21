@@ -67,7 +67,7 @@ export default function CardContextMenu({
                             }`}
                     >
                         <CheckCircle className={`w-4 h-4 ${currentStatus === 'Specified' ? 'text-green-600' : 'text-gray-400'}`} />
-                        Approve
+                        {currentStatus === 'Specified' ? 'Approved' : 'Approve'}
                         {currentStatus === 'Specified' && <Check className="w-3.5 h-3.5 ml-auto text-green-600" />}
                     </button>
                     <button
@@ -82,7 +82,7 @@ export default function CardContextMenu({
                             }`}
                     >
                         <XCircle className={`w-4 h-4 ${currentStatus === 'Excluded' ? 'text-red-600' : 'text-gray-400'}`} />
-                        Reject
+                        {currentStatus === 'Excluded' ? 'Rejected' : 'Reject'}
                         {currentStatus === 'Excluded' && <Check className="w-3.5 h-3.5 ml-auto text-red-600" />}
                     </button>
                 </>

@@ -8,10 +8,28 @@ export const toast = {
     sonnerToast.custom((t) => (
       <CustomToast t={t} message={message} title={title} type="success" />
     )),
-  error: (message, title) =>
-    sonnerToast.custom((t) => (
+  error: (message, title) => {
+    // Silence Access Denied toasts for customers to prevent UX friction (Hard Silence requested)
+    if (typeof window !== 'undefined') {
+      try {
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+        if (user?.role === 'customer' && (
+          message?.toLowerCase()?.includes('access denied') || 
+          message?.toLowerCase()?.includes('insufficient permissions')
+        )) {
+          console.warn('[Toast Silenced] Suppressed Permission Error for Customer:', message);
+          return null;
+        }
+      } catch (err) {
+        console.error('Error in toast suppression check:', err);
+      }
+    }
+
+    return sonnerToast.custom((t) => (
       <CustomToast t={t} message={message} title={title} type="error" />
-    )),
+    ));
+  },
   warning: (message, title) =>
     sonnerToast.custom((t) => (
       <CustomToast t={t} message={message} title={title} type="warning" />

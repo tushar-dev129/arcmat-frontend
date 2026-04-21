@@ -217,7 +217,7 @@ export default function OverviewTab({
                     currentStatus={
                         contextMenu.isPhoto
                             ? customPhotos.find(p => p.id === contextMenu.itemId)?.status ?? 'Considering'
-                            : productStatuses[contextMenu.itemId] ?? 'Considering'
+                            : (typeof productStatuses[contextMenu.itemId] === 'object' ? productStatuses[contextMenu.itemId].status : productStatuses[contextMenu.itemId]) ?? 'Considering'
                     }
                     onStatusChange={(status) => {
                         if (contextMenu.isPhoto) handlePhotoStatusChange(contextMenu.itemId, status);
