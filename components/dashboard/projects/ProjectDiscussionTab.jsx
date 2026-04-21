@@ -15,9 +15,9 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
 
     // spaceId and materialId are explicitly null for general project discussion
     // We now pass aggregate: "true" to fetch communication from ALL spaces
-    const { data, isLoading } = useGetComments(projectId, null, { 
+    const { data, isLoading } = useGetComments(projectId, null, {
         enabled: !!projectId,
-        aggregate: "true" 
+        aggregate: "true"
     });
 
     const postMutation = usePostComment(projectId);
@@ -35,11 +35,11 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
             // If we have a specific space filter, we clear that space. 
             // Otherwise, we clear the general project-wide notifications.
             const targetSpaceId = (filterSpaceId !== 'all' && filterSpaceId !== 'general') ? filterSpaceId : null;
-            
-            markNotificationsRead({ 
-                id: projectId, 
+
+            markNotificationsRead({
+                id: projectId,
                 spaceId: targetSpaceId,
-                type: targetSpaceId ? 'space' : 'general' 
+                type: targetSpaceId ? 'space' : 'general'
             });
         }
     }, [projectId, user, isLoading, data, filterSpaceId, markNotificationsRead]);
@@ -62,7 +62,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
             // Check architect's materials
             const archMaterial = mb.materials?.find(m => m._id === itemId || m.productName === itemName);
             if (archMaterial) return archMaterial.productThumbnail || archMaterial.imageUrl;
-            
+
             // Check products list (if they were mapped)
             const product = mb.products?.find(p => p._id === itemId || p.productName === itemName);
             if (product) return product.productThumbnail || product.imageUrl;
@@ -129,11 +129,10 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                     <div className="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar">
                         <button
                             onClick={() => setFilterSpaceId('general')}
-                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${
-                                filterSpaceId === 'general' 
-                                    ? 'bg-[#d9a88a] text-white shadow-lg' 
-                                    : 'bg-white text-gray-400 hover:bg-gray-100'
-                            }`}
+                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${filterSpaceId === 'general'
+                                ? 'bg-[#d9a88a] text-white shadow-lg'
+                                : 'bg-white text-gray-400 hover:bg-gray-100'
+                                }`}
                         >
                             General
                         </button>
@@ -142,11 +141,10 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <button
                                 key={mb._id}
                                 onClick={() => setFilterSpaceId(mb._id)}
-                                className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${
-                                    filterSpaceId === mb._id 
-                                        ? 'bg-[#d9a88a] text-white shadow-lg' 
-                                        : 'bg-white text-gray-400 hover:bg-gray-100'
-                                }`}
+                                className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${filterSpaceId === mb._id
+                                    ? 'bg-[#d9a88a] text-white shadow-lg'
+                                    : 'bg-white text-gray-400 hover:bg-gray-100'
+                                    }`}
                             >
                                 {mb.moodboard_name}
                             </button>
@@ -156,7 +154,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
             </div>
 
             {/* Chat Area */}
-            <div 
+            <div
                 ref={scrollContainerRef}
                 className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50/20 custom-scrollbar"
             >
@@ -172,8 +170,8 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         </div>
                         <h3 className="text-xl font-black text-[#2d3142] mb-2">No messages here</h3>
                         <p className="text-gray-400 font-medium max-w-xs mx-auto text-sm">
-                            {filterSpaceId === 'all' 
-                                ? "Nobody has started a conversation in this project yet." 
+                            {filterSpaceId === 'all'
+                                ? "Nobody has started a conversation in this project yet."
                                 : `No messages found for ${filterSpaceId === 'general' ? 'General' : getSpaceName(filterSpaceId)}.`}
                         </p>
                     </div>
@@ -188,11 +186,10 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                 <div className="flex items-center gap-2 mb-2">
                                     {/* Space/Context Label */}
-                                    <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md ${
-                                        !spaceName 
-                                            ? 'bg-blue-50 text-blue-600' 
-                                            : 'bg-orange-50 text-orange-600'
-                                    }`}>
+                                    <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md ${!spaceName
+                                        ? 'bg-blue-50 text-blue-600'
+                                        : 'bg-orange-50 text-orange-600'
+                                        }`}>
                                         {spaceName ? `[${spaceName}]` : '[General]'}
                                     </span>
 
@@ -205,22 +202,21 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                     <span className="text-[10px] font-black uppercase tracking-widest text-[#2d3142] ml-1">
                                         {isMe ? 'You' : authorName}
                                     </span>
-                                    
+
                                     {comment.isInternal && (
                                         <span className="text-[9px] px-2 py-0.5 rounded-lg font-black uppercase tracking-tighter bg-amber-100 text-amber-700 flex items-center gap-1">
                                             <Shield className="w-3 h-3" /> Private
                                         </span>
                                     )}
                                 </div>
-                                <div className={`max-w-[75%] rounded-3xl text-sm font-medium leading-relaxed shadow-sm group relative overflow-hidden ${
-                                    isMe 
-                                        ? 'bg-[#1a1a2e] text-white rounded-tr-sm' 
-                                        : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm'
-                                }`}>
+                                <div className={`max-w-[75%] rounded-3xl text-sm font-medium leading-relaxed shadow-sm group relative overflow-hidden ${isMe
+                                    ? 'bg-[#1a1a2e] text-white rounded-tr-sm'
+                                    : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm'
+                                    }`}>
                                     {(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName)) && (
                                         <div className="relative h-32 w-full overflow-hidden border-b border-gray-100/10 group/thumb">
-                                            <img 
-                                                src={getImageUrl(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName))} 
+                                            <img
+                                                src={getImageUrl(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName))}
                                                 alt={comment.referencedMaterialName}
                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/thumb:scale-110"
                                             />
@@ -263,7 +259,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                 </label>
                             )}
                         </div>
-                        
+
                         {/* Status Label for input context */}
                         <div className="text-[10px] font-black uppercase tracking-widest text-[#d9a88a]">
                             Posting to: {filterSpaceId === 'all' || filterSpaceId === 'general' ? 'General Project' : getSpaceName(filterSpaceId)}
@@ -292,11 +288,10 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         <button
                             type="submit"
                             disabled={!message.trim() || postMutation.isPending}
-                            className={`h-[60px] w-[60px] flex items-center justify-center rounded-[24px] text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale ${
-                                isInternal 
-                                    ? 'bg-amber-500 shadow-amber-200/50 hover:bg-amber-600' 
-                                    : 'bg-[#d9a88a] shadow-orange-100/50 hover:bg-[#c29377]'
-                            }`}
+                            className={`h-[60px] w-[60px] flex items-center justify-center rounded-[24px] text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale ${isInternal
+                                ? 'bg-amber-500 shadow-amber-200/50 hover:bg-amber-600'
+                                : 'bg-[#d9a88a] shadow-orange-100/50 hover:bg-[#c29377]'
+                                }`}
                         >
                             {postMutation.isPending ? <Loader2 className="w-6 h-6 animate-spin" /> : <Send className="w-6 h-6" />}
                         </button>
