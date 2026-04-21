@@ -246,12 +246,18 @@ export default function OverviewTab({
                         setActiveModal('retailer');
                     }}
                     onOpenDiscussion={() => {
-                        const product = contextMenu.isPhoto
+                        const item = contextMenu.isPhoto
                             ? customPhotos.find(p => p.id === contextMenu.itemId)
                             : products.find(p => p._id === contextMenu.itemId);
 
-                        const name = contextMenu.isPhoto ? product?.title : (product ? getProductName(product) : '');
-                        setSelectedMaterial({ id: contextMenu.itemId, name: name });
+                        const name = contextMenu.isPhoto ? item?.title : (item ? getProductName(item) : '');
+                        const image = contextMenu.isPhoto ? item?.previewUrl : (item ? getProductThumbnail(item) : null);
+                        
+                        setSelectedMaterial({ 
+                            id: contextMenu.itemId, 
+                            name: name,
+                            image: image
+                        });
                         setActiveModal('discussion');
                     }}
                     onOpenReplace={() => {
@@ -514,6 +520,7 @@ export default function OverviewTab({
                 spaceId={moodboardId}
                 materialId={selectedMaterial?.id}
                 materialName={selectedMaterial?.name}
+                materialImage={selectedMaterial?.image}
             />
 
             {/* Replace uses a callback passed to parent or handled locally if we pass the right props. We will pass a prop handleReplaceProduct up. */}

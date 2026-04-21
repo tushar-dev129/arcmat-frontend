@@ -64,7 +64,7 @@ const TABS = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'designDesk', label: 'Design Desk', icon: Paintbrush2 },
     { id: 'renders', label: 'Drawing/Render', icon: ImagePlus },
-    { id: 'discussion', label: 'Discussion', icon: Paintbrush2 },
+    // { id: 'discussion', label: 'Discussion', icon: Paintbrush2 },
     { id: 'export', label: 'Export', icon: TableProperties },
     { id: 'download', label: 'Download', icon: FolderDown },
 ];

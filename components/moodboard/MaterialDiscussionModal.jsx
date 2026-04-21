@@ -4,7 +4,7 @@ import { useMarkNotificationsRead } from '@/hooks/useProject';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Send, Trash2, UserCircle2, X } from 'lucide-react';
 
-export default function MaterialDiscussionModal({ isOpen, onClose, projectId, spaceId, materialId, materialName }) {
+export default function MaterialDiscussionModal({ isOpen, onClose, projectId, spaceId, materialId, materialName, materialImage }) {
     const { user } = useAuth();
     const [message, setMessage] = useState('');
     const [isInternal, setIsInternal] = useState(false);
@@ -39,6 +39,7 @@ export default function MaterialDiscussionModal({ isOpen, onClose, projectId, sp
             spaceId: spaceId,
             referencedMaterialId: materialId,
             referencedMaterialName: materialName,
+            referencedMaterialImage: materialImage, // New field
             isInternal: isInternal
         }, {
             onSuccess: () => {

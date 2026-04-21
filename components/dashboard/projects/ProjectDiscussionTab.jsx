@@ -3,6 +3,7 @@ import { useGetComments, usePostComment, useDeleteComment } from '@/hooks/useDis
 import { useMarkNotificationsRead } from '@/hooks/useProject';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Send, MessageCircle, UserCircle2, Shield } from 'lucide-react';
+import { getImageUrl } from '@/lib/productUtils';
 
 export default function ProjectDiscussionTab({ projectId, projectName, moodboards = [] }) {
     const { user } = useAuth();
@@ -28,29 +29,52 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
         }
     };
 
-    // Mark messages as read when the tab is active
+    // Mark messages as read when the tab is active or data changes
     useEffect(() => {
-        if (projectId && user) {
-            markNotificationsRead({ id: projectId, type: 'general' });
+        if (projectId && user && !isLoading && data?.data?.length > 0) {
+            // If we have a specific space filter, we clear that space. 
+            // Otherwise, we clear the general project-wide notifications.
+            const targetSpaceId = (filterSpaceId !== 'all' && filterSpaceId !== 'general') ? filterSpaceId : null;
+            
+            markNotificationsRead({ 
+                id: projectId, 
+                spaceId: targetSpaceId,
+                type: targetSpaceId ? 'space' : 'general' 
+            });
         }
-    }, [projectId, user, markNotificationsRead]);
+    }, [projectId, user, isLoading, data, filterSpaceId, markNotificationsRead]);
 
     // Auto-scroll to the latest message
     useEffect(() => {
         if (!isLoading) {
-            scrollToBottom();
+            setTimeout(scrollToBottom, 100);
         }
     }, [data, isLoading, filterSpaceId]);
 
     if (!projectId) return null;
 
     const allComments = data?.data || [];
-    
+
+    // Fallback: Find material image from moodboards if not stored in comment
+    const findMaterialImage = (itemId, itemName) => {
+        if (!moodboards) return null;
+        for (const mb of moodboards) {
+            // Check architect's materials
+            const archMaterial = mb.materials?.find(m => m._id === itemId || m.productName === itemName);
+            if (archMaterial) return archMaterial.productThumbnail || archMaterial.imageUrl;
+            
+            // Check products list (if they were mapped)
+            const product = mb.products?.find(p => p._id === itemId || p.productName === itemName);
+            if (product) return product.productThumbnail || product.imageUrl;
+        }
+        return null;
+    };
+
     // Filter comments based on selected space
     const filteredComments = allComments.filter(c => {
         if (filterSpaceId === 'all') return true;
-        if (filterSpaceId === 'general') return !c.spaceId && !c.referencedMaterialId;
-        return c.spaceId === filterSpaceId || c.spaceId?._id === filterSpaceId;
+        if (filterSpaceId === 'general') return !c.spaceId; // Include item discussions that aren't tied to a space
+        return (c.spaceId === filterSpaceId || c.spaceId?._id === filterSpaceId);
     });
 
     const handleSend = (e) => {
@@ -172,6 +196,12 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         {spaceName ? `[${spaceName}]` : '[General]'}
                                     </span>
 
+                                    {comment.referencedMaterialName && (
+                                        <span className="text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md bg-purple-50 text-purple-600">
+                                            [ITEM: {comment.referencedMaterialName}]
+                                        </span>
+                                    )}
+
                                     <span className="text-[10px] font-black uppercase tracking-widest text-[#2d3142] ml-1">
                                         {isMe ? 'You' : authorName}
                                     </span>
@@ -182,12 +212,28 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         </span>
                                     )}
                                 </div>
-                                <div className={`max-w-[75%] px-5 py-4 rounded-3xl text-sm font-medium leading-relaxed shadow-sm group relative ${
+                                <div className={`max-w-[75%] rounded-3xl text-sm font-medium leading-relaxed shadow-sm group relative overflow-hidden ${
                                     isMe 
                                         ? 'bg-[#1a1a2e] text-white rounded-tr-sm' 
                                         : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm'
                                 }`}>
-                                    <p className="whitespace-pre-wrap">{comment.message}</p>
+                                    {(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName)) && (
+                                        <div className="relative h-32 w-full overflow-hidden border-b border-gray-100/10 group/thumb">
+                                            <img 
+                                                src={getImageUrl(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName))} 
+                                                alt={comment.referencedMaterialName}
+                                                className="w-full h-full object-cover transition-transform duration-500 group-hover/thumb:scale-110"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-3">
+                                                <span className="text-white text-[10px] font-black uppercase tracking-widest truncate">
+                                                    {comment.referencedMaterialName}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="px-5 py-4">
+                                        <p className="whitespace-pre-wrap">{comment.message}</p>
+                                    </div>
                                 </div>
                                 <span className="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">
                                     {new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

@@ -96,17 +96,19 @@ export const useMarkNotificationsRead = () => {
         mutationFn: ({ id, spaceId, materialId, type }) =>
             projectService.markNotificationsRead(id, spaceId, materialId, type),
         onSuccess: (data, variables) => {
-            // Refresh project list so unread badges on ProjectCard clear immediately
+            // Refresh project list & details so unread badges clear immediately
             queryClient.invalidateQueries({ queryKey: PROJECT_KEYS.all });
-            // Refresh sidebar unread counts badge
-            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.counts() });
+            
+            // Refresh sidebar unread counts & notification master list
+            queryClient.invalidateQueries({ queryKey: NOTIFICATION_KEYS.all });
 
             queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.assigned() });
             queryClient.invalidateQueries({ queryKey: RETAILER_REQ_KEYS.mine() });
 
-            if (variables.id && variables.spaceId) {
+            if (variables.id) {
+                // Clear any space-specific caches related to notifications for this project
                 queryClient.invalidateQueries({
-                    queryKey: ['projects', 'detail', variables.id, 'space', variables.spaceId, 'notifications']
+                    queryKey: ['projects', 'detail', variables.id]
                 });
             }
         },
