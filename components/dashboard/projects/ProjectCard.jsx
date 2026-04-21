@@ -1,6 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { ChevronRight, ChevronDown, Edit2, Trash2, Check, Camera, MessageCircle, AlertCircle, MoreHorizontal, Image as ImageIcon, Download, PlusSquare, Loader2, FileText } from 'lucide-react';
+import { ChevronRight, ChevronDown, Edit2, Trash2, Check, Camera, MessageCircle, AlertCircle, MoreHorizontal, Image as ImageIcon, Download, PlusSquare, Loader2, FileText, FileSpreadsheet } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -10,7 +10,7 @@ import { useUpdateProject } from '@/hooks/useProject';
 import { toast } from '@/components/ui/Toast';
 import CoverSelectionModal from './CoverSelectionModal';
 import RetailerRatingModal from './RetailerRatingModal';
-import { exportProjectToZip, exportProjectToCSV, downloadImage } from '@/lib/exportUtils';
+import { exportProjectToZip, exportProjectToExcel, downloadImage } from '@/lib/exportUtils';
 import { getImageUrl } from '@/lib/productUtils';
 import { moodboardService } from '@/services/moodboardService';
 import { useCreateTemplateFromProject } from '@/hooks/useTemplate';
@@ -211,7 +211,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
         }
     };
 
-    const handleDownloadProjectCSV = async (e) => {
+    const handleDownloadProjectExcel = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         setIsOptionsMenuOpen(false);
@@ -228,9 +228,9 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                 if (detailResponse?.data) fullSpaces.push(detailResponse.data);
             }
             toast.dismiss('project-export-fetch');
-            await exportProjectToCSV(project, fullSpaces);
+            await exportProjectToExcel(project, fullSpaces);
         } catch (error) {
-            console.error('[ProjectCard] CSV Download failed:', error);
+            console.error('[ProjectCard] Excel Download failed:', error);
             toast.dismiss('project-export-fetch');
             toast.error('Export failed');
         } finally {
@@ -309,17 +309,17 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                 {isExporting ? 'Exporting…' : 'Download Project (ZIP)'}
                             </button>
                             <button
-                                onClick={handleDownloadProjectCSV}
+                                onClick={handleDownloadProjectExcel}
                                 disabled={isExporting}
                                 className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
                                     isExporting
                                         ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a]'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-green-600'
                                 }`}
-                                title="Download a consolidated CSV of all project materials"
+                                title="Download a consolidated Excel of all project materials"
                             >
-                                <FileText className="w-4 h-4" />
-                                {isExporting ? 'Exporting…' : 'Download Materials (CSV)'}
+                                <FileSpreadsheet className="w-4 h-4 text-green-500" />
+                                {isExporting ? 'Exporting…' : 'Download Materials (Excel)'}
                             </button>
                             <button
                                 onClick={handleCreateTemplate}

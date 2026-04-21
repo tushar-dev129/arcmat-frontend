@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import {
     Layout, IndianRupee, ArrowRight, Trash2, Plus, Edit2, Check, X,
-    MonitorPlay, Camera, Copy, Download, FileText, MessageCircle, AlertCircle,
+    MonitorPlay, Camera, Copy, Download, FileText, FileSpreadsheet, MessageCircle, AlertCircle,
     Loader2, FolderArchive, ChevronDown,
 } from 'lucide-react';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ import { useUpdateMoodboard, useDuplicateMoodboard } from '@/hooks/useMoodboard'
 import { getProductThumbnail } from '@/lib/productUtils';
 import { toast } from 'sonner';
 import CoverSelectionModal from './CoverSelectionModal';
-import { exportMoodboardToZip, exportMoodboardToCSV } from '@/lib/exportUtils';
+import { exportMoodboardToZip, exportMoodboardToExcel } from '@/lib/exportUtils';
 import { moodboardService } from '@/services/moodboardService';
 import { useGetCategoryTree } from '@/hooks/useCategory';
 
@@ -55,7 +55,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
     const [editName, setEditName] = useState(moodboard_name);
     const [isCoverModalOpen, setIsCoverModalOpen] = useState(false);
     const [isExporting, setIsExporting] = useState(false);
-    const [isCSVExporting, setIsCSVExporting] = useState(false);
+    const [isExcelExporting, setIsExcelExporting] = useState(false);
     const [showExportMenu, setShowExportMenu] = useState(false);
 
     const { mutate: updateMoodboard, isPending } = useUpdateMoodboard();
@@ -178,8 +178,8 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
         }
     };
 
-    // ── Handlers: CSV quick-download ───────────────────────────────────────
-    const handleDownloadCSV = async (e) => {
+    // ── Handlers: Excel quick-download ──────────────────────────────────────
+    const handleDownloadExcel = async (e) => {
         e.preventDefault();
         e.stopPropagation();
         setShowExportMenu(false);
@@ -190,7 +190,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
         }
 
         try {
-            setIsCSVExporting(true);
+            setIsExcelExporting(true);
             const response = await moodboardService.getMoodboardById(_id);
             const fullMoodboard = response?.data;
 
@@ -199,12 +199,12 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                 return;
             }
 
-            await exportMoodboardToCSV(fullMoodboard, fullMoodboard.projectId);
+            await exportMoodboardToExcel(fullMoodboard, fullMoodboard.projectId);
         } catch (error) {
-            console.error('[MoodboardCard] CSV export failed:', error);
-            toast.error('Failed to export CSV');
+            console.error('[MoodboardCard] Excel export failed:', error);
+            toast.error('Failed to export Excel');
         } finally {
-            setIsCSVExporting(false);
+            setIsExcelExporting(false);
         }
     };
 
@@ -246,15 +246,15 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                     e.stopPropagation();
                                     if (hasContent) setShowExportMenu(!showExportMenu);
                                 }}
-                                disabled={isExporting || isCSVExporting}
+                                disabled={isExporting || isExcelExporting}
                                 className={`flex items-center gap-1.5 px-3 py-2 bg-white/90 backdrop-blur shadow-sm rounded-xl transition-all border border-gray-100
                                     ${hasContent
                                         ? 'text-gray-500 hover:text-[#d9a88a] hover:bg-orange-50 hover:border-orange-100'
                                         : 'text-gray-200 cursor-not-allowed'}
-                                    ${(isExporting || isCSVExporting) ? 'opacity-60 animate-pulse' : ''}`}
+                                    ${(isExporting || isExcelExporting) ? 'opacity-60 animate-pulse' : ''}`}
                                 title={downloadTooltip}
                             >
-                                {isExporting || isCSVExporting ? (
+                                {isExporting || isExcelExporting ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />
                                 ) : (
                                     <Download className="w-4 h-4" />
@@ -274,11 +274,11 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                         <span>Full Space ZIP</span>
                                     </button>
                                     <button
-                                        onClick={handleDownloadCSV}
-                                        className="w-full text-left px-4 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a] flex items-center gap-2.5 transition-colors"
+                                        onClick={handleDownloadExcel}
+                                        className="w-full text-left px-4 py-2.5 text-[11px] font-bold text-gray-600 hover:bg-gray-50 hover:text-green-600 flex items-center gap-2.5 transition-colors"
                                     >
-                                        <FileText className="w-4 h-4 text-blue-400" />
-                                        <span>Material List (CSV)</span>
+                                        <FileSpreadsheet className="w-4 h-4 text-green-500" />
+                                        <span>Material List (Excel)</span>
                                     </button>
                                     <div className="px-4 py-2 mt-1 bg-gray-50/50 border-t border-gray-50">
                                         <p className="text-[9px] text-gray-400 leading-tight">
