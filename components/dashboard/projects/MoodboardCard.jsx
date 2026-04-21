@@ -324,7 +324,35 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     className="absolute inset-0 rounded-[24px] overflow-hidden bg-gray-50 flex flex-col border border-gray-100 group-hover/preview:border-[#d9a88a]/20 transition-colors z-10"
                     onClick={() => useProjectStore.getState().setActiveMoodboard(_id, moodboard_name, projectId, '')}
                 >
-                    {typeof moodboard.coverImage === 'string' && moodboard.coverImage.trim() ? (
+                    {previewImages.length > 0 ? (
+                        <div className="h-full w-full grid grid-cols-2 grid-rows-2 gap-[2px] bg-white">
+                            {previewImages.length === 1 && (
+                                <div className="col-span-2 row-span-2 relative">
+                                    {previewImages[0]?.trim() && (
+                                        <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-110 transition-transform duration-700" />
+                                    )}
+                                </div>
+                            )}
+                            {previewImages.length === 2 && (
+                                <>
+                                    <div className="row-span-2 relative">{previewImages[0]?.trim() && <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
+                                    <div className="row-span-2 relative">{previewImages[1]?.trim() && <Image src={previewImages[1].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
+                                </>
+                            )}
+                            {previewImages.length === 3 && (
+                                <>
+                                    <div className="row-span-2 relative">{previewImages[0]?.trim() && <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
+                                    <div className="relative">{previewImages[1]?.trim() && <Image src={previewImages[1].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
+                                    <div className="relative">{previewImages[2]?.trim() && <Image src={previewImages[2].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
+                                </>
+                            )}
+                            {previewImages.length >= 4 && previewImages.slice(0, 4).map((img, i) => (
+                                <div key={i} className="relative bg-white">
+                                    {img?.trim() && <Image src={img.trim()} alt="" fill className="object-cover group-hover/preview:scale-110 transition-transform duration-700" />}
+                                </div>
+                            ))}
+                        </div>
+                    ) : typeof moodboard.coverImage === 'string' && moodboard.coverImage.trim() ? (
                         <div className="relative h-full w-full">
                             <Image
                                 src={moodboard.coverImage.trim()}
@@ -334,41 +362,9 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                             />
                         </div>
                     ) : (
-                        <div className="h-full w-full grid grid-cols-2 grid-rows-2 gap-[2px]">
-                            {previewImages.length > 0 ? (
-                                <>
-                                    {previewImages.length === 1 && (
-                                        <div className="col-span-2 row-span-2 relative">
-                                            {previewImages[0]?.trim() && (
-                                                <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-110 transition-transform duration-700" />
-                                            )}
-                                        </div>
-                                    )}
-                                    {previewImages.length === 2 && (
-                                        <>
-                                            <div className="row-span-2 relative">{previewImages[0]?.trim() && <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
-                                            <div className="row-span-2 relative">{previewImages[1]?.trim() && <Image src={previewImages[1].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
-                                        </>
-                                    )}
-                                    {previewImages.length === 3 && (
-                                        <>
-                                            <div className="row-span-2 relative">{previewImages[0]?.trim() && <Image src={previewImages[0].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
-                                            <div className="relative">{previewImages[1]?.trim() && <Image src={previewImages[1].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
-                                            <div className="relative">{previewImages[2]?.trim() && <Image src={previewImages[2].trim()} alt="" fill className="object-cover group-hover/preview:scale-105 transition-transform duration-700" />}</div>
-                                        </>
-                                    )}
-                                    {previewImages.length >= 4 && previewImages.slice(0, 4).map((img, i) => (
-                                        <div key={i} className="relative bg-white">
-                                            {img?.trim() && <Image src={img.trim()} alt="" fill className="object-cover group-hover/preview:scale-110 transition-transform duration-700" />}
-                                        </div>
-                                    ))}
-                                </>
-                            ) : (
-                                <div className="col-span-2 row-span-2 flex flex-col items-center justify-center gap-3 text-gray-200">
-                                    <Layout className="w-10 h-10" />
-                                    <span className="text-[10px] font-bold uppercase tracking-widest">No Items Added</span>
-                                </div>
-                            )}
+                        <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-gray-200">
+                            <Layout className="w-10 h-10" />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">No Items Added</span>
                         </div>
                     )}
                 </Link>
