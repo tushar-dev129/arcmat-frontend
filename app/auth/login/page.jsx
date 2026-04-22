@@ -22,11 +22,11 @@ export default function LoginPage() {
             The marketplace where architects and brands build the future together.
           </h1>
 
-          <p className="text-[16px] text-[#86868B] text-center leading-[24px] mb-8">
+          <p className="text-[16px] text-[#86868B] text-center leading-[24px] mb-4">
             Hundreds of Brands. One Website. Order by Midnight.
           </p>
 
-          <div className="mb-8">
+          <div className="">
             <Image
               src={sample}
               alt="Architects and brands illustration"
@@ -35,6 +35,15 @@ export default function LoginPage() {
               className="object-contain"
               priority
             />
+          </div>
+
+          <div className="max-w-[450px] text-center mt-4 px-4">
+            <p className="text-[16px] font-semibold text-[#4D4E58] mb-1">
+              We&apos;re in pilot mode.
+            </p>
+            <p className="text-[14px] text-[#86868B] leading-relaxed">
+              During this phase, selected users get free access to premium features. Your feedback will help shape the final product.
+            </p>
           </div>
         </div>
       </div>

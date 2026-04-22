@@ -166,10 +166,10 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
     if (files.length === 0) return;
 
     const file = files[0];
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    const MAX_SIZE = 10 * 1024 * 1024; // 10MB
 
     if (file.size > MAX_SIZE) {
-      toast.error(`${file.name} is too large (max 5MB)`);
+      toast.error(`${file.name} is too large (max 10MB)`);
       return;
     }
 

@@ -128,6 +128,13 @@ export const useVerifyOtpMutation = () => {
     return useMutation({
         mutationFn: (data) => authService.verifyOtp(data),
         onSuccess: async (data) => {
+            if (data.data?.requireAdminVerification) {
+                setLoading(false);
+                toast.info("Let admin verify your details first please wait", "Email Verified");
+                router.push('/auth/login');
+                return;
+            }
+
             const user = data.data.user;
             const token = data.data.token;
 

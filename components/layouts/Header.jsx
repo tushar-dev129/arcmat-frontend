@@ -103,10 +103,6 @@ const Header = ({ variant = 'default' }) => {
         setSearchText(e.target.value)
     }
 
-    const handleAiToolsClick = () => {
-        toast.info("AI tools are coming soon.", "Coming Soon");
-    };
-
     const desktopProfileRef = useRef(null);
     const mobileProfileRef = useRef(null);
     const projectsRef = useRef(null);
@@ -243,15 +239,14 @@ const Header = ({ variant = 'default' }) => {
                     {mounted && isAuthenticated && (
                         <>
                             {(!isDashboard || user?.role !== 'brand') && (
-                                <button
-                                    onClick={handleAiToolsClick}
+                                <Link
+                                    href="/not-found"
                                     className='p-2 hover:bg-gray-50 rounded-full transition-colors hidden sm:flex shrink-0'
-                                    title="AI tools coming soon"
-                                    aria-label="AI tools coming soon"
-                                    type="button"
+                                    title="AI tools"
+                                    aria-label="AI tools"
                                 >
                                     <Image src="/Icons/ai_icon.png" alt="AI Tools" width={28} height={28} />
-                                </button>
+                                </Link>
                             )}
 
                             {user?.invitedProjects?.length > 0 && (

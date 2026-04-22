@@ -375,9 +375,9 @@ export default function ProductsListPage() {
                         </Link>
                     )}
 
-                    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
-                        <div className="flex flex-col w-full lg:flex-row gap-4 items-center flex-1">
-                            <div className="relative w-full lg:max-w-xs">
+                    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col xl:flex-row gap-4 items-center justify-between">
+                        <div className="flex flex-col w-full md:flex-row flex-wrap gap-4 items-center flex-1">
+                            <div className="relative w-full flex-1 min-w-[250px] md:max-w-md group">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                                 <input
                                     type="text"

@@ -187,6 +187,19 @@ export default function UsersPage() {
         }
     };
 
+    const handleToggleVerification = async (user) => {
+        const newStatus = !user.isVerified;
+        try {
+            await updateUserMutation.mutateAsync({
+                id: user._id,
+                data: { isVerified: newStatus }
+            });
+            toast.success(`User ${user.name} is now ${newStatus ? 'Verified' : 'Unverified'}`);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to update verification status");
+        }
+    };
+
     if (!isAdmin && currentUser) {
         return (
             <Container className="py-20 text-center">
@@ -303,10 +316,18 @@ export default function UsersPage() {
                                                     )}
                                                 </div>
                                                 <div className="flex items-center gap-1.5 font-medium">
-                                                    {u.isEmailVerified === 1 ? (
-                                                        <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[10px] text-emerald-600">Verified</span></>
+                                                    {u.role === 'architect' ? (
+                                                        u.isVerified ? (
+                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[10px] text-emerald-600">Admin Verified</span></>
+                                                        ) : (
+                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[10px] text-amber-600">Admin Unverified</span></>
+                                                        )
                                                     ) : (
-                                                        <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[10px] text-amber-600">Unverified</span></>
+                                                        u.isEmailVerified === 1 ? (
+                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[10px] text-emerald-600">Email Verified</span></>
+                                                        ) : (
+                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[10px] text-amber-600">Email Unverified</span></>
+                                                        )
                                                     )}
                                                 </div>
                                             </div>
@@ -347,6 +368,18 @@ export default function UsersPage() {
                                                     >
                                                         <PackageSearch className="w-4 h-4" />
                                                     </Link>
+                                                )}
+                                                {u.role === 'architect' && (
+                                                    <button
+                                                        onClick={() => handleToggleVerification(u)}
+                                                        className={clsx(
+                                                            "p-1.5 rounded-lg transition-all",
+                                                            u.isVerified ? "text-emerald-600 hover:bg-emerald-50" : "text-amber-600 hover:bg-amber-50"
+                                                        )}
+                                                        title={u.isVerified ? "Mark as Unverified" : "Mark as Verified"}
+                                                    >
+                                                        {u.isVerified ? <ShieldCheck className="w-4 h-4" /> : <ShieldAlert className="w-4 h-4" />}
+                                                    </button>
                                                 )}
                                                 <button
                                                     onClick={() => handleToggleStatus(u)}

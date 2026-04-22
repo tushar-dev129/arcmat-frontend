@@ -67,7 +67,7 @@ export default function CoverSelectionModal({
                                     <Upload className="w-8 h-8 text-[#d9a88a]" />
                                 </div>
                                 <p className="text-lg font-bold text-[#2d3142]">Click to upload</p>
-                                <p className="text-sm text-gray-400 font-medium mt-1">PNG, JPG or WEBP (Max 5MB)</p>
+                                <p className="text-sm text-gray-400 font-medium mt-1">PNG, JPG or WEBP (Max 10MB)</p>
                                 <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                             </label>
                         )}

@@ -348,9 +348,9 @@ export default function ProductsListPage() {
           <div className="space-y-6">
             {isBrand && <AttributeCompletionBanner />}
 
-            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col lg:flex-row gap-5 items-stretch lg:items-center justify-between">
-              <div className="flex flex-col md:flex-row gap-4 flex-1">
-                <div className="relative flex-1 md:max-w-md group">
+            <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col xl:flex-row gap-5 items-stretch xl:items-center justify-between">
+              <div className="flex flex-col md:flex-row flex-wrap gap-4 flex-1">
+                <div className="relative flex-1 min-w-[250px] md:max-w-md group">
                   <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#e09a74] w-5 h-5 transition-colors" />
                   <input
                     type="text"
