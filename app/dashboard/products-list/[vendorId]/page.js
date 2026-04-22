@@ -1,12 +1,13 @@
 'use client';
-import { useState } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Link from 'next/link';
-import { Plus, Search, Upload, Download, Package, Loader2 } from 'lucide-react';
+import { Plus, Search, Upload, Download, Package, Loader2, Filter } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import useAuthStore from '@/store/useAuthStore';
 import { useProductStore } from '@/store/useProductStore';
 import { useGetProducts } from '@/hooks/useProduct';
+import { useGetCategories } from '@/hooks/useCategory';
 import { useUIStore } from '@/store/useUIStore';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
@@ -45,6 +46,7 @@ export default function ProductsListPage() {
   const [pageSize, setPageSize] = useState(12);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [orderBy, setOrderBy] = useState('createdAt');
   const [sortOrder, setSortOrder] = useState('DESC');
   const [isExporting, setIsExporting] = useState(false);
@@ -63,10 +65,34 @@ export default function ProductsListPage() {
     limit: pageSize,
     search: searchTerm,
     status: statusFilter,
+    categoryId: categoryFilter || undefined,
     orderby: orderBy,
     order: sortOrder,
     enabled: !!effectiveVendorId && !authLoading
   });
+
+  const { data: allCategoriesData } = useGetCategories({ enabled: !!effectiveVendorId });
+  const allCategories = allCategoriesData?.data || allCategoriesData || [];
+
+  const categoryCounts = apiResponse?.data?.categoryCounts || {};
+  const cachedCategoryOptionsRef = useRef([]);
+  const categoryOptions = useMemo(() => {
+    if (!Array.isArray(allCategories) || allCategories.length === 0) return cachedCategoryOptionsRef.current;
+    const parentCategories = allCategories.filter(c => c.level === 1 || !c.parentId);
+    const options = parentCategories
+      .filter(cat => categoryCounts[(cat._id || cat.id)])
+      .map(cat => ({
+        id: cat._id || cat.id,
+        name: cat.name,
+        count: categoryCounts[(cat._id || cat.id)]
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    // Cache the full list when no category filter is active
+    if (!categoryFilter && options.length > 0) {
+      cachedCategoryOptionsRef.current = options;
+    }
+    return cachedCategoryOptionsRef.current.length > 0 ? cachedCategoryOptionsRef.current : options;
+  }, [categoryCounts, allCategories, categoryFilter]);
 
   const apiProducts = apiResponse?.data?.data || apiResponse?.data || apiResponse?.products || [];
   const paginationData = apiResponse?.data?.pagination
@@ -334,6 +360,24 @@ export default function ProductsListPage() {
                     className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-[#e09a74] focus:ring-4 focus:ring-orange-50 transition-all text-sm"
                   />
                 </div>
+
+                {categoryOptions.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Category</span>
+                    <select
+                      value={categoryFilter}
+                      onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
+                      className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-[#e09a74] text-sm font-medium transition-all min-w-[140px]"
+                    >
+                      <option value="">All Categories</option>
+                      {categoryOptions.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name} ({cat.count})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
