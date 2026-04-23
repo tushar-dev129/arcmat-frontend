@@ -259,7 +259,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                 ) : (
                                     <Download className="w-4 h-4" />
                                 )}
-                                <span className="text-[11px] font-bold">Download</span>
+                                {/* <span className="text-[11px] font-bold">Download</span> */}
                                 <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showExportMenu ? 'rotate-180' : ''}`} />
                             </button>
 
@@ -391,7 +391,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                 )}
 
                 {/* Cover Edit Button */}
-                {isArchitect && (
+                {/* {isArchitect && (
                     <button
                         onClick={() => setIsCoverModalOpen(true)}
                         className="absolute top-4 left-4 p-2.5 bg-white/90 backdrop-blur text-gray-500 hover:text-[#d9a88a] rounded-xl shadow-lg opacity-0 translate-y-2 group-hover/preview:opacity-100 group-hover/preview:translate-y-0 transition-all duration-300 z-20"
@@ -399,10 +399,10 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     >
                         <Camera className="w-4 h-4" />
                     </button>
-                )}
+                )} */}
 
                 {/* Design Desk floating button */}
-                {(isArchitect || projectPrivacy?.showRenders) && (
+                {/* {(isArchitect || projectPrivacy?.showRenders) && (
                     <Link
                         href={`/dashboard/projects/${projectId}/moodboards/${_id}?tab=designDesk`}
                         className="absolute bottom-4 right-4 p-3 bg-white/95 backdrop-blur text-[#d9a88a] rounded-2xl shadow-xl opacity-0 translate-y-2 group-hover/preview:opacity-100 group-hover/preview:translate-y-0 transition-all duration-300 hover:scale-110 active:scale-95 z-20"
@@ -410,7 +410,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     >
                         <MonitorPlay className="w-5 h-5" />
                     </Link>
-                )}
+                )} */}
             </div>
 
             {/* ── Info Section ────────────────────────────────────────────── */}

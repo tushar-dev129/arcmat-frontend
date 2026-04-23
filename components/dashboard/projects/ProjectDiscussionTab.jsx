@@ -117,7 +117,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                 <MessageCircle className="w-5 h-5" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black text-[#2d3142]">Communication Hub</h2>
+                                <h2 className="text-xl font-black text-[#2d3142]">Project Messages</h2>
                                 <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
                                     Project: {projectName || 'General'}
                                 </p>
