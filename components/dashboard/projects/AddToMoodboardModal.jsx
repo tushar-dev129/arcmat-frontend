@@ -60,14 +60,23 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
         }
     }, [selectedProjectId, activeProjectId, activeMoodboardId, targetType]);
 
+    const resolveRetailerProductId = (p) => {
+        if (!p) return null;
+        if (p.override_id) return String(p.override_id);
+        if (p.variants && p.variants.length > 0) {
+            const v = p.variants.find(v => v.override_id) || p.variants[0];
+            if (v?.override_id) return String(v.override_id);
+        }
+        return String(p._id || p.id || '');
+    };
+
     // Handle extraction of single or multiple product IDs
     const getProductIds = () => {
         if (products && products.length > 0) {
-            return products.map(p => p.override_id || p._id || p.id).filter(Boolean);
+            return products.map(p => resolveRetailerProductId(p)).filter(Boolean);
         }
         if (product) {
-            // Priority: override_id (RetailerProduct) > _id > id
-            const id = product.override_id || product._id || product.id;
+            const id = resolveRetailerProductId(product);
             return id ? [id] : [];
         }
         return [];

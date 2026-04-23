@@ -98,7 +98,9 @@ export default function OverviewTab({
     // Calculate total estimation
     const totalEstimation = (products || []).reduce((sum, p) => {
         const meta = (productStatuses || {})[p?._id] || {};
-        const price = typeof meta === 'object' ? (Number(meta.price) || 0) : 0;
+        const price = (typeof meta === 'object' && meta.price !== undefined) 
+            ? (Number(meta.price) || 0) 
+            : resolvePricing(p).price;
         const qty = typeof meta === 'object' ? (Number(meta.quantity) || 1) : 1;
         return sum + (price * qty);
     }, 0) + (customPhotos || []).reduce((sum, p) => {
@@ -405,7 +407,6 @@ export default function OverviewTab({
                             const name = getProductName(product);
                             const brand = getProductBrand(product);
                             const productId = product._id;
-                            const hasVariants = (typeof product.productId === 'object' ? product.productId?.variants?.length : 0) || 0;
                             const statusData = productStatuses[productId] ?? 'Considering';
                             const status = typeof statusData === 'object' ? statusData.status : statusData;
                             const price = typeof statusData === 'object' ? (statusData.price || 0) : 0;
@@ -458,7 +459,7 @@ export default function OverviewTab({
                                     >
                                         <div>
                                             <div className="flex items-center justify-between gap-2">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">{hasVariants > 0 ? `${hasVariants} Finishes` : '0 Finishes'}</p>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">{getProductCategory(product)}</p>
                                                 {getProductSize(product) && <p className="text-[10px] text-gray-400 font-medium whitespace-nowrap">{getProductSize(product)}</p>}
                                             </div>
                                             <p className="text-sm font-bold text-[#1a1a2e] leading-snug line-clamp-1 hover:text-[#d9a88a] transition-colors">{brand}</p>
