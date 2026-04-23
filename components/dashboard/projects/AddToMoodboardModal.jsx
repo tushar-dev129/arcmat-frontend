@@ -66,7 +66,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             return products.map(p => p.override_id || p._id || p.id).filter(Boolean);
         }
         if (product) {
-            // Restore previous logic for single product matching
+            // Priority: override_id (RetailerProduct) > _id > id
             const id = product.override_id || product._id || product.id;
             return id ? [id] : [];
         }
@@ -112,8 +112,13 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             const existingCostId = selectedMb?.estimation?._id;
             if (existingCostId) {
                 const existingProductIds = selectedMb.estimation.productIds || [];
-                const normalizedExisting = existingProductIds.map(p => typeof p === 'object' ? (p.productId?._id || p._id) : p);
-                const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id));
+                const normalizedExisting = existingProductIds.map(p => {
+                    if (!p) return null;
+                    if (typeof p === 'object') return (p._id || p.id || p).toString();
+                    return p.toString();
+                }).filter(Boolean);
+
+                const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id.toString()));
 
                 if (newIds.length === 0) {
                     toast.success("Products already exist in this template space!");
@@ -151,10 +156,15 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
         if (selectedMb?.estimatedCostId) {
             // UPDATING existing estimation for PROJECT
             const existingRetailerProductIds = selectedMb.estimatedCostId.productIds || [];
-            const normalizedExisting = existingRetailerProductIds.map(p => typeof p === 'object' ? (p.productId?._id || p._id) : p);
+            const normalizedExisting = existingRetailerProductIds.map(p => {
+                if (!p) return null;
+                // If populated, use p._id (RetailerProduct ID). If not, p is the ID.
+                if (typeof p === 'object') return (p._id || p.id || p).toString();
+                return p.toString();
+            }).filter(Boolean);
 
             // Filter out products that are already in the list
-            const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id));
+            const newIds = productIdsToSend.filter(id => !normalizedExisting.includes(id.toString()));
 
             if (newIds.length === 0) {
                 toast.success("Products already exist in this moodboard!");
@@ -266,8 +276,8 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                                 )}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h4 className="font-bold text-[#2d3142] truncate">{product?.product_name || product?.productId?.product_name}</h4>
-                                <p className="text-xs text-gray-400 font-medium">{product?.productId?.brand?.name || product?.brand_name || 'Brand'}</p>
+                                <h4 className="font-bold text-[#2d3142] truncate">{product?.product_name || product?.name || product?.productId?.product_name}</h4>
+                                <p className="text-xs text-gray-400 font-medium">{product?.brand_name || product?.productId?.brand?.name || 'Brand'}</p>
                             </div>
                         </div>
                     ) : null}

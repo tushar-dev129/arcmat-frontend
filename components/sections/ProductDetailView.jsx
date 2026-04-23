@@ -68,12 +68,12 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
     // Check if product is already in the active moodboard
     const { data: moodboardData } = useGetMoodboard(activeMoodboardId);
 
-    const rawId = product._id || product.id;
+    const rawId = selectedVariant?.override_id || product._id || product.id;
     const isAlreadyAdded = React.useMemo(() => {
         if (!moodboardData?.data?.estimatedCostId?.productIds) return false;
         const addedIds = moodboardData.data.estimatedCostId.productIds;
         return addedIds.some(p => {
-            const addedId = typeof p === 'object' && p !== null ? (p.productId?._id || p._id) : p;
+            const addedId = typeof p === 'object' && p !== null ? (p._id || p.id || p) : p;
             return String(addedId) === String(rawId);
         });
     }, [moodboardData, rawId]);
@@ -81,7 +81,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
     const handleRemoveFromMoodboard = () => {
         if (!moodboardData?.data?.estimatedCostId) return;
         const existingRetailerProductIds = moodboardData.data.estimatedCostId.productIds || [];
-        const normalizedExisting = existingRetailerProductIds.map(p => typeof p === 'object' ? (p.productId?._id || p._id) : p);
+        const normalizedExisting = existingRetailerProductIds.map(p => typeof p === 'object' && p !== null ? (p._id || p.id || p) : p);
         const updatedIds = normalizedExisting.filter(id => String(id) !== String(rawId));
         updateEstimateMutation({
             id: moodboardData.data.estimatedCostId._id,
@@ -775,7 +775,14 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                     <AddToMoodboardModal
                                         isOpen={isAddModalOpen}
                                         onClose={() => setIsAddModalOpen(false)}
-                                        product={product}
+                                        product={{
+                                            ...selectedVariant,
+                                            product_name: product.product_name || product.name,
+                                            brand_name: (product.brand && typeof product.brand === 'object') ? (product.brand.name || product.brand.brand_name) : (product.brand || 'Arcmat'),
+                                            productId: product._id, // Keep reference to base product
+                                            // Ensure we have an ID for the modal's internal logic
+                                            _id: selectedVariant?.override_id || product._id
+                                        }}
                                     />
                                 )}
                             </div>
