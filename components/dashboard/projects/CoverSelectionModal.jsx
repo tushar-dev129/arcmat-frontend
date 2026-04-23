@@ -37,7 +37,13 @@ export default function CoverSelectionModal({
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
+        <div 
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300"
+            onClick={(e) => {
+                e.stopPropagation();
+                if (e.target === e.currentTarget) handleClose();
+            }}
+        >
             <div className="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                     <div>
@@ -53,7 +59,7 @@ export default function CoverSelectionModal({
                     <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-[32px] py-12 px-6 bg-gray-50/50">
                         {(typeof previewUrl === 'string' && previewUrl.trim()) ? (
                             <div className="relative w-full aspect-video rounded-2xl overflow-hidden mb-6 group shadow-md">
-                                <Image src={previewUrl.trim()} alt="Preview" fill className="object-cover" />
+                                <Image src={previewUrl.trim()} alt="Preview" fill className="object-cover" unoptimized />
                                 <button
                                     onClick={() => { setUploadFile(null); setPreviewUrl(null); }}
                                     className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur rounded-full text-red-500 shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"

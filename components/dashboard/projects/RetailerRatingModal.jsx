@@ -116,7 +116,13 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
         : 0;
 
     return (
-        <div className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+        <div 
+            className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={(e) => {
+                e.stopPropagation();
+                if (e.target === e.currentTarget) onClose();
+            }}
+        >
             <div className="bg-white w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden border border-gray-100 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
                 {/* Header */}
                 <div className="p-7 pb-4 flex justify-between items-start">
