@@ -72,7 +72,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#fef7f2] shrink-0 rounded-t-3xl">
                     <div>
-                        <h2 className="text-xl font-black text-[#2d3142]">Project Discussion</h2>
+                        <h2 className="text-xl font-black text-[#2d3142]">Project Messages</h2>
                         <p className="text-sm font-medium text-gray-500 mt-1 truncate max-w-[300px]">
                             <span className="text-[#d9a88a] font-bold">{projectName || 'General Project'}</span>
                         </p>

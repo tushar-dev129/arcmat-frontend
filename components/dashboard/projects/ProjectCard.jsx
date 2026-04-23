@@ -221,7 +221,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             toast.loading('📂 Loading project spaces…', { id: 'project-export-fetch' });
             const listResponse = await moodboardService.getMoodboardList(_id);
             const spaces = listResponse?.data || [];
-            
+
             const fullSpaces = [];
             for (let i = 0; i < spaces.length; i++) {
                 const detailResponse = await moodboardService.getMoodboardById(spaces[i]._id);
@@ -294,11 +294,10 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                             <button
                                 onClick={handleDownloadProject}
                                 disabled={isExporting}
-                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
-                                    isExporting
-                                        ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a]'
-                                }`}
+                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${isExporting
+                                    ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a]'
+                                    }`}
                                 title="Download all spaces as a folder-wise ZIP with Excel + CSV + images"
                             >
                                 {isExporting ? (
@@ -311,11 +310,10 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                             <button
                                 onClick={handleDownloadProjectExcel}
                                 disabled={isExporting}
-                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${
-                                    isExporting
-                                        ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-green-600'
-                                }`}
+                                className={`w-full text-left px-4 py-2 text-sm font-semibold flex items-center gap-2 transition-colors cursor-pointer ${isExporting
+                                    ? 'opacity-60 text-[#d9a88a] animate-pulse cursor-wait'
+                                    : 'text-gray-600 hover:bg-gray-50 hover:text-green-600'
+                                    }`}
                                 title="Download a consolidated Excel of all project materials"
                             >
                                 <FileSpreadsheet className="w-4 h-4 text-green-500" />
@@ -325,7 +323,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                 onClick={handleCreateTemplate}
                                 className="w-full text-left px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-50 hover:text-[#d9a88a] flex items-center gap-2 transition-colors cursor-pointer"
                             >
-                                <PlusSquare className="w-4 h-4" /> Create Template
+                                <PlusSquare className="w-4 h-4" /> Save Template
                             </button>
                             <div className="border-t border-gray-100 my-1" />
                             <button
@@ -369,11 +367,11 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                     ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
                                     : 'bg-white text-gray-400 border-gray-100 hover:text-[#d9a88a] hover:border-[#d9a88a]/30'
                                     }`}
-                                title={unreadMessages > 0 ? `${unreadMessages} unread message${unreadMessages > 1 ? 's' : ''}` : 'Open Project Discussion'}
+                                title={unreadMessages > 0 ? `${unreadMessages} unread message${unreadMessages > 1 ? 's' : ''}` : 'Open Project Messages'}
                             >
                                 <MessageCircle className="w-3.5 h-3.5 mr-1" />
                                 <span className="text-[11px] font-bold leading-none">
-                                    {unreadMessages > 0 ? unreadMessages : 'Discuss'}
+                                    {unreadMessages > 0 ? unreadMessages : 'Messages'}
                                 </span>
                             </button>
 
@@ -474,7 +472,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                 <div className="flex flex-col h-full justify-between gap-4 z-10 w-full min-w-0 pr-2 p-4">
                     <div className="flex items-center justify-between">
                         <h4 className="font-extrabold text-gray-500  border-amber-500 text-[15px] truncate">Spec'd Brands</h4>
-                        <button
+                        {/* <button
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsCoverModalOpen(true);
@@ -483,7 +481,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                             title="Change Project Cover"
                         >
                             <Camera className="w-3.5 h-3.5" />
-                        </button>
+                        </button> */}
 
                     </div>
 

@@ -186,7 +186,7 @@ export default function MoodboardsPage() {
                 {[
                     { id: 'spaces', label: 'All Spaces', icon: Layout },
                     { id: 'analytics', label: 'Project Analytics', icon: BarChart3 },
-                    { id: 'discussion', label: 'Project Chat', icon: MessageCircle },
+                    { id: 'discussion', label: 'Messages', icon: MessageCircle },
                 ].map((tab) => {
                     const isActive = activeTab === tab.id;
                     const hasUnread = tab.id === 'discussion' && unreadMessages > 0;
