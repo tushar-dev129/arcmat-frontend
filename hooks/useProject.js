@@ -113,7 +113,11 @@ export const useMarkNotificationsRead = () => {
             }
         },
         onError: (error) => {
-            console.error('Failed to mark notifications read:', error.response?.data || error.message);
+            console.error('Failed to mark notifications read:', {
+                message: error.message,
+                data: error.response?.data,
+                status: error.response?.status
+            });
         }
     });
 };
