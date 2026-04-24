@@ -4,7 +4,7 @@ import { useMarkNotificationsRead } from '@/hooks/useProject';
 import { useAuth } from '@/hooks/useAuth';
 import { Loader2, Send, Trash2, UserCircle2, X } from 'lucide-react';
 
-export default function ProjectDiscussionModal({ isOpen, onClose, projectId, projectName }) {
+export default function ProjectDiscussionModal({ isOpen, onClose, projectId, projectName, clientName }) {
     const { user } = useAuth();
     const [message, setMessage] = useState('');
     const [isInternal, setIsInternal] = useState(false);
@@ -70,16 +70,19 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                 onClick={e => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#fef7f2] shrink-0 rounded-t-3xl">
-                    <div>
+                <div className="p-6 border-b border-gray-100 bg-[#fef7f2] shrink-0 rounded-t-3xl relative">
+                    <div className="pr-10">
                         <h2 className="text-xl font-black text-[#2d3142]">Project Messages</h2>
-                        <p className="text-sm font-medium text-gray-500 mt-1 truncate max-w-[300px]">
-                            <span className="text-[#d9a88a] font-bold">{projectName || 'General Project'}</span>
-                        </p>
+                        <div className="flex items-center gap-1.5 mt-0.5 truncate">
+                            {clientName && (
+                                <span className="text-sm font-bold text-gray-400">{clientName}</span>
+                            )}
+                            <span className="text-sm font-bold text-[#d9a88a]">{projectName}</span>
+                        </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-xl transition-all"
+                        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 hover:bg-white/50 rounded-xl transition-all z-10"
                     >
                         <X className="w-5 h-5" />
                     </button>
@@ -109,10 +112,10 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                             return (
                                 <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-indigo-50 text-indigo-600' : 'bg-green-50 text-green-600'}`}>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
+                                        {/* <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-indigo-50 text-indigo-600' : 'bg-green-50 text-green-600'}`}>
                                             {authorRole}
-                                        </span>
+                                        </span>  */}
                                         {comment.isInternal && (
                                             <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase bg-amber-100 text-amber-700">
                                                 Private Note
@@ -120,7 +123,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                                         )}
                                     </div>
                                     <div className="group relative flex items-start flex-col gap-1 max-w-[85%]">
-                                        <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${isMe ? 'bg-[#1a1a2e] text-white rounded-tr-sm' : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm shadow-sm'}`}>
+                                        <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${isMe ? 'bg-gray-100 text-gray-800 rounded-tr-sm' : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm shadow-sm'}`}>
                                             <p className="whitespace-pre-wrap">{comment.message}</p>
                                         </div>
                                     </div>
@@ -156,7 +159,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 placeholder={isInternal ? "Type a private note..." : "Add a project comment..."}
-                                className={`flex-1 resize-none min-h-[50px] max-h-[150px] p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-[#e09a74] focus:border-[#e09a74] outline-none text-sm transition-all leading-relaxed ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
+                                className={`flex-1 resize-none  overflow-hidden !py-2 px-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-[#e09a74] focus:border-[#e09a74] outline-none text-sm transition-all leading-tight ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();

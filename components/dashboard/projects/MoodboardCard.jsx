@@ -84,17 +84,36 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // ── Item counts (derived from existing data — no extra fetch) ──────────
-    const itemCount = moodboard.canvasState?.filter(i => i.type === 'material').length || 0;
+    // ── Item counts (derived from budget + canvas) ───────────────────────
+    const budgetItems = moodboard.estimatedCostId?.productIds || [];
+    const canvasMaterials = moodboard.canvasState?.filter(i => i.type === 'material') || [];
+
+    // Use budget items as primary source for material count
+    const itemCount = budgetItems.length > 0 ? budgetItems.length : canvasMaterials.length;
+
     const renderCount = (moodboard?.customPhotos || []).filter(p => (p.tags || []).includes('Render')).length;
     const photoCount = (moodboard?.customPhotos || []).filter(p => !(p.tags || []).includes('Render')).length;
     const hasContent = itemCount + renderCount + photoCount > 0;
 
     // ── Preview grid images ────────────────────────────────────────────────
-    const previewImages = (moodboard?.canvasState || [])
-        .filter(item => item.type === 'material' && item.material)
-        .slice(0, 4)
-        .map(item => getProductThumbnail(item.material));
+    let previewImages = [];
+    if (canvasMaterials.length > 0) {
+        previewImages = canvasMaterials
+            .filter(item => item.material)
+            .map(item => getProductThumbnail(item.material));
+    }
+
+    // Fallback to budget items if canvas is empty or images are placeholders
+    if (previewImages.length === 0 || previewImages.every(img => img?.includes('arcmatlogo.svg'))) {
+        const budgetPreviews = budgetItems
+            .map(item => getProductThumbnail(item))
+            .filter(img => img && !img.includes('arcmatlogo.svg'));
+
+        if (budgetPreviews.length > 0) {
+            previewImages = budgetPreviews;
+        }
+    }
+    previewImages = previewImages.slice(0, 4);
 
     // ── Keyboard shortcut: Ctrl+D / Cmd+D when card is focused ────────────
     const handleKeyDown = useCallback((e) => {
@@ -260,7 +279,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                     <Download className="w-4 h-4" />
                                 )}
                                 {/* <span className="text-[11px] font-bold">Download</span> */}
-                                <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showExportMenu ? 'rotate-180' : ''}`} />
+                                {/* <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${showExportMenu ? 'rotate-180' : ''}`} /> */}
                             </button>
 
                             {/* Download Dropdown Menu */}
@@ -443,7 +462,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                 </h3>
 
                                 {/* Notification badges */}
-                                <div className="flex items-center gap-1.5 ml-1">
+                                <div className="flex items-center gap-1.5  ">
                                     {moodboard.unreadMessages > 0 && (
                                         <div
                                             className="flex items-center justify-center bg-red-50 text-red-600 rounded-full px-2 py-0.5 border border-red-100 shadow-sm"
@@ -481,7 +500,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                             {itemCount} {itemCount === 1 ? 'item' : 'items'}
                             {renderCount > 0 && ` · ${renderCount} render${renderCount !== 1 ? 's' : ''}`}
                             {photoCount > 0 && ` · ${photoCount} photo${photoCount !== 1 ? 's' : ''}`}
-                            {' '}• ArcMat
+                            
                         </p>
                     </div>
                 </div>
@@ -516,7 +535,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                             <Link
                                 href={`/productlist?category=${defaultCategoryId}`}
                                 onClick={() => useProjectStore.getState().setActiveMoodboard(_id, moodboard_name, projectId, '')}
-                                className="p-2.5 bg-[#fef7f2] text-[#d9a88a] hover:bg-[#d9a88a] hover:text-white rounded-xl transition-all"
+                                className="p-2.5 bg-[#fef7f2] text-[#d9a88a]  rounded-xl transition-all"
                                 title="Add Items"
                             >
                                 <Plus className="w-5 h-5" />
@@ -524,7 +543,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                         )}
                         <Link
                             href={`/dashboard/projects/${projectId}/moodboards/${_id}`}
-                            className="p-2.5 bg-[#2d3142] text-white hover:bg-[#d9a88a] rounded-xl transition-all"
+                            className="p-2.5 bg-[#d9a88a]  text-white  rounded-xl transition-all"
                             title="View Details"
                         >
                             <ArrowRight className="w-5 h-5" />

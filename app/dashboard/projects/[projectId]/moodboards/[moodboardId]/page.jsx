@@ -1137,7 +1137,9 @@ export default function MoodboardDetailPage() {
                 {/* DISCUSSION */}
                 {
                     activeTab === 'discussion' && (
-                        <DiscussionTab projectId={projectId} spaceId={moodboardId} />
+                        <div className='py-15'>
+                            <DiscussionTab projectId={projectId} spaceId={moodboardId} />
+                        </div>
                     )
                 }
             </div>
@@ -1266,21 +1268,20 @@ export default function MoodboardDetailPage() {
             {activeTab !== 'discussion' && (
                 <button
                     onClick={() => setActiveTab('discussion')}
-                    className="fixed bottom-8 right-8 z-40 group flex items-center gap-3 bg-[#2d3142] hover:bg-[#d9a88a] text-white pl-4 pr-5 py-3.5 rounded-full shadow-2xl shadow-slate-900/25 transition-all duration-300 hover:scale-105 active:scale-95"
+                    className="fixed bottom-8 right-8 z-40 group flex items-center justify-center bg-[#d9a88a] text-white p-3.5 rounded-full shadow-2xl shadow-slate-900/25 transition-all duration-300 hover:scale-105 active:scale-95"
                     title="Open space discussion"
-                    aria-label="Message client"
                 >
                     <div className="relative">
-                        <MessageCircle className="w-5 h-5" />
+                        <MessageCircle className="w-10 h-10" />
                         {notificationsData?.generalDiscussions > 0 && (
-                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[16px] h-4 flex items-center justify-center px-1 leading-none animate-bounce">
+                            <span className="absolute -top-1 right-0 bg-red-500 text-white text-[15px] font-bold rounded-full flex items-center justify-center px-1  animate-bounce">
                                 {notificationsData.generalDiscussions > 9 ? '9+' : notificationsData.generalDiscussions}
                             </span>
                         )}
                     </div>
-                    <span className="text-sm font-bold whitespace-nowrap">
+                    {/* <span className="text-sm font-bold whitespace-nowrap">
                         {notificationsData?.generalDiscussions > 0 ? `${notificationsData.generalDiscussions} new message${notificationsData.generalDiscussions > 1 ? 's' : ''}` : 'Message Client'}
-                    </span>
+                    </span> */}
                 </button>
             )}
 

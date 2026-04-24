@@ -226,6 +226,7 @@ export default function AllProjectsPage() {
                 onClose={() => setDiscussionProject(null)}
                 projectId={discussionProject?._id}
                 projectName={discussionProject?.projectName}
+                clientName={discussionProject?.clientName}
             />
 
             <ConfirmationModal

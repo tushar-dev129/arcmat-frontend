@@ -272,7 +272,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                 <div className="absolute top-4 right-4 z-30" ref={optionsMenuRef}>
                     <button
                         onClick={(e) => { e.preventDefault(); e.stopPropagation(); setIsOptionsMenuOpen(!isOptionsMenuOpen); }}
-                        className="p-2 bg-white/90 shadow-md border border-gray-100 rounded-xl text-gray-500 hover:text-[#1a1a2e] hover:bg-gray-50 transition-all opacity-0 group-hover:opacity-100"
+                        className="p-2 bg-white/90 shadow-md border border-gray-100 rounded-xl text-gray-500 hover:text-[#1a1a2e] hover:bg-gray-50 transition-all opacity-100"
                         title="More options"
                     >
                         <MoreHorizontal className="w-5 h-5" />
@@ -305,7 +305,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                 ) : (
                                     <Download className="w-4 h-4" />
                                 )}
-                                {isExporting ? 'Exporting…' : 'Download Project (ZIP)'}
+                                {isExporting ? 'Exporting…' : 'Download (ZIP)'}
                             </button>
                             <button
                                 onClick={handleDownloadProjectExcel}
@@ -316,8 +316,8 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                     }`}
                                 title="Download a consolidated Excel of all project materials"
                             >
-                                <FileSpreadsheet className="w-4 h-4 text-green-500" />
-                                {isExporting ? 'Exporting…' : 'Download Materials (Excel)'}
+                                <FileSpreadsheet className="w-4 h-4" />
+                                {isExporting ? 'Exporting…' : 'Download (Excel)'}
                             </button>
                             <button
                                 onClick={handleCreateTemplate}
@@ -338,8 +338,8 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
             )}
 
             {/* Left Section */}
-            <div className="flex-[1.2] flex flex-col min-w-0 p-2">
-                <div className="flex flex-col gap-0.5 mb-6">
+            <div className="flex-[1.2] flex flex-col  min-w-0 p-2">
+                <div className="flex flex-1 flex-col gap-0.5 mb-10">
                     <div className="flex items-center gap-2 flex-wrap">
                         <Link
                             href={href || `/dashboard/projects/${project._id}/moodboards`}
@@ -357,23 +357,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
 
                         {/* Notification Badges & Discussion Shortcut */}
                         <div className="flex items-center gap-1.5 ml-1">
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    onOpenDiscussion?.(project);
-                                }}
-                                className={`flex items-center justify-center rounded-full px-2 py-1.5 border shadow-sm transition-all hover:scale-105 active:scale-95 ${unreadMessages > 0
-                                    ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
-                                    : 'bg-white text-gray-400 border-gray-100 hover:text-[#d9a88a] hover:border-[#d9a88a]/30'
-                                    }`}
-                                title={unreadMessages > 0 ? `${unreadMessages} unread message${unreadMessages > 1 ? 's' : ''}` : 'Open Project Messages'}
-                            >
-                                <MessageCircle className="w-3.5 h-3.5 mr-1" />
-                                <span className="text-[11px] font-bold leading-none">
-                                    {unreadMessages > 0 ? unreadMessages : 'Messages'}
-                                </span>
-                            </button>
+
 
                             {pendingApprovals > 0 && (
                                 <div
@@ -393,85 +377,106 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                     )}
                 </div>
 
-                <div className="mb-auto relative" ref={phaseDropdownRef}>
-                    <span className="text-[10px] text-gray-400 font-bold mb-2 block tracking-wide">Project Phase</span>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            isArchitect && setIsPhaseDropdownOpen(!isPhaseDropdownOpen);
-                        }}
-                        className={`flex items-center justify-between min-w-[140px] px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-sm font-extrabold text-[#2d3142] ${isArchitect ? 'hover:bg-gray-50 transition-colors cursor-pointer' : 'cursor-default'}`}
-                        disabled={!isArchitect}
-                    >
-                        <span className="truncate max-w-[120px]">{currentPhase}</span>
-                        {isArchitect && <ChevronDown className={`w-4 h-4 text-gray-400 ml-2 transition-transform ${isPhaseDropdownOpen ? 'rotate-180' : ''}`} />}
-                    </button>
+                <div>
+                    <div className="mb-auto relative" ref={phaseDropdownRef}>
+                        <span className="text-[10px] text-gray-400 font-bold mb-2 block tracking-wide">Project Phase</span>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                isArchitect && setIsPhaseDropdownOpen(!isPhaseDropdownOpen);
+                            }}
+                            className={`flex items-center justify-between min-w-[140px] w-full px-3 py-1.5 bg-[#f4f5f7] rounded-full text-[12px] border border-gray-200  text-sm font-bold text-[#2d3142] ${isArchitect ? 'hover:bg-gray-50 transition-colors cursor-pointer' : 'cursor-default'}`}
+                            disabled={!isArchitect}
+                        >
+                            <span className="truncate max-w-[120px]">{currentPhase}</span>
+                            {isArchitect && <ChevronDown className={`w-4 h-4 text-gray-400 ml-2 transition-transform ${isPhaseDropdownOpen ? 'rotate-180' : ''}`} />}
+                        </button>
 
-                    {isPhaseDropdownOpen && isArchitect && (
-                        <div className="absolute top-full left-0 mt-1 w-56 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50">
-                            {PHASE_OPTIONS.map((option) => (
-                                <button
-                                    key={option}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handlePhaseChange(option);
-                                    }}
-                                    className={`w-full text-left px-4 py-2 text-sm font-medium flex items-center justify-between hover:bg-gray-50 transition-colors ${currentPhase === option ? 'text-[#D9A88A] bg-gray-50' : 'text-gray-500'}`}
-                                >
-                                    {option}
-                                    {currentPhase === option && <Check className="w-4 h-4 text-gray-400" />}
-                                </button>
-                            ))}
-                        </div>
-                    )}
+                        {isPhaseDropdownOpen && isArchitect && (
+                            <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg text-[13px]  border border-gray-100 py-2 z-50">
+                                {PHASE_OPTIONS.map((option) => (
+                                    <button
+                                        key={option}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePhaseChange(option);
+                                        }}
+                                        className={`w-full text-left px-4 py-2 text-sm font-medium flex items-center justify-between hover:bg-gray-50 transition-colors ${currentPhase === option ? 'text-[#D9A88A] bg-gray-50' : 'text-gray-500'}`}
+                                    >
+                                        {option}
+                                        {currentPhase === option && <Check className="w-4 h-4 text-gray-400" />}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="mt-2 relative flex-wrap flex items-center gap-3" ref={dropdownRef}>
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                isArchitect && setIsStatusDropdownOpen(!isStatusDropdownOpen);
+                            }}
+                            className={`inline-flex flex-1 justify-between items-center gap-2 px-4 py-1.5 bg-[#f4f5f7] rounded-full text-[13px] font-bold text-gray-600 ${isArchitect ? 'hover:bg-gray-200 transition-colors cursor-pointer' : 'cursor-default'}`}
+                            disabled={!isArchitect}
+                        >
+                            {currentStatus}
+                            {isArchitect && <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''}`} />}
+                        </button>
+
+                        {isStatusDropdownOpen && isArchitect && (
+                            <div className="absolute top-full left-0 mt-1 w-40 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50">
+                                {STATUS_OPTIONS.map((option) => (
+                                    <button
+                                        key={option}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleStatusChange(option);
+                                        }}
+                                        className={`w-full text-left px-4 py-2 text-sm font-medium flex items-center justify-between hover:bg-gray-50 transition-colors ${currentStatus === option ? 'text-[#D9A88A] bg-gray-50' : 'text-gray-500'
+                                            }`}
+                                    >
+                                        {option}
+                                        {currentStatus === option && <Check className="w-4 h-4 text-gray-400" />}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onOpenDiscussion?.(project);
+                            }}
+                            className={`flex items-center gap-1.5 justify-center rounded-full px-2 py-1.5 border shadow-sm transition-all hover:scale-105 active:scale-95 ${unreadMessages > 0
+                                ? 'bg-red-50 text-red-600 border-red-100 hover:bg-red-100'
+                                : 'bg-white text-gray-400 border-gray-100 hover:text-[#d9a88a] hover:border-[#d9a88a]/30'
+                                }`}
+                            title={unreadMessages > 0 ? `${unreadMessages} unread message${unreadMessages > 1 ? 's' : ''}` : 'Open Project Messages'}
+                        >
+                            <MessageCircle className="w-4 h-4 " />
+                            <span className="text-[12px] font-bold leading-none">
+                                {unreadMessages > 0 ? unreadMessages : 'Chats'}
+                            </span>
+                        </button>
+                    </div>
+
                 </div>
 
-                <div className="mt-8 relative" ref={dropdownRef}>
-                    <button
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            isArchitect && setIsStatusDropdownOpen(!isStatusDropdownOpen);
-                        }}
-                        className={`inline-flex items-center gap-2 px-4 py-1.5 bg-[#f4f5f7] rounded-full text-[13px] font-bold text-gray-600 ${isArchitect ? 'hover:bg-gray-200 transition-colors cursor-pointer' : 'cursor-default'}`}
-                        disabled={!isArchitect}
-                    >
-                        {currentStatus}
-                        {isArchitect && <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isStatusDropdownOpen ? 'rotate-180' : ''}`} />}
-                    </button>
-
-                    {isStatusDropdownOpen && isArchitect && (
-                        <div className="absolute top-full left-0 mt-1 w-40 bg-white shadow-xl rounded-xl border border-gray-100 py-2 z-50">
-                            {STATUS_OPTIONS.map((option) => (
-                                <button
-                                    key={option}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleStatusChange(option);
-                                    }}
-                                    className={`w-full text-left px-4 py-2 text-sm font-medium flex items-center justify-between hover:bg-gray-50 transition-colors ${currentStatus === option ? 'text-[#D9A88A] bg-gray-50' : 'text-gray-500'
-                                        }`}
-                                >
-                                    {option}
-                                    {currentStatus === option && <Check className="w-4 h-4 text-gray-400" />}
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </div>
             </div>
 
             {/* Right Section */}
-            <div className="flex-[1.4] bg-[#fafafb] rounded-[16px] flex items-center justify-between border border-gray-50 group-hover:border-gray-100 transition-colors relative min-w-0 overflow-hidden">
-                {getImageUrl(project.coverImage) && (
+            <div className="flex-[1.4] bg-[#fafafb] rounded-[16px] p-4 flex items-end justify-between border border-gray-50 group-hover:border-gray-100 transition-colors relative min-w-0 overflow-hidden">
+                {getImageUrl(project.coverImage, 'projects/covers') && (
                     <div className="absolute inset-0 z-0">
-                        <Image src={getImageUrl(project.coverImage)} alt="" fill className="object-cover opacity-80" />
+                        <Image src={getImageUrl(project.coverImage, 'projects/covers')} alt="" fill className="object-cover opacity-80" unoptimized />
                         <div className="absolute inset-0 bg-linear-to-r from-black/40 to-black/10 transition-colors" />
                     </div>
-                )}
+                )/* Resolve only: Added folder context, unoptimized, and missing absolute */}
 
-                <div className="flex flex-col h-full justify-between gap-4 z-10 w-full min-w-0 pr-2 p-4">
+                <div className="flex flex-col h-full justify-between gap-4 z-10 w-full min-w-0 ">
                     <div className="flex items-center justify-between">
-                        <h4 className="font-extrabold text-gray-500  border-amber-500 text-[15px] truncate">Spec'd Brands</h4>
+                        {/* <h4 className="font-extrabold text-gray-500  border-amber-500 text-[15px] truncate">Spec'd Brands</h4> */}
                         {/* <button
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -485,7 +490,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
 
                     </div>
 
-                    <div className="mt-auto flex flex-col gap-2">
+                    <div className=" flex flex-col gap-2">
                         {isArchitect && (
                             <>
                                 <Link

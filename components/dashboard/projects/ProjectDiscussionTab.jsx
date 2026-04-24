@@ -117,8 +117,8 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                 <MessageCircle className="w-5 h-5" />
                             </div>
                             <div>
-                                <h2 className="text-xl font-black text-[#2d3142]">Project Messages</h2>
-                                <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
+                                <h2 className="text-xl font-bold text-[#2d3142]/80">Project Messages</h2>
+                                <p className="text-xs font-bold text-gray-400  tracking-widest mt-0.5">
                                     Project: {projectName || 'General'}
                                 </p>
                             </div>
@@ -129,8 +129,8 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                     <div className="flex items-center gap-2 overflow-x-auto pb-4 hide-scrollbar">
                         <button
                             onClick={() => setFilterSpaceId('general')}
-                            className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${filterSpaceId === 'general'
-                                ? 'bg-[#d9a88a] text-white shadow-lg'
+                            className={`px-4 py-2 rounded-xl text-[11px] font-bold  tracking-wider transition-all whitespace-nowrap ${filterSpaceId === 'general'
+                                ? 'bg-[#d9a88a] text-white '
                                 : 'bg-white text-gray-400 hover:bg-gray-100'
                                 }`}
                         >
@@ -141,8 +141,8 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <button
                                 key={mb._id}
                                 onClick={() => setFilterSpaceId(mb._id)}
-                                className={`px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all whitespace-nowrap ${filterSpaceId === mb._id
-                                    ? 'bg-[#d9a88a] text-white shadow-lg'
+                                className={`px-4 py-2 rounded-xl text-[11px] font-black  tracking-wider transition-all whitespace-nowrap ${filterSpaceId === mb._id
+                                    ? 'bg-[#d9a88a] text-white '
                                     : 'bg-white text-gray-400 hover:bg-gray-100'
                                     }`}
                             >
@@ -186,31 +186,31 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                 <div className="flex items-center gap-2 mb-2">
                                     {/* Space/Context Label */}
-                                    <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md ${!spaceName
+                                    {/* <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md ${!spaceName
                                         ? 'bg-blue-50 text-blue-600'
                                         : 'bg-orange-50 text-orange-600'
                                         }`}>
                                         {spaceName ? `[${spaceName}]` : '[General]'}
-                                    </span>
+                                    </span> */}
 
                                     {comment.referencedMaterialName && (
-                                        <span className="text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md bg-purple-50 text-purple-600">
+                                        <span className="text-[9px] font-bold  tracking-tighter px-2 py-0.5 rounded-md bg-purple-50 text-purple-600">
                                             [ITEM: {comment.referencedMaterialName}]
                                         </span>
                                     )}
 
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-[#2d3142] ml-1">
+                                    <span className="text-[10px] font-bold  tracking-widest text-[#2d3142] ml-1">
                                         {isMe ? 'You' : authorName}
                                     </span>
 
                                     {comment.isInternal && (
-                                        <span className="text-[9px] px-2 py-0.5 rounded-lg font-black uppercase tracking-tighter bg-amber-100 text-amber-700 flex items-center gap-1 shrink-0">
+                                        <span className="text-[9px] px-2 py-0.5 rounded-lg font-bold  tracking-tighter bg-amber-100 text-amber-700 flex items-center gap-1 shrink-0">
                                             <Shield className="w-3 h-3" /> Private
                                         </span>
                                     )}
                                 </div>
-                                <div className={`max-w-[85%] sm:max-w-[75%] rounded-3xl text-sm font-medium leading-relaxed shadow-sm group relative overflow-hidden ${isMe
-                                    ? 'bg-[#1a1a2e] text-white rounded-tr-sm'
+                                <div className={`max-w-[85%] sm:max-w-[75%] rounded-3xl text-sm font-medium leading-relaxed  group relative overflow-hidden ${isMe
+                                    ? 'bg-gray-100/80 text-gray-600 rounded-tr-sm'
                                     : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm'
                                     }`}>
                                     {(comment.referencedMaterialImage || findMaterialImage(comment.referencedMaterialId, comment.referencedMaterialName)) && (
@@ -221,7 +221,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/thumb:scale-110"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-3">
-                                                <span className="text-white text-[10px] font-black uppercase tracking-widest truncate">
+                                                <span className="text-white text-[10px] font-bold  tracking-widest truncate">
                                                     {comment.referencedMaterialName}
                                                 </span>
                                             </div>
@@ -266,8 +266,8 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         </div>
                     </div>
 
-                    <div className="flex items-end gap-3">
-                        <div className="flex-1 relative">
+                    <div className="flex items-end h-[60px] gap-3">
+                        <div className="flex-1 relative h-full">
                             <textarea
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
@@ -276,7 +276,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         ? "Add a general project comment..."
                                         : `Add a comment specifically for the ${getSpaceName(filterSpaceId)}...`
                                 }
-                                className={`w-full resize-none min-h-[60px] max-h-[200px] p-5 bg-gray-50 border border-transparent rounded-[24px] focus:bg-white focus:border-[#d9a88a] focus:ring-4 focus:ring-[#d9a88a]/5 outline-none text-sm font-bold text-gray-700 transition-all leading-relaxed placeholder:text-gray-400 scrollbar-none ${isInternal ? 'bg-amber-50/30' : ''}`}
+                                className={`w-full h-full px-5 py-3 resize-none bg-gray-50 border border-transparent rounded-[24px] focus:bg-white focus:border-[#d9a88a] focus:ring-4 focus:ring-[#d9a88a]/5 outline-none text-sm font-bold text-gray-700 transition-all leading-relaxed placeholder:text-gray-400 scrollbar-none ${isInternal ? 'bg-amber-50/30' : ''}`}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();
@@ -288,7 +288,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         <button
                             type="submit"
                             disabled={!message.trim() || postMutation.isPending}
-                            className={`h-[60px] w-[60px] flex items-center justify-center rounded-[24px] text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale ${isInternal
+                            className={`w-[60px] h-full flex items-center justify-center rounded-[24px] text-white shadow-lg transition-all active:scale-95 disabled:opacity-50 disabled:grayscale ${isInternal
                                 ? 'bg-amber-500 shadow-amber-200/50 hover:bg-amber-600'
                                 : 'bg-[#d9a88a] shadow-orange-100/50 hover:bg-[#c29377]'
                                 }`}

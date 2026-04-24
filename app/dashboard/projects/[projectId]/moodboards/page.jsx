@@ -123,7 +123,7 @@ export default function MoodboardsPage() {
                     <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-1 sm:pb-0 hide-scrollbar w-full md:w-auto">
                         <Button
                             onClick={() => setIsPrivacyModalOpen(true)}
-                            className="bg-white border text-gray-700 px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all hover:scale-105 active:scale-95 text-[11px] sm:text-sm whitespace-nowrap shrink-0"
+                            className="bg-white border text-gray-700 px-4 sm:px-5 py-3 rounded-2xl font-bold flex items-center gap-2 transition-all active:scale-95 text-[11px] sm:text-sm whitespace-nowrap shrink-0"
                         >
                             <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#d9a88a]" />
                             Client Settings
@@ -221,7 +221,7 @@ export default function MoodboardsPage() {
                     <>
                         {/* Search and Sort controls moved here for clarity */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                           <div className="flex items-center gap-3">
+                           <div className="flex items-center lg:w-full w-[200px] gap-3">
                                 <div className="relative">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                     <input
@@ -229,7 +229,7 @@ export default function MoodboardsPage() {
                                         placeholder="Search spaces..."
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="pl-11 pr-4 py-3 bg-gray-50 border-none rounded-2xl text-sm font-bold text-gray-700 w-48 focus:ring-2 focus:ring-[#d9a88a]/20 transition-all outline-none"
+                                        className="pl-11 pr-4 py-3 bg-white border-none rounded-2xl text-sm font-bold text-gray-700 w-48 focus:ring-2 focus:ring-[#d9a88a]/20 transition-all outline-none"
                                     />
                                 </div>
 
@@ -312,7 +312,7 @@ export default function MoodboardsPage() {
 
                 {/* DISCUSSION TAB */}
                 {activeTab === 'discussion' && (
-                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="animate-in fade-in py-5 slide-in-from-bottom-4 duration-500">
                         <ProjectDiscussionTab 
                             projectId={projectId}
                             projectName={project?.projectName}

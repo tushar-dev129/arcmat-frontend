@@ -28,6 +28,14 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'arcmat.s3.us-east-1.amazonaws.com',
+            },
+            {
+                protocol: 'https',
+                hostname: 'arcmatv2.s3.ap-south-1.amazonaws.com',
+            },
+            {
+                protocol: 'https',
                 hostname: 'res.cloudinary.com',
             },
         ],
