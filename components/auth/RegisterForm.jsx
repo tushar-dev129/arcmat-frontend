@@ -56,17 +56,26 @@ export default function RegisterForm() {
 
     if (activeTab === 'professionals') {
       if (userType === 'professional') {
-        assignedRole = (data.profession && data.profession !== '') ? 'architect' : 'customer';
+        if (data.profession === 'Contractor / Builder') {
+          assignedRole = 'contractor';
+        } else if (data.profession && data.profession !== '') {
+          assignedRole = 'architect';
+        } else {
+          assignedRole = 'customer';
+        }
       } else {
         assignedRole = 'customer';
       }
     } else {
       assignedRole = vendorType === 'brand' ? 'brand' : 'retailer';
     }
+    
+    const isContractor = activeTab === 'professionals' && data.profession === 'Contractor / Builder';
 
     const finalData = {
       ...data,
-      professionalType: (activeTab === 'professionals' && userType === 'professional') ? data.profession : undefined
+      professionalType: (activeTab === 'professionals' && userType === 'professional') ? data.profession : undefined,
+      providerType: isContractor ? 'contractor' : undefined
     };
 
     let profileUrl = finalData.profile;

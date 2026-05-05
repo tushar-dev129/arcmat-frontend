@@ -31,6 +31,7 @@ const BRAND_MENU_ITEMS = mapIcons(sidebarData.BRAND_MENU_ITEMS);
 const USER_MENU_ITEMS = mapIcons(sidebarData.USER_MENU_ITEMS);
 const RETAILER_MENU_ITEMS = mapIcons(sidebarData.RETAILER_MENU_ITEMS);
 const ARCHITECT_MENU_ITEMS = mapIcons(sidebarData.ARCHITECT_MENU_ITEMS);
+const CONTRACTOR_MENU_ITEMS = mapIcons(sidebarData.CONTRACTOR_MENU_ITEMS);
 
 export default function Sidebar() {
   const { isCollapsed, toggleSidebar, isMobileOpen, setMobileOpen } = useSidebarStore();
@@ -39,6 +40,7 @@ export default function Sidebar() {
   const isBrand = user?.role === 'brand' || user?.role === 'vendor';
   const isRetailer = user?.role === 'retailer';
   const isArchitect = user?.role === 'architect';
+  const isContractor = user?.role === 'contractor';
   const [mounted, setMounted] = useState(false);
 
   const pathname = usePathname();
@@ -71,7 +73,9 @@ export default function Sidebar() {
         ? RETAILER_MENU_ITEMS
         : isArchitect
           ? ARCHITECT_MENU_ITEMS
-          : USER_MENU_ITEMS);
+          : isContractor
+            ? CONTRACTOR_MENU_ITEMS
+            : USER_MENU_ITEMS);
 
   const visibleItems = menuItems
     .map(item => {

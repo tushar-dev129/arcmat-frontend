@@ -201,5 +201,37 @@
             "icon": "HelpCircle",
             "href": "/dashboard/help"
         }
+    ],
+    "CONTRACTOR_MENU_ITEMS": [
+        {
+            "id": "dashboard",
+            "label": "Dashboard",
+            "icon": "LayoutDashboard",
+            "href": "/dashboard/contractor"
+        },
+        {
+            "id": "profile",
+            "label": "Marketplace Profile",
+            "icon": "User",
+            "href": "/dashboard/contractor/profile"
+        },
+        {
+            "id": "portfolio",
+            "label": "Portfolio",
+            "icon": "Image",
+            "href": "/dashboard/contractor/portfolio"
+        },
+        {
+            "id": "leads",
+            "label": "Inquiry Leads",
+            "icon": "MessageSquare",
+            "href": "/dashboard/contractor/leads"
+        },
+        {
+            "id": "help",
+            "label": "Help",
+            "icon": "HelpCircle",
+            "href": "/dashboard/help"
+        }
     ]
 }

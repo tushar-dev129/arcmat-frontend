@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
+import Link from "next/link";
 import { NavbarItem } from "./navbar-item";
 import { MegaMenu } from "./mega-menu";
 import Container from "@/components/ui/Container";
@@ -139,6 +140,30 @@ const Navbar = () => {
                                     ))
                                 )}
                             </ul>
+                        </div>
+
+                        <div className="hidden lg:flex items-center ml-6 pl-6 border-l border-[hsl(30,15%,85%)]">
+                            <Link 
+                                href="/contractors" 
+                                className="group px-4 py-2 text-[13px] font-bold text-[hsl(20,10%,15%)] bg-[#ead4ce]/30 hover:bg-[#ead4ce]/60 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-[#ead4ce]"
+                            >
+                                <span className="w-2 h-2 rounded-full bg-[hsl(15,80%,65%)] animate-pulse" />
+                                Contractors & Services
+                                <svg 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    width="16" 
+                                    height="16" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    strokeWidth="2.5" 
+                                    strokeLinecap="round" 
+                                    strokeLinejoin="round" 
+                                    className="ml-1 transition-transform duration-200 group-hover:translate-x-1"
+                                >
+                                    <path d="M5 12h14m-7-7 7 7-7 7"/>
+                                </svg>
+                            </Link>
                         </div>
 
                         {/* Mega Menu Rendered Here - Outside Overflow Container but Inside Relative Container */}

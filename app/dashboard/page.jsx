@@ -171,6 +171,8 @@ export default function DashboardPage() {
             router.push('/dashboard/retailer');
         } else if (user?.role === 'architect') {
             router.push('/dashboard/architect');
+        } else if (user?.role === 'contractor') {
+            router.push('/dashboard/contractor');
         }
     }, [user, router]);
 
