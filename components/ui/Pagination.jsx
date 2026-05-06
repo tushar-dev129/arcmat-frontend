@@ -8,8 +8,8 @@ const Pagination = ({
     currentPage = 1,
     totalPages = 1,
     pageSize = 12,
-    onPageChange = () => {},
-    onPageSizeChange = () => {},
+    onPageChange = () => { },
+    onPageSizeChange = () => { },
     totalItems = 0
 }) => {
     const pageSizes = [12, 20, 50];
@@ -29,7 +29,7 @@ const Pagination = ({
                     <select
                         value={pageSize}
                         onChange={(e) => onPageSizeChange(Number(e.target.value))}
-                        className="text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg px-2 py-1 outline-none focus:border-[#e09a74] transition-colors cursor-pointer"
+                        className="text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg px-2 py-1 outline-none focus:border-primary transition-colors cursor-pointer"
                     >
                         {pageSizes.map((size) => (
                             <option key={size} value={size}>
@@ -55,7 +55,7 @@ const Pagination = ({
                         "p-2 rounded-lg border border-gray-200 transition-all",
                         currentPage === 1
                             ? "text-gray-300 cursor-not-allowed"
-                            : "text-gray-600 hover:bg-gray-50 hover:border-[#e09a74] hover:text-[#e09a74]"
+                            : "text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
                     )}
                 >
                     <ChevronLeft size={18} />
@@ -76,7 +76,7 @@ const Pagination = ({
                                     className={clsx(
                                         "w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-all",
                                         currentPage === pageNum
-                                            ? "bg-[#e09a74] text-white shadow-sm"
+                                            ? "bg-primary text-white shadow-sm"
                                             : "text-gray-600 hover:bg-gray-50 border border-transparent hover:border-gray-200"
                                     )}
                                 >
@@ -100,7 +100,7 @@ const Pagination = ({
                         "p-2 rounded-lg border border-gray-200 transition-all",
                         currentPage === totalPages
                             ? "text-gray-300 cursor-not-allowed"
-                            : "text-gray-600 hover:bg-gray-50 hover:border-[#e09a74] hover:text-[#e09a74]"
+                            : "text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
                     )}
                 >
                     <ChevronRight size={18} />

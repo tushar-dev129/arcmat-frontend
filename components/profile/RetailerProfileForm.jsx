@@ -106,7 +106,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
                     <input
                         {...register('companyName', { required: 'Company name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. Acme Supplies"
                     />
                     {errors.companyName && <p className="text-red-500 text-xs mt-1">{errors.companyName.message}</p>}
@@ -116,7 +116,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
                     <input
                         {...register('contactPerson', { required: 'Contact person is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. John Doe"
                     />
                     {errors.contactPerson && <p className="text-red-500 text-xs mt-1">{errors.contactPerson.message}</p>}
@@ -129,7 +129,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                             required: 'Email is required',
                             pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
                         })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. contact@company.com"
                     />
                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
@@ -139,7 +139,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                     <input
                         {...register('mobile', { required: 'Phone number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. +91 9876543210"
                     />
                     {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
@@ -149,7 +149,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Base City / Region</label>
                     <input
                         {...register('cityRegion', { required: 'City / Region is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. Delhi"
                     />
                     {errors.cityRegion && <p className="text-red-500 text-xs mt-1">{errors.cityRegion.message}</p>}
@@ -159,7 +159,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Contact Method</label>
                     <select
                         {...register('preferredContactMethod', { required: 'Please select a contact method' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all bg-white"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-white"
                     >
                         <option value="Phone">Phone</option>
                         <option value="Email">Email</option>
@@ -172,7 +172,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                     <label className="block text-sm font-medium text-gray-700 mb-1">Calling Hours</label>
                     <input
                         {...register('callingHours')}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="e.g. Mon – Sat, 9:00 AM – 5:00 PM"
                     />
                     <p className="mt-1 text-[10px] text-gray-400">Architects will see this before calling.</p>
@@ -186,13 +186,13 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                         value={cityInput}
                         onChange={(e) => setCityInput(e.target.value)}
                         onKeyDown={handleCityKeyDown}
-                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="Type a city and press Enter (e.g. Noida)"
                     />
                     <button
                         type="button"
                         onClick={handleAddCity}
-                        className="px-4 py-2 bg-[#e09a74] text-white rounded-lg hover:opacity-90 transition-all font-medium"
+                        className="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-all font-medium"
                     >
                         Add
                     </button>
@@ -203,7 +203,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                         cities.map((city, index) => (
                             <span
                                 key={index}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#e09a74]/30 text-[#e09a74] text-sm font-semibold rounded-lg shadow-sm animate-in fade-in zoom-in duration-200"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-primary/30 text-primary text-sm font-semibold rounded-lg shadow-sm animate-in fade-in zoom-in duration-200"
                             >
                                 {city}
                                 <button
@@ -227,7 +227,7 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                 <textarea
                     {...register('businessAddress', { required: 'Business address is required' })}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all resize-none"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                     placeholder="Enter full business address"
                 />
                 {errors.businessAddress && <p className="text-red-500 text-xs mt-1">{errors.businessAddress.message}</p>}
@@ -245,8 +245,8 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                                 className={`
                                     flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all
                                     ${currentSelectedBrands.includes(brand._id)
-                                        ? 'bg-[#e09a74] text-white shadow-sm'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:border-[#e09a74] hover:text-[#e09a74]'}
+                                        ? 'bg-primary text-white shadow-sm'
+                                        : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}
                                 `}
                             >
                                 <span className="truncate">{brand.name}</span>
@@ -262,13 +262,13 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
                 <Button
                     type="button"
                     onClick={onCancel}
-                    className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-[#e09a74] hover:text-[#e09a74] px-3 cursor-pointer"
+                    className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary px-3 cursor-pointer"
                     text="Cancel"
                 />
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-[#e09a74] text-white cursor-pointer hover:opacity-90 min-w-[120px] py-2 px-4 border border-[#e09a74]"
+                    className="bg-primary text-white cursor-pointer hover:opacity-90 min-w-[120px] py-2 px-4 border border-primary"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
                             <Loader2 className="animate-spin" size={16} />

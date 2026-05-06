@@ -91,9 +91,9 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
         <div className="mb-2">
 
             <div className="bg-[#FFF9E6]">
-                <div className="flex items-center gap-1 mb-6 p-1 bg-[#e09a74]">
-                    <div className="bg-[#e09a74] rounded-full p-2">
-                        <Send className="text-black"/>
+                <div className="flex items-center gap-1 mb-6 p-1 bg-primary">
+                    <div className="bg-primary rounded-full p-2">
+                        <Send className="text-black" />
                     </div>
                     <div className="flex justify-between items-center w-full pr-2">
                         <h2 className="text-lg md:text-xl font-bold text-gray-900">Contact</h2>
@@ -128,7 +128,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                                 name="catalogue"
                                                 checked={formData.catalogue || false}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-700">Catalogue</span>
                                         </label>
@@ -138,7 +138,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                                 name="priceList"
                                                 checked={formData.priceList || false}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-700">Price list</span>
                                         </label>
@@ -148,7 +148,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                                 name="bimCad"
                                                 checked={formData.bimCad || false}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-700">BIM/CAD</span>
                                         </label>
@@ -158,7 +158,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                                 name="retailersList"
                                                 checked={formData.retailersList || false}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-700">Retailers list</span>
                                         </label>
@@ -168,7 +168,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                                 name="contactRepresentative"
                                                 checked={formData.contactRepresentative || false}
                                                 onChange={handleChange}
-                                                className="w-4 h-4 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                                className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
                                             />
                                             <span className="text-sm text-gray-700">Contact representative</span>
                                         </label>
@@ -181,7 +181,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                             name="message"
                                             value={formData.message}
                                             onChange={handleChange}
-                                            className="w-full h-24 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent resize-none"
+                                            className="w-full h-24 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                                             placeholder="Hello, I would like more information about the product FRAME..."
                                         ></textarea>
                                     </div>
@@ -202,7 +202,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.firstName}
                                 onChange={handleChange}
                                 placeholder="First Name *"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="text"
@@ -210,7 +210,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.lastName}
                                 onChange={handleChange}
                                 placeholder="Last Name *"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="email"
@@ -218,13 +218,13 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.email}
                                 onChange={handleChange}
                                 placeholder="E-mail *"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <select
                                 name="profession"
                                 value={formData.profession}
                                 onChange={handleChange}
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             >
                                 <option>Profession *</option>
                                 <option>Architect</option>
@@ -238,7 +238,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.company}
                                 onChange={handleChange}
                                 placeholder="Company/Studio Name"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="text"
@@ -246,7 +246,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.city}
                                 onChange={handleChange}
                                 placeholder="City/Town *"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="text"
@@ -254,7 +254,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.address}
                                 onChange={handleChange}
                                 placeholder="Address"
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="text"
@@ -262,7 +262,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.no}
                                 onChange={handleChange}
                                 placeholder="No."
-                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="text"
@@ -270,7 +270,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.postcode}
                                 onChange={handleChange}
                                 placeholder="Postcode"
-                                className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                             <input
                                 type="tel"
@@ -278,7 +278,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 value={formData.tel}
                                 onChange={handleChange}
                                 placeholder="Tel."
-                                className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] focus:border-transparent"
+                                className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                         </div>
                     </div>
@@ -292,7 +292,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                     name="consent"
                                     checked={formData.consent}
                                     onChange={handleChange}
-                                    className="w-4 h-4 mt-1 rounded border-gray-300 text-[#e09a74] focus:ring-[#e09a74]"
+                                    className="w-4 h-4 mt-1 rounded border-gray-300 text-primary focus:ring-primary"
                                 />
                                 <span className="text-xs text-gray-600 leading-relaxed">
                                     I consent to the transfer of my data to {(product.brand && typeof product.brand === 'object') ? (product.brand.name || product.brand.brand_name) : (product.brand || 'Arcmat')} and the brands featured on Archiproducts for marketing purposes
@@ -300,9 +300,9 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                             </label>
                             <p className="text-xs text-gray-500 mt-2 ml-6">
                                 By clicking on Send, I consent to register on the site and share my data with the contacted brand so that it can respond to my request. To this end, I accept the{' '}
-                                <Link href="/not-found" className="text-[#e09a74] hover:underline">Terms of Use</Link> and the{' '}
-                                <Link href="/not-found" className="text-[#e09a74] hover:underline">Privacy Policy</Link> and authorize the processing of my personal data for marketing purposes by Archiproducts. If you are already registered,{' '}
-                                <Link href="/not-found" className="text-[#e09a74] hover:underline">Login</Link>
+                                <Link href="/not-found" className="text-primary hover:underline">Terms of Use</Link> and the{' '}
+                                <Link href="/not-found" className="text-primary hover:underline">Privacy Policy</Link> and authorize the processing of my personal data for marketing purposes by Archiproducts. If you are already registered,{' '}
+                                <Link href="/not-found" className="text-primary hover:underline">Login</Link>
                             </p>
                         </div>
 
@@ -310,7 +310,7 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                             text={isPending ? 'SENDING...' : 'SEND'}
                             onClick={handleSubmit}
                             disabled={isPending}
-                            className="w-full md:w-auto bg-[#e09a74] hover:bg-white hover:text-[#e09a74] border-[#e09a74] border text-white font-semibold py-3 px-8 rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                            className="w-full md:w-auto bg-primary hover:bg-white hover:text-primary border-primary border text-white font-semibold py-3 px-8 rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
                         >
                         </Button>
                     </div>

@@ -40,12 +40,12 @@ export default function BrandInventoryPage() {
     const [excludedVariants, setExcludedVariants] = useState([]);
 
     const toggleSelectAll = () => {
-        const allVariants = products.flatMap(p => p.variants.map(v => ({ 
-            productId: p._id, 
-            variantId: v._id, 
-            isAdded: v.isAdded 
+        const allVariants = products.flatMap(p => p.variants.map(v => ({
+            productId: p._id,
+            variantId: v._id,
+            isAdded: v.isAdded
         })));
-        
+
         if (selectedVariants.length === allVariants.length && allVariants.length > 0) {
             setSelectedVariants([]);
         } else {
@@ -157,20 +157,20 @@ export default function BrandInventoryPage() {
             {isAnySelected && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-gray-900 border border-gray-800 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-6 animate-in slide-in-from-bottom">
                     <span className="font-bold text-sm whitespace-nowrap">
-                        <span className="text-[#e09a74] mr-1">{selectedVariants.length}</span> {selectedVariants.length === 1 ? 'variant selected' : 'variants selected'}
+                        <span className="text-primary mr-1">{selectedVariants.length}</span> {selectedVariants.length === 1 ? 'variant selected' : 'variants selected'}
                     </span>
                     <div className="flex items-center gap-2">
                         {selectedToAdd.length > 0 && (
-                            <Button 
+                            <Button
                                 onClick={handleBulkAdd}
                                 isLoading={bulkAddMutation.isPending}
-                                className="bg-[#e09a74] hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                                className="bg-primary hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
                             >
                                 Add  ({selectedToAdd.length})
                             </Button>
                         )}
                         {selectedToRemove.length > 0 && (
-                            <Button 
+                            <Button
                                 onClick={handleBulkRemove}
                                 isLoading={bulkRemoveMutation.isPending}
                                 className="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
@@ -179,7 +179,7 @@ export default function BrandInventoryPage() {
                             </Button>
                         )}
                     </div>
-                    <button 
+                    <button
                         onClick={() => { setSelectedVariants([]); }}
                         className="p-1 hover:bg-gray-800 rounded-full transition-colors flex-shrink-0 border border-gray-700"
                         title="Clear selection"
@@ -230,7 +230,7 @@ export default function BrandInventoryPage() {
                         placeholder="Search brand products..."
                         value={searchTerm}
                         onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                        className="w-full pl-12 pr-4 py-3 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm"
+                        className="w-full pl-12 pr-4 py-3 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm"
                     />
                 </div>
                 <div className="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-50 rounded-lg">
@@ -262,9 +262,9 @@ export default function BrandInventoryPage() {
                                         <span>Available Variants & Actions</span>
                                         {products.length > 0 && (
                                             <label className="flex items-center gap-2 cursor-pointer bg-white px-3 py-1.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors shadow-sm normal-case">
-                                                <input 
-                                                    type="checkbox" 
-                                                    className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74]"
+                                                <input
+                                                    type="checkbox"
+                                                    className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary"
                                                     checked={selectedVariants.length > 0 && selectedVariants.length === products.flatMap(p => p.variants).length}
                                                     onChange={toggleSelectAll}
                                                 />
@@ -314,60 +314,61 @@ export default function BrandInventoryPage() {
                                                 const isSelected = selectedVariants.some(v => v.variantId === variant._id);
 
                                                 return (
-                                                <div key={variant._id} className={clsx(
-                                                    "flex flex-wrap items-center justify-between p-3 rounded-xl border shadow-sm transition-all gap-4",
-                                                    isSelected ? "bg-[#e09a74]/5 border-[#e09a74]/30" : "bg-white border-gray-100 hover:border-[#e09a74]/30"
-                                                )}>
-                                                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                                                        <input 
-                                                            type="checkbox"
-                                                            checked={isSelected}
-                                                            onChange={() => toggleVariant(product._id, variant._id, variant.isAdded)}
-                                                            className="w-4 h-4 rounded text-[#e09a74] border-gray-300 focus:ring-[#e09a74] cursor-pointer shrink-0"
-                                                        />
-                                                        <div className="min-w-0 flex-1">
-                                                            <p className="text-xs font-bold text-gray-900 truncate">
-                                                                {variant.variant_name || 'Standard Variant'}
-                                                            </p>
-                                                            {(() => {
-                                                                const attrs = getSpecifications(product, variant).filter(a => a.label !== 'SKU');
-                                                                return (
-                                                                    <div className="flex flex-wrap items-center gap-1 mt-0.5 min-h-[1rem]">
-                                                                        {attrs.length > 0 && attrs.map((attr, idx) => (
-                                                                            <span key={idx} className="flex items-center gap-1 uppercase">
-                                                                                <span className="text-[9px] font-semibold text-[#e09a74]">{attr.value}</span>
-                                                                                {idx < attrs.length - 1 && <span className="text-[9px] text-[#e09a74]/80">||</span>}
-                                                                            </span>
-                                                                        ))}
-                                                                    </div>
-                                                                );
-                                                            })()}
-                                                            <div className="text-[10px] text-gray-400 font-mono mt-0.5 flex items-center gap-2">
-                                                                <span>SKU: {variant.skucode || 'N/A'}</span>
-                                                                <span className="text-gray-200">•</span>
-                                                                <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
+                                                    <div key={variant._id} className={clsx(
+                                                        "flex flex-wrap items-center justify-between p-3 rounded-xl border shadow-sm transition-all gap-4",
+                                                        isSelected ? "bg-primary/5 border-primary/30" : "bg-white border-gray-100 hover:border-primary/30"
+                                                    )}>
+                                                        <div className="flex items-center gap-3 min-w-0 flex-1">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={isSelected}
+                                                                onChange={() => toggleVariant(product._id, variant._id, variant.isAdded)}
+                                                                className="w-4 h-4 rounded text-primary border-gray-300 focus:ring-primary cursor-pointer shrink-0"
+                                                            />
+                                                            <div className="min-w-0 flex-1">
+                                                                <p className="text-xs font-bold text-gray-900 truncate">
+                                                                    {variant.variant_name || 'Standard Variant'}
+                                                                </p>
+                                                                {(() => {
+                                                                    const attrs = getSpecifications(product, variant).filter(a => a.label !== 'SKU');
+                                                                    return (
+                                                                        <div className="flex flex-wrap items-center gap-1 mt-0.5 min-h-[1rem]">
+                                                                            {attrs.length > 0 && attrs.map((attr, idx) => (
+                                                                                <span key={idx} className="flex items-center gap-1 uppercase">
+                                                                                    <span className="text-[9px] font-semibold text-primary">{attr.value}</span>
+                                                                                    {idx < attrs.length - 1 && <span className="text-[9px] text-primary/80">||</span>}
+                                                                                </span>
+                                                                            ))}
+                                                                        </div>
+                                                                    );
+                                                                })()}
+                                                                <div className="text-[10px] text-gray-400 font-mono mt-0.5 flex items-center gap-2">
+                                                                    <span>SKU: {variant.skucode || 'N/A'}</span>
+                                                                    <span className="text-gray-200">•</span>
+                                                                    <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
+                                                        <button
+                                                            onClick={() => openModal(product, variant)}
+                                                            disabled={upsertOverride.isPending || variant.isAdded}
+                                                            className={clsx(
+                                                                "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider shrink-0",
+                                                                variant.isAdded
+                                                                    ? "bg-green-50 text-green-600 border-green-100 cursor-not-allowed"
+                                                                    : "bg-white text-primary border-gray-200 shadow-sm hover:bg-primary hover:text-white hover:border-primary"
+                                                            )}
+                                                            title={variant.isAdded ? "Already in Inventory" : "Add to My Inventory"}
+                                                        >
+                                                            {variant.isAdded ? (
+                                                                <><Check className="w-3.5 h-3.5" /> Added</>
+                                                            ) : (
+                                                                <><Plus className="w-3.5 h-3.5" /> Add</>
+                                                            )}
+                                                        </button>
                                                     </div>
-                                                    <button
-                                                        onClick={() => openModal(product, variant)}
-                                                        disabled={upsertOverride.isPending || variant.isAdded}
-                                                        className={clsx(
-                                                            "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider shrink-0",
-                                                            variant.isAdded
-                                                                ? "bg-green-50 text-green-600 border-green-100 cursor-not-allowed"
-                                                                : "bg-white text-[#e09a74] border-gray-200 shadow-sm hover:bg-[#e09a74] hover:text-white hover:border-[#e09a74]"
-                                                        )}
-                                                        title={variant.isAdded ? "Already in Inventory" : "Add to My Inventory"}
-                                                    >
-                                                        {variant.isAdded ? (
-                                                            <><Check className="w-3.5 h-3.5" /> Added</>
-                                                        ) : (
-                                                            <><Plus className="w-3.5 h-3.5" /> Add</>
-                                                        )}
-                                                    </button>
-                                                </div>
-                                            )})}
+                                                )
+                                            })}
                                         </div>
                                     </td>
                                 </tr>
@@ -443,7 +444,7 @@ export default function BrandInventoryPage() {
                                             value={formData.mrp_price}
                                             onChange={e => setFormData({ ...formData, mrp_price: e.target.value })}
                                             placeholder="Enter MRP"
-                                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] focus:bg-white transition-all text-sm font-bold"
+                                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary focus:bg-white transition-all text-sm font-bold"
                                         />
                                     </div>
                                 </div>
@@ -460,7 +461,7 @@ export default function BrandInventoryPage() {
                                             value={formData.selling_price}
                                             onChange={e => setFormData({ ...formData, selling_price: e.target.value })}
                                             placeholder="Enter Selling Price"
-                                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] focus:bg-white transition-all text-sm font-bold"
+                                            className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary focus:bg-white transition-all text-sm font-bold"
                                         />
                                     </div>
                                 </div>
@@ -474,7 +475,7 @@ export default function BrandInventoryPage() {
                                         value={formData.stock}
                                         onChange={e => setFormData({ ...formData, stock: e.target.value })}
                                         placeholder="Enter Stock"
-                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] focus:bg-white transition-all text-sm font-bold"
+                                        className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary focus:bg-white transition-all text-sm font-bold"
                                     />
                                 </div>
 
@@ -490,7 +491,7 @@ export default function BrandInventoryPage() {
                                     <Button
                                         type="submit"
                                         isLoading={upsertOverride.isPending}
-                                        className="flex-1 text-white rounded-xl h-12 bg-[#e09a74] hover:bg-[#d08963]"
+                                        className="flex-1 text-white rounded-xl h-12 bg-primary hover:bg-[#d08963]"
                                     >
                                         Confirm & Add
                                     </Button>

@@ -28,7 +28,7 @@ const findNodeAndDetermineDisplay = (tree, targetId) => {
         }
         return false;
     };
-    
+
     traverse(tree);
 
     if (!foundNode) return { nodesToDisplay: tree, parentNode: null };
@@ -37,7 +37,7 @@ const findNodeAndDetermineDisplay = (tree, targetId) => {
     if (foundNode.children && foundNode.children.length > 0) {
         return { nodesToDisplay: foundNode.children, parentNode: foundNode };
     }
-    
+
     // If the node has NO children (it's a leaf node), gracefully fallback to showing its siblings
     if (foundParent) {
         return { nodesToDisplay: foundParent.children, parentNode: foundParent };
@@ -101,30 +101,30 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
                     <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto scroll-smooth py-1 px-1 custom-scrollbar">
                         {isLoading ? (
                             <div className="flex items-center gap-2 px-4 py-2">
-                                <Loader2 className="w-4 h-4 text-[#e09a74] animate-spin" />
+                                <Loader2 className="w-4 h-4 text-primary animate-spin" />
                                 <span className="text-sm text-gray-400">Loading categories...</span>
                             </div>
                         ) : (
                             <div className="flex items-center gap-2 ml-4 sm:gap-3">
                                 {/* Breadcrumb Context Area */}
-                                    <button
-                                        onClick={() => {
-                                            if (selectedCategory !== 'All' && categoryPath.length > 0) {
-                                                // If we are deep, 'All' shows all products of the parent level
-                                                // If at top-level (no parent), stay on current category; otherwise go up one level
+                                <button
+                                    onClick={() => {
+                                        if (selectedCategory !== 'All' && categoryPath.length > 0) {
+                                            // If we are deep, 'All' shows all products of the parent level
+                                            // If at top-level (no parent), stay on current category; otherwise go up one level
                                             const parentId = categoryPath.length > 1 ? categoryPath[categoryPath.length - 2].id : selectedCategory;
-                                                setSelectedCategory(parentId);
-                                            } else {
-                                                setSelectedCategory('All');
-                                            }
-                                        }}
-                                        className={`text-[14px] sm:text-[16px] font-semibold transition-all  cursor-pointer ${
-                                            // Highlighted if we are at root or explicitly at a parent state with sub-options
-                                            (selectedCategory === 'All' || (parentNode && (parentNode._id === selectedCategory || parentNode.id === selectedCategory))) 
-                                            ? 'text-[#e09a74]' : 'text-gray-500'}`}
-                                    >
-                                        All
-                                    </button>
+                                            setSelectedCategory(parentId);
+                                        } else {
+                                            setSelectedCategory('All');
+                                        }
+                                    }}
+                                    className={`text-[14px] sm:text-[16px] font-semibold transition-all  cursor-pointer ${
+                                        // Highlighted if we are at root or explicitly at a parent state with sub-options
+                                        (selectedCategory === 'All' || (parentNode && (parentNode._id === selectedCategory || parentNode.id === selectedCategory)))
+                                            ? 'text-primary' : 'text-gray-500'}`}
+                                >
+                                    All
+                                </button>
 
                                 {/* Divider for drill-down */}
                                 {dynamicCategories.length > 0 && <div className="h-6 w-[1px] bg-gray-200 mx-1 shrink-0"></div>}
@@ -135,7 +135,7 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
                                         key={idx}
                                         onClick={() => setSelectedCategory(cat.id)}
                                         className={`flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full whitespace-nowrap transition-all text-[14px] sm:text-[15px] cursor-pointer ${selectedCategory === cat.id
-                                            ? 'bg-[#e09a74] text-white shadow-sm font-semibold'
+                                            ? 'bg-primary text-white shadow-sm font-semibold'
                                             : 'bg-[#f3f4f6] text-gray-600 hover:bg-gray-200'
                                             }`}
                                     >
@@ -151,7 +151,7 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
 
                     <Button
                         onClick={() => openCompareModal()}
-                        className="hidden sm:block ml-1 sm:ml-2 px-4 sm:px-7 py-2 sm:py-2.5 bg-white border border-gray-200 rounded-2xl hover:bg-[#e09a74] hover:text-white transition-colors text-[14px] sm:text-[15px] font-bold text-gray-700 shadow-sm cursor-pointer whitespace-nowrap"
+                        className="hidden sm:block ml-1 sm:ml-2 px-4 sm:px-7 py-2 sm:py-2.5 bg-white border border-gray-200 rounded-2xl hover:bg-primary hover:text-white transition-colors text-[14px] sm:text-[15px] font-bold text-gray-700 shadow-sm cursor-pointer whitespace-nowrap"
                     >
                         Compare {mounted && comparedCount > 0 && `(${comparedCount})`}
                     </Button>

@@ -210,7 +210,7 @@ export default function BulkUploadModal() {
       />
       <div className="flex flex-col items-center">
         <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all">
-          <FileText className="w-7 h-7 text-[#e09a74]" />
+          <FileText className="w-7 h-7 text-primary" />
         </div>
         {csvFile ? (
           <div className="flex flex-col items-center">
@@ -308,7 +308,7 @@ export default function BulkUploadModal() {
             <Button
               onClick={handleRetry}
               disabled={isClearing}
-              className="flex-1 flex items-center justify-center gap-2 bg-orange-50 text-[#e09a74] border border-[#e09a74] py-3 rounded-lg font-bold hover:bg-[#e09a74] hover:text-white transition-all disabled:opacity-60"
+              className="flex-1 flex items-center justify-center gap-2 bg-orange-50 text-primary border border-primary py-3 rounded-lg font-bold hover:bg-primary hover:text-white transition-all disabled:opacity-60"
             >
               {isClearing ? (
                 <><div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />Clearing...</>
@@ -329,7 +329,7 @@ export default function BulkUploadModal() {
               </Button>
               <Button
                 onClick={handleGoToVariants}
-                className="flex-1 bg-[#e09a74] text-white py-3 rounded-lg font-bold hover:bg-[#d08963]"
+                className="flex-1 bg-primary text-white py-3 rounded-lg font-bold hover:bg-[#d08963]"
               >
                 Continue to Variants →
               </Button>
@@ -337,7 +337,7 @@ export default function BulkUploadModal() {
           ) : (
             <Button
               onClick={handleClose}
-              className="flex-1 bg-[#e09a74] text-white py-3 rounded-lg font-bold hover:bg-[#d08963]"
+              className="flex-1 bg-primary text-white py-3 rounded-lg font-bold hover:bg-[#d08963]"
             >
               Close &amp; View Updates
             </Button>
@@ -358,7 +358,7 @@ export default function BulkUploadModal() {
         <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center">
-              <Upload className="w-6 h-6 text-[#e09a74]" />
+              <Upload className="w-6 h-6 text-primary" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-gray-900">Bulk Import Hub</h2>
@@ -382,7 +382,7 @@ export default function BulkUploadModal() {
                 <div className="flex items-center gap-2">
                   <div className={clsx(
                     'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all',
-                    currentStep === step.num ? 'bg-[#e09a74] text-white shadow-md' :
+                    currentStep === step.num ? 'bg-primary text-white shadow-md' :
                       currentStep > step.num ? 'bg-green-500 text-white' :
                         'bg-gray-200 text-gray-500'
                   )}>
@@ -412,7 +412,7 @@ export default function BulkUploadModal() {
               {currentStep === 1 && (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
-                    <ImageIcon className="w-5 h-5 text-[#e09a74]" />
+                    <ImageIcon className="w-5 h-5 text-primary" />
                     <h3 className="text-lg font-bold text-gray-900">Step 1: Upload Product Images (ZIP)</h3>
                   </div>
 
@@ -425,7 +425,7 @@ export default function BulkUploadModal() {
                     />
                     <div className="flex flex-col items-center">
                       <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all">
-                        <FileText className="w-7 h-7 text-[#e09a74]" />
+                        <FileText className="w-7 h-7 text-primary" />
                       </div>
                       {zipFile ? (
                         <div className="flex flex-col items-center">
@@ -458,7 +458,7 @@ export default function BulkUploadModal() {
                   <Button
                     onClick={handleZipUpload}
                     disabled={!zipFile || isUploading}
-                    className="w-full bg-[#e09a74] text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
+                    className="w-full bg-primary text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
                   >
                     {isUploading ? (
                       <div className="flex items-center justify-center gap-2">
@@ -474,7 +474,7 @@ export default function BulkUploadModal() {
               {currentStep === 2 && (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
-                    <Package className="w-5 h-5 text-[#e09a74]" />
+                    <Package className="w-5 h-5 text-primary" />
                     <h3 className="text-lg font-bold text-gray-900">Step 2: Upload Products (CSV/Excel)</h3>
                   </div>
 
@@ -498,7 +498,7 @@ export default function BulkUploadModal() {
                   <Button
                     onClick={handleCsvUpload}
                     disabled={!csvFile || isUploading}
-                    className="w-full bg-[#e09a74] text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
+                    className="w-full bg-primary text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
                   >
                     {isUploading ? (
                       <div className="flex items-center justify-center gap-2">
@@ -514,7 +514,7 @@ export default function BulkUploadModal() {
               {currentStep === 3 && (
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-4">
-                    <Layers className="w-5 h-5 text-[#e09a74]" />
+                    <Layers className="w-5 h-5 text-primary" />
                     <h3 className="text-lg font-bold text-gray-900">Step 3: Upload Variants (Optional)</h3>
                   </div>
 
@@ -545,7 +545,7 @@ export default function BulkUploadModal() {
                     <Button
                       onClick={handleVariantUpload}
                       disabled={!csvFile || isUploading}
-                      className="flex-1 bg-[#e09a74] text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
+                      className="flex-1 bg-primary text-white py-3.5 rounded-lg font-bold hover:bg-[#d08963] disabled:opacity-50 shadow-lg shadow-orange-100"
                     >
                       {isUploading ? (
                         <div className="flex items-center justify-center gap-2">

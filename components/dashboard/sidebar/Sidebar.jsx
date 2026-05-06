@@ -13,7 +13,6 @@ import clsx from 'clsx';
 import useAuthStore from '@/store/useAuthStore';
 import { useSidebarStore } from '@/store/useSidebarStore';
 import SidebarItem from './SidebarItem';
-import SidebarUser from './SidebarUser';
 import sidebarData from './sidebar-data.json';
 import CreateProjectModal from './CreateProjectModal';
 import Button from '@/components/ui/Button';
@@ -133,7 +132,7 @@ export default function Sidebar() {
       <aside
         suppressHydrationWarning
         className={clsx(
-          "fixed md:relative z-40 h-screen border-r border-gray-200 bg-white transition-all duration-300 flex flex-col shrink-0",
+          "fixed md:sticky md:top-16 z-40 h-screen md:h-[calc(100vh-64px)] border-r border-gray-200 bg-white transition-all duration-300 flex flex-col shrink-0",
           safeCollapsed ? "w-20" : "w-64",
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
@@ -141,9 +140,9 @@ export default function Sidebar() {
         <button
           onClick={toggleSidebar}
           suppressHydrationWarning
-          className="absolute -right-3 top-6 bg-white border border-gray-200 rounded-full p-1 hidden md:flex hover:bg-[#d9a88a] z-50 shadow-sm"
+          className="absolute -right-3 top-6 bg-white border border-gray-200 rounded-full p-1 hidden md:flex hover:bg-[#d9a88a] z-50 shadow-sm group transition-colors"
         >
-          {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          {isCollapsed ? <ChevronRight className="w-4 h-4 transition-colors group-hover:text-white" /> : <ChevronLeft className="w-4 h-4 transition-colors group-hover:text-white" />}
         </button>
 
         <div
@@ -153,7 +152,6 @@ export default function Sidebar() {
           )}
           suppressHydrationWarning
         >
-          <SidebarUser isCollapsed={safeCollapsed} mounted={mounted} />
 
           {isArchitect && (
             <Button

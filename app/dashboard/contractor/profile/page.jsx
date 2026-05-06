@@ -6,12 +6,15 @@ import {
     useGetMyContractorProfile, 
     useCreateContractorProfile, 
     useUpdateContractorProfile,
-    useUploadContractorImage
+    useUploadContractorImage,
+    useCreateContractorPortfolioItem,
+    useDeleteContractorPortfolioItem
 } from "@/hooks/useContractor";
 import { useGetCategoryTree } from "@/hooks/useCategory";
 import { getImageUrl } from "@/lib/productUtils";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
+import clsx from "clsx";
 import { 
     User, 
     MapPin, 
@@ -27,10 +30,16 @@ import {
     CheckCircle2,
     Plus,
     X,
+    Eye,
+    EyeOff,
     MessageCircle,
     Info,
     Camera,
-    Loader2
+    Loader2,
+    Image as ImageIcon,
+    Film,
+    Trash2,
+    Upload
 } from "lucide-react";
 import { toast } from "@/components/ui/Toast";
 import Image from "next/image";
@@ -42,6 +51,8 @@ export default function MarketplaceProfilePage() {
     const createMutation = useCreateContractorProfile();
     const updateMutation = useUpdateContractorProfile();
     const uploadMutation = useUploadContractorImage();
+    const createPortfolioMutation = useCreateContractorPortfolioItem();
+    const deletePortfolioMutation = useDeleteContractorPortfolioItem();
 
     const categories = (categoriesData?.data || categoriesData) || [];
 
@@ -66,12 +77,20 @@ export default function MarketplaceProfilePage() {
             state: "",
             country: "India"
         },
-        serviceAreas: []
+        serviceAreas: [],
+        visibility: "public"
     });
 
     const [newArea, setNewArea] = useState("");
+    const [portfolioForm, setPortfolioForm] = useState({
+        title: "",
+        description: "",
+        location: "",
+        files: []
+    });
 
     const profile = profileData?.profile || profileData?.data?.profile;
+    const portfolio = profileData?.portfolio || profileData?.data?.portfolio || [];
 
     useEffect(() => {
         if (profile) {
@@ -95,10 +114,27 @@ export default function MarketplaceProfilePage() {
                     state: profile.location?.state || "",
                     country: profile.location?.country || "India"
                 },
-                serviceAreas: profile.serviceAreas || []
+                serviceAreas: profile.serviceAreas || [],
+                visibility: profile.visibility || "public"
             });
+        } else if (user) {
+            // Pre-fill with existing user data if profile doesn't exist
+            setFormData(prev => ({
+                ...prev,
+                businessName: user.name || prev.businessName,
+                contact: {
+                    ...prev.contact,
+                    phone: user.mobile || user.phone || prev.contact.phone,
+                    email: user.email || prev.contact.email,
+                },
+                location: {
+                    ...prev.location,
+                    city: user.city || user.location?.city || prev.location.city,
+                    state: user.state || user.location?.state || prev.location.state,
+                }
+            }));
         }
-    }, [profile]);
+    }, [profile, user]);
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -110,7 +146,8 @@ export default function MarketplaceProfilePage() {
 
         try {
             const response = await uploadMutation.mutateAsync(formData);
-            setFormData(prev => ({ ...prev, profileImage: response.image }));
+            const uploadedImage = response.data?.image || response.image;
+            setFormData(prev => ({ ...prev, profileImage: uploadedImage }));
             toast.success("Image uploaded!");
         } catch (error) {
             toast.error("Upload failed");
@@ -118,7 +155,13 @@ export default function MarketplaceProfilePage() {
     };
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
+
+        // Auto-capitalize first letter for city and state
+        if (name === "location.city" || name === "location.state") {
+            value = value.charAt(0).toUpperCase() + value.slice(1);
+        }
+
         if (name.includes(".")) {
             const [parent, child] = name.split(".");
             setFormData(prev => ({
@@ -150,6 +193,59 @@ export default function MarketplaceProfilePage() {
         }));
     };
 
+    const handlePortfolioFileChange = (e) => {
+        const files = Array.from(e.target.files);
+        setPortfolioForm(prev => ({
+            ...prev,
+            files: [...prev.files, ...files]
+        }));
+    };
+
+    const handleRemovePortfolioFile = (index) => {
+        setPortfolioForm(prev => ({
+            ...prev,
+            files: prev.files.filter((_, i) => i !== index)
+        }));
+    };
+
+    const handleAddPortfolio = async () => {
+        if (!portfolioForm.title || portfolioForm.files.length === 0) {
+            toast.error("Please add a title and at least one image");
+            return;
+        }
+
+        const data = new FormData();
+        data.append("title", portfolioForm.title);
+        data.append("description", portfolioForm.description);
+        data.append("location", portfolioForm.location);
+        portfolioForm.files.forEach(file => {
+            data.append("images", file);
+        });
+
+        try {
+            await createPortfolioMutation.mutateAsync({
+                contractorId: profile._id,
+                formData: data
+            });
+            toast.success("Project added to portfolio!");
+            setPortfolioForm({ title: "", description: "", location: "", files: [] });
+            await refetchProfile();
+        } catch (error) {
+            toast.error(error.message || "Could not add portfolio item");
+        }
+    };
+
+    const handleDeletePortfolio = async (itemId) => {
+        if (!confirm("Are you sure you want to delete this project?")) return;
+        try {
+            await deletePortfolioMutation.mutateAsync(itemId);
+            toast.success("Project removed");
+            await refetchProfile();
+        } catch (error) {
+            toast.error(error.message || "Could not remove portfolio work");
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -169,7 +265,8 @@ export default function MarketplaceProfilePage() {
                     providerType: "contractor"
                 });
                 toast.success("Profile created successfully!");
-                refetchProfile();
+                await refetchProfile();
+                setIsEditing(false);
             }
         } catch (error) {
             toast.error(error.message || "Something went wrong");
@@ -209,25 +306,72 @@ export default function MarketplaceProfilePage() {
 
     return (
         <div className="p-4 md:p-8 max-w-5xl mx-auto pb-32">
-            <div className="flex items-center justify-between mb-10">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10">
                 <div>
                     <h1 className="text-3xl font-bold text-gray-900">Marketplace Profile</h1>
                     <p className="text-gray-500 mt-1">Manage how your business appears to architects and clients.</p>
                 </div>
-                {!isEditing && (
-                    <Button 
-                        onClick={() => setIsEditing(true)}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 hover:border-[hsl(15,80%,65%)] hover:text-[hsl(15,80%,65%)] rounded-xl font-bold transition-all shadow-sm"
-                    >
-                        <Edit3 className="w-4 h-4" />
-                        Edit Profile
-                    </Button>
-                )}
+                <div className="flex items-center gap-3">
+                    {!isEditing ? (
+                        <Button 
+                            onClick={() => setIsEditing(true)}
+                            className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 hover:border-[hsl(15,80%,65%)] hover:text-[hsl(15,80%,65%)] rounded-xl font-bold transition-all shadow-sm"
+                        >
+                            <Edit3 className="w-4 h-4" />
+                            Edit Profile
+                        </Button>
+                    ) : (
+                        <>
+                            <Button 
+                                type="button"
+                                onClick={() => {
+                                    if (profile) setIsEditing(false);
+                                    else window.location.href = "/dashboard/contractor";
+                                }}
+                                className="px-6 py-2.5 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl font-bold transition-all text-sm"
+                            >
+                                Cancel
+                            </Button>
+                            <Button 
+                                onClick={() => {
+                                    document.getElementById('profile-form').requestSubmit();
+                                }}
+                                loading={createMutation.isPending || updateMutation.isPending}
+                                className="px-8 py-2.5 bg-primary text-white rounded-xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 text-sm"
+                            >
+                                <Save className="w-4 h-4" />
+                                {profile ? "Save" : "Create"}
+                            </Button>
+                        </>
+                    )}
+                </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+            <form id="profile-form" onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
                 {/* Logo Section */}
-                <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-6 md:gap-8">
+                <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm flex flex-col sm:flex-row items-center gap-6 md:gap-8 relative">
+                    {!isEditing && (
+                        <div className="absolute top-4 right-4 md:top-6 md:right-8">
+                            <div className={clsx(
+                                "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                formData.visibility === 'public' 
+                                    ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
+                                    : "bg-gray-50 text-gray-400 border-gray-100"
+                            )}>
+                                {formData.visibility === 'public' ? (
+                                    <>
+                                        <Eye className="w-3 h-3" />
+                                        Public
+                                    </>
+                                ) : (
+                                    <>
+                                        <EyeOff className="w-3 h-3" />
+                                        Private
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    )}
                     <div className="relative group">
                         <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative">
                             {(getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url) ? (
@@ -235,14 +379,10 @@ export default function MarketplaceProfilePage() {
                                     src={getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url} 
                                     alt="Profile" 
                                     className="w-full h-full object-cover block"
-                                    onError={(e) => {
-                                        console.error("Image load error:", e);
-                                        e.target.style.display = 'none';
-                                        e.target.nextSibling.style.display = 'flex';
-                                    }}
                                 />
-                            ) : null}
-                            <User className={`w-10 h-10 md:w-12 md:h-12 text-gray-300 ${(getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url) ? 'hidden' : 'flex'}`} />
+                            ) : (
+                                <User className="w-10 h-10 md:w-12 md:h-12 text-gray-300" />
+                            )}
                             
                             {isEditing && (
                                 <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-[10px] font-bold uppercase tracking-widest text-center px-2">
@@ -261,7 +401,25 @@ export default function MarketplaceProfilePage() {
                     </div>
                     <div className="flex-1 text-center sm:text-left">
                         <h3 className="text-xl md:text-2xl font-bold text-gray-900">{formData.businessName || "Business Name"}</h3>
-                        <p className="text-sm md:text-base text-gray-500">{formData.tagline || "Your professional tagline will appear here"}</p>
+                        <p className="text-sm md:text-base text-gray-500 mb-4">{formData.tagline || "Your professional tagline will appear here"}</p>
+                        
+                        {!isEditing && (
+                            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+                                {formData.contact?.email && (
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-xl border border-gray-100 text-xs font-semibold text-gray-600">
+                                        <Mail className="w-3.5 h-3.5 text-primary" />
+                                        {formData.contact.email}
+                                    </div>
+                                )}
+                                {formData.experienceYears && (
+                                    <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-xl border border-gray-100 text-xs font-semibold text-gray-600">
+                                        <Briefcase className="w-3.5 h-3.5 text-primary" />
+                                        {formData.experienceYears} Years Experience
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
                         {isEditing && (
                             <p className="text-[10px] md:text-xs text-gray-400 mt-2 flex items-center justify-center sm:justify-start gap-1">
                                 <Info className="w-3 h-3" />
@@ -344,6 +502,48 @@ export default function MarketplaceProfilePage() {
                             )}
                         </Field>
                     </div>
+
+                    {isEditing && (
+                        <div className="mt-8 border-t border-gray-100 pt-8">
+                            <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                                <Eye className="w-4 h-4 text-primary" />
+                                Profile Visibility
+                            </h3>
+                            <div className="flex gap-4">
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData(prev => ({ ...prev, visibility: 'public' }))}
+                                    className={clsx(
+                                        "flex-1 flex items-center justify-center gap-3 p-4 py-3 rounded-2xl border-2 transition-all",
+                                        formData.visibility === 'public' 
+                                            ? "border-primary bg-primary/5 text-primary font-bold shadow-sm" 
+                                            : "border-gray-100 text-gray-400 hover:border-gray-200"
+                                    )}
+                                >
+                                    <Eye className="w-5 h-5" />
+                                    Public Profile
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData(prev => ({ ...prev, visibility: 'private' }))}
+                                    className={clsx(
+                                        "flex-1 flex items-center justify-center gap-3 p-4 py-3 rounded-2xl border-2 transition-all",
+                                        formData.visibility === 'private' 
+                                            ? "border-[hsl(20,10%,15%)] bg-gray-50 text-[hsl(20,10%,15%)] font-bold shadow-sm" 
+                                            : "border-gray-100 text-gray-400 hover:border-gray-200"
+                                    )}
+                                >
+                                    <EyeOff className="w-5 h-5" />
+                                    Private Profile
+                                </button>
+                            </div>
+                            <p className="text-[11px] text-gray-400 mt-3 ml-1 font-medium italic">
+                                {formData.visibility === 'public' 
+                                    ? "Anyone can see your profile and projects in the marketplace." 
+                                    : "Your profile will be hidden from the public marketplace listing."}
+                            </p>
+                        </div>
+                    )}
                 </Section>
 
                 {/* About Section */}
@@ -372,7 +572,7 @@ export default function MarketplaceProfilePage() {
                                         name="experienceYears"
                                         value={formData.experienceYears}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. 10"
                                     />
                                 ) : (
@@ -390,7 +590,7 @@ export default function MarketplaceProfilePage() {
                                         name="teamSize"
                                         value={formData.teamSize}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. 25"
                                     />
                                 ) : (
@@ -414,14 +614,14 @@ export default function MarketplaceProfilePage() {
                                     name="contact.phone"
                                     value={formData.contact.phone}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                     placeholder="+91 XXXXX XXXXX"
                                 />
                             ) : (
-                                <a href={`tel:${formData.contact.phone}`} className="flex items-center gap-2 text-blue-600 hover:underline font-medium">
+                                <div className="flex items-center gap-2 text-gray-900 font-medium">
                                     <Phone className="w-4 h-4" />
                                     {formData.contact.phone || "Not added"}
-                                </a>
+                                </div>
                             )}
                         </Field>
 
@@ -432,18 +632,14 @@ export default function MarketplaceProfilePage() {
                                     name="contact.whatsapp"
                                     value={formData.contact.whatsapp}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                     placeholder="+91 XXXXX XXXXX"
                                 />
                             ) : (
-                                <a 
-                                    href={`https://wa.me/${formData.contact.whatsapp?.replace(/[^0-9]/g, '')}`} 
-                                    target="_blank"
-                                    className="flex items-center gap-2 text-emerald-600 hover:underline font-medium"
-                                >
+                                <div className="flex items-center gap-2 text-gray-900 font-medium">
                                     <MessageCircle className="w-4 h-4" />
                                     {formData.contact.whatsapp || "Not added"}
-                                </a>
+                                </div>
                             )}
                         </Field>
 
@@ -454,14 +650,14 @@ export default function MarketplaceProfilePage() {
                                     name="contact.email"
                                     value={formData.contact.email}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                     placeholder="business@example.com"
                                 />
                             ) : (
-                                <a href={`mailto:${formData.contact.email}`} className="flex items-center gap-2 text-blue-600 hover:underline font-medium">
+                                <div className="flex items-center gap-2 text-gray-900 font-medium">
                                     <Mail className="w-4 h-4" />
                                     {formData.contact.email || "Not added"}
-                                </a>
+                                </div>
                             )}
                         </Field>
 
@@ -472,18 +668,14 @@ export default function MarketplaceProfilePage() {
                                     name="contact.website"
                                     value={formData.contact.website}
                                     onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                     placeholder="https://www.example.com"
                                 />
                             ) : (
-                                <a 
-                                    href={formData.contact.website} 
-                                    target="_blank" 
-                                    className="flex items-center gap-2 text-blue-600 hover:underline font-medium"
-                                >
+                                <div className="flex items-center gap-2 text-gray-900 font-medium">
                                     <Globe className="w-4 h-4" />
                                     {formData.contact.website || "Not added"}
-                                </a>
+                                </div>
                             )}
                         </Field>
                     </div>
@@ -500,7 +692,7 @@ export default function MarketplaceProfilePage() {
                                         name="location.city"
                                         value={formData.location.city}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. Mumbai"
                                     />
                                 ) : (
@@ -515,7 +707,7 @@ export default function MarketplaceProfilePage() {
                                         name="location.state"
                                         value={formData.location.state}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all"
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. Maharashtra"
                                     />
                                 ) : (
@@ -523,82 +715,8 @@ export default function MarketplaceProfilePage() {
                                 )}
                             </Field>
                         </div>
-
-                        <Field label="Specific Service Areas">
-                            {isEditing ? (
-                                <div className="space-y-4">
-                                    <div className="flex flex-col sm:flex-row gap-2">
-                                        <input 
-                                            type="text" 
-                                            value={newArea}
-                                            onChange={(e) => setNewArea(e.target.value)}
-                                            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddArea())}
-                                            className="flex-1 px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all text-sm md:text-base"
-                                            placeholder="Add a location (e.g. Bandra, South Mumbai)"
-                                        />
-                                        <Button 
-                                            type="button"
-                                            onClick={handleAddArea}
-                                            className="w-full sm:w-auto px-6 py-3 bg-gray-900 text-white rounded-xl font-bold hover:bg-black transition-all text-sm md:text-base"
-                                        >
-                                            Add
-                                        </Button>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        {formData.serviceAreas.map(area => (
-                                            <span key={area} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium">
-                                                {area}
-                                                <button type="button" onClick={() => handleRemoveArea(area)} className="hover:text-red-500 transition-colors">
-                                                    <X className="w-3.5 h-3.5" />
-                                                </button>
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="flex flex-wrap gap-2">
-                                    {formData.serviceAreas.length > 0 ? (
-                                        formData.serviceAreas.map(area => (
-                                            <span key={area} className="px-3 py-1.5 bg-gray-50 text-gray-600 rounded-lg text-sm font-medium border border-gray-100">
-                                                {area}
-                                            </span>
-                                        ))
-                                    ) : (
-                                        <div className="text-gray-500 italic">No specific service areas added</div>
-                                    )}
-                                </div>
-                            )}
-                        </Field>
                     </div>
                 </Section>
-
-                {/* Submit / Action Bar */}
-                {isEditing && (
-                    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-3 md:p-6 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-40">
-                        <Container>
-                            <div className="flex items-center justify-end gap-3 md:gap-4 max-w-5xl mx-auto">
-                                <Button 
-                                    type="button"
-                                    onClick={() => {
-                                        if (profile) setIsEditing(false);
-                                        else window.location.href = "/dashboard/contractor";
-                                    }}
-                                    className="flex-1 sm:flex-none px-4 md:px-8 py-2.5 md:py-3 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl md:rounded-2xl font-bold transition-all text-sm md:text-base"
-                                >
-                                    Cancel
-                                </Button>
-                                <Button 
-                                    type="submit"
-                                    loading={createMutation.isPending || updateMutation.isPending}
-                                    className="flex-1 sm:flex-none px-4 md:px-10 py-2.5 md:py-3 bg-[hsl(15,80%,65%)] hover:bg-[hsl(15,80%,55%)] text-white rounded-xl md:rounded-2xl font-bold transition-all shadow-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                                >
-                                    <Save className="w-4 h-4" />
-                                    {profile ? "Save" : "Create"}
-                                </Button>
-                            </div>
-                        </Container>
-                    </div>
-                )}
             </form>
         </div>
     );
@@ -606,30 +724,27 @@ export default function MarketplaceProfilePage() {
 
 function Section({ title, icon: Icon, children }) {
     return (
-        <div className="bg-white rounded-2xl md:rounded-3xl border border-gray-100 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="p-4 md:p-6 border-b border-gray-50 bg-gray-50/30 flex items-center gap-3">
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-white shadow-sm flex items-center justify-center text-[hsl(15,80%,65%)]">
-                    <Icon className="w-4 h-4 md:w-5 md:h-5" />
+        <div className="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+            <div className="flex items-center gap-3 mb-8">
+                <div className="p-2.5 bg-orange-50 rounded-xl">
+                    <Icon className="w-5 h-5 text-[hsl(15,80%,65%)]" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-gray-900">{title}</h3>
+                <h2 className="text-xl font-bold text-gray-900">{title}</h2>
             </div>
-            <div className="p-5 md:p-8">
-                {children}
-            </div>
+            {children}
         </div>
     );
 }
 
-function Field({ label, children, required, icon }) {
+function Field({ label, icon: Icon, required, children }) {
     return (
-        <div className="space-y-1.5 md:space-y-2">
-            <label className="text-[10px] md:text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+        <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
+                {Icon && <Icon className="w-3 h-3" />}
                 {label}
-                {required && <span className="text-red-500">*</span>}
+                {required && <span className="text-primary">*</span>}
             </label>
-            <div className="relative">
-                {children}
-            </div>
+            {children}
         </div>
     );
 }

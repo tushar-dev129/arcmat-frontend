@@ -57,7 +57,7 @@ const ProfileDetails = ({ brand, onEdit }) => {
                                 href={brand.website}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex text-[#e09a74] hover:underline text-sm"
+                                className="inline-flex text-primary hover:underline text-sm"
                             >
                                 {brand.website}
                             </a>
@@ -70,7 +70,7 @@ const ProfileDetails = ({ brand, onEdit }) => {
                 </div>
                 <button
                     onClick={onEdit}
-                    className="flex items-center gap-2 text-[#e09a74] hover:text-[#d08963] font-medium transition-colors shrink-0"
+                    className="flex items-center gap-2 text-primary hover:text-[#d08963] font-medium transition-colors shrink-0"
                 >
                     <Edit size={18} />
                     <span className="hidden sm:inline cursor-pointer">Edit Profile</span>

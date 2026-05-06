@@ -44,7 +44,7 @@ const BespokePage = () => {
                 <Container className="py-12 sm:py-16 lg:py-20">
                     <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
                         <div className="max-w-4xl">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-[#e09a74]/30 bg-[#fff7f2] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#b76b45]">
+                            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-[#fff7f2] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#b76b45]">
                                 <Sparkles className="h-4 w-4" />
                                 Bespoke brand library
                             </div>
@@ -58,7 +58,7 @@ const BespokePage = () => {
 
                         <div className="rounded-lg border border-gray-200 bg-gray-50 p-5">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-[#e09a74] shadow-sm">
+                                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
                                     <Building2 className="h-5 w-5" />
                                 </div>
                                 <div>
@@ -83,14 +83,14 @@ const BespokePage = () => {
                             value={searchTerm}
                             onChange={(event) => setSearchTerm(event.target.value)}
                             placeholder="Search brands"
-                            className="h-12 w-full rounded-full border border-gray-200 bg-white pl-11 pr-4 text-sm font-medium text-gray-800 outline-none transition focus:border-[#e09a74] focus:ring-4 focus:ring-[#e09a74]/10"
+                            className="h-12 w-full rounded-full border border-gray-200 bg-white pl-11 pr-4 text-sm font-medium text-gray-800 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
                         />
                     </div>
                 </div>
 
                 {isLoading ? (
                     <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
-                        <Loader2 className="h-9 w-9 animate-spin text-[#e09a74]" />
+                        <Loader2 className="h-9 w-9 animate-spin text-primary" />
                     </div>
                 ) : filteredBrands.length > 0 ? (
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -101,7 +101,7 @@ const BespokePage = () => {
                                 <Link
                                     key={brandId}
                                     href={`/bespoke/${brandId}`}
-                                    className="group flex min-h-[320px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-[#e09a74]/50 hover:shadow-xl hover:shadow-gray-200/70"
+                                    className="group flex min-h-[320px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-gray-200/70"
                                 >
                                     <div className="relative flex h-44 items-center justify-center border-b border-gray-100 bg-gray-50 p-8">
                                         <Image
@@ -117,7 +117,7 @@ const BespokePage = () => {
                                             <h3 className="line-clamp-2 text-lg font-bold leading-snug text-gray-950">
                                                 {brand.name || "Untitled Brand"}
                                             </h3>
-                                            <ArrowRight className="h-5 w-5 shrink-0 text-gray-300 transition group-hover:translate-x-1 group-hover:text-[#e09a74]" />
+                                            <ArrowRight className="h-5 w-5 shrink-0 text-gray-300 transition group-hover:translate-x-1 group-hover:text-primary" />
                                         </div>
                                         <p className="line-clamp-3 text-sm font-medium leading-6 text-gray-500">
                                             {brand.description || "Open this bespoke page to explore the brand profile and catalogue."}

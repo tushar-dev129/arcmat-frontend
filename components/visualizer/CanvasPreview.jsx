@@ -206,7 +206,7 @@ const CanvasPreview = forwardRef((props, ref) => {
                         </div>
                     )}
                     {filledCount > 0 && (
-                        <span className="ml-1 px-2 py-0.5 text-[10px] md:text-xs font-semibold rounded-full bg-[#e09a74]/10 text-[#e09a74] whitespace-nowrap">
+                        <span className="ml-1 px-2 py-0.5 text-[10px] md:text-xs font-semibold rounded-full bg-primary/10 text-primary whitespace-nowrap">
                             {filledCount} <span className="hidden md:inline">item{filledCount !== 1 ? 's' : ''}</span>
                         </span>
                     )}
@@ -241,7 +241,7 @@ const CanvasPreview = forwardRef((props, ref) => {
             </div>
 
             {/* Canvas */}
-            <div ref={canvasContainerRef} className={`flex-1 relative overflow-hidden select-none ${panMode ? 'cursor-grab active:cursor-grabbing' : ''} ${isDragOver ? 'bg-[#e09a74]/5 ring-2 ring-inset ring-[#e09a74]/30' : 'bg-[#f0eee9]'}`} onDragOver={handleDragOver} onDragLeave={() => setIsDragOver(false)} onDrop={handleDropEvent} style={{ backgroundColor: props.canvasBg }}>
+            <div ref={canvasContainerRef} className={`flex-1 relative overflow-hidden select-none ${panMode ? 'cursor-grab active:cursor-grabbing' : ''} ${isDragOver ? 'bg-primary/5 ring-2 ring-inset ring-primary/30' : 'bg-[#f0eee9]'}`} onDragOver={handleDragOver} onDragLeave={() => setIsDragOver(false)} onDrop={handleDropEvent} style={{ backgroundColor: props.canvasBg }}>
                 {filledCount === 0 && !isDragOver && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none text-gray-400 z-0">
                         <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-gray-300 flex items-center justify-center">
@@ -293,9 +293,9 @@ const CanvasPreview = forwardRef((props, ref) => {
                             >
                                 {isProcessingBg ? (
                                     <div className="relative flex items-center justify-center">
-                                        <Loader2 className="w-4 h-4 animate-spin text-[#e09a74]" />
+                                        <Loader2 className="w-4 h-4 animate-spin text-primary" />
                                         {bgProgress > 0 && (
-                                            <span className="absolute -bottom-4 text-[8px] font-bold text-[#e09a74] whitespace-nowrap bg-white/80 px-1 rounded-sm">
+                                            <span className="absolute -bottom-4 text-[8px] font-bold text-primary whitespace-nowrap bg-white/80 px-1 rounded-sm">
                                                 {bgProgress < 10 ? 'Loading...' : `${bgProgress}%`}
                                             </span>
                                         )}
@@ -312,7 +312,7 @@ const CanvasPreview = forwardRef((props, ref) => {
                                 active={lockedIds.has(activeMenuConfig.id)}
                             >
                                 {lockedIds.has(activeMenuConfig.id) ? (
-                                    <Lock className="w-4 h-4 text-[#e09a74]" />
+                                    <Lock className="w-4 h-4 text-primary" />
                                 ) : (
                                     <LockOpen className="w-4 h-4" />
                                 )}
@@ -407,7 +407,7 @@ function MenuBtn({ onClick, title, children, active, isDanger }) {
             title={title}
             className={`w-10 h-10 md:w-8 md:h-8 rounded-lg flex items-center justify-center transition-all shrink-0
                 ${active
-                    ? 'bg-[#e09a74]/10 text-[#e09a74]'
+                    ? 'bg-primary/10 text-primary'
                     : isDanger
                         ? 'text-red-500 hover:bg-red-50'
                         : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'

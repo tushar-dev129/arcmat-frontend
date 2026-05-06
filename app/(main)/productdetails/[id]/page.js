@@ -19,7 +19,7 @@ const ProductDetailPage = () => {
         return (
             <div className="min-h-screen flex flex-col">
                 <div className="flex-1 flex items-center justify-center">
-                    <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin" />
+                    <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 </div>
             </div>
         )

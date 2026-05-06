@@ -82,7 +82,7 @@ export default function RetailerProductsPage() {
                 </div>
                 <Link
                     href="/dashboard/retailer/brands"
-                    className="px-4 py-2 bg-[#e09a74] text-white rounded-xl text-sm font-semibold hover:bg-[#d08a64] transition-all shadow-sm flex items-center gap-2"
+                    className="px-4 py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-[#d08a64] transition-all shadow-sm flex items-center gap-2"
                 >
                     <Plus className="w-4 h-4" />
                     Add More Products
@@ -98,7 +98,7 @@ export default function RetailerProductsPage() {
                         placeholder="Search your inventory..."
                         value={searchTerm}
                         onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] text-sm"
+                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary text-sm"
                     />
                 </div>
                 <span className="text-sm text-gray-400 whitespace-nowrap">
@@ -153,7 +153,7 @@ export default function RetailerProductsPage() {
                                                     )}
                                                 </div>
                                                 <div className="min-w-0">
-                                                    <h3 className="text-sm font-bold text-gray-900 group-hover:text-[#e09a74] transition-colors truncate">{product.product_name}</h3>
+                                                    <h3 className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors truncate">{product.product_name}</h3>
                                                     <p className="text-xs text-gray-400 font-medium mt-0.5 truncate max-w-[200px]">{product.description ? product.description.replace(/<[^>]*>?/gm, '').substring(0, 50) + '...' : 'No description available'}</p>
                                                 </div>
                                             </div>
@@ -166,8 +166,8 @@ export default function RetailerProductsPage() {
                                                         <div className="flex flex-wrap items-center gap-1 min-h-[1rem]">
                                                             {attrs.length > 0 && attrs.map((attr, idx) => (
                                                                 <span key={idx} className="flex items-center gap-1 uppercase">
-                                                                    <span className="text-[9px] font-normal text-[#e09a74]">{attr.value}</span>
-                                                                    {idx < attrs.length - 1 && <span className="text-[9px] text-[#e09a74]/80">||</span>}
+                                                                    <span className="text-[9px] font-normal text-primary">{attr.value}</span>
+                                                                    {idx < attrs.length - 1 && <span className="text-[9px] text-primary/80">||</span>}
                                                                 </span>
                                                             ))}
                                                         </div>
@@ -287,7 +287,7 @@ export default function RetailerProductsPage() {
                                         type="number"
                                         name="mrp_price"
                                         defaultValue={editingItem.mrp_price}
-                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -297,7 +297,7 @@ export default function RetailerProductsPage() {
                                         type="number"
                                         name="selling_price"
                                         defaultValue={editingItem.selling_price}
-                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -314,7 +314,7 @@ export default function RetailerProductsPage() {
                                             e.target.value = e.target.value.replace(/^0+/, '');
                                         }
                                     }}
-                                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                 />
                             </div>
 
@@ -325,7 +325,7 @@ export default function RetailerProductsPage() {
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="isActive" defaultChecked={editingItem.isActive} className="sr-only peer" />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#e09a74]"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </label>
                             </div>
 
@@ -340,7 +340,7 @@ export default function RetailerProductsPage() {
                                 <Button
                                     type="submit"
                                     loading={upsertOverride.isPending}
-                                    className="flex-1 py-4! bg-[#e09a74] text-white rounded-2xl text-sm font-black hover:bg-[#d08a64] uppercase tracking-widest shadow-lg shadow-[#e09a74]/20"
+                                    className="flex-1 py-4! bg-primary text-white rounded-2xl text-sm font-black hover:bg-[#d08a64] uppercase tracking-widest shadow-lg shadow-primary/20"
                                 >
                                     Save Changes
                                 </Button>

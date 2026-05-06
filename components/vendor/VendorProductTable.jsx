@@ -164,7 +164,7 @@ export default function VendorProductTable({ products = [] }) {
               variant="outline"
               size="sm"
               onClick={() => {
-                setProductToDelete(null); 
+                setProductToDelete(null);
                 setIsDeleteModalOpen(true);
               }}
               className="bg-red-500 text-white border-transparent hover:bg-red-600 font-black rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-red-200 transition-all active:scale-95"
@@ -172,7 +172,7 @@ export default function VendorProductTable({ products = [] }) {
               <Trash2 className="w-3.5 h-3.5" />
               <span>Delete Selected</span>
             </Button>
-            <button 
+            <button
               onClick={() => clearSelection()}
               className="p-2 text-gray-400 hover:text-gray-600 hover:bg-white rounded-full transition-colors"
               title="Clear selection"
@@ -285,7 +285,7 @@ export default function VendorProductTable({ products = [] }) {
                         setLoading(true);
                         router.push(`/dashboard/products-list/${product.createdBy._id || effectiveVendorId}/edit/${id}`);
                       }}
-                      className="p-2 text-[#e09a74] hover:bg-orange-50 rounded-lg transition-all cursor-pointer"
+                      className="p-2 text-primary hover:bg-orange-50 rounded-lg transition-all cursor-pointer"
                       title="Edit Product"
                     >
                       <Pencil className="w-4 h-4" />

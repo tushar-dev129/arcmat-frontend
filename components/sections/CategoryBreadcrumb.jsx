@@ -17,7 +17,7 @@ const CategoryBreadcrumb = ({ selectedCategory, onCategoryChange }) => {
 
     const breadcrumbItems = useMemo(() => {
         const path = getCategoryPath(treeData, selectedCategory);
-        
+
         const items = [];
 
         // Add the category path (up to 3 levels: Parent > Sub > Sub-Sub)
@@ -34,7 +34,7 @@ const CategoryBreadcrumb = ({ selectedCategory, onCategoryChange }) => {
     if (isLoading) {
         return (
             <div className="flex items-center gap-2 mb-8">
-                <Loader2 className="w-4 h-4 text-[#e09a74] animate-spin" />
+                <Loader2 className="w-4 h-4 text-primary animate-spin" />
                 <span className="text-sm text-gray-400 font-medium">Updating breadcrumbs...</span>
             </div>
         );

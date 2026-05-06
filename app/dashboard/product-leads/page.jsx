@@ -12,7 +12,7 @@ const Field = ({ label, value, icon: Icon, href }) => (
         <div className="flex items-center gap-2.5 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-[#2d3142]">
             {Icon && <Icon className="w-3.5 h-3.5 text-gray-300 shrink-0" />}
             {href ? (
-                <a href={href} className="truncate hover:text-[#e09a74] transition-colors font-semibold">
+                <a href={href} className="truncate hover:text-primary transition-colors font-semibold">
                     {value || '—'}
                 </a>
             ) : (

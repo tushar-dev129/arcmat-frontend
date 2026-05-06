@@ -126,7 +126,7 @@ export default function AttributesPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                            <Settings className="w-6 h-6 text-[#e09a74]" />
+                            <Settings className="w-6 h-6 text-primary" />
                             Attribute Management
                         </h1>
                         <p className="text-gray-500 mt-1">Define and manage product specifications and variants attributes.</p>
@@ -137,7 +137,7 @@ export default function AttributesPage() {
                     {/* Form Section */}
                     <div className="lg:col-span-1">
                         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden sticky top-8">
-                            <div className="bg-[#e09a74]/5 px-6 py-4 border-b border-[#e09a74]/10">
+                            <div className="bg-primary/5 px-6 py-4 border-b border-primary/10">
                                 <h2 className="font-bold text-gray-900 flex items-center gap-2">
                                     {editingId ? (
                                         <><Pencil className="w-4 h-4" /> Edit Attribute</>
@@ -156,7 +156,7 @@ export default function AttributesPage() {
                                             value={formData.attributeName}
                                             onChange={handleChange}
                                             placeholder="e.g. Color, Size, Material"
-                                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] focus:border-transparent outline-none transition-all"
+                                            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
                                         />
                                     </div>
                                 </div>
@@ -169,7 +169,7 @@ export default function AttributesPage() {
                                         onChange={handleChange}
                                         placeholder="Enter values separated by commas (e.g. Red, Blue, Green)"
                                         rows={4}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] focus:border-transparent outline-none transition-all resize-none"
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
                                     />
                                     <p className="text-[10px] text-gray-400 mt-2 italic">Values will be automatically cleaned and categorized.</p>
                                 </div>
@@ -180,7 +180,7 @@ export default function AttributesPage() {
                                         name="status"
                                         value={formData.status}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] outline-none appearance-none bg-white font-semibold"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary outline-none appearance-none bg-white font-semibold"
                                     >
                                         <option value={1}>Active</option>
                                         <option value={0}>Inactive</option>
@@ -191,7 +191,7 @@ export default function AttributesPage() {
                                     <Button
                                         type="submit"
                                         disabled={createMutation.isPending || updateMutation.isPending}
-                                        className="flex-1 bg-[#e09a74] text-white hover:bg-white hover:text-[#e09a74] border border-[#e09a74] rounded-xl font-bold py-3 transition-all cursor-pointer shadow-lg shadow-orange-100"
+                                        className="flex-1 bg-primary text-white hover:bg-white hover:text-primary border border-primary rounded-xl font-bold py-3 transition-all cursor-pointer shadow-lg shadow-orange-100"
                                     >
                                         {editingId ? "Update Attribute" : "Create Attribute"}
                                     </Button>
@@ -220,7 +220,7 @@ export default function AttributesPage() {
                                 placeholder="Search attributes or values..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] focus:border-transparent outline-none shadow-sm transition-all"
+                                className="w-full pl-12 pr-4 py-3 bg-white rounded-2xl border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent outline-none shadow-sm transition-all"
                             />
                         </div>
 
@@ -240,7 +240,7 @@ export default function AttributesPage() {
                                         {isLoading ? (
                                             <tr>
                                                 <td colSpan={4} className="px-6 py-20 text-center">
-                                                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-[#e09a74] border-t-transparent"></div>
+                                                    <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
                                                     <p className="mt-2 text-gray-500 font-medium">Loading attributes...</p>
                                                 </td>
                                             </tr>
@@ -284,7 +284,7 @@ export default function AttributesPage() {
                                                         <div className="flex justify-end gap-2">
                                                             <button
                                                                 onClick={() => handleEdit(attr)}
-                                                                className="p-2 text-[#e09a74] hover:bg-orange-50 rounded-xl transition-all cursor-pointer"
+                                                                className="p-2 text-primary hover:bg-orange-50 rounded-xl transition-all cursor-pointer"
                                                                 title="Edit Attribute"
                                                             >
                                                                 <Pencil className="w-4 h-4" />

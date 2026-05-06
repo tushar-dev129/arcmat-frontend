@@ -364,9 +364,9 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
 
                     {/* Breadcrumbs */}
                     <nav className="flex text-sm text-gray-500 mb-2 overflow-x-auto no-scrollbar whitespace-nowrap">
-                        <Link href="/" className="hover:text-[#e09a74] transition-colors">Home</Link>
+                        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
                         <span className="mx-2">/</span>
-                        <Link href="/productlist" className="hover:text-[#e09a74] transition-colors">Products</Link>
+                        <Link href="/productlist" className="hover:text-primary transition-colors">Products</Link>
                         {categories && categories.length > 0 && (
                             <>
                                 <span className="mx-2">/</span>
@@ -394,14 +394,14 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                             <div className="flex-1 flex flex-col">
                                 <div className="mb-4">
                                     {product.brand && (
-                                        <Link href="#" className="text-2xl font-extrabold text-gray-600 hover:text-[#e09a74] transition-colors mb-2 inline-block">
+                                        <Link href="#" className="text-2xl font-extrabold text-gray-600 hover:text-primary transition-colors mb-2 inline-block">
                                             {(product.brand && typeof product.brand === 'object') ? (product.brand.name || product.brand.brand_name) : (product.brand || 'Arcmat')}
                                         </Link>
                                     )}
                                     {/* BADGES SECTION */}
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {isPremium && (
-                                            <span className="px-3 py-1 bg-[#fff2ed] text-[#e09a74] text-[10px] font-bold tracking-wider uppercase rounded-md">
+                                            <span className="px-3 py-1 bg-[#fff2ed] text-primary text-[10px] font-bold tracking-wider uppercase rounded-md">
                                                 PREMIUM
                                             </span>
                                         )}
@@ -453,7 +453,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                             key={`${v._id || 'v'}-${idx}`}
                                                             onClick={() => handleVariantSelect(v)}
                                                             className={`group relative w-[96px] rounded-2xl border-2 transition-all p-1.5 bg-white text-left ${isSelected
-                                                                ? 'border-[#e09a74] ring-2 ring-[#e09a74]/20 shadow-sm'
+                                                                ? 'border-primary ring-2 ring-primary/20 shadow-sm'
                                                                 : 'border-gray-100 hover:border-gray-300'
                                                                 }`}
                                                             title={variantMeta ? `${variantLabel} - ${variantMeta}` : variantLabel}
@@ -484,7 +484,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                 )}
                                                             </div>
                                                             {isSelected && (
-                                                                <div className="absolute -top-1.5 -right-1.5 bg-[#e09a74] text-white w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm scale-110">
+                                                                <div className="absolute -top-1.5 -right-1.5 bg-primary text-white w-4 h-4 rounded-full flex items-center justify-center border-2 border-white shadow-sm scale-110">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" className="w-2.5 h-2.5">
                                                                         <polyline points="20 6 9 17 4 12" />
                                                                     </svg>
@@ -544,7 +544,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                             className={`
                                                                                 relative flex items-center justify-center w-10 h-10 rounded-full border transition-all
                                                                                 ${isSelected
-                                                                                    ? 'border-[#e09a74] ring-2 ring-[#e09a74]/20 shadow-sm'
+                                                                                    ? 'border-primary ring-2 ring-primary/20 shadow-sm'
                                                                                     : isCompatible
                                                                                         ? 'border-gray-200 hover:border-gray-400'
                                                                                         : 'border-gray-100 cursor-not-allowed opacity-50'
@@ -557,7 +557,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                                 style={{ backgroundColor: colorCode }}
                                                                             />
                                                                             {isSelected && (
-                                                                                <div className="absolute inset-0 rounded-full border-2 border-[#e09a74] -m-[2px]" />
+                                                                                <div className="absolute inset-0 rounded-full border-2 border-primary -m-[2px]" />
                                                                             )}
                                                                         </button>
                                                                     )
@@ -572,7 +572,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                         className={`
                                                                             px-4 py-2 rounded-lg text-sm border transition-all
                                                                             ${isSelected
-                                                                                ? 'border-[#e09a74] bg-[#fffbf9] text-[#e09a74] font-medium'
+                                                                                ? 'border-primary bg-[#fffbf9] text-primary font-medium'
                                                                                 : isCompatible
                                                                                     ? 'border-gray-200 text-gray-600 hover:border-gray-300'
                                                                                     : 'border-gray-100 text-gray-300 cursor-not-allowed opacity-50'
@@ -631,7 +631,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                         <Button
                                             text={isArchitect ? (isAlreadyAdded ? "IN SPACES" : "ADD TO SPACES") : (isAdded ? "ADDED TO CART" : "ADD TO CART")}
                                             onClick={isArchitect ? (isAlreadyAdded ? handleRemoveFromMoodboard : () => setIsAddModalOpen(true)) : handleAddToCart}
-                                            className={`w-full ${isArchitect ? (isAlreadyAdded ? "bg-green-600 text-white" : "bg-[#e09a74]/80 text-white hover:bg-[#e09a74]") : (isAdded ? "bg-green-600 text-white" : "bg-[#e09a74]/80 text-white hover:bg-[#e09a74]")} font-bold py-3 px-5 rounded-full text-sm transition-all flex items-center justify-center gap-2 shadow-sm`}
+                                            className={`w-full ${isArchitect ? (isAlreadyAdded ? "bg-green-600 text-white" : "bg-primary/80 text-white hover:bg-primary") : (isAdded ? "bg-green-600 text-white" : "bg-primary/80 text-white hover:bg-primary")} font-bold py-3 px-5 rounded-full text-sm transition-all flex items-center justify-center gap-2 shadow-sm`}
                                             icon={isArchitect ? (isAlreadyAdded ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />) : (isAdded ? <Check className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />)}
                                         />
                                     )} */}
@@ -641,7 +641,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                         <Button
                                             text={isAlreadyAdded ? "IN SPACES" : "ADD TO SPACES"}
                                             onClick={isAlreadyAdded ? handleRemoveFromMoodboard : () => setIsAddModalOpen(true)}
-                                            className={`w-full ${isAlreadyAdded ? "bg-green-600 text-white" : "bg-[#e09a74]/80 text-white hover:bg-[#e09a74]"} font-bold py-3 px-5 rounded-full text-sm transition-all flex items-center justify-center gap-2 shadow-sm mb-2`}
+                                            className={`w-full ${isAlreadyAdded ? "bg-green-600 text-white" : "bg-primary/80 text-white hover:bg-primary"} font-bold py-3 px-5 rounded-full text-sm transition-all flex items-center justify-center gap-2 shadow-sm mb-2`}
                                             icon={isAlreadyAdded ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                                         />
                                     )}
@@ -674,7 +674,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                     setShowSampleProjectSelector(false);
                                                                     setIsSampleModalOpen(true);
                                                                 }}
-                                                                className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${selectedProject?._id === p._id ? 'bg-[#e09a74] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                                                className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${selectedProject?._id === p._id ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
                                                             >
                                                                 {p.name}
                                                             </button>
@@ -687,7 +687,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                 text={isRequestingContact ? "SENDING REQUEST..." : "REQUEST RETAILER CONTACT"}
                                                 onClick={handleRequestContact}
                                                 disabled={isRequestingContact}
-                                                className="w-full bg-[#e09a74]/80 text-white hover:bg-[#e09a74] py-3 px-5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2"
+                                                className="w-full bg-primary/80 text-white hover:bg-primary py-3 px-5 rounded-full text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2"
                                                 icon={<User className="w-4 h-4" />}
                                             />
 
@@ -699,7 +699,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                             <button
                                                                 key={p._id}
                                                                 onClick={() => setSelectedProject(p)}
-                                                                className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${selectedProject?._id === p._id ? 'bg-[#e09a74] text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
+                                                                className={`text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${selectedProject?._id === p._id ? 'bg-primary text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}
                                                             >
                                                                 {p.name}
                                                             </button>
@@ -708,7 +708,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                     <button
                                                         onClick={handleRequestContact}
                                                         disabled={!selectedProject || isRequestingContact}
-                                                        className="w-full mt-3 py-2 bg-[#e09a74] text-white rounded-lg text-xs font-bold disabled:opacity-50 transition-all hover:bg-[#d98b63] shadow-sm"
+                                                        className="w-full mt-3 py-2 bg-primary text-white rounded-lg text-xs font-bold disabled:opacity-50 transition-all hover:bg-[#d98b63] shadow-sm"
                                                     >
                                                         Confirm Request
                                                     </button>
@@ -730,13 +730,13 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                     <div className="mt-2 grid grid-cols-2 gap-2">
                                         <button
                                             onClick={() => handleOpenModal({ catalogue: true, contactRepresentative: true })}
-                                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[11px] font-bold transition-all bg-[#e09a74]/5 text-[#e09a74] border border-[#e09a74]/20 hover:bg-[#e09a74]/10"
+                                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[11px] font-bold transition-all bg-primary/5 text-primary border border-primary/20 hover:bg-primary/10"
                                         >
                                             <Package className="w-3.5 h-3.5" /> CATALOGUE
                                         </button>
                                         <button
                                             onClick={() => handleOpenModal({ bimCad: true })}
-                                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[11px] font-bold transition-all bg-[#e09a74]/5 text-[#e09a74] border border-[#e09a74]/20 hover:bg-[#e09a74]/10"
+                                            className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-[11px] font-bold transition-all bg-primary/5 text-primary border border-primary/20 hover:bg-primary/10"
                                         >
                                             <ExternalLink className="w-3.5 h-3.5" /> BIM / CAD
                                         </button>
@@ -757,7 +757,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                             w-full py-2.5 rounded-full text-sm font-medium transition-all flex items-center justify-center gap-2 border
                                             ${isWishlisted
                                             ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100'
-                                            : 'bg-white text-[#e09a74] border-[#e09a74]/20 hover:bg-[#e09a74]/10'
+                                            : 'bg-white text-primary border-primary/20 hover:bg-primary/10'
                                         }
                                         `}>
                                     <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
@@ -765,7 +765,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                 </button> */}
                                 <Button
                                     onClick={() => handleOpenModal({})}
-                                    className="w-full py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 border bg-[#e09a74] text-white hover:bg-white hover:text-[#e09a74] border border-[#e09a74] mt-2"
+                                    className="w-full py-2.5 rounded-full text-sm font-medium flex items-center justify-center gap-2 border bg-primary text-white hover:bg-white hover:text-primary border border-primary mt-2"
                                 >
                                     <Send className="w-4 h-4" />
                                     CONTACT
@@ -837,7 +837,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                             <section className="bg-white rounded-xl border border-gray-100 p-2">
                                 <Accordion items={[
                                     {
-                                        title: 'Meta Details', 
+                                        title: 'Meta Details',
                                         content: <div className="space-y-4 p-5">
                                             {product.meta_title && (
                                                 <div className="text-lg font-bold text-gray-900 leading-tight">
@@ -845,7 +845,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                 </div>
                                             )}
                                             {product.meta_keywords && (
-                                                <div className="text-sm text-[#e09a74] font-medium tracking-wide">
+                                                <div className="text-sm text-primary font-medium tracking-wide">
                                                     {product.meta_keywords}
                                                 </div>
                                             )}

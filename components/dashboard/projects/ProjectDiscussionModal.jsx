@@ -28,7 +28,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
         if (isOpen && projectId && user) {
             markNotificationsRead({ id: projectId, type: 'general' });
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, projectId]);
 
     // Auto-scroll to the latest message whenever messages update
@@ -89,7 +89,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                 </div>
 
                 {/* Messages Area */}
-                <div 
+                <div
                     ref={scrollContainerRef}
                     className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50/50 custom-scrollbar"
                 >
@@ -159,7 +159,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                                 value={message}
                                 onChange={(e) => setMessage(e.target.value)}
                                 placeholder={isInternal ? "Type a private note..." : "Add a project comment..."}
-                                className={`flex-1 resize-none  overflow-hidden !py-2 px-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-[#e09a74] focus:border-[#e09a74] outline-none text-sm transition-all leading-tight ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
+                                className={`flex-1 resize-none  overflow-hidden !py-2 px-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm transition-all leading-tight ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && !e.shiftKey) {
                                         e.preventDefault();

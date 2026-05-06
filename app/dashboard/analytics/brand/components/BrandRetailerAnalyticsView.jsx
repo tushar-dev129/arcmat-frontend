@@ -42,7 +42,7 @@ export default function BrandRetailerAnalyticsView() {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
-                <Loader2 className="w-10 h-10 text-[#E09A74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading network insights...</p>
             </div>
         );
@@ -53,8 +53,8 @@ export default function BrandRetailerAnalyticsView() {
             {/* Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
-                    <div className="w-12 h-12 rounded-2xl bg-[#E09A74]/10 flex items-center justify-center mb-6">
-                        <Store className="w-6 h-6 text-[#E09A74]" />
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                        <Store className="w-6 h-6 text-primary" />
                     </div>
                     <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active Retailers</p>
                     <h3 className="text-4xl font-black text-gray-900 mt-2">{totalRetailers}</h3>
@@ -65,7 +65,7 @@ export default function BrandRetailerAnalyticsView() {
                     <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
                         <Briefcase className="w-6 h-6 text-white" />
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#E09A74]">Regional Professionals</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary">Regional Professionals</p>
                     <h3 className="text-4xl font-black text-white mt-2">{totalArchitects}</h3>
                     <p className="text-[10px] text-gray-400 mt-2">Architects in your retailer cities</p>
                 </div>
@@ -91,7 +91,7 @@ export default function BrandRetailerAnalyticsView() {
                                 placeholder="Filter by city name..."
                                 value={filters.city}
                                 onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
-                                className="w-full h-12 bg-gray-50 border-none rounded-2xl pl-12 pr-4 text-sm font-bold text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-[#E09A74]/20"
+                                className="w-full h-12 bg-gray-50 border-none rounded-2xl pl-12 pr-4 text-sm font-bold text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-primary/20"
                             />
                         </div>
                     </div>
@@ -102,7 +102,7 @@ export default function BrandRetailerAnalyticsView() {
                             type="date"
                             value={filters.startDate}
                             onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))}
-                            className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-[#E09A74]/20"
+                            className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
 
@@ -112,7 +112,7 @@ export default function BrandRetailerAnalyticsView() {
                             type="date"
                             value={filters.endDate}
                             onChange={(e) => setFilters(prev => ({ ...prev, endDate: e.target.value }))}
-                            className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-[#E09A74]/20"
+                            className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20"
                         />
                     </div>
                 </div>
@@ -178,7 +178,7 @@ export default function BrandRetailerAnalyticsView() {
                                     <tr key={i} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-10 py-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-[#E09A74]/10 flex items-center justify-center text-[#E09A74] font-black text-xs">
+                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-xs">
                                                     {retailer.retailerName.charAt(0)}
                                                 </div>
                                                 <div>
@@ -189,7 +189,7 @@ export default function BrandRetailerAnalyticsView() {
                                         </td>
                                         <td className="px-10 py-6">
                                             <div className="flex items-center gap-2">
-                                                <MapPin className="w-3.5 h-3.5 text-[#E09A74]" />
+                                                <MapPin className="w-3.5 h-3.5 text-primary" />
                                                 <span className="text-sm font-bold text-gray-700">{retailer.city}</span>
                                             </div>
                                         </td>

@@ -141,7 +141,7 @@ const CompareSidebar = () => {
                                             </div>
 
                                             <div className="text-center">
-                                                <div className="text-xs font-bold text-[#e09a74] uppercase tracking-wider mb-1">
+                                                <div className="text-xs font-bold text-primary uppercase tracking-wider mb-1">
                                                     {getProductBrand(product)}
                                                 </div>
                                                 <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 min-h-[40px] mb-2">
@@ -261,14 +261,14 @@ const CompareSidebar = () => {
                                     const isVariant = Boolean(product.productId && typeof product.productId === 'object');
                                     const root = isVariant ? product.productId : product;
                                     // Robust stock check: check variant stock first, then root stock fields
-                                    const stockCount = 
-                                        product.stock !== undefined ? product.stock : 
-                                        (product.stockQuantity !== undefined ? product.stockQuantity : 
-                                        (root.stock !== undefined ? root.stock : 
-                                        (root.stockQuantity !== undefined ? root.stockQuantity : 0)));
-                                    
-                                    const inStock = product.inStock !== undefined ? product.inStock : 
-                                                   (root.inStock !== undefined ? root.inStock : stockCount > 0);
+                                    const stockCount =
+                                        product.stock !== undefined ? product.stock :
+                                            (product.stockQuantity !== undefined ? product.stockQuantity :
+                                                (root.stock !== undefined ? root.stock :
+                                                    (root.stockQuantity !== undefined ? root.stockQuantity : 0)));
+
+                                    const inStock = product.inStock !== undefined ? product.inStock :
+                                        (root.inStock !== undefined ? root.inStock : stockCount > 0);
 
                                     return (
                                         <div key={product._id || product.id} className="p-4 px-6 border-l border-gray-100 flex items-center justify-center">
@@ -299,7 +299,7 @@ const CompareSidebar = () => {
                                                     setSelectedProductForBoard(product);
                                                     setIsAddModalOpen(true);
                                                 }}
-                                                className="w-full h-11 bg-[#e09a74] text-white hover:bg-[#d08963] active:scale-95 transition-all rounded-xl text-sm font-bold flex items-center justify-center shadow-lg shadow-orange-500/20"
+                                                className="w-full h-11 bg-primary text-white hover:bg-[#d08963] active:scale-95 transition-all rounded-xl text-sm font-bold flex items-center justify-center shadow-lg shadow-orange-500/20"
                                             >
                                                 <Plus className="w-4 h-4 mr-2" />
                                                 {activeMoodboardName ? `Add to ${activeMoodboardName}` : 'Add to space'}

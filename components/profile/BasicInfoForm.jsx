@@ -32,7 +32,7 @@ const BasicInfoForm = ({ user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                     <input
                         {...register('name', { required: 'Name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="John Doe"
                     />
                     {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
@@ -42,7 +42,7 @@ const BasicInfoForm = ({ user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                     <input
                         {...register('mobile', { required: 'Phone number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="+91 9876543210"
                     />
                     {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
@@ -59,7 +59,7 @@ const BasicInfoForm = ({ user, onSubmit, onCancel, isSubmitting }) => {
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-[#e09a74] text-white cursor-pointer hover:opacity-90 min-w-[100px] py-1.5 px-4 border border-[#e09a74]"
+                    className="bg-primary text-white cursor-pointer hover:opacity-90 min-w-[100px] py-1.5 px-4 border border-primary"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
                             <Loader2 className="animate-spin" size={14} />

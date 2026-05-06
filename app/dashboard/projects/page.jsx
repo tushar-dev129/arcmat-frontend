@@ -94,7 +94,7 @@ export default function AllProjectsPage() {
                 {urlArchitectId && isAdmin && (
                     <button
                         onClick={() => window.history.back()}
-                        className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#e09a74] transition-colors mb-4 group"
+                        className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors mb-4 group"
                     >
                         <svg className="w-4 h-4 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                         Back to User Management

@@ -184,7 +184,7 @@ export default function DetailsPanel({
                                 <button
                                     key={v._id}
                                     onClick={() => onVariantChange(v)}
-                                    className={`group flex flex-col items-center gap-1.5 p-1.5 rounded-xl border-2 transition-all ${isSelected ? 'border-[#e09a74] bg-[#e09a74]/5 shadow-md' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'}`}
+                                    className={`group flex flex-col items-center gap-1.5 p-1.5 rounded-xl border-2 transition-all ${isSelected ? 'border-primary bg-primary/5 shadow-md' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'}`}
                                 >
                                     <div className="w-full rounded-lg overflow-hidden" style={{ aspectRatio: '1/1' }}>
                                         {vImg && vImg !== '/Icons/arcmatlogo.svg' ? (
@@ -199,7 +199,7 @@ export default function DetailsPanel({
                                     </div>
                                     <span className="text-[10px] text-gray-700 font-semibold text-center leading-tight line-clamp-2 w-full">{variantLabel}</span>
                                     {variantMeta && <span className="text-[10px] text-gray-500 text-center leading-tight line-clamp-2 w-full">{variantMeta}</span>}
-                                    {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-[#e09a74]" />}
+                                    {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                 </button>
                             );
                         })}
@@ -212,7 +212,7 @@ export default function DetailsPanel({
                 <div className="px-4 mt-5 shrink-0">
                     <div className="flex items-center justify-between mb-3">
                         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide flex items-center gap-2">
-                            <ReceiptText className="w-3.5 h-3.5 text-[#e09a74]" />
+                            <ReceiptText className="w-3.5 h-3.5 text-primary" />
                             Materials on Board
                         </h3>
                         <span className="text-xs text-gray-400 font-medium">{materialCount} item{materialCount !== 1 ? 's' : ''}</span>
@@ -365,7 +365,7 @@ function BoardItemRow({ item, onUpdateItem }) {
                                 setLocalPrice(String(Number(localPrice)));
                             }
                         }}
-                        className="w-full h-8 px-2 rounded-lg bg-gray-100 border border-transparent focus:border-[#e09a74] focus:bg-white text-xs font-bold text-gray-900 outline-none transition-all"
+                        className="w-full h-8 px-2 rounded-lg bg-gray-100 border border-transparent focus:border-primary focus:bg-white text-xs font-bold text-gray-900 outline-none transition-all"
                     />
                 </div>
             </div>

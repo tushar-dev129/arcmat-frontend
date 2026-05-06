@@ -56,3 +56,25 @@ export const useUploadContractorImage = () => {
         mutationFn: (formData) => contractorService.uploadImage(formData),
     });
 };
+
+export const useCreateContractorPortfolioItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ contractorId, formData }) => contractorService.createPortfolioItem(contractorId, formData),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['my-contractor-profile'] });
+            queryClient.invalidateQueries({ queryKey: ['contractors'] });
+        },
+    });
+};
+
+export const useDeleteContractorPortfolioItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (itemId) => contractorService.deletePortfolioItem(itemId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['my-contractor-profile'] });
+            queryClient.invalidateQueries({ queryKey: ['contractors'] });
+        },
+    });
+};

@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, MapPin, Briefcase, ChevronRight } from "lucide-react";
+import { Star, MapPin, Briefcase, ChevronRight, Mail, Phone } from "lucide-react";
+import clsx from "clsx";
 
 const ContractorCard = ({ contractor }) => {
     const {
@@ -15,27 +16,48 @@ const ContractorCard = ({ contractor }) => {
         experienceYears,
         isVerified,
         isTopRated,
-        rating = 4.8, // Fallback for MVP
-        reviewCount = 12 // Fallback for MVP
+        contact,
+        rating = 4.8,
+        reviewCount = 12
     } = contractor;
 
     // Helper to get image URL
-    const getImageUrl = (img) => {
-        if (!img) return "/images/placeholder-cover.jpg";
-        return typeof img === 'string' ? img : img.url || "/images/placeholder-cover.jpg";
+    const getImageUrl = (img, type = "cover") => {
+        if (!img) {
+            if (type === "cover") return "/Icons/arcmatlogo.svg";
+            return "/images/placeholder-profile.jpg";
+        }
+        
+        // Handle different image object structures
+        const url = typeof img === 'string' ? img : img.url || img.secure_url;
+        
+        if (!url) {
+            if (type === "cover") return "/Icons/arcmatlogo.svg";
+            return "/images/placeholder-profile.jpg";
+        }
+        
+        return url;
     };
 
     return (
         <div className="group relative bg-white rounded-2xl overflow-hidden border border-[hsl(30,15%,90%)] hover:shadow-xl transition-all duration-500 flex flex-col h-full">
             {/* Cover Image Area */}
-            <div className="relative h-40 w-full overflow-hidden">
+            <div className={clsx(
+                "relative h-40 w-full overflow-hidden",
+                !coverImage && "bg-gray-50 flex items-center justify-center p-8"
+            )}>
                 <Image
-                    src={getImageUrl(coverImage)}
+                    src={getImageUrl(coverImage, "cover")}
                     alt={businessName}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    fill={!!coverImage}
+                    width={!coverImage ? 120 : undefined}
+                    height={!coverImage ? 120 : undefined}
+                    className={clsx(
+                        "transition-transform duration-700 group-hover:scale-110",
+                        coverImage ? "object-cover" : "object-contain opacity-20 grayscale"
+                    )}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />
+                {coverImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />}
                 
                 {/* Badges */}
                 <div className="absolute top-3 left-3 flex flex-wrap gap-2">
@@ -59,10 +81,10 @@ const ContractorCard = ({ contractor }) => {
                 <div className="absolute -top-10 left-5 h-20 w-20 rounded-xl bg-white p-1 shadow-xl border border-[hsl(30,15%,95%)] overflow-hidden">
                     <div className="relative h-full w-full rounded-lg overflow-hidden bg-gray-50">
                         <Image
-                            src={getImageUrl(profileImage)}
+                            src={getImageUrl(profileImage, "profile")}
                             alt={businessName}
                             fill
-                            className="object-contain"
+                            className="object-cover"
                         />
                     </div>
                 </div>
@@ -83,34 +105,47 @@ const ContractorCard = ({ contractor }) => {
                     </p>
                 </div>
 
-                {/* Info Grid */}
-                <div className="mt-5 grid grid-cols-2 gap-3 pb-5 border-b border-dashed border-[hsl(30,15%,90%)]">
-                    <div className="flex items-center gap-2">
-                        <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
-                            <MapPin className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
+                {/* Info Grid - Updated with Email and Phone */}
+                <div className="mt-5 grid grid-cols-1 gap-3 pb-5 border-b border-dashed border-[hsl(30,15%,90%)]">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
+                                <MapPin className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
+                            </div>
+                            <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{location?.city || "Mumbai"}</span>
                         </div>
-                        <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{location?.city || "Mumbai"}</span>
+                        <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
+                                <Briefcase className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
+                            </div>
+                            <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{experienceYears || "5+"} Years Exp.</span>
+                        </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
-                            <Briefcase className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
-                        </div>
-                        <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{experienceYears || "5+"} Years Exp.</span>
+
+                    <div className="space-y-2.5 mt-1">
+                        {contact?.email && (
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <Mail className="w-3.5 h-3.5 text-primary opacity-70" />
+                                <span className="text-[11px] font-medium truncate">{contact.email}</span>
+                            </div>
+                        )}
+                        {contact?.phone && (
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <Phone className="w-3.5 h-3.5 text-primary opacity-70" />
+                                <span className="text-[11px] font-medium">{contact.phone}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Footer Action */}
-                <div className="mt-auto pt-4 flex items-center justify-between">
-                    <div className="flex flex-col">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Starts from</span>
-                        <span className="text-sm font-bold text-[hsl(20,10%,15%)]">₹ 499 <span className="text-[10px] text-gray-400 font-normal">/ sqft</span></span>
-                    </div>
+                <div className="mt-auto pt-4 flex items-center justify-end">
                     <Link 
                         href={`/contractors/${slug}`}
-                        className="flex items-center gap-1 px-4 py-2 bg-[hsl(20,10%,15%)] hover:bg-[hsl(15,80%,60%)] text-white text-xs font-bold rounded-xl transition-all duration-300 shadow-lg shadow-black/10"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-primary/90 hover:bg-primary text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 shadow-lg shadow-black/10 active:scale-95"
                     >
                         View Profile
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ChevronRight className="w-4 h-4" />
                     </Link>
                 </div>
             </div>

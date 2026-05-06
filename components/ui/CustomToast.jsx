@@ -38,7 +38,7 @@ const CustomToast = ({ t, message, title, type = 'success' }) => {
             <div className="flex border-l border-gray-100">
                 <button
                     onClick={() => t?.onDismiss && t.onDismiss()}
-                    className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-[#e09a74] transition-colors"
+                    className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 >
                     <X className="w-4 h-4" />
                 </button>

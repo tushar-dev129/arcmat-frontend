@@ -46,11 +46,10 @@ function StarRating({ value, onChange }) {
                     className="transition-transform hover:scale-110 focus:outline-none"
                 >
                     <Star
-                        className={`w-8 h-8 transition-colors ${
-                            star <= (hovered || value)
-                                ? 'text-[#e09a74] fill-[#e09a74]'
+                        className={`w-8 h-8 transition-colors ${star <= (hovered || value)
+                                ? 'text-primary fill-primary'
                                 : 'text-gray-200 fill-gray-200'
-                        }`}
+                            }`}
                     />
                 </button>
             ))}
@@ -116,7 +115,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
         : 0;
 
     return (
-        <div 
+        <div
             className="fixed inset-0 z-70 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={(e) => {
                 e.stopPropagation();
@@ -176,7 +175,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                                         {[1, 2, 3, 4, 5].map((s) => (
                                             <Star
                                                 key={s}
-                                                className={`w-5 h-5 ${s <= avgRating ? 'text-[#e09a74] fill-[#e09a74]' : 'text-gray-200 fill-gray-200'}`}
+                                                className={`w-5 h-5 ${s <= avgRating ? 'text-primary fill-primary' : 'text-gray-200 fill-gray-200'}`}
                                             />
                                         ))}
                                     </div>
@@ -207,7 +206,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                                                 onChange={(v) => setRatings((prev) => ({ ...prev, [criterion.key]: v }))}
                                             />
                                             {val > 0 && (
-                                                <span className="text-xs font-bold text-[#e09a74]">
+                                                <span className="text-xs font-bold text-primary">
                                                     {LABEL_MAP[val]}
                                                 </span>
                                             )}

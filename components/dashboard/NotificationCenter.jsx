@@ -37,7 +37,7 @@ export default function NotificationCenter() {
 
     const getTypeIcon = (type) => {
         switch (type) {
-            case 'RETAILER_CONTACT_REQUEST': return <Package className="w-4 h-4 text-[#e09a74]" />;
+            case 'RETAILER_CONTACT_REQUEST': return <Package className="w-4 h-4 text-primary" />;
             case 'CONTACT_SHARE_CONFIRMED': return <Check className="w-4 h-4 text-green-500" />;
             default: return <Info className="w-4 h-4 text-gray-400" />;
         }
@@ -49,9 +49,9 @@ export default function NotificationCenter() {
                 onClick={() => setIsOpen(!isOpen)}
                 className="p-2 hover:bg-gray-100 rounded-full transition-all relative group"
             >
-                <Bell className={`w-6 h-6 ${unreadCount > 0 ? 'text-[#e09a74] animate-pulse' : 'text-gray-600'}`} />
+                <Bell className={`w-6 h-6 ${unreadCount > 0 ? 'text-primary animate-pulse' : 'text-gray-600'}`} />
                 {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-[#e09a74] text-white text-[9px] font-bold w-5 h-5  rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                    <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[9px] font-bold w-5 h-5  rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                         {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                 )}
@@ -63,7 +63,7 @@ export default function NotificationCenter() {
                         <h3 className="font-bold text-gray-900 flex items-center gap-2">
                             Notifications
                             {unreadCount > 0 && (
-                                <span className="text-[10px] bg-[#e09a74] text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                                <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">
                                     {unreadCount} NEW
                                 </span>
                             )}
@@ -95,7 +95,7 @@ export default function NotificationCenter() {
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between gap-2 mb-1">
-                                                    <span className="text-[10px] font-bold text-[#e09a74] uppercase tracking-widest truncate">
+                                                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest truncate">
                                                         {n.type.replace(/_/g, ' ')}
                                                     </span>
                                                     <span className="text-[10px] text-gray-400 flex items-center gap-1 shrink-0">
@@ -127,7 +127,7 @@ export default function NotificationCenter() {
                                                             </div>
                                                             <div className="flex flex-col">
                                                                 <span className="text-gray-400 uppercase font-bold">Preferred</span>
-                                                                <span className="text-[#e09a74] font-bold">{n.sender.retailerProfile?.preferredContactMethod || 'Phone'}</span>
+                                                                <span className="text-primary font-bold">{n.sender.retailerProfile?.preferredContactMethod || 'Phone'}</span>
                                                             </div>
                                                             <div className="flex flex-col">
                                                                 <span className="text-gray-400 uppercase font-bold">Hours</span>
@@ -169,7 +169,7 @@ export default function NotificationCenter() {
                                                             }}
                                                             className="flex-1 bg-black text-white py-1.5 rounded-lg text-xs font-bold hover:bg-gray-800 transition-all flex items-center justify-center gap-1"
                                                         >
-                                                            <Check className="w-4 h-4" /> Accept 
+                                                            <Check className="w-4 h-4" /> Accept
                                                         </button>
                                                         <button
                                                             onClick={(e) => {
@@ -199,7 +199,7 @@ export default function NotificationCenter() {
                     <div className="p-3 border-t border-gray-50 bg-gray-50/30">
                         <Link
                             href="/dashboard/notifications"
-                            className="text-[11px] font-bold text-gray-400 hover:text-[#e09a74] transition-colors flex items-center justify-center gap-1 uppercase tracking-widest"
+                            className="text-[11px] font-bold text-gray-400 hover:text-primary transition-colors flex items-center justify-center gap-1 uppercase tracking-widest"
                         >
                             View All Notifications
                         </Link>

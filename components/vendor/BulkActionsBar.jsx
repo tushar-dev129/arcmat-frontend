@@ -87,7 +87,7 @@ export default function BulkActionsBar({ products = [] }) {
     <>
       {/* Sticky selection toolbar */}
       <div className="sticky top-0 z-30 mx-0 mb-0 animate-in fade-in slide-in-from-top-4 duration-500">
-        <div className="flex items-center justify-between gap-4 px-6 py-4 bg-orange-50/70 backdrop-blur-md text-[#2d3142] rounded-xl shadow-2xl shadow-orange-900/5 border border-[#e09a74]/30">
+        <div className="flex items-center justify-between gap-4 px-6 py-4 bg-orange-50/70 backdrop-blur-md text-[#2d3142] rounded-xl shadow-2xl shadow-orange-900/5 border border-primary/30">
           {/* Left: count + thumbnails + clear */}
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
@@ -97,14 +97,14 @@ export default function BulkActionsBar({ products = [] }) {
                 </div>
               ))}
             </div>
-            
+
             <div className="flex flex-col">
               <span className="text-sm font-black leading-none flex items-center gap-1.5 uppercase tracking-wider">
-                <span className="text-[#e09a74]">{selectedProducts.length}</span> Products Selected
+                <span className="text-primary">{selectedProducts.length}</span> Products Selected
               </span>
               <button
                 onClick={clearSelection}
-                className="mt-1 flex items-center gap-1 text-[10px] text-gray-400 hover:text-[#e09a74] transition-colors font-bold uppercase tracking-widest text-left"
+                className="mt-1 flex items-center gap-1 text-[10px] text-gray-400 hover:text-primary transition-colors font-bold uppercase tracking-widest text-left"
               >
                 <X className="w-2.5 h-2.5" />
                 Clear Selection
@@ -118,7 +118,7 @@ export default function BulkActionsBar({ products = [] }) {
               <select
                 value={selectedAction}
                 onChange={(e) => setSelectedAction(e.target.value)}
-                className="appearance-none bg-white border border-[#e09a74]/20 text-[#2d3142] text-[10px] font-black rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-4 focus:ring-orange-100 cursor-pointer transition-all shadow-sm group-hover:shadow-md uppercase tracking-widest"
+                className="appearance-none bg-white border border-primary/20 text-[#2d3142] text-[10px] font-black rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-4 focus:ring-orange-100 cursor-pointer transition-all shadow-sm group-hover:shadow-md uppercase tracking-widest"
               >
                 <option value="">CHOOSE ACTION...</option>
                 {selectedProducts.length === 1 && (
@@ -128,13 +128,13 @@ export default function BulkActionsBar({ products = [] }) {
                 <option value="deactivate">SET INACTIVE</option>
                 <option value="delete">DELETE PERMANENTLY</option>
               </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#e09a74] pointer-events-none" />
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-primary pointer-events-none" />
             </div>
 
             <button
               onClick={handleApply}
               disabled={!selectedAction || isPending}
-              className="px-6 py-3 bg-[#e09a74] text-white text-[10px] font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-lg shadow-orange-200 flex items-center gap-2 uppercase tracking-widest"
+              className="px-6 py-3 bg-primary text-white text-[10px] font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-lg shadow-orange-200 flex items-center gap-2 uppercase tracking-widest"
             >
               {isPending ? (
                 <>
@@ -164,4 +164,4 @@ export default function BulkActionsBar({ products = [] }) {
       />
     </>
   );
-}
+}

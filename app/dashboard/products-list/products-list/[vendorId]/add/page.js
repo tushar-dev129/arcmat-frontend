@@ -25,7 +25,7 @@ export default function AddProductPage() {
     const [createdProductData, setCreatedProductData] = useState(null);
 
     const brand = user?.selectedBrands?.[0];
-    const effectiveVendorId = user?.role === 'brand' 
+    const effectiveVendorId = user?.role === 'brand'
         ? (brand?._id || (typeof brand === 'string' ? brand : undefined))
         : vendorId;
 
@@ -80,12 +80,12 @@ export default function AddProductPage() {
                     {/* Step Indicators */}
                     <div className="flex items-center gap-2">
                         <div className={clsx("flex items-center justify-center w-8 h-8 rounded-full font-bold transition-all",
-                            createdProductId ? "bg-green-100 text-green-600" : "bg-[#e09a74] text-white shadow-lg shadow-orange-100")}>
+                            createdProductId ? "bg-green-100 text-green-600" : "bg-primary text-white shadow-lg shadow-orange-100")}>
                             {createdProductId ? <CheckCircle2 className="w-5 h-5" /> : '1'}
                         </div>
                         <div className="w-8 h-0.5 bg-gray-200"></div>
                         <div className={clsx("flex items-center justify-center w-8 h-8 rounded-full font-bold transition-all",
-                            createdProductId ? "bg-[#e09a74] text-white shadow-lg shadow-orange-100" : "bg-gray-100 text-gray-400")}>
+                            createdProductId ? "bg-primary text-white shadow-lg shadow-orange-100" : "bg-gray-100 text-gray-400")}>
                             2
                         </div>
                     </div>
@@ -104,7 +104,7 @@ export default function AddProductPage() {
                             </div>
                             <h2 className="text-2xl font-bold text-gray-900 mb-4">Complete Your Business Profile First</h2>
                             <p className="text-gray-600 mb-4 leading-relaxed">
-                                You must complete your business profile before you can start creating products. 
+                                You must complete your business profile before you can start creating products.
                                 A complete profile helps build trust with architects and professionals.
                             </p>
                             <div className="bg-amber-50 rounded-xl p-4 mb-8 text-left border border-amber-100">
@@ -117,7 +117,7 @@ export default function AddProductPage() {
                             </div>
                             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                 <Link href="/profile">
-                                    <Button className="bg-[#e09a74] text-white hover:bg-white hover:text-[#e09a74] border-[#e09a74] border px-8 py-3 rounded-xl font-bold w-full sm:w-auto">
+                                    <Button className="bg-primary text-white hover:bg-white hover:text-primary border-primary border px-8 py-3 rounded-xl font-bold w-full sm:w-auto">
                                         Update Profile
                                     </Button>
                                 </Link>

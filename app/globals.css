@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@theme {
+  --color-primary: #E09A74;
+}
+
 
 .loader {
   width: 48px;

@@ -50,7 +50,7 @@ export default function RetailerContactsPage() {
     if (isLoading) {
         return (
             <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
             </div>
         );
     }
@@ -59,7 +59,7 @@ export default function RetailerContactsPage() {
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
             <header className="mb-8">
                 <h1 className="text-3xl font-black text-[#2d3142] mb-2 flex items-center gap-3">
-                    <MessageSquare className="w-8 h-8 text-[#e09a74]" />
+                    <MessageSquare className="w-8 h-8 text-primary" />
                     Retailer Contacts
                 </h1>
                 <p className="text-gray-400 font-medium">Manage your material inquiries and private chats with retailers.</p>
@@ -96,7 +96,7 @@ export default function RetailerContactsPage() {
                                                 <h3 className="text-xl font-black text-[#2d3142] mb-1">{request.materialName}</h3>
                                                 <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
                                                     <div className="flex items-center gap-1.5">
-                                                        <Package className="w-4 h-4 text-[#e09a74]" />
+                                                        <Package className="w-4 h-4 text-primary" />
                                                         {request.projectId?.projectName}
                                                     </div>
                                                     <div className="flex items-center gap-1.5">
@@ -134,7 +134,7 @@ export default function RetailerContactsPage() {
                                                     {retailer.email && (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                                                             <Mail className="w-4 h-4 text-gray-400" />
-                                                            <a href={`mailto:${retailer.email}`} className="hover:text-[#e09a74] transition-colors">
+                                                            <a href={`mailto:${retailer.email}`} className="hover:text-primary transition-colors">
                                                                 {retailer.email}
                                                             </a>
                                                         </div>
@@ -142,7 +142,7 @@ export default function RetailerContactsPage() {
                                                     {retailer.mobile && (
                                                         <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
                                                             <Phone className="w-4 h-4 text-gray-400" />
-                                                            <a href={`tel:${retailer.mobile}`} className="hover:text-[#e09a74] transition-colors">
+                                                            <a href={`tel:${retailer.mobile}`} className="hover:text-primary transition-colors">
                                                                 {retailer.mobile}
                                                             </a>
                                                         </div>
@@ -151,7 +151,7 @@ export default function RetailerContactsPage() {
                                                 {/* BUG FIX 4: Use handleOpenChat instead of direct setMessagingRequest */}
                                                 {/* <Button
                                                     onClick={() => handleOpenChat(request)}
-                                                    className="relative bg-white border-2 border-[#e09a74] text-[#e09a74] hover:bg-[#e09a74] hover:text-white font-black rounded-2xl py-3 px-6 flex items-center gap-2 transition-all shadow-sm"
+                                                    className="relative bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-black rounded-2xl py-3 px-6 flex items-center gap-2 transition-all shadow-sm"
                                                 >
                                                     <MessageSquare className="w-4 h-4" />
                                                     Chat with Retailer
@@ -172,7 +172,7 @@ export default function RetailerContactsPage() {
 
                                     {request.notes && (
                                         <div className="mt-6 flex gap-3 p-4 bg-orange-50/30 rounded-2xl border border-orange-50/50 text-sm text-gray-600">
-                                            <div className="font-black text-[10px] uppercase tracking-widest text-[#e09a74] mt-0.5 shrink-0">Your Note:</div>
+                                            <div className="font-black text-[10px] uppercase tracking-widest text-primary mt-0.5 shrink-0">Your Note:</div>
                                             <p className="font-medium italic leading-relaxed">"{request.notes}"</p>
                                         </div>
                                     )}

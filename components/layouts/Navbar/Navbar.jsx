@@ -19,13 +19,13 @@ const Navbar = () => {
                     <ul className="hidden xl:flex w-full justify-between text-[16px] font-semibold text-[#4D4E58] items-center min-h-[30px]">
                         {isLoading ? (
                             <div className="flex justify-center w-full">
-                                <div className="h-4 w-4 border-2 border-[#e09a74] border-t-transparent rounded-full animate-spin"></div>
+                                <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                             </div>
                         ) : categories.length > 0 ? (
                             categories.map((item) => (
                                 <li key={item._id}
                                     className={clsx(
-                                        "cursor-pointer whitespace-nowrap hover:text-[#e09a74] transition-colors px-2",
+                                        "cursor-pointer whitespace-nowrap hover:text-primary transition-colors px-2",
                                         item.name?.toLowerCase() === 'new' && "text-orange-500 text-xl hover:text-orange-700 font-bold"
                                     )}>
                                     <Link href={`/productlist?category=${item._id}`}>

@@ -67,7 +67,7 @@ export default function AnalyticsDashboard() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
-                            <TrendingUp className="w-8 h-8 text-[#E09A74]" />
+                            <TrendingUp className="w-8 h-8 text-primary" />
                             Retailer Analytics
                         </h1>
                         <p className="text-gray-500 font-medium mt-1">Track brand demand and regional expansion</p>
@@ -84,7 +84,7 @@ export default function AnalyticsDashboard() {
                 {/* Filters */}
                 <div className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm mb-12">
                     <div className="flex items-center gap-3 mb-6">
-                        <Filter className="w-5 h-5 text-[#E09A74]" />
+                        <Filter className="w-5 h-5 text-primary" />
                         <h2 className="text-sm font-black text-gray-900 uppercase tracking-widest">Global Filters</h2>
                     </div>
 
@@ -94,7 +94,7 @@ export default function AnalyticsDashboard() {
                             <select
                                 value={filters.brandId}
                                 onChange={(e) => setFilters(prev => ({ ...prev, brandId: e.target.value }))}
-                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-[#E09A74]/20"
+                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20"
                             >
                                 <option value="">All Brands</option>
                                 {brands.map(brand => (
@@ -110,7 +110,7 @@ export default function AnalyticsDashboard() {
                                 placeholder="Enter city name..."
                                 value={filters.city}
                                 onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
-                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-[#E09A74]/20"
+                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-primary/20"
                             />
                         </div>
 
@@ -120,7 +120,7 @@ export default function AnalyticsDashboard() {
                                 type="date"
                                 value={filters.startDate}
                                 onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))}
-                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-[#E09A74]/20"
+                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20"
                             />
                         </div>
 
@@ -130,7 +130,7 @@ export default function AnalyticsDashboard() {
                                 type="date"
                                 value={filters.endDate}
                                 onChange={(e) => setFilters(prev => ({ ...prev, endDate: e.target.value }))}
-                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-[#E09A74]/20"
+                                className="w-full h-12 bg-gray-50 border-none rounded-2xl px-4 text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20"
                             />
                         </div>
                     </div>
@@ -138,7 +138,7 @@ export default function AnalyticsDashboard() {
 
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-4">
-                        <Loader2 className="w-10 h-10 text-[#E09A74] animate-spin" />
+                        <Loader2 className="w-10 h-10 text-primary animate-spin" />
                         <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Analysing demand patterns...</p>
                     </div>
                 ) : (
@@ -146,8 +146,8 @@ export default function AnalyticsDashboard() {
                         {/* Top Stats Cards */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
-                                <div className="w-12 h-12 rounded-2xl bg-[#E09A74]/10 flex items-center justify-center mb-6">
-                                    <Users className="w-6 h-6 text-[#E09A74]" />
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                                    <Users className="w-6 h-6 text-primary" />
                                 </div>
                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Brand Selections</p>
                                 <h3 className="text-4xl font-black text-gray-900 mt-2">{brandWiseStats.reduce((acc, curr) => acc + curr.count, 0)}</h3>
@@ -281,7 +281,7 @@ export default function AnalyticsDashboard() {
                                                 <td className="px-10 py-6">
                                                     <div className="w-48 h-2 bg-gray-100 rounded-full overflow-hidden">
                                                         <div
-                                                            className="h-full bg-[#E09A74]"
+                                                            className="h-full bg-primary"
                                                             style={{
                                                                 width: `${(stat.count / (Array.isArray(brandWiseStats) ? (brandWiseStats.find(b => b.brandName === stat.brandName)?.count || 1) : 1) * 100) || 0}%`
                                                             }}

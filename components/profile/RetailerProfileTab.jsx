@@ -43,7 +43,7 @@ const RetailerProfileTab = () => {
     if (isBrandsLoading) {
         return (
             <div className="flex justify-center items-center py-12 bg-white rounded-2xl shadow-sm border border-gray-100">
-                <Loader2 className="w-8 h-8 animate-spin text-[#e09a74]" />
+                <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
         );
     }

@@ -34,7 +34,7 @@ const BasicInfoCard = ({ user }) => {
                 {!isEditing && (
                     <button
                         onClick={() => setIsEditing(true)}
-                        className="flex items-center gap-2 text-[#e09a74] hover:text-[#d08963] font-medium transition-colors cursor-pointer"
+                        className="flex items-center gap-2 text-primary hover:text-[#d08963] font-medium transition-colors cursor-pointer"
                     >
                         <Edit size={18} />
                         <span className="text-sm">Edit</span>

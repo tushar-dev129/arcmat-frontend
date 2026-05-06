@@ -12,7 +12,7 @@ import { useSidebarStore } from '@/store/useSidebarStore';
 const SidebarItem = memo(({ item, isCollapsed }) => {
     const pathname = usePathname();
     const isFolderAnimating = useSidebarStore(state => state.isFolderAnimating);
-    const isDashboardRoot = item.href === '/dashboard' || item.href === '/dashboard/retailer';
+    const isDashboardRoot = item.href === '/dashboard' || item.href === '/dashboard/retailer' || item.href === '/dashboard/contractor' || item.href === '/dashboard/architect';
     const isActive = isDashboardRoot ? pathname === item.href : pathname.startsWith(item.href);
     const Icon = item.icon;
     const MotionIcon = motion(Icon);

@@ -70,7 +70,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Brand Name</label>
                         <input
                             {...register('name', { required: 'Name is required' })}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                             placeholder="e.g. Kajaria"
                         />
                         {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
@@ -80,7 +80,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
                         <input
                             {...register('country')}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                             placeholder="e.g. India"
                         />
                     </div>
@@ -89,7 +89,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">Website</label>
                         <input
                             {...register('website')}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                             placeholder="https://..."
                         />
                     </div>
@@ -126,8 +126,8 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                                         file:mr-4 file:py-2 file:px-4
                                         file:rounded-full file:border-0
                                         file:text-sm file:font-semibold
-                                        file:bg-[#e09a74]/10 file:text-[#e09a74]
-                                        hover:file:bg-[#e09a74]/20
+                                        file:bg-primary/10 file:text-primary
+                                        hover:file:bg-primary/20
                                     "
                                 />
                                 <p className="mt-1 text-xs text-gray-500">PNG, JPG up to 70KB</p>
@@ -146,7 +146,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                         <textarea
                             {...register('shippingAddress')}
                             rows={3}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all resize-none"
+                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                             placeholder="Delhi India"
                         />
                     </div>
@@ -155,7 +155,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                         <textarea
                             {...register('billingAddress')}
                             rows={3}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all resize-none"
+                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                             placeholder="Delhi India"
                         />
                     </div>
@@ -167,7 +167,7 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                 <textarea
                     {...register('description')}
                     rows={4}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     placeholder="Premium furniture brand..."
                 />
             </div>
@@ -177,14 +177,14 @@ const ProfileForm = ({ brand, onSubmit, onCancel, isSubmitting }) => {
                     <Button
                         type="button"
                         onClick={onCancel}
-                        className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-[#e09a74] hover:text-[#e09a74] px-3 cursor-pointer"
+                        className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary px-3 cursor-pointer"
                         text="Cancel"
                     />
                 )}
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-[#e09a74] text-white cursor-pointer hover:bg-white min-w-[120px] py-2 px-4 hover:border-[#e09a74] border hover:text-[#e09a74]"
+                    className="bg-primary text-white cursor-pointer hover:bg-white min-w-[120px] py-2 px-4 hover:border-primary border hover:text-primary"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
                             <Loader2 className="animate-spin" size={16} />

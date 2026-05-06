@@ -43,7 +43,7 @@ const ComboboxInput = ({ value, onChange, options, placeholder, disabled }) => {
                 onFocus={() => setIsOpen(true)}
                 placeholder={placeholder}
                 disabled={disabled}
-                className="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-[#e09a74] text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white focus:ring-2 focus:ring-primary text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 autoComplete="off"
             />
             {isOpen && filteredOptions.length > 0 && (
@@ -56,7 +56,7 @@ const ComboboxInput = ({ value, onChange, options, placeholder, disabled }) => {
                                 onChange(opt);
                                 setIsOpen(false);
                             }}
-                            className="px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-[#e09a74] cursor-pointer transition-colors"
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-orange-50 hover:text-primary cursor-pointer transition-colors"
                         >
                             {opt}
                         </li>
@@ -251,7 +251,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                             type="number"
                             value={formData.mrp_price}
                             onChange={handleChange}
-                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                             placeholder="0.00"
                             required
                         />
@@ -263,7 +263,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                             type="number"
                             value={formData.selling_price}
                             onChange={handleChange}
-                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                             placeholder="0.00"
                             required
                         />
@@ -281,7 +281,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                                     e.target.value = e.target.value.replace(/^0+/, '');
                                 }
                             }}
-                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                         />
                     </div>
                 </div>
@@ -293,7 +293,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                             name="skucode"
                             value={formData.skucode}
                             onChange={handleChange}
-                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                             placeholder="e.g. CHAIR-WOOD-RED"
                             required
                         />
@@ -306,7 +306,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                                 type="number"
                                 value={formData.weight}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] flex-1"
+                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary flex-1"
                                 placeholder="Value"
                             />
                             <select
@@ -340,7 +340,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                                 name="weight_type"
                                 value={formData.weight_type}
                                 onChange={handleChange}
-                                className="w-full mt-2 px-4 py-2 rounded-lg border border-gray-100 bg-orange-50/30 focus:ring-1 focus:ring-[#e09a74] text-xs"
+                                className="w-full mt-2 px-4 py-2 rounded-lg border border-gray-100 bg-orange-50/30 focus:ring-1 focus:ring-primary text-xs"
                                 placeholder="Enter custom unit (e.g. gauge, ply)"
                             />
                         )}
@@ -350,7 +350,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                 <div className="space-y-4 pt-4">
                     <div className="flex items-center justify-between">
                         <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Attributes</h3>
-                        <button type="button" onClick={addAttribute} className="text-[#e09a74] hover:text-[#d08963] text-sm font-bold flex items-center gap-1">
+                        <button type="button" onClick={addAttribute} className="text-primary hover:text-[#d08963] text-sm font-bold flex items-center gap-1">
                             <Plus className="w-4 h-4" /> Add Attribute
                         </button>
                     </div>
@@ -385,7 +385,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                                                 disabled={!attr.key}
                                             />
                                         </div>
-                                        
+
                                         <button type="button" onClick={() => removeAttribute(idx)} className="p-2 text-gray-300 hover:text-red-500 transition-colors shrink-0">
                                             <Trash2 className="w-4 h-4" />
                                         </button>
@@ -400,7 +400,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                     <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider">Variant Images *</h3>
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                         <label className="aspect-square border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-all group">
-                            <Upload className="w-6 h-6 text-gray-300 group-hover:text-[#e09a74] transition-colors" />
+                            <Upload className="w-6 h-6 text-gray-300 group-hover:text-primary transition-colors" />
                             <span className="text-[10px] font-bold text-gray-400 mt-2">Upload</span>
                             <input type="file" multiple onChange={handleImageChange} className="hidden" accept="image/*" />
                         </label>
@@ -424,7 +424,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                     <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="bg-[#e09a74] text-white px-10 py-3 font-bold rounded-full hover:bg-white hover:text-[#e09a74] hover:border-[#e09a74] border transition-all cursor-pointer shadow-lg shadow-orange-100"
+                        className="bg-primary text-white px-10 py-3 font-bold rounded-full hover:bg-white hover:text-primary hover:border-primary border transition-all cursor-pointer shadow-lg shadow-orange-100"
                     >
                         {isSubmitting ? 'Saving...' : 'Save & Finish'}
                     </Button>

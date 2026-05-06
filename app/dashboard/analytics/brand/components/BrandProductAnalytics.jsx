@@ -22,7 +22,7 @@ export default function BrandProductAnalytics() {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
-                <Loader2 className="w-10 h-10 text-[#E09A74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Aggregating product performance...</p>
             </div>
         );
@@ -35,7 +35,7 @@ export default function BrandProductAnalytics() {
         { label: 'Total Product Views', value: stats.totalProductViews, icon: Eye, color: 'text-blue-600', bg: 'bg-blue-50' },
         { label: 'Shortlisted Products', value: stats.shortlistedProducts, icon: Heart, color: 'text-rose-600', bg: 'bg-rose-50' },
         { label: 'Sample Requests', value: stats.sampleRequests, icon: FileText, color: 'text-amber-600', bg: 'bg-amber-50' },
-        { label: 'Vendor Contact Requests', value: stats.vendorContactRequests, icon: MessageSquare, color: 'text-[#E09A74]', bg: 'bg-[#E09A74]/10' },
+        { label: 'Vendor Contact Requests', value: stats.vendorContactRequests, icon: MessageSquare, color: 'text-primary', bg: 'bg-primary/10' },
     ];
 
     return (
@@ -62,7 +62,7 @@ export default function BrandProductAnalytics() {
                             <h3 className="text-xl font-black text-gray-900">Most Viewed Products</h3>
                             <p className="text-sm font-medium text-gray-400">Products gaining the most attention</p>
                         </div>
-                        <TrendingUp className="w-6 h-6 text-[#E09A74]" />
+                        <TrendingUp className="w-6 h-6 text-primary" />
                     </div>
 
                     <div className="space-y-6 relative z-10">
@@ -82,7 +82,7 @@ export default function BrandProductAnalytics() {
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xl font-black text-[#E09A74]">{product.views || 0}</p>
+                                    <p className="text-xl font-black text-primary">{product.views || 0}</p>
                                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Unique Views</p>
                                 </div>
                             </div>
@@ -97,7 +97,7 @@ export default function BrandProductAnalytics() {
                 <div className="bg-[#2C2D35] p-10 rounded-[48px] shadow-2xl text-white relative overflow-hidden flex flex-col justify-between">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
                     <div className="relative z-10">
-                        <div className="w-12 h-12 rounded-2xl bg-[#E09A74] flex items-center justify-center mb-8 shadow-2xl">
+                        <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center mb-8 shadow-2xl">
                             <TrendingUp className="w-6 h-6 text-white" />
                         </div>
                         <h3 className="text-2xl font-black mb-4">Growth Tips</h3>
@@ -107,17 +107,17 @@ export default function BrandProductAnalytics() {
 
                         <div className="space-y-4">
                             <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <ArrowUpRight className="w-5 h-5 text-[#E09A74] shrink-0" />
+                                <ArrowUpRight className="w-5 h-5 text-primary shrink-0" />
                                 <p className="text-xs font-bold text-gray-300 uppercase tracking-widest leading-loose">Reach out to professionals who've shortlisted your products.</p>
                             </div>
                             <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/10">
-                                <ArrowUpRight className="w-5 h-5 text-[#E09A74] shrink-0" />
+                                <ArrowUpRight className="w-5 h-5 text-primary shrink-0" />
                                 <p className="text-xs font-bold text-gray-300 uppercase tracking-widest leading-loose">Update stock info for high-demand regions.</p>
                             </div>
                         </div>
                     </div>
 
-                    <button className="mt-12 w-full py-4 bg-[#E09A74] rounded-2xl text-sm font-black text-white hover:bg-[#d88963] transition-all shadow-xl shadow-[#E09A74]/20 relative z-10">
+                    <button className="mt-12 w-full py-4 bg-primary rounded-2xl text-sm font-black text-white hover:bg-[#d88963] transition-all shadow-xl shadow-primary/20 relative z-10">
                         View Marketing Resources
                     </button>
                 </div>

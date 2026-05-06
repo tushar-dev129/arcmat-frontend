@@ -74,7 +74,7 @@ export default function RetailerRequestsPage() {
     if (isLoading) {
         return (
             <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
             </div>
         );
     }
@@ -83,7 +83,7 @@ export default function RetailerRequestsPage() {
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
             <header className="mb-8">
                 <h1 className="text-3xl font-black text-[#2d3142] mb-2 flex items-center gap-3">
-                    <User className="w-8 h-8 text-[#e09a74]" />
+                    <User className="w-8 h-8 text-primary" />
                     Architect Contact Requests
                 </h1>
                 <p className="text-gray-400 font-medium">Manage and respond to architects interested in your materials.</p>
@@ -109,7 +109,7 @@ export default function RetailerRequestsPage() {
                                     <div className="flex flex-col lg:flex-row justify-between gap-6 mb-8">
                                         {/* Architect Info */}
                                         <div className="flex gap-5">
-                                            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-50 text-[#e09a74]">
+                                            <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center shrink-0 border border-gray-50 text-primary">
                                                 <User className="w-8 h-8" />
                                             </div>
                                             <div>
@@ -122,11 +122,11 @@ export default function RetailerRequestsPage() {
                                                 <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
                                                     <div className="flex items-center gap-1.5">
                                                         <Mail className="w-4 h-4" />
-                                                        <a href={`mailto:${request.professionalId?.email}`} className="hover:text-[#e09a74] hover:underline transition-colors">{request.professionalId?.email}</a>
+                                                        <a href={`mailto:${request.professionalId?.email}`} className="hover:text-primary hover:underline transition-colors">{request.professionalId?.email}</a>
                                                     </div>
                                                     <div className="flex items-center gap-1.5">
                                                         <Phone className="w-4 h-4" />
-                                                        <a href={`tel:${request.professionalId?.mobile}`} className="hover:text-[#e09a74] hover:underline transition-colors">{request.professionalId?.mobile}</a>
+                                                        <a href={`tel:${request.professionalId?.mobile}`} className="hover:text-primary hover:underline transition-colors">{request.professionalId?.mobile}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -205,7 +205,7 @@ export default function RetailerRequestsPage() {
                                                     updateStatus({ requestId: request._id, status: nextStatus });
                                                 }}
                                                 disabled={isUpdating || (request.status !== 'Pending' && request.status !== 'Processing')}
-                                                className="bg-[#e09a74] text-white hover:bg-[#c59678] font-black rounded-2xl py-4 px-8 shadow-lg shadow-orange-50 transition-all flex items-center gap-2 disabled:opacity-50"
+                                                className="bg-primary text-white hover:bg-[#c59678] font-black rounded-2xl py-4 px-8 shadow-lg shadow-orange-50 transition-all flex items-center gap-2 disabled:opacity-50"
                                             >
                                                 {request.status === 'Pending' ? 'Mark as Processed' : (request.status === 'Processing' ? 'Complete Request' : 'Confirmed')}
                                                 <ChevronRight className="w-4 h-4" />

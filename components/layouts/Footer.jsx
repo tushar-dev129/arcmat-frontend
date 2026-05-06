@@ -4,7 +4,7 @@ import Container from "../ui/Container";
 
 const Footer = () => {
     return (
-        <footer className="bg-white pt-16 pb-8 border-t border-[#E09A74] w-full">
+        <footer className="bg-white pt-16 pb-8 border-t border-primary w-full">
             <Container>
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-24">
                     <div className="flex flex-col gap-4 text-[#707075]">
@@ -40,7 +40,7 @@ const Footer = () => {
                         <Button
                             text="Join Us"
                             href="/auth/login"
-                            className="bg-[#4D4E58] text-white hover:bg-black px-8 py-3 rounded-full font-medium cursor-pointer"
+                            className="bg-primary text-white hover:bg-primary/80 px-8 py-3 rounded-full font-medium cursor-pointer"
                         />
                     </div>
                 </div>

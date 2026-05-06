@@ -173,7 +173,7 @@ const Header = ({ variant = 'default' }) => {
                                                 const isVariantCentric = Boolean(product.productId && typeof product.productId === 'object');
                                                 const rootProduct = isVariantCentric ? product.productId : product;
                                                 const variantItem = isVariantCentric ? product : null;
-                                                
+
                                                 const id = rootProduct._id || rootProduct.id;
                                                 const name = product.product_name || product.name || rootProduct.product_name || rootProduct.name;
                                                 const thumbnail = getProductThumbnail(product);
@@ -208,7 +208,7 @@ const Header = ({ variant = 'default' }) => {
                                                                 {name}
                                                             </h4>
                                                             <div className="flex items-center gap-2 mt-0.5">
-                                                                <span className="text-xs font-semibold text-[#e09a74]">
+                                                                <span className="text-xs font-semibold text-primary">
                                                                     {formatCurrency(price)}
                                                                 </span>
                                                             </div>
@@ -296,7 +296,7 @@ const Header = ({ variant = 'default' }) => {
                                                             onClick={() => setProjectsOpen(false)}
                                                             className="flex flex-col gap-0.5 px-4 py-3 hover:bg-[#fcf6f3] transition-colors border-b border-gray-50 last:border-none group"
                                                         >
-                                                            <span className="text-sm font-semibold text-[#4D4E58] group-hover:text-[#e09a74] transition-colors">
+                                                            <span className="text-sm font-semibold text-[#4D4E58] group-hover:text-primary transition-colors">
                                                                 {projectName}
                                                             </span>
                                                             <span className="text-[10px] text-gray-400 uppercase tracking-tight">View Moodboards</span>
@@ -310,7 +310,7 @@ const Header = ({ variant = 'default' }) => {
                             )}
 
                             {mounted && user?.role === 'architect' && (
-                                <Link 
+                                <Link
                                     href={
                                         activeProjectId && activeMoodboardId
                                             ? `/dashboard/projects/${activeProjectId}/moodboards/${activeMoodboardId}`
@@ -354,9 +354,9 @@ const Header = ({ variant = 'default' }) => {
                         <div className='flex md:flex items-center sm:gap-3'>
                             <Link href="/wishlist">
                                 <button className='p-2 hover:bg-gray-50 rounded-full transition-colors relative group/wishlist'>
-                                    <Heart size={22} className="text-gray-600 group-hover/wishlist:text-[#e09a74] transition-colors" />
+                                    <Heart size={22} className="text-gray-600 group-hover/wishlist:text-primary transition-colors" />
                                     {wishlistCount > 0 && (
-                                        <span className="absolute -top-0.5 -right-0.5 bg-[#e09a74] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
+                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
                                             {wishlistCount > 99 ? '99+' : wishlistCount}
                                         </span>
                                     )}
@@ -364,9 +364,9 @@ const Header = ({ variant = 'default' }) => {
                             </Link>
                             <Link href="/cart">
                                 <button className='p-2 hover:bg-gray-50 rounded-full transition-colors relative group/cart'>
-                                    <ShoppingCart size={22} className="text-gray-600 group-hover/cart:text-[#e09a74] transition-colors" />
+                                    <ShoppingCart size={22} className="text-gray-600 group-hover/cart:text-primary transition-colors" />
                                     {cartCount > 0 && (
-                                        <span className="absolute -top-0.5 -right-0.5 bg-[#e09a74] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
+                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
                                             {cartCount > 99 ? '99+' : cartCount}
                                         </span>
                                     )}
@@ -386,7 +386,7 @@ const Header = ({ variant = 'default' }) => {
                                     onClick={() => setProfileOpen(!profileOpen)}
                                     className="flex items-center gap-2 border border-gray-200 rounded-full py-1.5 px-4 hover:shadow-sm transition-all bg-white"
                                 >
-                                    <div className="w-8 h-8 rounded-full bg-[#e09a74] text-white flex items-center justify-center font-bold text-sm overflow-hidden border-2 border-gray-100 shadow-sm">
+                                    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm overflow-hidden border-2 border-gray-100 shadow-sm">
                                         {user.profileImage ? (
                                             <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
                                         ) : (
@@ -406,13 +406,13 @@ const Header = ({ variant = 'default' }) => {
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                         </div>
 
-                                        <Link href="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74] transition-colors">
+                                        <Link href="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary transition-colors">
                                             <User size={16} />
                                             Profile
                                         </Link>
 
                                         {!pathname?.startsWith('/dashboard') && (
-                                            <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74] transition-colors">
+                                            <Link href="/dashboard" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary transition-colors">
                                                 <LayoutDashboard size={16} />
                                                 Dashboard
                                             </Link>
@@ -434,7 +434,7 @@ const Header = ({ variant = 'default' }) => {
                         ) : (
                             <Button
                                 href="/auth/login"
-                                className="border border-[#e09a74] font-semibold bg-white text-[#4D4E58] hover:bg-[#e09a74] hover:text-white px-6 py-2 h-auto text-[15px]"
+                                className="border border-primary font-semibold bg-white text-[#4D4E58] hover:bg-primary hover:text-white px-6 py-2 h-auto text-[15px]"
                                 text="Sign In"
                             />
                         )}
@@ -447,7 +447,7 @@ const Header = ({ variant = 'default' }) => {
                                 onClick={() => setProfileOpen(!profileOpen)}
                                 className="p-1 hover:bg-gray-50 rounded-full transition-colors"
                             >
-                                <div className="w-8 h-8 rounded-full bg-[#e09a74] text-white flex items-center justify-center font-bold text-sm overflow-hidden border border-gray-200">
+                                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm overflow-hidden border border-gray-200">
                                     {user.profileImage ? (
                                         <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
                                     ) : (
@@ -480,7 +480,7 @@ const Header = ({ variant = 'default' }) => {
                                         <Link
                                             href="/profile"
                                             onClick={() => setProfileOpen(false)}
-                                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74]"
+                                            className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary"
                                         >
                                             <User size={16} />
                                             Profile
@@ -496,7 +496,7 @@ const Header = ({ variant = 'default' }) => {
                                                             : "/dashboard/projects"
                                                 }
                                                 onClick={() => setProfileOpen(false)}
-                                                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74]"
+                                                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary"
                                             >
                                                 <MotionFolder
                                                     size={16}
@@ -527,7 +527,7 @@ const Header = ({ variant = 'default' }) => {
                                             <Link
                                                 href="/dashboard"
                                                 onClick={() => setProfileOpen(false)}
-                                                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-[#e09a74]"
+                                                className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary"
                                             >
                                                 <LayoutDashboard size={16} />
                                                 Dashboard

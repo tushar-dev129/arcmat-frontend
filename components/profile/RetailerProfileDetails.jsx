@@ -18,7 +18,7 @@ const RetailerProfileDetails = ({ user, brands, onEdit }) => {
             <div className="flex justify-between items-start">
                 <div className="flex-1 space-y-6">
                     <div className="flex items-start gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-[#e09a74]/10 flex items-center justify-center text-[#e09a74] shrink-0">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
                             <Building2 size={24} />
                         </div>
                         <div>
@@ -92,7 +92,7 @@ const RetailerProfileDetails = ({ user, brands, onEdit }) => {
 
                 <button
                     onClick={onEdit}
-                    className="flex items-center gap-2 text-[#e09a74] hover:text-[#d08963] font-medium transition-colors shrink-0"
+                    className="flex items-center gap-2 text-primary hover:text-[#d08963] font-medium transition-colors shrink-0"
                 >
                     <Edit size={18} />
                     <span className="hidden sm:inline cursor-pointer">Edit Profile</span>
@@ -109,7 +109,7 @@ const RetailerProfileDetails = ({ user, brands, onEdit }) => {
                         {retailerProfile.cities.map((city, index) => (
                             <span
                                 key={index}
-                                className="px-4 py-2 bg-[#e09a74]/5 border border-[#e09a74]/20 text-[#e09a74] text-sm font-bold rounded-xl shadow-sm"
+                                className="px-4 py-2 bg-primary/5 border border-primary/20 text-primary text-sm font-bold rounded-xl shadow-sm"
                             >
                                 {city}
                             </span>

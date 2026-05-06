@@ -76,7 +76,7 @@ export default function AdminHelp({ isAdmin }) {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
-                            <MessageSquare className="w-8 h-8 text-[#E09A74]" />
+                            <MessageSquare className="w-8 h-8 text-primary" />
                             Support Tickets
                         </h1>
                         <p className="text-gray-500 font-medium mt-1">Manage and respond to platform user queries</p>
@@ -100,7 +100,7 @@ export default function AdminHelp({ isAdmin }) {
 
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-4">
-                        <Loader2 className="w-10 h-10 text-[#E09A74] animate-spin" />
+                        <Loader2 className="w-10 h-10 text-primary animate-spin" />
                         <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading queries...</p>
                     </div>
                 ) : filteredQueries.length === 0 ? (
@@ -118,7 +118,7 @@ export default function AdminHelp({ isAdmin }) {
                                     key={query._id}
                                     className={clsx(
                                         "bg-white rounded-[32px] border transition-all overflow-hidden",
-                                        isExpanded ? "ring-2 ring-[#E09A74]/20 border-[#E09A74] shadow-2xl shadow-gray-200" : "border-gray-100 hover:border-gray-200 shadow-sm"
+                                        isExpanded ? "ring-2 ring-primary/20 border-primary shadow-2xl shadow-gray-200" : "border-gray-100 hover:border-gray-200 shadow-sm"
                                     )}
                                 >
                                     {/* Header / Summary */}
@@ -185,7 +185,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                         href={src}
                                                                         target="_blank"
                                                                         rel="noopener noreferrer"
-                                                                        className="w-24 h-24 rounded-2xl overflow-hidden border border-gray-200 hover:ring-2 hover:ring-[#E09A74] transition-all relative group"
+                                                                        className="w-24 h-24 rounded-2xl overflow-hidden border border-gray-200 hover:ring-2 hover:ring-primary transition-all relative group"
                                                                     >
                                                                         <img src={src} className="w-full h-full object-cover" />
                                                                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white transition-opacity">
@@ -212,7 +212,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                                 {new Date(step.updatedAt).toLocaleString()}
                                                                             </span>
                                                                             <p className="text-sm font-bold text-gray-700">
-                                                                                Status set to <span className="text-[#E09A74]">{step.status}</span>
+                                                                                Status set to <span className="text-primary">{step.status}</span>
                                                                             </p>
                                                                             {step.comment && <p className="text-xs text-gray-500 mt-1 italic">"{step.comment}"</p>}
                                                                         </div>

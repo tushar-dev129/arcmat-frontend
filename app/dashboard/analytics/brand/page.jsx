@@ -44,7 +44,7 @@ export default function UnifiedBrandAnalytics() {
                     {/* Header */}
                     <div className="mb-12">
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
-                            <TrendingUp className="w-8 h-8 text-[#E09A74]" />
+                            <TrendingUp className="w-8 h-8 text-primary" />
                             Brand Analytics
                         </h1>
                         <p className="text-gray-500 font-medium mt-1">Comprehensive insights into your brand performance, professional reach, and retail network.</p>
@@ -65,7 +65,7 @@ export default function UnifiedBrandAnalytics() {
                                             : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
                                     )}
                                 >
-                                    <Icon className={clsx("w-4 h-4", activeTab === tab.id ? "text-[#E09A74]" : "")} />
+                                    <Icon className={clsx("w-4 h-4", activeTab === tab.id ? "text-primary" : "")} />
                                     {tab.label}
                                 </button>
                             );

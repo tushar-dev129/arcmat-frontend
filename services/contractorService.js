@@ -42,5 +42,24 @@ export const contractorService = {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
+    },
+
+    createPortfolioItem: async (contractorId, formData) => {
+        const response = await api.post(`/contractor/${contractorId}/portfolio`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    },
+
+    updatePortfolioItem: async (itemId, formData) => {
+        const response = await api.patch(`/contractor/portfolio/${itemId}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    },
+
+    deletePortfolioItem: async (itemId) => {
+        const response = await api.delete(`/contractor/portfolio/${itemId}`);
+        return response.data;
     }
 };

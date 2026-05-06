@@ -34,7 +34,7 @@ export default function EditProductPage() {
     if (isLoading) {
         return (
             <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
-                <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 <p className="text-gray-500 font-medium">Fetching product data...</p>
             </div>
         );
@@ -45,7 +45,7 @@ export default function EditProductPage() {
             <Container className="py-20 text-center">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h2>
                 <p className="text-gray-500 mb-8">The product you are trying to edit doesn't exist or you don't have permission.</p>
-                <Link href={user?.role === 'admin' ? `/dashboard/products-list` : `/dashboard/products-list/${effectiveVendorId}`} className="text-[#e09a74] font-bold hover:underline">
+                <Link href={user?.role === 'admin' ? `/dashboard/products-list` : `/dashboard/products-list/${effectiveVendorId}`} className="text-primary font-bold hover:underline">
                     Back to Product List
                 </Link>
             </Container>

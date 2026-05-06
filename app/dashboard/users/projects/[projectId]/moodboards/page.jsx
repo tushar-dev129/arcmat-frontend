@@ -27,7 +27,7 @@ export default function ProjectMoodboardsPage() {
             <div className="mb-8">
                 <button
                     onClick={() => router.back()}
-                    className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#e09a74] transition-colors mb-4 group"
+                    className="flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors mb-4 group"
                 >
                     <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                     Back to Projects List
@@ -35,7 +35,7 @@ export default function ProjectMoodboardsPage() {
 
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-[#e09a74]">
+                        <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-100 flex items-center justify-center text-primary">
                             <Layout className="w-6 h-6" />
                         </div>
                         <div>
@@ -55,7 +55,7 @@ export default function ProjectMoodboardsPage() {
                             placeholder="Search spaces..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:border-[#e09a74] transition-colors text-sm"
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:border-primary transition-colors text-sm"
                         />
                     </div>
                 </div>

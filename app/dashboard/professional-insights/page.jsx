@@ -122,7 +122,7 @@ const ProfessionalRow = ({ professional }) => {
                 onClick={() => setExpanded(!expanded)}
             >
                 <div className="flex items-center gap-4 w-full md:w-auto">
-                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#e09a74] to-[#c87d55] flex items-center justify-center text-white font-bold text-lg shrink-0 shadow-sm">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-[#c87d55] flex items-center justify-center text-white font-bold text-lg shrink-0 shadow-sm">
                         {professional.avatar}
                     </div>
 
@@ -160,7 +160,7 @@ const ProfessionalRow = ({ professional }) => {
                             </div>
                             <div className="w-[1px] h-6 bg-gray-100"></div>
                             <div className="flex flex-col items-end">
-                                <span className="text-sm font-bold text-[#e09a74]">{professional.totalSpend}</span>
+                                <span className="text-sm font-bold text-primary">{professional.totalSpend}</span>
                             </div>
                         </div>
                     </div>
@@ -196,7 +196,7 @@ const ProfessionalRow = ({ professional }) => {
                                     <div className="pt-2 border-t border-gray-50 flex flex-col gap-1">
                                         <span className="text-xs text-gray-400">Contact Details</span>
                                         <div className="flex flex-col gap-1.5 mt-1">
-                                            <a href={`mailto:${professional.email}`} className="text-xs text-[#e09a74] hover:underline flex items-center gap-1.5 font-medium">
+                                            <a href={`mailto:${professional.email}`} className="text-xs text-primary hover:underline flex items-center gap-1.5 font-medium">
                                                 <Mail className="w-3 h-3" /> {professional.email}
                                             </a>
                                             <a href={`tel:${professional.phone}`} className="text-xs text-gray-600 flex items-center gap-1.5">
@@ -299,8 +299,8 @@ export default function ProfessionalInsightsPage() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                             <div className="flex items-center gap-3 mb-2">
-                                <div className="w-12 h-12 rounded-2xl bg-[#e09a74]/10 flex items-center justify-center">
-                                    <Briefcase className="w-6 h-6 text-[#e09a74]" />
+                                <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center">
+                                    <Briefcase className="w-6 h-6 text-primary" />
                                 </div>
                                 <div>
                                     <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Professional Insights</h1>
@@ -315,8 +315,8 @@ export default function ProfessionalInsightsPage() {
                                     key={type}
                                     onClick={() => setFilterType(type)}
                                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterType === type
-                                            ? "bg-gray-900 text-white shadow-lg shadow-gray-200"
-                                            : "bg-white text-gray-500 border border-gray-100 hover:border-gray-200"
+                                        ? "bg-gray-900 text-white shadow-lg shadow-gray-200"
+                                        : "bg-white text-gray-500 border border-gray-100 hover:border-gray-200"
                                         }`}
                                 >
                                     {type}
@@ -372,7 +372,7 @@ export default function ProfessionalInsightsPage() {
                         placeholder="Search by professional name, type, location..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 rounded-2xl border border-gray-100 bg-white text-sm shadow-sm focus:outline-none focus:ring-4 focus:ring-[#e09a74]/10 focus:border-[#e09a74] transition-all"
+                        className="w-full pl-12 pr-6 py-4 rounded-2xl border border-gray-100 bg-white text-sm shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
                     />
                 </div>
 

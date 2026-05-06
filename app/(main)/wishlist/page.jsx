@@ -26,7 +26,7 @@ const WishlistPage = () => {
         return (
             <div className="min-h-screen flex flex-col bg-white">
                 <div className="flex-1 flex flex-col items-center justify-center p-10">
-                    <Loader2 className="w-12 h-12 text-[#e09a74] animate-spin mb-4" />
+                    <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
                     <p className="text-gray-500 font-medium animate-pulse text-lg">Curating your favorites...</p>
                 </div>
             </div>
@@ -43,7 +43,7 @@ const WishlistPage = () => {
                         <div>
                             <div className="flex items-center gap-3 mb-2">
                                 <span className="p-2 bg-[#fff2ed] rounded-lg">
-                                    <Heart className="w-5 h-5 text-[#e09a74] fill-current" />
+                                    <Heart className="w-5 h-5 text-primary fill-current" />
                                 </span>
                                 <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight italic">My Wishlist</h1>
                             </div>

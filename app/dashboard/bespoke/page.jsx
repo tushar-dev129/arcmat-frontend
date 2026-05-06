@@ -149,7 +149,7 @@ const BespokeEditorPage = () => {
     if (loading || brandLoading) {
         return (
             <div className="flex min-h-[60vh] items-center justify-center">
-                <Loader2 className="h-9 w-9 animate-spin text-[#e09a74]" />
+                <Loader2 className="h-9 w-9 animate-spin text-primary" />
             </div>
         );
     }
@@ -176,7 +176,7 @@ const BespokeEditorPage = () => {
                     <Link
                         href={`/bespoke/${brandId}`}
                         target="_blank"
-                        className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 hover:border-[#e09a74] hover:text-[#e09a74]"
+                        className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 hover:border-primary hover:text-primary"
                     >
                         Preview
                         <ArrowUpRight className="h-4 w-4" />
@@ -184,7 +184,7 @@ const BespokeEditorPage = () => {
                     <button
                         onClick={savePage}
                         disabled={updateBrand.isPending}
-                        className="inline-flex items-center gap-2 rounded-full bg-[#e09a74] px-5 py-3 text-sm font-bold text-white hover:bg-[#c97f58] disabled:opacity-60"
+                        className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-[#c97f58] disabled:opacity-60"
                     >
                         {updateBrand.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                         Save Page
@@ -202,7 +202,7 @@ const BespokeEditorPage = () => {
                                     type="checkbox"
                                     checked={isPublished}
                                     onChange={(event) => setIsPublished(event.target.checked)}
-                                    className="h-4 w-4 accent-[#e09a74]"
+                                    className="h-4 w-4 accent-primary"
                                 />
                                 Published
                             </label>
@@ -215,7 +215,7 @@ const BespokeEditorPage = () => {
                                     value={headline}
                                     onChange={(event) => setHeadline(event.target.value)}
                                     placeholder={`${brand.name} bespoke materials for project-ready spaces`}
-                                    className="mt-2 h-12 w-full rounded-lg border border-gray-200 px-4 text-sm font-medium outline-none focus:border-[#e09a74] focus:ring-4 focus:ring-[#e09a74]/10"
+                                    className="mt-2 h-12 w-full rounded-lg border border-gray-200 px-4 text-sm font-medium outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
                                 />
                             </label>
                             <label className="block">
@@ -225,7 +225,7 @@ const BespokeEditorPage = () => {
                                     onChange={(event) => setBio(event.target.value)}
                                     rows={6}
                                     placeholder="Tell customers what this brand does best."
-                                    className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium leading-6 outline-none focus:border-[#e09a74] focus:ring-4 focus:ring-[#e09a74]/10"
+                                    className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium leading-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
                                 />
                             </label>
 
@@ -312,7 +312,7 @@ const BespokeEditorPage = () => {
                         </div>
                         {requestsLoading ? (
                             <div className="flex h-24 items-center justify-center">
-                                <Loader2 className="h-6 w-6 animate-spin text-[#e09a74]" />
+                                <Loader2 className="h-6 w-6 animate-spin text-primary" />
                             </div>
                         ) : contractorRequests.length > 0 ? (
                             <div className="space-y-3">
@@ -387,7 +387,7 @@ const BespokeEditorPage = () => {
                             <h2 className="text-lg font-bold text-gray-950">Reviews</h2>
                             <button
                                 onClick={() => setReviews((current) => [...current, { name: "", role: "", rating: 5, comment: "" }])}
-                                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:border-[#e09a74] hover:text-[#e09a74]"
+                                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-600 hover:border-primary hover:text-primary"
                             >
                                 <Plus className="h-4 w-4" />
                             </button>
@@ -409,18 +409,18 @@ const BespokeEditorPage = () => {
                                             value={review.name || ""}
                                             onChange={(event) => setReviews((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value } : item))}
                                             placeholder="Customer name"
-                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-[#e09a74]"
+                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-primary"
                                         />
                                         <input
                                             value={review.role || ""}
                                             onChange={(event) => setReviews((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, role: event.target.value } : item))}
                                             placeholder="Role or project"
-                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-[#e09a74]"
+                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-primary"
                                         />
                                         <select
                                             value={review.rating || 5}
                                             onChange={(event) => setReviews((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, rating: Number(event.target.value) } : item))}
-                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-[#e09a74]"
+                                            className="h-10 w-full rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-primary"
                                         >
                                             {[5, 4, 3, 2, 1].map((rating) => <option key={rating} value={rating}>{rating} stars</option>)}
                                         </select>
@@ -429,7 +429,7 @@ const BespokeEditorPage = () => {
                                             onChange={(event) => setReviews((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, comment: event.target.value } : item))}
                                             placeholder="Review text"
                                             rows={3}
-                                            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-[#e09a74]"
+                                            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none focus:border-primary"
                                         />
                                     </div>
                                 </div>
@@ -484,7 +484,7 @@ const GalleryInput = ({ existingMedia, newMedia, onExistingChange, onNewChange }
                     <p className="text-sm font-bold text-gray-950">{totalCount} / 8 media selected</p>
                     <p className="text-xs font-medium text-gray-500">Recommended: at least 4 for a balanced showcase.</p>
                 </div>
-                <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${remainingSlots > 0 ? "bg-[#e09a74] text-white hover:bg-[#c97f58]" : "bg-gray-200 text-gray-400"}`}>
+                <label className={`inline-flex cursor-pointer items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${remainingSlots > 0 ? "bg-primary text-white hover:bg-[#c97f58]" : "bg-gray-200 text-gray-400"}`}>
                     <ImagePlus className="h-4 w-4" />
                     Add Media
                     <input
@@ -592,7 +592,7 @@ const SelectionSection = ({ title, description, isLoading, items, selectedIds, o
         </div>
         {isLoading ? (
             <div className="flex h-32 items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-[#e09a74]" />
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
             </div>
         ) : items.length > 0 ? (
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
@@ -603,7 +603,7 @@ const SelectionSection = ({ title, description, isLoading, items, selectedIds, o
                         <button
                             key={itemId}
                             onClick={() => onToggle(itemId)}
-                            className={`rounded-lg border p-3 text-left transition ${selected ? "border-[#e09a74] bg-[#fff7f2]" : "border-gray-200 bg-white hover:border-gray-300"}`}
+                            className={`rounded-lg border p-3 text-left transition ${selected ? "border-primary bg-[#fff7f2]" : "border-gray-200 bg-white hover:border-gray-300"}`}
                         >
                             {renderItem(item)}
                         </button>
@@ -625,12 +625,12 @@ const OptionRow = ({ image, title, subtitle }) => {
         <div className="flex items-center gap-3">
             <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-lg font-black text-gray-500">
                 {!failed && !isLogo ? (
-                    <Image 
-                        src={image} 
-                        alt={title || "Option"} 
-                        fill 
-                        className="object-cover" 
-                        unoptimized 
+                    <Image
+                        src={image}
+                        alt={title || "Option"}
+                        fill
+                        className="object-cover"
+                        unoptimized
                         onError={() => setFailed(true)}
                     />
                 ) : (

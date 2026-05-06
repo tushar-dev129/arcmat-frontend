@@ -70,7 +70,7 @@ export default function LoginForm() {
               type="email"
               placeholder="Business Email"
               className={clsx(
-                "w-full py-3 rounded-[8px] border px-4 text-[15.75px] text-[#4D4E58] placeholder-[#86868B] focus:outline-none focus:border-[#E09A74] transition-all",
+                "w-full py-3 rounded-[8px] border px-4 text-[15.75px] text-[#4D4E58] placeholder-[#86868B] focus:outline-none focus:border-primary transition-all",
                 errors.email ? "border-red-500" : "border-[#E5E5E5]"
               )}
             />
@@ -83,7 +83,7 @@ export default function LoginForm() {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               className={clsx(
-                "w-full py-3 rounded-[8px] border px-4 text-[15.75px] text-[#4D4E58] placeholder-[#86868B] focus:outline-none focus:border-[#E09A74] transition-all",
+                "w-full py-3 rounded-[8px] border px-4 text-[15.75px] text-[#4D4E58] placeholder-[#86868B] focus:outline-none focus:border-primary transition-all",
                 errors.password ? "border-red-500" : "border-[#E5E5E5]"
               )}
             />
@@ -128,8 +128,8 @@ export default function LoginForm() {
             className={clsx(
               'w-full py-3.5 rounded-lg text-base font-medium text-white transition-all',
               loginMutation.isPending
-                ? "bg-[#E09A74]/70 cursor-not-allowed"
-                : "bg-[#E09A74] hover:bg-[#d48b65]"
+                ? "bg-primary/70 cursor-not-allowed"
+                : "bg-primary hover:bg-[#d48b65]"
             )}
           >
             {loginMutation.isPending ? (

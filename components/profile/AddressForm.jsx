@@ -65,7 +65,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                     <input
                         {...register('first_name', { required: 'First name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="First Name"
                     />
                     {errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>}
@@ -74,7 +74,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                     <input
                         {...register('last_name', { required: 'Last name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="Last Name"
                     />
                     {errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>}
@@ -89,7 +89,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                             required: 'Email is required',
                             pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
                         })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="Email"
                     />
                     {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
@@ -98,7 +98,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
                     <input
                         {...register('mobile', { required: 'Mobile number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="Mobile Number"
                     />
                     {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
@@ -110,7 +110,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
                     <input
                         {...register('pincode', { required: 'Pincode is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="Pincode"
                     />
                     {errors.pincode && <p className="text-red-500 text-xs mt-1">{errors.pincode.message}</p>}
@@ -119,7 +119,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
                     <input
                         {...register('city', { required: 'City is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="City"
                     />
                     {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>}
@@ -128,7 +128,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
                     <input
                         {...register('state', { required: 'State is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                         placeholder="State"
                     />
                     {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state.message}</p>}
@@ -139,7 +139,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
                 <input
                     {...register('country', { required: 'Country is required' })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
                     placeholder="Country"
                 />
                 {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country.message}</p>}
@@ -150,7 +150,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                 <textarea
                     {...register('address1', { required: 'Address is required' })}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all resize-none"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                     placeholder="House No, Building Name, Street"
                 />
                 {errors.address1 && <p className="text-red-500 text-xs mt-1">{errors.address1.message}</p>}
@@ -161,7 +161,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                 <textarea
                     {...register('address2')}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#e09a74]/20 focus:border-[#e09a74] outline-none transition-all resize-none"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
                     placeholder="Area, Landmark"
                 />
             </div>
@@ -174,7 +174,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                     onChange={(e) => {
                         reset({ ...watch(), defaultaddress: e.target.checked ? 1 : 0 });
                     }}
-                    className="w-4 h-4 text-[#e09a74] border-gray-300 rounded focus:ring-[#e09a74] cursor-pointer"
+                    className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
                 />
                 <label htmlFor="default_check" className="text-sm text-gray-600 cursor-pointer">Set as default address</label>
             </div>
@@ -189,7 +189,7 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-[#e09a74] text-white cursor-pointer hover:bg-white hover:text-[#e09a74] border border-[#e09a74] min-w-[120px] px-2"
+                    className="bg-primary text-white cursor-pointer hover:bg-white hover:text-primary border border-primary min-w-[120px] px-2"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
                             <Loader2 className="animate-spin" size={16} />

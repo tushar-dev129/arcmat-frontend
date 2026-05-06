@@ -71,7 +71,7 @@ const CompareBar = () => {
                         onClick={openCompareModal}
                         disabled={comparedProducts.length < 2}
                         className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm transition-all shadow-lg ${comparedProducts.length >= 2
-                            ? 'bg-[#e09a74] text-white hover:bg-[#d08963] shadow-orange-500/20 hover:shadow-orange-500/30 active:scale-95'
+                            ? 'bg-primary text-white hover:bg-[#d08963] shadow-orange-500/20 hover:shadow-orange-500/30 active:scale-95'
                             : 'bg-gray-100 text-gray-400 cursor-not-allowed shadow-none'
                             }`}
                     >

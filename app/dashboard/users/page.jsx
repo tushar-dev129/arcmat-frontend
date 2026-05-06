@@ -49,7 +49,7 @@ const UserDetailTooltip = ({ user, index, total }) => {
         )}>
             <div className="space-y-4">
                 <div className="flex items-center gap-3 pb-3 border-b border-gray-50">
-                    <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-[#e09a74] shadow-inner">
+                    <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-primary shadow-inner">
                         <UserIcon className="w-5 h-5" />
                     </div>
                     <div>
@@ -61,17 +61,17 @@ const UserDetailTooltip = ({ user, index, total }) => {
                 <div className="space-y-3">
                     <div className="grid grid-cols-1 gap-2.5">
                         <div className="flex items-center gap-2.5 text-[11px] text-gray-600 font-semibold group/item">
-                            <Mail className="w-3.5 h-3.5 text-[#e09a74]/70" />
+                            <Mail className="w-3.5 h-3.5 text-primary/70" />
                             <span className="truncate">{user.email}</span>
                         </div>
                         {user.mobile && (
                             <div className="flex items-center gap-2.5 text-[11px] text-gray-600 font-semibold">
-                                <Phone className="w-3.5 h-3.5 text-[#e09a74]/70" />
+                                <Phone className="w-3.5 h-3.5 text-primary/70" />
                                 <span>{user.mobile}</span>
                             </div>
                         )}
                         <div className="flex items-center gap-2.5 text-[11px] text-gray-600 font-semibold">
-                            <Calendar className="w-3.5 h-3.5 text-[#e09a74]/70" />
+                            <Calendar className="w-3.5 h-3.5 text-primary/70" />
                             <span>Joined {new Date(user.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                         </div>
                     </div>
@@ -79,7 +79,7 @@ const UserDetailTooltip = ({ user, index, total }) => {
                     {(user.profile || user.profession) && (
                         <div className="pt-3 border-t border-gray-50 space-y-2">
                             <div className="flex items-start gap-2.5 text-[11px] text-gray-600 font-semibold">
-                                <Briefcase className="w-3.5 h-3.5 text-[#e09a74]/70 mt-0.5" />
+                                <Briefcase className="w-3.5 h-3.5 text-primary/70 mt-0.5" />
                                 <span className="italic">{user.profession || user.profile || 'Professional profile'}</span>
                             </div>
                         </div>
@@ -88,11 +88,11 @@ const UserDetailTooltip = ({ user, index, total }) => {
                     {address && (
                         <div className="pt-3 border-t border-gray-50 space-y-2">
                             <div className="flex items-start gap-2.5 text-[11px] text-gray-600 font-semibold leading-relaxed">
-                                <MapPin className="w-3.5 h-3.5 text-[#e09a74]/70 mt-0.5" />
+                                <MapPin className="w-3.5 h-3.5 text-primary/70 mt-0.5" />
                                 <div>
                                     <p>{address.address1}</p>
                                     {address.address2 && <p>{address.address2}</p>}
-                                    <p className="text-[#e09a74] text-[10px] mt-0.5">{address.city}, {address.state} {address.pincode}</p>
+                                    <p className="text-primary text-[10px] mt-0.5">{address.city}, {address.state} {address.pincode}</p>
                                     <p className="text-[10px]">{address.country}</p>
                                 </div>
                             </div>
@@ -205,7 +205,7 @@ export default function UsersPage() {
             <Container className="py-20 text-center">
                 <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
                 <p className="text-gray-600 mt-2">You do not have permission to view this page.</p>
-                <Link href="/dashboard" className="text-[#e09a74] mt-4 inline-block hover:underline">Back to Dashboard</Link>
+                <Link href="/dashboard" className="text-primary mt-4 inline-block hover:underline">Back to Dashboard</Link>
             </Container>
         );
     }
@@ -229,7 +229,7 @@ export default function UsersPage() {
                             placeholder="Search by name or email..."
                             value={searchTerm}
                             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] transition-colors"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary transition-colors"
                         />
                     </div>
 
@@ -241,7 +241,7 @@ export default function UsersPage() {
                                 className={clsx(
                                     "px-4 py-1.5 text-xs font-medium rounded-md transition-all whitespace-nowrap",
                                     roleFilter === role.value
-                                        ? "bg-white text-[#e09a74] shadow-sm"
+                                        ? "bg-white text-primary shadow-sm"
                                         : "text-gray-500 hover:text-gray-700"
                                 )}
                             >
@@ -281,7 +281,7 @@ export default function UsersPage() {
                                     <tr key={u._id} className="hover:bg-gray-50/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-[#e09a74]">
+                                                <div className="w-10 h-10 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-primary">
                                                     <UserIcon className="w-5 h-5" />
                                                 </div>
                                                 <div className="flex flex-col">
@@ -335,7 +335,7 @@ export default function UsersPage() {
                                         <td className="px-6 py-4 whitespace-nowrap text-right">
                                             <div className="flex justify-end items-center gap-1.5">
                                                 <div className="group/info relative">
-                                                    <div className="p-1.5  text-gray-400 hover:text-[#e09a74] hover:bg-orange-50 transition-all cursor-help">
+                                                    <div className="p-1.5  text-gray-400 hover:text-primary hover:bg-orange-50 transition-all cursor-help">
                                                         <Info className="w-4 h-4" />
                                                     </div>
                                                     <div className="invisible group-hover/info:visible opacity-0 group-hover/info:opacity-100 transition-all duration-300">

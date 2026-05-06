@@ -65,7 +65,7 @@ export default function MaterialPanel({ materials, selectedMaterial, stagedMater
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
                                 placeholder="Search materials…"
-                                className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e09a74]/40 focus:border-[#e09a74] placeholder-gray-400 text-gray-700"
+                                className="w-full pl-9 pr-9 py-2 text-sm bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary placeholder-gray-400 text-gray-700"
                             />
                             <button className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
                                 <SlidersHorizontal className="w-4 h-4" />
@@ -138,7 +138,7 @@ export default function MaterialPanel({ materials, selectedMaterial, stagedMater
                                             e.dataTransfer.effectAllowed = 'copy';
                                         }}
                                         onClick={() => onSelect(v)}
-                                        className={`group text-left rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white cursor-grab active:cursor-grabbing ${isStaged ? 'border-orange-400 shadow-md shadow-orange-400/20 ring-2 ring-orange-300 ring-offset-1' : isSelected ? 'border-[#e09a74] shadow-md shadow-[#e09a74]/20' : 'border-transparent hover:border-gray-300 hover:shadow-sm'}`}
+                                        className={`group text-left rounded-xl overflow-hidden border-2 transition-all duration-200 bg-white cursor-grab active:cursor-grabbing ${isStaged ? 'border-orange-400 shadow-md shadow-orange-400/20 ring-2 ring-orange-300 ring-offset-1' : isSelected ? 'border-primary shadow-md shadow-primary/20' : 'border-transparent hover:border-gray-300 hover:shadow-sm'}`}
                                     >
                                         <div className="relative aspect-square bg-gray-100 overflow-hidden">
                                             <img

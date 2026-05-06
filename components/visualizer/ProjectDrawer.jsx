@@ -9,10 +9,10 @@ export default function ProjectDrawer({ isOpen, onClose, savedMaterials, onAdd, 
     const getImgUrl = (v) => {
         if (!v) return '/Icons/arcmatlogo.svg';
         // Try every known image field in order of priority
-        if (v.images?.length) return ;
-        if (v.variant_images?.length) return ;
+        if (v.images?.length) return;
+        if (v.variant_images?.length) return;
         if (typeof v.productId === 'object' && v.productId?.product_images?.length)
-            return ;
+            return;
         if (v.photoUrl) return v.photoUrl;
         return '/Icons/arcmatlogo.svg';
     };
@@ -38,7 +38,7 @@ export default function ProjectDrawer({ isOpen, onClose, savedMaterials, onAdd, 
                         {selectedMaterial && (
                             <button
                                 onClick={() => onAdd(selectedMaterial)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#e09a74] text-white text-xs font-semibold rounded-lg hover:bg-[#d08a64] transition-colors"
+                                className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-[#d08a64] transition-colors"
                             >
                                 <Plus className="w-3.5 h-3.5" /> Add to Project
                             </button>
@@ -62,7 +62,7 @@ export default function ProjectDrawer({ isOpen, onClose, savedMaterials, onAdd, 
                                 const name = getName(v);
                                 return (
                                     <div key={v._id || i} className="flex flex-col items-center gap-1 group shrink-0">
-                                        <div className="relative w-16 h-16 rounded-xl overflow-hidden border-2 border-gray-200 group-hover:border-[#e09a74] transition-all">
+                                        <div className="relative w-16 h-16 rounded-xl overflow-hidden border-2 border-gray-200 group-hover:border-primary transition-all">
                                             <Image src={imgUrl} alt={name} fill className="object-cover" />
                                             <button
                                                 onClick={() => onRemove(v._id)}

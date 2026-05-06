@@ -91,7 +91,7 @@ export default function OrderSummary({ subtotal, shipping, total, discount }) {
 
             <Button
                 onClick={handleCheckout}
-                className="w-full bg-[#e09a74] text-white py-3 sm:py-4 mb-3 text-sm sm:text-base font-semibold hover:bg-white hover:text-[#e09a74] border hover:border-[#e09a74]"
+                className="w-full bg-primary text-white py-3 sm:py-4 mb-3 text-sm sm:text-base font-semibold hover:bg-white hover:text-primary border hover:border-primary"
             >
                 Proceed to Checkout
             </Button>
@@ -99,7 +99,7 @@ export default function OrderSummary({ subtotal, shipping, total, discount }) {
             <Button
                 href="/productlist"
                 text={"Continue Shopping"}
-                className="w-full border border-[#e09a74] text-[#e09a74] py-3 sm:py-4 text-sm sm:text-base font-semibold hover:bg-[#e09a74] hover:text-white"
+                className="w-full border border-primary text-primary py-3 sm:py-4 text-sm sm:text-base font-semibold hover:bg-primary hover:text-white"
             />
 
             {/* Trust Badges */}

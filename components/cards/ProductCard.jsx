@@ -335,7 +335,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                         )}
 
                         {(rootProduct.isNew || rootProduct.newarrivedproduct === "Active" || rootProduct.newarrivedproduct === 1) && (
-                            <div className="absolute top-2 left-2 bg-[#e09a74] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
+                            <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
                                 New
                             </div>
                         )}
@@ -396,7 +396,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                             onClick={handleCompareToggle}
                             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all shadow-md backdrop-blur-sm ${isCompared
                                 ? 'bg-green-50 text-green-700 border border-green-200 opacity-100'
-                                : 'bg-white/95 text-gray-700 hover:bg-[#e09a74] hover:text-white border border-gray-100'
+                                : 'bg-white/95 text-gray-700 hover:bg-primary hover:text-white border border-gray-100'
                                 }`}
                         >
                             <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${isCompared ? 'bg-green-600 border-green-600' : 'border-gray-300 bg-white/50'}`}>
@@ -410,7 +410,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
             </div>
 
             <div className="flex flex-col flex-1 px-3">
-                <h4 className="text-[14px] font-bold text-gray-900 uppercase tracking-tight mb-0.5 group-hover:text-[#e09a74] transition-colors line-clamp-2">{name}</h4>
+                <h4 className="text-[14px] font-bold text-gray-900 uppercase tracking-tight mb-0.5 group-hover:text-primary transition-colors line-clamp-2">{name}</h4>
                 <h3 className="text-[11px] font-medium text-gray-400 leading-tight mb-1 ">
                     {(typeof brand === 'object' && brand !== null ? brand.name : brand) || 'Generic'}
                 </h3>
@@ -447,7 +447,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
 
                 <div className="flex items-center gap-2 mb-3">
                     {price && (
-                        <span className="text-[16px] font-bold text-[#e09a74]">{formatCurrency(price)}</span>
+                        <span className="text-[16px] font-bold text-primary">{formatCurrency(price)}</span>
                     )}
                     {mrp && mrp > price && (
                         <>
@@ -467,7 +467,7 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                         : isArchitect
                             ? isAlreadyAdded
                                 ? 'bg-green-700 hover:border-red-600 text-white font-semibold hover:bg-white hover:text-red-600'
-                                : 'bg-[#e09a74] border-[#e09a74] text-white hover:bg-white hover:text-[#e09a74]'
+                                : 'bg-primary border-primary text-white hover:bg-white hover:text-primary'
                             : (isInCart || isAdded)
                                 ? 'hidden' // Hide remove from cart
                                 : 'hidden' // Hide add to cart

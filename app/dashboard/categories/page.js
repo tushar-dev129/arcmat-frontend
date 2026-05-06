@@ -103,7 +103,7 @@ export default function CategoriesPage() {
     if (isLoading) {
         return (
             <Container className="py-8 flex justify-center items-center h-[50vh]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#e09a74]"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
             </Container>
         );
     }
@@ -135,13 +135,13 @@ export default function CategoriesPage() {
                                 placeholder="Search categories..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 pr-4 py-2.5 border bg-white border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74] w-full text-black transition-all"
+                                className="pl-10 pr-4 py-2.5 border bg-white border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full text-black transition-all"
                             />
                         </div>
 
                         <Button
                             onClick={() => setIsAddModalOpen(true)}
-                            className="flex items-center bg-[#e09a74] text-white cursor-pointer hover:bg-white hover:text-[#e09a74] border border-[#e09a74] font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-orange-100"
+                            className="flex items-center bg-primary text-white cursor-pointer hover:bg-white hover:text-primary border border-primary font-bold py-2.5 px-6 rounded-xl transition-all shadow-lg shadow-orange-100"
                         >
                             <Plus className="w-4 h-4 mr-2" /> Add Category
                         </Button>

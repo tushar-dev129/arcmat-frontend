@@ -37,13 +37,13 @@ export default function StatusUpdateModal({
                 {/* Header */}
                 <div className="p-8 pb-0 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-[#E09A74]/10 rounded-2xl flex items-center justify-center text-[#E09A74]">
+                        <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
                             <MessageSquare className="w-6 h-6" />
                         </div>
                         <div>
                             <h2 className="text-xl font-black text-gray-900 tracking-tight">Update Status</h2>
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
-                                Set to <span className="text-[#E09A74]">{status}</span>
+                                Set to <span className="text-primary">{status}</span>
                             </p>
                         </div>
                     </div>
@@ -69,7 +69,7 @@ export default function StatusUpdateModal({
                                 onChange={(e) => setComment(e.target.value)}
                                 placeholder="Add a note about this update..."
                                 rows={4}
-                                className="w-full bg-white border-2 border-gray-100 rounded-[24px] p-5 font-bold text-gray-900 focus:border-[#E09A74] focus:ring-0 transition-all placeholder:text-gray-300 resize-none"
+                                className="w-full bg-white border-2 border-gray-100 rounded-[24px] p-5 font-bold text-gray-900 focus:border-primary focus:ring-0 transition-all placeholder:text-gray-300 resize-none"
                             />
                         </div>
                     </div>

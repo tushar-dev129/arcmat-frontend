@@ -12,7 +12,7 @@ export default function HelpDashboard() {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
-                <Loader2 className="w-10 h-10 text-[#E09A74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
                 <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading help center...</p>
             </div>
         );

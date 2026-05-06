@@ -124,7 +124,7 @@ export const MobileMenu = () => {
                                 <input
                                     type="text"
                                     placeholder="Search products..."
-                                    className="w-full bg-gray-50 border border-gray-100 rounded-3xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74]/20"
+                                    className="w-full bg-gray-50 border border-gray-100 rounded-3xl py-2.5 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
                                 />
                             </div>
                         </div>
@@ -136,7 +136,7 @@ export const MobileMenu = () => {
                                 className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-[15px] font-bold text-[hsl(20,10%,15%)]"
                             >
                                 Bespoke Brands
-                                <ChevronRight className="h-4 w-4 text-[#e09a74]" />
+                                <ChevronRight className="h-4 w-4 text-primary" />
                             </Link>
                             <Link
                                 href="/contractors"
@@ -144,7 +144,7 @@ export const MobileMenu = () => {
                                 className="flex items-center justify-between rounded-xl border border-[#ead4ce] bg-[#ead4ce]/30 px-4 py-3 text-[15px] font-bold text-[hsl(20,10%,15%)]"
                             >
                                 Contractors & Services
-                                <ChevronRight className="h-4 w-4 text-[#e09a74]" />
+                                <ChevronRight className="h-4 w-4 text-primary" />
                             </Link>
                         </div>
 
@@ -186,7 +186,7 @@ export const MobileMenu = () => {
                                                             <Link
                                                                 href={item.id ? `/productlist?category=${item.id}` : "/productlist"}
                                                                 onClick={() => setMobileOpen(false)}
-                                                                className="text-[15px] font-bold text-[#e09a74] hover:underline"
+                                                                className="text-[15px] font-bold text-primary hover:underline"
                                                             >
                                                                 View All {item.name}
                                                             </Link>
@@ -226,7 +226,7 @@ export const MobileMenu = () => {
                                                                                     <Link
                                                                                         href={category.id ? `/productlist?category=${category.id}` : "/productlist"}
                                                                                         onClick={() => setMobileOpen(false)}
-                                                                                        className="block py-2 px-3 text-sm font-bold text-[#e09a74] hover:underline border-b border-gray-100/30 mb-1"
+                                                                                        className="block py-2 px-3 text-sm font-bold text-primary hover:underline border-b border-gray-100/30 mb-1"
                                                                                     >
                                                                                         View All {category.name}
                                                                                     </Link>
@@ -240,7 +240,7 @@ export const MobileMenu = () => {
                                                                                                 key={link}
                                                                                                 href={href}
                                                                                                 onClick={() => setMobileOpen(false)}
-                                                                                                className="block py-2 px-3 text-sm text-gray-500 hover:text-[#e09a74] hover:bg-[#e09a74]/5 rounded-md transition-all"
+                                                                                                className="block py-2 px-3 text-sm text-gray-500 hover:text-primary hover:bg-primary/5 rounded-md transition-all"
                                                                                             >
                                                                                                 {link}
                                                                                             </Link>
@@ -268,7 +268,7 @@ export const MobileMenu = () => {
                         {isAuthenticated && user ? (
                             <div className="flex flex-col gap-3">
                                 <div className="flex items-center gap-3 px-2 mb-1">
-                                    <div className="w-10 h-10 rounded-full bg-[#e09a74] text-white flex items-center justify-center font-bold text-lg overflow-hidden border-2 border-white shadow-sm">
+                                    <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold text-lg overflow-hidden border-2 border-white shadow-sm">
                                         {user.profileImage ? (
                                             <img src={user.profileImage} alt={user.name} className="w-full h-full object-cover" />
                                         ) : (
@@ -310,7 +310,7 @@ export const MobileMenu = () => {
                             <Link
                                 href="/auth/login"
                                 onClick={() => setMobileOpen(false)}
-                                className="w-full bg-[#e09a74] text-white py-3 rounded-xl font-bold text-center block transition-transform hover:scale-[0.98] active:scale-[0.96]"
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold text-center block transition-transform hover:scale-[0.98] active:scale-[0.96]"
                             >
                                 Sign in / Join
                             </Link>

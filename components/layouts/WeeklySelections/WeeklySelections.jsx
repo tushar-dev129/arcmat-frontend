@@ -27,7 +27,7 @@ const WeeklySelections = () => {
 
     return (
         <section className="bg-[#ECE6DF] py-12 relative">
-            <h2 className="text-3xl md:text-4xl font-bold text-center text-[#E09A74] mb-10 tracking-wide">
+            <h2 className="text-3xl md:text-4xl font-bold text-center text-primary mb-10 tracking-wide">
                 Spotlight
             </h2>
             <Container>

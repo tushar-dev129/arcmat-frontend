@@ -61,7 +61,7 @@ const ChangePasswordCard = () => {
                                     name="currentPassword"
                                     value={formData.currentPassword}
                                     onChange={handleChange}
-                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#e09a74] focus:border-[#e09a74] disabled:bg-gray-50 disabled:text-gray-500"
+                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary disabled:bg-gray-50 disabled:text-gray-500"
                                     placeholder="Enter current password"
                                     required
                                     disabled={changePasswordMutation.isPending}
@@ -80,7 +80,7 @@ const ChangePasswordCard = () => {
                                     name="newPassword"
                                     value={formData.newPassword}
                                     onChange={handleChange}
-                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#e09a74] focus:border-[#e09a74] disabled:bg-gray-50 disabled:text-gray-500"
+                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary disabled:bg-gray-50 disabled:text-gray-500"
                                     placeholder="Enter new password"
                                     required
                                     disabled={changePasswordMutation.isPending}
@@ -99,7 +99,7 @@ const ChangePasswordCard = () => {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-[#e09a74] focus:border-[#e09a74] disabled:bg-gray-50 disabled:text-gray-500"
+                                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary disabled:bg-gray-50 disabled:text-gray-500"
                                     placeholder="Confirm new password"
                                     required
                                     disabled={changePasswordMutation.isPending}
@@ -113,8 +113,8 @@ const ChangePasswordCard = () => {
                             type="submit"
                             disabled={changePasswordMutation.isPending}
                             className={clsx(
-                                "bg-[#e09a74] text-white px-6 py-2 transition-all",
-                                changePasswordMutation.isPending ? "opacity-70 cursor-not-allowed" : "hover:bg-white hover:text-[#e09a74] hover:border-[#e09a74] border"
+                                "bg-primary text-white px-6 py-2 transition-all",
+                                changePasswordMutation.isPending ? "opacity-70 cursor-not-allowed" : "hover:bg-white hover:text-primary hover:border-primary border"
                             )}
                         >
                             {changePasswordMutation.isPending ? (

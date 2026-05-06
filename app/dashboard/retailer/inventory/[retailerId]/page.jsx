@@ -101,7 +101,7 @@ export default function RetailerAdminInventoryPage() {
                         placeholder="Search retailer inventory..."
                         value={searchTerm}
                         onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] text-sm"
+                        className="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary text-sm"
                     />
                 </div>
                 <span className="text-sm text-gray-400 whitespace-nowrap">
@@ -250,7 +250,7 @@ export default function RetailerAdminInventoryPage() {
                                         type="number"
                                         name="mrp_price"
                                         defaultValue={editingItem.mrp_price}
-                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -260,7 +260,7 @@ export default function RetailerAdminInventoryPage() {
                                         type="number"
                                         name="selling_price"
                                         defaultValue={editingItem.selling_price}
-                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                         required
                                     />
                                 </div>
@@ -277,7 +277,7 @@ export default function RetailerAdminInventoryPage() {
                                             e.target.value = e.target.value.replace(/^0+/, '');
                                         }
                                     }}
-                                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[#e09a74] text-sm font-bold"
+                                    className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-primary text-sm font-bold"
                                     required
                                 />
                             </div>
@@ -288,7 +288,7 @@ export default function RetailerAdminInventoryPage() {
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="isActive" defaultChecked={editingItem.isActive} className="sr-only peer" />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#e09a74]"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </label>
                             </div>
 
@@ -303,7 +303,7 @@ export default function RetailerAdminInventoryPage() {
                                 <Button
                                     type="submit"
                                     loading={upsertOverride.isPending}
-                                    className="flex-1 py-4! bg-[#e09a74] text-white rounded-2xl text-sm font-black hover:bg-[#d08a64] uppercase tracking-widest shadow-lg shadow-[#e09a74]/20"
+                                    className="flex-1 py-4! bg-primary text-white rounded-2xl text-sm font-black hover:bg-[#d08a64] uppercase tracking-widest shadow-lg shadow-primary/20"
                                 >
                                     Save Changes
                                 </Button>

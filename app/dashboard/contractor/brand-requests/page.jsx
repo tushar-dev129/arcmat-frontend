@@ -62,7 +62,7 @@ const ContractorBrandRequestsPage = () => {
 
             {brandsLoading || requestsLoading ? (
                 <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#e09a74]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
                 </div>
             ) : brands.length > 0 ? (
                 <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -100,12 +100,12 @@ const ContractorBrandRequestsPage = () => {
                                             onChange={(event) => setMessageByBrand((current) => ({ ...current, [brandId]: event.target.value }))}
                                             placeholder="Tell the brand why your contractor profile should appear on their bespoke page."
                                             rows={4}
-                                            className="mt-5 w-full rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium leading-6 outline-none focus:border-[#e09a74] focus:ring-4 focus:ring-[#e09a74]/10"
+                                            className="mt-5 w-full rounded-lg border border-gray-200 px-4 py-3 text-sm font-medium leading-6 outline-none focus:border-primary focus:ring-4 focus:ring-primary/10"
                                         />
                                         <button
                                             onClick={() => sendRequest(brandId)}
                                             disabled={createRequest.isPending}
-                                            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#e09a74] px-5 py-3 text-sm font-bold text-white hover:bg-[#c97f58] disabled:opacity-60"
+                                            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-[#c97f58] disabled:opacity-60"
                                         >
                                             {createRequest.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                                             Request Display

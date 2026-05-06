@@ -104,7 +104,7 @@ export default function DiscussionTab({ projectId, spaceId }) {
                                             </span>
                                         )}
                                         {comment.referencedMaterialName && (
-                                            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase bg-[#fef7f2] text-[#e09a74] border border-[#e09a74]/20 truncate max-w-[150px]" title={comment.referencedMaterialName}>
+                                            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase bg-[#fef7f2] text-primary border border-primary/20 truncate max-w-[150px]" title={comment.referencedMaterialName}>
                                                 {comment.referencedMaterialName}
                                             </span>
                                         )}
@@ -147,7 +147,7 @@ export default function DiscussionTab({ projectId, spaceId }) {
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder={isInternal ? "Type a private note..." : "Type a message..."}
-                            className={`flex-1 resize-none min-h-[50px] max-h-[150px] p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-[#e09a74] focus:border-[#e09a74] outline-none text-sm transition-all leading-relaxed ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
+                            className={`flex-1 resize-none min-h-[50px] max-h-[150px] p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-1 focus:ring-primary focus:border-primary outline-none text-sm transition-all leading-relaxed ${isInternal ? 'bg-amber-50/50 border-amber-100' : ''}`}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
                                     e.preventDefault();

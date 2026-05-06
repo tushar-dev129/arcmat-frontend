@@ -4,7 +4,8 @@ import { useState } from "react";
 import Container from "@/components/ui/Container";
 import { useGetContractors } from "@/hooks/useContractor";
 import ContractorCard from "@/components/cards/ContractorCard";
-import { Search, SlidersHorizontal, MapPin, X } from "lucide-react";
+import { Search, MapPin, X, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ContractorListingPage() {
     const [search, setSearch] = useState("");
@@ -12,119 +13,74 @@ export default function ContractorListingPage() {
     
     const { data: contractorData, isLoading } = useGetContractors({
         search,
-        city,
-        status: 'approved'
+        city
     });
 
-    const contractors = contractorData?.data || [];
+    const contractors = contractorData?.data?.data || [];
 
     return (
-        <main className="min-h-screen bg-[hsl(30,20%,98%)] pb-20">
-            {/* Hero Section */}
-            <section className="relative h-[400px] flex items-center overflow-hidden bg-[hsl(20,10%,15%)]">
-                <div className="absolute inset-0 opacity-40">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[hsl(20,10%,15%)] via-transparent to-transparent z-10" />
-                    {/* Background pattern or image could go here */}
-                    <div className="w-full h-full bg-[url('/images/hero-pattern.png')] bg-repeat opacity-20" />
-                </div>
-                
-                <Container className="relative z-20">
-                    <div className="max-w-2xl">
-                        <span className="inline-block px-4 py-1 rounded-full bg-[hsl(15,80%,65%)]/20 border border-[hsl(15,80%,65%)]/30 text-[hsl(15,80%,65%)] text-xs font-bold mb-6 tracking-widest uppercase">
-                            Premium Network
-                        </span>
-                        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                            Find the Best <span className="text-[hsl(15,80%,65%)]">Contractors</span> for Your Space.
-                        </h1>
-                        <p className="text-gray-400 text-lg mb-8 max-w-lg">
-                            Discover verified professionals and bespoke makers who bring architecture to life with precision and craftsmanship.
-                        </p>
-                    </div>
-                </Container>
-
-                {/* Floating Search Bar */}
-                <div className="absolute -bottom-10 left-0 w-full z-30">
-                    <Container>
-                        <div className="bg-white p-4 rounded-2xl shadow-2xl border border-[hsl(30,15%,90%)] flex flex-col md:flex-row items-center gap-4">
-                            <div className="flex-1 w-full relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input 
-                                    type="text"
-                                    placeholder="Search by business name or service..."
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[hsl(15,80%,65%)] transition-all text-sm font-medium"
-                                    value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                />
-                            </div>
-                            <div className="w-full md:w-64 relative">
-                                <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                                <input 
-                                    type="text"
-                                    placeholder="City (e.g. Mumbai)"
-                                    className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-100 rounded-xl outline-none focus:border-[hsl(15,80%,65%)] transition-all text-sm font-medium"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
-                                />
-                            </div>
-                            <button className="w-full md:w-auto px-8 py-3.5 bg-[hsl(20,10%,15%)] hover:bg-[hsl(15,80%,60%)] text-white font-bold rounded-xl transition-all duration-300 flex items-center justify-center gap-2">
-                                <SlidersHorizontal className="w-4 h-4" />
-                                Find Experts
-                            </button>
-                        </div>
-                    </Container>
-                </div>
-            </section>
-
-            {/* Main Content Area */}
-            <Container className="mt-24">
-                {/* Active Filters */}
-                {(search || city) && (
-                    <div className="flex items-center gap-3 mb-8">
-                        <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Active Filters:</span>
-                        {search && (
-                            <button 
-                                onClick={() => setSearch("")}
-                                className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[hsl(30,15%,90%)] rounded-full text-xs font-bold text-[hsl(20,10%,15%)] hover:bg-gray-50 transition-all"
-                            >
-                                Search: {search} <X className="w-3 h-3" />
-                            </button>
-                        )}
-                        {city && (
-                            <button 
-                                onClick={() => setCity("")}
-                                className="flex items-center gap-2 px-3 py-1.5 bg-white border border-[hsl(30,15%,90%)] rounded-full text-xs font-bold text-[hsl(20,10%,15%)] hover:bg-gray-50 transition-all"
-                            >
-                                City: {city} <X className="w-3 h-3" />
-                            </button>
-                        )}
-                    </div>
-                )}
-
-                {/* Results Count & Sort */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                    <div>
-                        <h2 className="text-2xl font-bold text-[hsl(20,10%,15%)]">
-                            {isLoading ? "Finding Professionals..." : `${contractors.length} Experts found`}
-                        </h2>
-                        <p className="text-sm text-gray-500 font-medium">Verified contractors & service providers in your network.</p>
-                    </div>
+        <main className="min-h-screen bg-[hsl(30,20%,98%)] py-12">
+            <Container>
+                {/* Simplified Search Header */}
+                <div className="mb-12">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-8 tracking-tight">Our Professionals</h1>
                     
-                    <div className="flex items-center gap-4">
-                        <span className="text-sm font-semibold text-gray-500">Sort by:</span>
-                        <select className="bg-white border border-[hsl(30,15%,90%)] px-4 py-2 rounded-xl text-sm font-bold outline-none focus:border-[hsl(15,80%,65%)] transition-all cursor-pointer">
-                            <option>Recommended</option>
-                            <option>Top Rated</option>
-                            <option>Most Experienced</option>
-                            <option>Recently Added</option>
-                        </select>
+                    <div className="bg-white p-2 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col md:flex-row items-center gap-2">
+                        <div className="flex-1 w-full relative">
+                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input 
+                                type="text"
+                                placeholder="Search by name or service..."
+                                className="w-full pl-14 pr-6 py-4 bg-transparent border-none rounded-2xl outline-none focus:ring-0 transition-all text-sm font-bold text-gray-800"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                            />
+                        </div>
+                        <div className="h-8 w-px bg-gray-100 hidden md:block"></div>
+                        <div className="w-full md:w-64 relative">
+                            <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                            <input 
+                                type="text"
+                                placeholder="City (e.g. Mumbai)"
+                                className="w-full pl-14 pr-6 py-4 bg-transparent border-none rounded-2xl outline-none focus:ring-0 transition-all text-sm font-bold text-gray-800"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </div>
+                        <button className="w-full md:w-auto px-10 py-4 bg-primary text-white font-black uppercase tracking-widest text-[10px] rounded-[1.25rem] transition-all duration-300 shadow-lg shadow-primary/20 active:scale-95">
+                            Search
+                        </button>
                     </div>
+
+                    {/* Quick Filters */}
+                    <AnimatePresence>
+                        {(search || city) && (
+                            <motion.div 
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="flex items-center gap-2 mt-4"
+                            >
+                                {search && (
+                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-bold text-gray-500">
+                                        "{search}" <X className="w-3 h-3 cursor-pointer hover:text-primary" onClick={() => setSearch("")} />
+                                    </span>
+                                )}
+                                {city && (
+                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-bold text-gray-500">
+                                        {city} <X className="w-3 h-3 cursor-pointer hover:text-primary" onClick={() => setCity("")} />
+                                    </span>
+                                )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
 
-                {/* Grid */}
+                {/* Results Section */}
                 {isLoading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                            <div key={i} className="h-[450px] w-full bg-gray-100 animate-pulse rounded-2xl" />
+                            <div key={i} className="h-[400px] w-full bg-gray-200 animate-pulse rounded-[2rem]" />
                         ))}
                     </div>
                 ) : contractors.length > 0 ? (
@@ -134,18 +90,10 @@ export default function ContractorListingPage() {
                         ))}
                     </div>
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-32 text-center">
-                        <div className="w-24 h-24 bg-[#ead4ce]/30 rounded-full flex items-center justify-center mb-6">
-                            <Search className="w-10 h-10 text-[hsl(15,80%,60%)]" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-[hsl(20,10%,15%)] mb-2">No professionals found</h3>
-                        <p className="text-gray-500 max-w-xs mx-auto">Try adjusting your search filters or city to find what you're looking for.</p>
-                        <button 
-                            onClick={() => {setSearch(""); setCity("");}}
-                            className="mt-8 px-6 py-3 bg-[hsl(20,10%,15%)] text-white font-bold rounded-xl hover:bg-[hsl(15,80%,60%)] transition-all"
-                        >
-                            Reset all filters
-                        </button>
+                    <div className="py-32 flex flex-col items-center justify-center text-center bg-white rounded-[3rem] border border-dashed border-gray-200">
+                        <Search className="w-12 h-12 text-gray-300 mb-4" />
+                        <h3 className="text-xl font-bold text-gray-900">No professionals found</h3>
+                        <p className="text-gray-500 mt-2">Try adjusting your filters to find more experts.</p>
                     </div>
                 )}
             </Container>

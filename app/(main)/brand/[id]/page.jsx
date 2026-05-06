@@ -28,7 +28,7 @@ const BrandDetailPage = () => {
     if (brandLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <Loader2 className="w-10 h-10 animate-spin text-[#E09A74]" />
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
             </div>
         );
     }
@@ -61,7 +61,7 @@ const BrandDetailPage = () => {
 
                         {/* Brand Basics */}
                         <div className="flex-1 space-y-4">
-                            <div className="inline-flex px-3 py-1 bg-[#E09A74]/10 text-[#E09A74] text-xs font-bold uppercase tracking-widest rounded-full">
+                            <div className="inline-flex px-3 py-1 bg-primary/10 text-primary text-xs font-bold uppercase tracking-widest rounded-full">
                                 Premium Brand
                             </div>
                             <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight leading-tight">
@@ -73,7 +73,7 @@ const BrandDetailPage = () => {
                                         href={brand.website.startsWith('http') ? brand.website : `https://${brand.website}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-[#E09A74] transition-colors"
+                                        className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-primary transition-colors"
                                     >
                                         <Globe className="w-4 h-4" />
                                         Visit Website
@@ -108,17 +108,17 @@ const BrandDetailPage = () => {
 
                         {/* Creator Section */}
                         {brand.userId && (
-                            <section className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm border-t-4 border-t-[#E09A74]">
+                            <section className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm border-t-4 border-t-primary">
                                 <div className="flex items-center gap-3 mb-6">
-                                    <div className="p-2 bg-[#E09A74]/10 rounded-xl">
-                                        <User className="w-5 h-5 text-[#E09A74]" />
+                                    <div className="p-2 bg-primary/10 rounded-xl">
+                                        <User className="w-5 h-5 text-primary" />
                                     </div>
                                     <h2 className="text-xl font-bold text-gray-900">Created By</h2>
                                 </div>
                                 <div className="flex items-center gap-4">
                                     <div className="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center text-gray-400 font-bold text-xl uppercase overflow-hidden">
                                         {brand.userId.profile ? (
-                                             <Image src={brand.userId.profile} alt={brand.userId.name} width={56} height={56} className="object-cover" unoptimized />
+                                            <Image src={brand.userId.profile} alt={brand.userId.name} width={56} height={56} className="object-cover" unoptimized />
                                         ) : (
                                             brand.userId.name?.charAt(0) || 'U'
                                         )}
@@ -162,12 +162,12 @@ const BrandDetailPage = () => {
                                         <ProductCard key={item._id || item.productId?._id} product={item} />
                                     ))}
                                 </div>
-                                
+
                                 {productsData?.data?.pagination?.totalItems > 10 && (
                                     <div className="flex justify-center pt-8">
-                                        <Link 
+                                        <Link
                                             href={`/productlist?brand=${id}`}
-                                            className="inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-[#E09A74] text-[#E09A74] font-bold rounded-2xl hover:bg-[#E09A74] hover:text-white transition-all duration-300 group shadow-lg shadow-[#E09A74]/10"
+                                            className="inline-flex items-center gap-2 px-8 py-4 bg-white border-2 border-primary text-primary font-bold rounded-2xl hover:bg-primary hover:text-white transition-all duration-300 group shadow-lg shadow-primary/10"
                                         >
                                             Show all products
                                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -187,7 +187,7 @@ export default function ProductsListPage() {
             <div className="flex flex-col gap-8">
                 {/* HEADER & GLOBAL STATS */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-                    <div className="xl:col-span-1 border-l-4 border-[#e09a74] pl-6 py-2">
+                    <div className="xl:col-span-1 border-l-4 border-primary pl-6 py-2">
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
                             {showBrandList ? 'Product Ecosystem' : (isAdmin ? 'Brand Inventory' : isBrand ? 'My Inventory' : 'All Products')}
                         </h1>
@@ -204,7 +204,7 @@ export default function ProductsListPage() {
 
                     {showBrandList && (
                         <div className="xl:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-4">
-                            <div className="bg-white/50 backdrop-blur-sm border border-gray-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-[#e09a74]/30 transition-all">
+                            <div className="bg-white/50 backdrop-blur-sm border border-gray-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-primary/30 transition-all">
                                 <div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:scale-110 transition-transform">
                                     <Package className="w-6 h-6" />
                                 </div>
@@ -226,7 +226,7 @@ export default function ProductsListPage() {
                                 </div>
                             </div>
                             <div className="bg-white/50 backdrop-blur-sm border border-orange-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-orange-300 transition-all col-span-2 md:col-span-1">
-                                <div className="p-3 bg-orange-50 text-[#e09a74] rounded-xl group-hover:scale-110 transition-transform">
+                                <div className="p-3 bg-orange-50 text-primary rounded-xl group-hover:scale-110 transition-transform">
                                     <Activity className="w-6 h-6" />
                                 </div>
                                 <div>
@@ -255,7 +255,7 @@ export default function ProductsListPage() {
                                 </Button>
                                 <Button
                                     onClick={() => openBulkUploadModal()}
-                                    className="flex items-center rounded-full bg-white text-[#e09a74] cursor-pointer hover:bg-gray-50 min-w-[120px] py-2 px-4 border border-[#e09a74] duration-300"
+                                    className="flex items-center rounded-full bg-white text-primary cursor-pointer hover:bg-gray-50 min-w-[120px] py-2 px-4 border border-primary duration-300"
                                 >
                                     <Upload className="w-4 h-4 mr-2" />
                                     Bulk Import
@@ -265,7 +265,7 @@ export default function ProductsListPage() {
                                         setLoading(true);
                                         router.push(`/dashboard/products-list/${effectiveVendorId}/add`);
                                     }}
-                                    className="flex items-center rounded-full bg-[#e09a74] text-white cursor-pointer min-w-[120px] py-2 px-4 border border-[#e09a74] hover:bg-white hover:text-[#e09a74] duration-300"
+                                    className="flex items-center rounded-full bg-primary text-white cursor-pointer min-w-[120px] py-2 px-4 border border-primary hover:bg-white hover:text-primary duration-300"
                                 >
                                     <Plus className="w-4 h-4 mr-2" />
                                     Add Product
@@ -290,12 +290,12 @@ export default function ProductsListPage() {
                                     setLoading(true);
                                     router.push(`/dashboard/products-list/${brand._id || brand.id}`);
                                 }}
-                                className="group bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-[#e09a74]/40 transition-all duration-500 relative overflow-hidden flex flex-col items-center text-center"
+                                className="group bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-sm hover:shadow-2xl hover:border-primary/40 transition-all duration-500 relative overflow-hidden flex flex-col items-center text-center"
                             >
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-[#e09a74]/5 to-transparent rounded-bl-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-linear-to-br from-primary/5 to-transparent rounded-bl-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700"></div>
 
                                 <div className="absolute top-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
-                                    <div className="bg-[#e09a74] text-white p-2 rounded-full shadow-lg">
+                                    <div className="bg-primary text-white p-2 rounded-full shadow-lg">
                                         <ArrowUpRight className="w-4 h-4" />
                                     </div>
                                 </div>
@@ -309,7 +309,7 @@ export default function ProductsListPage() {
                                             onError={(e) => { e.target.src = '/Images/placeholder-logo.png'; }}
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-[#e09a74]/10 flex items-center justify-center text-[#e09a74] font-black text-3xl">
+                                        <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-black text-3xl">
                                             {brand.name?.charAt(0)}
                                         </div>
                                     )}
@@ -317,13 +317,13 @@ export default function ProductsListPage() {
 
                                 <div className="space-y-4 w-full">
                                     <div>
-                                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#e09a74] transition-colors line-clamp-1">{brand.name}</h3>
+                                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">{brand.name}</h3>
                                         <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">Certified Provider</p>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
-                                        <div className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-50 rounded-2xl border border-gray-100 group-hover:bg-[#e09a74]/5 group-hover:border-[#e09a74]/10 transition-colors">
-                                            <Package className="w-4 h-4 text-[#e09a74]" />
+                                        <div className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-50 rounded-2xl border border-gray-100 group-hover:bg-primary/5 group-hover:border-primary/10 transition-colors">
+                                            <Package className="w-4 h-4 text-primary" />
                                             <span className="text-sm font-bold text-gray-700">{brand.productCount || 0}</span>
                                             <span className="text-[10px] text-gray-400 font-medium">Collections</span>
                                         </div>
@@ -368,7 +368,7 @@ export default function ProductsListPage() {
                     {isAdmin && (
                         <Link
                             href="/dashboard/products-list"
-                            className="inline-flex items-center text-sm text-[#e09a74] hover:underline mb-2 group"
+                            className="inline-flex items-center text-sm text-primary hover:underline mb-2 group"
                         >
                             <span className="mr-1 group-hover:-translate-x-1 transition-transform">←</span>
                             Back to Brand List
@@ -384,7 +384,7 @@ export default function ProductsListPage() {
                                     placeholder="Search by name or CODE..."
                                     value={searchTerm}
                                     onChange={handleSearchChange}
-                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] transition-colors"
+                                    className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary transition-colors"
                                 />
                             </div>
 
@@ -393,7 +393,7 @@ export default function ProductsListPage() {
                                 <select
                                     value={statusFilter}
                                     onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] bg-white text-sm"
+                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary bg-white text-sm"
                                 >
                                     <option value="all">All Status</option>
                                     <option value="1">Active Only</option>
@@ -403,7 +403,7 @@ export default function ProductsListPage() {
                                 <select
                                     value={orderBy}
                                     onChange={(e) => { setOrderBy(e.target.value); setCurrentPage(1); }}
-                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] bg-white text-sm"
+                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary bg-white text-sm"
                                 >
                                     <option value="updatedAt">Latest Updated</option>
                                     <option value="createdAt">Date Created</option>
@@ -413,7 +413,7 @@ export default function ProductsListPage() {
                                 <select
                                     value={sortOrder}
                                     onChange={(e) => { setSortOrder(e.target.value); setCurrentPage(1); }}
-                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-[#e09a74] bg-white text-sm"
+                                    className="px-3 py-2 border border-gray-200 rounded-lg outline-none focus:border-primary bg-white text-sm"
                                 >
                                     <option value="DESC">Descending</option>
                                     <option value="ASC">Ascending</option>

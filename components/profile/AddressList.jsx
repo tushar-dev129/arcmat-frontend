@@ -52,7 +52,7 @@ const AddressList = () => {
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <Loader2 className="w-8 h-8 text-[#e09a74] animate-spin mb-4" />
+                <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
                 <p className="text-gray-500">Loading your addresses...</p>
             </div>
         );
@@ -90,7 +90,7 @@ const AddressList = () => {
                 </div>
                 <Button
                     onClick={() => setIsAdding(true)}
-                    className="bg-[#e09a74] text-white flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white hover:text-[#e09a74] border border-[#e09a74]"
+                    className="bg-primary text-white flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white hover:text-primary border border-primary"
                     text={
                         <div className="flex items-center gap-2">
                             <Plus size={18} />
@@ -113,11 +113,11 @@ const AddressList = () => {
                             key={address._id}
                             className={`
                                 relative p-6 rounded-2xl border transition-all duration-200 bg-white
-                                ${address.defaultaddress === 1 ? 'border-[#e09a74] ring-1 ring-[#e09a74]/10' : 'border-gray-100 hover:border-gray-300'}
+                                ${address.defaultaddress === 1 ? 'border-primary ring-1 ring-primary/10' : 'border-gray-100 hover:border-gray-300'}
                             `}
                         >
                             {address.defaultaddress === 1 && (
-                                <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#e09a74]/10 text-[#e09a74] text-[10px] font-bold uppercase tracking-wider">
+                                <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">
                                     <CheckCircle2 size={12} />
                                     Default
                                 </div>
@@ -126,7 +126,7 @@ const AddressList = () => {
                             <div className="flex items-start gap-4 mb-4">
                                 <div className={`
                                     w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                                    ${address.defaultaddress === 1 ? 'bg-[#e09a74]/10 text-[#e09a74]' : 'bg-gray-50 text-gray-400'}
+                                    ${address.defaultaddress === 1 ? 'bg-primary/10 text-primary' : 'bg-gray-50 text-gray-400'}
                                 `}>
                                     <MapPin size={20} />
                                 </div>

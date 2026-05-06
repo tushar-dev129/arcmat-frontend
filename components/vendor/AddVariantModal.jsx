@@ -199,7 +199,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                             className={clsx(
                                 "flex items-center gap-2 px-6 py-3 text-sm font-semibold transition-all whitespace-nowrap",
                                 activeTab === tab.id
-                                    ? "text-[#e09a74] border-b-2 border-[#e09a74] bg-orange-50/30"
+                                    ? "text-primary border-b-2 border-primary bg-orange-50/30"
                                     : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                             )}
                         >
@@ -221,7 +221,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         name="product_name"
                                         value={formData.product_name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                                         required
                                     />
                                 </div>
@@ -231,7 +231,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         name="product_url"
                                         value={formData.product_url}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] transition-all"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary transition-all"
                                         required
                                     />
                                 </div>
@@ -241,7 +241,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         name="status"
                                         value={formData.status}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                     >
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
@@ -254,7 +254,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         value={formData.description}
                                         onChange={handleChange}
                                         rows={4}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                     />
                                 </div>
                             </div>
@@ -271,7 +271,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         type="number"
                                         value={formData.mrp_price}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                         required
                                     />
                                 </div>
@@ -282,7 +282,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         type="number"
                                         value={formData.selling_price}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                         required
                                     />
                                 </div>
@@ -299,7 +299,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                                 e.target.value = e.target.value.replace(/^0+/, '');
                                             }
                                         }}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                         required
                                     />
                                 </div>
@@ -309,7 +309,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         name="skucode"
                                         value={formData.skucode}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                        className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                         required
                                     />
                                 </div>
@@ -321,7 +321,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                             type="number"
                                             value={formData.weight}
                                             onChange={handleChange}
-                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74]"
+                                            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary"
                                         />
                                         <select
                                             name="weight_type"
@@ -351,7 +351,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                                 name="brand"
                                                 value={formData.brand}
                                                 onChange={handleChange}
-                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#e09a74] appearance-none bg-white"
+                                                className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary appearance-none bg-white"
                                             >
                                                 <option value="">Select Brand</option>
                                                 {allAttributes.find(a => a.attributeName.toLowerCase() === 'brand').attributeValues.map(v => (
@@ -379,7 +379,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                             type="checkbox"
                                             checked={formData.newarrivedproduct === 'Active'}
                                             onChange={(e) => setFormData(prev => ({ ...prev, newarrivedproduct: e.target.checked ? 'Active' : 'Inactive' }))}
-                                            className="w-4 h-4 rounded text-[#e09a74]"
+                                            className="w-4 h-4 rounded text-primary"
                                         />
                                         <span className="text-sm text-gray-700 font-medium">New Arrival</span>
                                     </label>
@@ -388,7 +388,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                             type="checkbox"
                                             checked={formData.trendingproduct === 'Active'}
                                             onChange={(e) => setFormData(prev => ({ ...prev, trendingproduct: e.target.checked ? 'Active' : 'Inactive' }))}
-                                            className="w-4 h-4 rounded text-[#e09a74]"
+                                            className="w-4 h-4 rounded text-primary"
                                         />
                                         <span className="text-sm text-gray-700 font-medium">Trending</span>
                                     </label>
@@ -397,7 +397,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                             type="checkbox"
                                             checked={formData.featuredproduct === 'Active'}
                                             onChange={(e) => setFormData(prev => ({ ...prev, featuredproduct: e.target.checked ? 'Active' : 'Inactive' }))}
-                                            className="w-4 h-4 rounded text-[#e09a74]"
+                                            className="w-4 h-4 rounded text-primary"
                                         />
                                         <span className="text-sm text-gray-700 font-medium">Featured</span>
                                     </label>
@@ -410,7 +410,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                                 <label className="aspect-square border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors group">
-                                    <Upload className="w-8 h-8 text-gray-300 group-hover:text-[#e09a74] transition-colors" />
+                                    <Upload className="w-8 h-8 text-gray-300 group-hover:text-primary transition-colors" />
                                     <span className="text-xs text-gray-500 font-bold mt-2">Add Images</span>
                                     <input
                                         type="file"
@@ -481,7 +481,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                     <Button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                        className="bg-[#e09a74] text-white px-8 py-2.5 font-bold rounded-xl hover:bg-white hover:text-[#e09a74] hover:border-[#e09a74] border shadow-lg shadow-orange-100 flex items-center gap-2"
+                        className="bg-primary text-white px-8 py-2.5 font-bold rounded-xl hover:bg-white hover:text-primary hover:border-primary border shadow-lg shadow-orange-100 flex items-center gap-2"
                     >
                         {isSubmitting ? (
                             <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />

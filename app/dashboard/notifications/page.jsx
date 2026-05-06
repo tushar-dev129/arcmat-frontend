@@ -45,7 +45,7 @@ export default function NotificationsPage() {
                     <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-3">
                         Notifications
                         {unreadCount > 0 && (
-                            <span className="bg-[#e09a74] text-white text-[12px] px-3 py-1 rounded-full font-bold">
+                            <span className="bg-primary text-white text-[12px] px-3 py-1 rounded-full font-bold">
                                 {unreadCount} NEW
                             </span>
                         )}
@@ -77,7 +77,7 @@ export default function NotificationsPage() {
                             placeholder="Search notifications..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:border-[#e09a74] transition-all"
+                            className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm outline-none focus:border-primary transition-all"
                         />
                     </div>
                     <div className="flex items-center gap-2">
@@ -85,7 +85,7 @@ export default function NotificationsPage() {
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium outline-none focus:border-[#e09a74] transition-all"
+                            className="bg-white border border-gray-200 rounded-xl px-4 py-2 text-sm font-medium outline-none focus:border-primary transition-all"
                         >
                             <option value="all">All</option>
                             <option value="unread">Unread</option>
@@ -119,11 +119,11 @@ export default function NotificationsPage() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                                         <div className="flex items-center gap-3">
-                                            <span className="text-[10px] font-bold text-[#e09a74] uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded">
+                                            <span className="text-[10px] font-bold text-primary uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded">
                                                 {n.type.replace(/_/g, ' ')}
                                             </span>
                                             {!n.isRead && (
-                                                <span className="w-2 h-2 rounded-full bg-[#e09a74] shadow-[0_0_8px_rgba(224,154,116,0.6)]"></span>
+                                                <span className="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(224,154,116,0.6)]"></span>
                                             )}
                                         </div>
                                         <span className="text-xs text-gray-400 flex items-center gap-1">
@@ -155,7 +155,7 @@ export default function NotificationsPage() {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-gray-400 uppercase font-bold tracking-tighter">Preferred Contact</span>
-                                                    <span className="text-[#e09a74] font-bold">{n.sender.retailerProfile.preferredContactMethod || 'Phone'}</span>
+                                                    <span className="text-primary font-bold">{n.sender.retailerProfile.preferredContactMethod || 'Phone'}</span>
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <span className="text-gray-400 uppercase font-bold tracking-tighter">Calling Hours</span>
@@ -211,7 +211,7 @@ export default function NotificationsPage() {
                                         {!n.isRead && (
                                             <button
                                                 onClick={() => markAsRead(n._id)}
-                                                className="text-[11px] font-bold text-gray-400 hover:text-[#e09a74] transition-colors"
+                                                className="text-[11px] font-bold text-gray-400 hover:text-primary transition-colors"
                                             >
                                                 MARK AS READ
                                             </button>

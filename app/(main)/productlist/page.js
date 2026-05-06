@@ -86,7 +86,7 @@ export default function ProductListPage() {
     const addedProductIdsMap = useMemo(() => {
         const spaceData = isActiveTemplate ? templateSpaceData?.data : moodboardData?.data;
         const prodIds = spaceData?.estimatedCostId?.productIds || spaceData?.estimation?.productIds || [];
-        
+
         const idSet = new Set();
         prodIds.forEach(p => {
             if (p) {
@@ -220,16 +220,16 @@ export default function ProductListPage() {
 
                 <main className="flex-1">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-3 ">
-                        <CategoryBreadcrumb 
-                            selectedCategory={selectedCategory} 
-                            onCategoryChange={handleCategoryChange} 
+                        <CategoryBreadcrumb
+                            selectedCategory={selectedCategory}
+                            onCategoryChange={handleCategoryChange}
                         />
-                       
+
                     </div>
 
                     <button
                         onClick={() => router.back()}
-                        className="flex items-center gap-2 text-gray-400 hover:text-[#e09a74] transition-colors mb-10 group"
+                        className="flex items-center gap-2 text-gray-400 hover:text-primary transition-colors mb-10 group"
                     >
                         <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
                         <span className="text-xs font-bold uppercase tracking-widest">Back</span>
@@ -237,7 +237,7 @@ export default function ProductListPage() {
 
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20">
-                            <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin mb-4" />
+                            <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
                             <p className="text-gray-500 font-medium">Loading products...</p>
                         </div>
                     ) : (
@@ -255,9 +255,9 @@ export default function ProductListPage() {
                                 const isAlreadyAdded = possibleIds.some(id => addedProductIdsMap.has(id));
 
                                 return (
-                                    <ProductCard 
-                                        key={`${product._id || product.id || 'p'}-${i}`} 
-                                        product={product} 
+                                    <ProductCard
+                                        key={`${product._id || product.id || 'p'}-${i}`}
+                                        product={product}
                                         isAlreadyAdded={isAlreadyAdded}
                                         moodboard={isActiveTemplate ? templateSpaceData?.data : moodboardData?.data}
                                     />
@@ -329,7 +329,7 @@ export default function ProductListPage() {
                             <Button
                                 text="Show Results"
                                 onClick={() => setDrawerOpen(false)}
-                                className="w-full py-3 bg-[#e09a74] hover:bg-white hover:text-[#e09a74] hover:border-[#e09a74] border text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform"
+                                className="w-full py-3 bg-primary hover:bg-white hover:text-primary hover:border-primary border text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform"
                             >
                             </Button>
                         </div>

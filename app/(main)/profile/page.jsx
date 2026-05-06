@@ -51,7 +51,7 @@ const ProfilePage = () => {
                                                     : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}
                                             `}
                                         >
-                                            <Icon size={16} className={isActive ? 'text-[#e09a74]' : 'text-gray-400'} />
+                                            <Icon size={16} className={isActive ? 'text-primary' : 'text-gray-400'} />
                                             {tab.label}
                                         </button>
                                     );

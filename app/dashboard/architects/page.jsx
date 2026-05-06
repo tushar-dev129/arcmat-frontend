@@ -109,7 +109,7 @@ const ArchitectRow = ({ architect }) => {
                 className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
             >
                 <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#e09a74] to-[#c87d55] flex items-center justify-center text-white font-bold text-sm shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-[#c87d55] flex items-center justify-center text-white font-bold text-sm shrink-0">
                         {architect.avatar}
                     </div>
 
@@ -136,7 +136,7 @@ const ArchitectRow = ({ architect }) => {
                     </div>
                     <div className="hidden sm:flex flex-col items-end">
                         <span className="text-xs text-gray-400 font-medium">Total Spend</span>
-                        <span className="text-[15px] font-bold text-[#e09a74]">{architect.totalSpend}</span>
+                        <span className="text-[15px] font-bold text-primary">{architect.totalSpend}</span>
                     </div>
                     {expanded
                         ? <ChevronUp className="w-5 h-5 text-gray-400" />
@@ -195,8 +195,8 @@ export default function ArchitectsPage() {
             <div className="p-6 max-w-5xl mx-auto">
 
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="w-10 h-10 rounded-xl bg-[#e09a74]/10 flex items-center justify-center">
-                        <HardHat className="w-5 h-5 text-[#e09a74]" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <HardHat className="w-5 h-5 text-primary" />
                     </div>
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Architect Notifications</h1>
@@ -206,8 +206,8 @@ export default function ArchitectsPage() {
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6 mb-6">
                     <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-[#e09a74]/10 flex items-center justify-center shrink-0">
-                            <User className="w-4 h-4 text-[#e09a74]" />
+                        <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                            <User className="w-4 h-4 text-primary" />
                         </div>
                         <div>
                             <p className="text-xs text-gray-400 font-medium">Total Architects</p>
@@ -241,7 +241,7 @@ export default function ArchitectsPage() {
                         placeholder="Search by name, email or location..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#e09a74]/30 focus:border-[#e09a74] transition"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition"
                     />
                 </div>
 

@@ -115,13 +115,13 @@ export default function RetailerBrandsPage() {
             {/* Search */}
             <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
                 <div className="relative group max-w-md flex-1 w-full">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#e09a74] w-5 h-5 transition-colors" />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary w-5 h-5 transition-colors" />
                     <input
                         type="text"
                         placeholder="Search brands by name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-4 focus:ring-[#e09a74]/10 shadow-sm text-sm transition-all"
+                        className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl outline-none focus:ring-4 focus:ring-primary/10 shadow-sm text-sm transition-all"
                     />
                 </div>
             </div>
@@ -178,7 +178,7 @@ export default function RetailerBrandsPage() {
                                 className="group bg-white rounded-3xl border border-gray-100 shadow-[1px_5px_40px_0px_rgba(224,154,116,0.08)] hover:shadow-[1px_5px_60px_0px_rgba(224,154,116,0.2)] transition-all duration-500 flex flex-col relative overflow-hidden items-center p-6 pt-0"
                             >
                                 {/* card-border-top */}
-                                <div className="w-[60%] h-2.5 bg-[#e09a74] mx-auto rounded-b-2xl shadow-[0_4px_15px_rgba(224,154,116,0.4)]" />
+                                <div className="w-[60%] h-2.5 bg-primary mx-auto rounded-b-2xl shadow-[0_4px_15px_rgba(224,154,116,0.4)]" />
 
                                 {/* Status badge (Left) */}
                                 <div className="absolute top-4 left-4">
@@ -208,7 +208,7 @@ export default function RetailerBrandsPage() {
                                     {brand.logo ? (
                                         <img src={getBrandImageUrl(brand.logo)} alt={brand.name} className="w-full h-full object-contain" />
                                     ) : (
-                                        <Store className="w-10 h-10 text-[#e09a74] opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        <Store className="w-10 h-10 text-primary opacity-50 group-hover:opacity-100 transition-opacity" />
                                     )}
                                 </div>
 
@@ -228,7 +228,7 @@ export default function RetailerBrandsPage() {
                                         <div className="flex gap-2">
                                             <Link
                                                 href={`/dashboard/retailer/brands/${brand._id || brand.id}/inventory${retailerId ? `?retailerId=${retailerId}` : ''}`}
-                                                className="flex-1 flex justify-center items-center py-2.5 bg-[#e09a74] text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-[#e09a74]/20"
+                                                className="flex-1 flex justify-center items-center py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-primary/20"
                                             >
                                                 Explore Products
                                             </Link>
@@ -237,9 +237,9 @@ export default function RetailerBrandsPage() {
                                         !retailerId && (
                                             <button
                                                 onClick={() => handleJoinBrand(brand._id || brand.id)}
-                                                className="w-full block mx-auto py-2.5 bg-[#e09a74] text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-[#e09a74]/20"
+                                                className="w-full block mx-auto py-2.5 bg-primary text-white rounded-xl text-xs font-bold hover:bg-[#d08963] transition-colors shadow-md shadow-primary/20"
                                             >
-                                               Become a partner
+                                                Become a partner
                                             </button>
                                         )
                                     )}

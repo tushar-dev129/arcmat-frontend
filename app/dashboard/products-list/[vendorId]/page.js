@@ -321,7 +321,7 @@ export default function ProductsListPage() {
                   <>
                     <Button
                       onClick={() => openBulkUploadModal()}
-                      className="flex items-center rounded-full bg-white text-[#e09a74] hover:bg-orange-50 min-w-[130px] h-[42px] px-6 border border-[#e09a74] shadow-sm transition-all duration-300 font-semibold"
+                      className="flex items-center rounded-full bg-white text-primary hover:bg-orange-50 min-w-[130px] h-[42px] px-6 border border-primary shadow-sm transition-all duration-300 font-semibold"
                     >
                       <Upload className="w-4 h-4 mr-2" />
                       Bulk Import
@@ -331,7 +331,7 @@ export default function ProductsListPage() {
                         setGlobalLoading(true);
                         router.push(`/dashboard/products-list/${effectiveVendorId}/add`);
                       }}
-                      className="flex items-center rounded-full bg-[#e09a74] text-white min-w-[130px] h-[42px] px-6 border border-[#e09a74] hover:bg-[#d08963] text-nowrap shadow-md transition-all duration-300 font-semibold"
+                      className="flex items-center rounded-full bg-primary text-white min-w-[130px] h-[42px] px-6 border border-primary hover:bg-[#d08963] text-nowrap shadow-md transition-all duration-300 font-semibold"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Product
@@ -351,13 +351,13 @@ export default function ProductsListPage() {
             <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex flex-col xl:flex-row gap-5 items-stretch xl:items-center justify-between">
               <div className="flex flex-col md:flex-row flex-wrap gap-4 flex-1">
                 <div className="relative flex-1 min-w-[250px] md:max-w-md group">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-[#e09a74] w-5 h-5 transition-colors" />
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary w-5 h-5 transition-colors" />
                   <input
                     type="text"
                     placeholder="Search by name, Unique Code or description..."
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-[#e09a74] focus:ring-4 focus:ring-orange-50 transition-all text-sm"
+                    className="w-full pl-11 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-primary focus:ring-4 focus:ring-orange-50 transition-all text-sm"
                   />
                 </div>
 
@@ -367,7 +367,7 @@ export default function ProductsListPage() {
                     <select
                       value={categoryFilter}
                       onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
-                      className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-[#e09a74] text-sm font-medium transition-all min-w-[140px]"
+                      className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-primary text-sm font-medium transition-all min-w-[140px]"
                     >
                       <option value="">All Categories</option>
                       {categoryOptions.map((cat) => (
@@ -385,7 +385,7 @@ export default function ProductsListPage() {
                     <select
                       value={statusFilter}
                       onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
-                      className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-[#e09a74] text-sm font-medium transition-all"
+                      className="px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:bg-white focus:border-primary text-sm font-medium transition-all"
                     >
                       <option value="all">All Status</option>
                       <option value="1">Active</option>
@@ -399,7 +399,7 @@ export default function ProductsListPage() {
                       <select
                         value={orderBy}
                         onChange={(e) => { setOrderBy(e.target.value); setCurrentPage(1); }}
-                        className="pl-4 pr-2 py-2.5 bg-transparent outline-none focus:text-[#e09a74] text-sm font-medium transition-all"
+                        className="pl-4 pr-2 py-2.5 bg-transparent outline-none focus:text-primary text-sm font-medium transition-all"
                       >
                         <option value="createdAt">Date</option>
                         <option value="product_name">Name</option>
@@ -409,7 +409,7 @@ export default function ProductsListPage() {
                       <select
                         value={sortOrder}
                         onChange={(e) => { setSortOrder(e.target.value); setCurrentPage(1); }}
-                        className="pl-2 pr-4 py-2.5 bg-transparent outline-none focus:text-[#e09a74] text-sm font-medium transition-all"
+                        className="pl-2 pr-4 py-2.5 bg-transparent outline-none focus:text-primary text-sm font-medium transition-all"
                       >
                         <option value="DESC">Newest</option>
                         <option value="ASC">Oldest</option>
@@ -420,7 +420,7 @@ export default function ProductsListPage() {
               </div>
 
               <div className="flex items-center px-4 py-2 bg-orange-50/50 rounded-xl border border-orange-100">
-                <span className="text-xs font-semibold text-[#e09a74]">
+                <span className="text-xs font-semibold text-primary">
                   {paginationData?.totalItems || 0} total products found
                 </span>
               </div>

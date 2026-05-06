@@ -294,7 +294,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="col-span-1">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Product Name *</label>
-                <input name="product_name" value={formData.product_name} onChange={handleChange} className={clsx("w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#e09a74]", errors.product_name ? "border-red-500" : "border-gray-200")} />
+                <input name="product_name" value={formData.product_name} onChange={handleChange} className={clsx("w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary", errors.product_name ? "border-red-500" : "border-gray-200")} />
               </div>
               <div className="col-span-1">
                 <label className="block text-sm font-semibold text-gray-700 mb-2">Product URL *</label>
@@ -309,7 +309,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
                   onChange={handleChange}
                   readOnly
                   className={clsx(
-                    "w-full px-4 py-2 border rounded-lg outline-none bg-white/50 cursor-not-allowed font-medium  text-[#e09a74]",
+                    "w-full px-4 py-2 border rounded-lg outline-none bg-white/50 cursor-not-allowed font-medium  text-primary",
                     errors.product_unique_id ? "border-red-500" : "border-gray-200"
                   )}
                 />
@@ -391,7 +391,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
               <div className="flex items-center justify-between mb-6 border-b pb-2">
                 <h3 className="text-lg font-bold text-gray-900 border-none">Product Variants</h3>
-                <Button type="button" onClick={handleAddVariant} className="bg-[#e09a74] text-white hover:bg-white hover:text-[#e09a74] border-[#e09a74] border transition-all cursor-pointer text-sm py-1.5 px-4 rounded-lg flex items-center gap-2 ">
+                <Button type="button" onClick={handleAddVariant} className="bg-primary text-white hover:bg-white hover:text-primary border-primary border transition-all cursor-pointer text-sm py-1.5 px-4 rounded-lg flex items-center gap-2 ">
                   <Plus className="w-4 h-4" /> Add Variant
                 </Button>
               </div>
@@ -463,7 +463,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
                               <button
                                 type="button"
                                 onClick={(e) => handleEditVariant(v, e)}
-                                className="p-2 text-[#e09a74] hover:bg-orange-50 rounded-lg transition-all"
+                                className="p-2 text-primary hover:bg-orange-50 rounded-lg transition-all"
                                 title="Edit Variant"
                               >
                                 <Pencil className="w-4 h-4" />
@@ -507,7 +507,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
 
           <div className="flex justify-end gap-3 pt-6">
             <Button variant="outline" className="cursor-pointer hover:text-red-500" type="button" onClick={() => onCancel ? onCancel() : window.history.back()}>Cancel</Button>
-            <Button type="submit" disabled={isSubmitting} className="bg-[#e09a74] px-4 py-2 text-white hover:bg-white hover:text-[#e09a74] border border-[#e09a74] cursor-pointer">
+            <Button type="submit" disabled={isSubmitting} className="bg-primary px-4 py-2 text-white hover:bg-white hover:text-primary border border-primary cursor-pointer">
               {isSubmitting ? 'Saving...' : initialData ? 'Save Changes' : 'Create Product'}
             </Button>
           </div>

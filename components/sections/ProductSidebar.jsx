@@ -20,7 +20,7 @@ const ToggleSwitch = ({ label, checked, onChange }) => (
                 checked={checked}
                 onChange={(e) => onChange(e.target.checked)}
             />
-            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#e09a74]"></div>
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
         </label>
     </div>
 )
@@ -157,14 +157,14 @@ const ProductSidebar = ({
                     activeFilters.priceRange[1] !== maxPrice) && (
                         <button
                             onClick={clearAll}
-                            className="text-[12px] font-semibold text-[#e09a74] hover:underline cursor-pointer"
+                            className="text-[12px] font-semibold text-primary hover:underline cursor-pointer"
                         >
                             Clear All
                         </button>
                     )}
             </div>
 
-{/* <div className="flex flex-col mb-4">
+            {/* <div className="flex flex-col mb-4">
                 <ToggleSwitch
                     label="Commercial"
                     checked={activeFilters.toggles.commercial}
@@ -197,7 +197,7 @@ const ProductSidebar = ({
                                         <div className="relative flex items-center">
                                             <input
                                                 type="checkbox"
-                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-[#e09a74] checked:border-[#e09a74] transition-all"
+                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-primary checked:border-primary transition-all"
                                                 checked={activeFilters.brands.includes(brand._id || brand.id)}
                                                 onChange={(e) => handleBrandChange(brand._id || brand.id, e.target.checked)}
                                             />
@@ -221,7 +221,7 @@ const ProductSidebar = ({
                                                     type="number"
                                                     value={activeFilters.priceRange[0]}
                                                     onChange={(e) => handlePriceChange(0, e.target.value)}
-                                                    className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:outline-none focus:border-[#e09a74]"
+                                                    className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:outline-none focus:border-primary"
                                                 />
                                             </div>
                                         </div>
@@ -233,7 +233,7 @@ const ProductSidebar = ({
                                                     type="number"
                                                     value={activeFilters.priceRange[1]}
                                                     onChange={(e) => handlePriceChange(1, e.target.value)}
-                                                    className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:outline-none focus:border-[#e09a74]"
+                                                    className="w-full pl-7 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm font-bold focus:outline-none focus:border-primary"
                                                 />
                                             </div>
                                         </div>
@@ -246,7 +246,7 @@ const ProductSidebar = ({
                                             step={priceStep}
                                             value={activeFilters.priceRange[1]}
                                             onChange={(e) => handlePriceChange(1, e.target.value)}
-                                            className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#e09a74]"
+                                            className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
                                         />
                                     </div> */}
                                 </div>
@@ -262,7 +262,7 @@ const ProductSidebar = ({
                                         <div className="relative flex items-center">
                                             <input
                                                 type="checkbox"
-                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-[#e09a74] checked:border-[#e09a74] transition-all"
+                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-primary checked:border-primary transition-all"
                                                 checked={(activeFilters.cities || []).includes(city)}
                                                 onChange={(e) => handleCityChange(city, e.target.checked)}
                                             />
@@ -282,7 +282,7 @@ const ProductSidebar = ({
                                         <div className="relative flex items-center">
                                             <input
                                                 type="checkbox"
-                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-[#e09a74] checked:border-[#e09a74] transition-all"
+                                                className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-gray-300 checked:bg-primary checked:border-primary transition-all"
                                                 checked={((activeFilters.attributes || {})[cat] || []).some(selected => normalizeAttributeValue(selected) === normalizeAttributeValue(val))}
                                                 onChange={(e) => handleAttributeChange(cat, val, e.target.checked)}
                                             />

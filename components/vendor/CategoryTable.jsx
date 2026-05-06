@@ -16,7 +16,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
             "relative",
             isL1 && "mb-4 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden",
             isL2 && "mt-2 ml-4 md:ml-10 bg-gray-50/50 rounded-xl border border-gray-200/60 p-1",
-            isL3 && "mt-1.5 ml-4 md:ml-8 flex items-center gap-3 py-2 px-3 border-l-2 border-gray-200 hover:border-[#e09a74] transition-colors"
+            isL3 && "mt-1.5 ml-4 md:ml-8 flex items-center gap-3 py-2 px-3 border-l-2 border-gray-200 hover:border-primary transition-colors"
         )}>
             {/* Context Line for L2/L3 relationship visualization */}
             {(isL2 || isL3) && (
@@ -34,7 +34,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
                     {hasChildren && (
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="p-1 hover:bg-gray-100 rounded-md transition-colors text-gray-400 hover:text-[#e09a74] cursor-pointer"
+                            className="p-1 hover:bg-gray-100 rounded-md transition-colors text-gray-400 hover:text-primary cursor-pointer"
                         >
                             {isExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
                         </button>
@@ -105,7 +105,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
                 <div className="flex items-center gap-0.5 md:gap-1 shrink-0">
                     <button
                         onClick={() => onEdit(category)}
-                        className="p-1.5 md:p-2 text-gray-400 hover:text-[#e09a74] hover:bg-orange-50 rounded-lg transition-all cursor-pointer"
+                        className="p-1.5 md:p-2 text-gray-400 hover:text-primary hover:bg-orange-50 rounded-lg transition-all cursor-pointer"
                         title="Edit Category"
                     >
                         <Pencil className="w-3.5 h-3.5 md:w-4 md:h-4" />

@@ -100,7 +100,7 @@ export default function RetailerDashboardPage() {
                 <div className="flex items-center gap-3">
                     <Link
                         href="/dashboard/retailer/inventory"
-                        className="px-4 py-2 bg-[#e09a74] text-white rounded-xl text-sm font-semibold hover:bg-[#d08a64] transition-all shadow-sm"
+                        className="px-4 py-2 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-[#d08a64] transition-all shadow-sm"
                     >
                         Manage Inventory
                     </Link>
@@ -143,7 +143,7 @@ export default function RetailerDashboardPage() {
                             <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mt-0.5">Manage your professional network</p>
                         </div>
                     </div>
-                    <Link href="/dashboard/retailer/requests" className="text-sm font-bold text-[#e09a74] hover:underline uppercase tracking-widest">
+                    <Link href="/dashboard/retailer/requests" className="text-sm font-bold text-primary hover:underline uppercase tracking-widest">
                         View All
                     </Link>
                 </div>
@@ -217,7 +217,7 @@ export default function RetailerDashboardPage() {
                     <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
                         <div className="flex items-center justify-between mb-6">
                             <h2 className="text-xl font-bold text-gray-900">Brands You Deal With</h2>
-                            <Link href="/dashboard/retailer/brands" className="text-sm font-medium text-[#e09a74] hover:underline">
+                            <Link href="/dashboard/retailer/brands" className="text-sm font-medium text-primary hover:underline">
                                 View all
                             </Link>
                         </div>
@@ -248,7 +248,7 @@ export default function RetailerDashboardPage() {
                             <div className="text-center py-10">
                                 <Store className="w-12 h-12 text-gray-100 mx-auto mb-3" />
                                 <p className="text-gray-400 text-sm">No brands linked yet.</p>
-                                <Link href="/dashboard/retailer/brands" className="text-[#e09a74] text-sm font-medium mt-2 inline-block">
+                                <Link href="/dashboard/retailer/brands" className="text-primary text-sm font-medium mt-2 inline-block">
                                     Browse Brands
                                 </Link>
                             </div>
@@ -264,7 +264,7 @@ export default function RetailerDashboardPage() {
                                 <h2 className="text-xl font-bold text-gray-900">Recent Performance Feedback</h2>
                                 <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mt-0.5">Insights from architects</p>
                             </div>
-                            <Link href="/dashboard/retailer/ratings" className="text-sm font-bold text-[#e09a74] hover:underline uppercase tracking-widest">
+                            <Link href="/dashboard/retailer/ratings" className="text-sm font-bold text-primary hover:underline uppercase tracking-widest">
                                 View All
                             </Link>
                         </div>

@@ -42,7 +42,7 @@ const BespokeBrandPage = () => {
     if (brandLoading) {
         return (
             <main className="flex min-h-screen items-center justify-center bg-[#f7f7f5]">
-                <Loader2 className="h-10 w-10 animate-spin text-[#e09a74]" />
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
             </main>
         );
     }
@@ -53,7 +53,7 @@ const BespokeBrandPage = () => {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-950">Brand not found</h1>
                     <p className="mt-2 text-sm font-medium text-gray-500">This bespoke brand page is not available.</p>
-                    <Link href="/bespoke" className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#e09a74] px-6 py-3 text-sm font-bold text-white">
+                    <Link href="/bespoke" className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-white">
                         <ArrowLeft className="h-4 w-4" />
                         Back to Bespoke
                     </Link>
@@ -88,7 +88,7 @@ const BespokeBrandPage = () => {
 
             <section className="relative overflow-hidden border-b border-gray-200 bg-white">
                 <Container className="relative py-8 sm:py-12">
-                    <Link href="/bespoke" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition hover:text-[#e09a74]">
+                    <Link href="/bespoke" className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-gray-500 transition hover:text-primary">
                         <ArrowLeft className="h-4 w-4" />
                         All bespoke brands
                     </Link>
@@ -125,7 +125,7 @@ const BespokeBrandPage = () => {
                                         href={brand.website.startsWith("http") ? brand.website : `https://${brand.website}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 transition hover:border-[#e09a74] hover:text-[#e09a74]"
+                                        className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 transition hover:border-primary hover:text-primary"
                                     >
                                         <Globe className="h-4 w-4" />
                                         Visit website
@@ -133,7 +133,7 @@ const BespokeBrandPage = () => {
                                 )}
                                 <Link
                                     href={`/productlist?brand=${id}`}
-                                    className="inline-flex items-center gap-2 rounded-full bg-[#e09a74] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#c97f58]"
+                                    className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white transition hover:bg-[#c97f58]"
                                 >
                                     View catalogue
                                     <ArrowRight className="h-4 w-4" />
@@ -182,7 +182,7 @@ const BespokeBrandPage = () => {
                 <div className="mb-8 grid gap-4 lg:grid-cols-[1fr_320px] lg:items-end">
                     <div>
                         <h2 className="flex items-center gap-3 text-2xl font-bold tracking-tight text-gray-950">
-                            <Package className="h-6 w-6 text-[#e09a74]" />
+                            <Package className="h-6 w-6 text-primary" />
                             Brand Products
                         </h2>
                         <p className="mt-2 text-sm font-medium text-gray-500">
@@ -212,7 +212,7 @@ const BespokeBrandPage = () => {
                             <div className="flex justify-center">
                                 <Link
                                     href={`/productlist?brand=${id}`}
-                                    className="inline-flex items-center gap-2 rounded-full border border-[#e09a74] bg-white px-7 py-3 text-sm font-bold text-[#b76b45] transition hover:bg-[#e09a74] hover:text-white"
+                                    className="inline-flex items-center gap-2 rounded-full border border-primary bg-white px-7 py-3 text-sm font-bold text-[#b76b45] transition hover:bg-primary hover:text-white"
                                 >
                                     Show all products
                                     <ArrowRight className="h-4 w-4" />
@@ -260,7 +260,7 @@ const BespokeBrandPage = () => {
 const PartnerPanel = ({ icon: Icon, title, items, renderItem }) => (
     <section className="rounded-lg border border-gray-200 bg-white p-6">
         <h2 className="mb-5 flex items-center gap-3 text-xl font-bold text-gray-950">
-            <Icon className="h-5 w-5 text-[#e09a74]" />
+            <Icon className="h-5 w-5 text-primary" />
             {title}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -337,14 +337,14 @@ const BrandShowcase = ({ galleryMedia, brandName }) => {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => scroll("left")}
-                            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-[#e09a74] hover:text-[#e09a74]"
+                            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:text-primary"
                             aria-label="Previous showcase media"
                         >
                             <ChevronLeft className="h-5 w-5" />
                         </button>
                         <button
                             onClick={() => scroll("right")}
-                            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-[#e09a74] hover:text-[#e09a74]"
+                            className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-sm transition hover:border-primary hover:text-primary"
                             aria-label="Next showcase media"
                         >
                             <ChevronRight className="h-5 w-5" />

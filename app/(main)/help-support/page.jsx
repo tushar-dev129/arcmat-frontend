@@ -76,7 +76,7 @@ export default function HelpSupportPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <Loader2 className="w-10 h-10 animate-spin text-[#E09A74]" />
+                <Loader2 className="w-10 h-10 animate-spin text-primary" />
             </div>
         );
     }
@@ -87,8 +87,8 @@ export default function HelpSupportPage() {
                 <div className="max-w-3xl mx-auto">
                     {/* Header */}
                     <div className="text-center mb-12">
-                        <div className="w-16 h-16 bg-[#E09A74]/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                            <MessageCircle className="w-8 h-8 text-[#E09A74]" />
+                        <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                            <MessageCircle className="w-8 h-8 text-primary" />
                         </div>
                         <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Help & Support</h1>
                         <p className="text-lg text-gray-600 font-medium max-w-lg mx-auto leading-relaxed">
@@ -127,7 +127,7 @@ export default function HelpSupportPage() {
                                             value={formData.subject}
                                             onChange={handleInputChange}
                                             placeholder="What can we help you with?"
-                                            className="w-full h-14 bg-white border-2 border-gray-50 rounded-2xl px-6 font-bold text-gray-900 focus:border-[#E09A74] focus:ring-0 transition-all placeholder:text-gray-300"
+                                            className="w-full h-14 bg-white border-2 border-gray-50 rounded-2xl px-6 font-bold text-gray-900 focus:border-primary focus:ring-0 transition-all placeholder:text-gray-300"
                                         />
                                     </div>
 
@@ -140,7 +140,7 @@ export default function HelpSupportPage() {
                                             value={formData.query}
                                             onChange={handleInputChange}
                                             placeholder="Please describe your issue or question in detail..."
-                                            className="w-full bg-white border-2 border-gray-50 rounded-[28px] p-6 font-bold text-gray-900 focus:border-[#E09A74] focus:ring-0 transition-all placeholder:text-gray-300 resize-none"
+                                            className="w-full bg-white border-2 border-gray-50 rounded-[28px] p-6 font-bold text-gray-900 focus:border-primary focus:ring-0 transition-all placeholder:text-gray-300 resize-none"
                                         />
                                     </div>
 
@@ -148,7 +148,7 @@ export default function HelpSupportPage() {
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between pl-1">
                                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Attachments (Images)</label>
-                                            <span className="text-[10px] font-bold text-[#E09A74]">{formData.attachments.length} files selected</span>
+                                            <span className="text-[10px] font-bold text-primary">{formData.attachments.length} files selected</span>
                                         </div>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">
@@ -165,7 +165,7 @@ export default function HelpSupportPage() {
                                                 </div>
                                             ))}
 
-                                            <label className="aspect-square rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-[#E09A74] hover:bg-orange-50/30 transition-all group">
+                                            <label className="aspect-square rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-orange-50/30 transition-all group">
                                                 <input
                                                     type="file"
                                                     multiple
@@ -178,8 +178,8 @@ export default function HelpSupportPage() {
                                                     <Loader2 className="w-6 h-6 text-gray-400 animate-spin" />
                                                 ) : (
                                                     <>
-                                                        <Plus className="w-6 h-6 text-gray-300 group-hover:text-[#E09A74] transition-colors" />
-                                                        <span className="text-[9px] font-black text-gray-300 group-hover:text-[#E09A74] mt-2 uppercase tracking-tighter">Add Photo</span>
+                                                        <Plus className="w-6 h-6 text-gray-300 group-hover:text-primary transition-colors" />
+                                                        <span className="text-[9px] font-black text-gray-300 group-hover:text-primary mt-2 uppercase tracking-tighter">Add Photo</span>
                                                     </>
                                                 )}
                                             </label>

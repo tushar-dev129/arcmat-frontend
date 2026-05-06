@@ -35,7 +35,7 @@ export default function RetailerRatingsPage() {
     if (isLoading) {
         return (
             <div className="flex-1 flex items-center justify-center min-h-[60vh]">
-                <Loader2 className="w-10 h-10 text-[#e09a74] animate-spin" />
+                <Loader2 className="w-10 h-10 text-primary animate-spin" />
             </div>
         );
     }
@@ -97,7 +97,7 @@ export default function RetailerRatingsPage() {
             {/* Detailed Feedbacks */}
             <div className="space-y-8">
                 <h2 className="text-xl font-black text-[#2d3142] flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-[#e09a74]" />
+                    <MessageSquare className="w-5 h-5 text-primary" />
                     All Performance Feedback
                 </h2>
 
@@ -113,7 +113,7 @@ export default function RetailerRatingsPage() {
                     <div className="grid grid-cols-1 gap-8">
                         {ratings.map((rating) => {
                             const avg = (rating.ratings.reduce((acc, r) => acc + r.rating, 0) / rating.ratings.length).toFixed(1);
-                            
+
                             return (
                                 <div key={rating._id} className="bg-white rounded-[40px] border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl hover:shadow-gray-100/50 transition-all duration-300">
                                     <div className="p-8">
@@ -143,9 +143,9 @@ export default function RetailerRatingsPage() {
                                             <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-3xl border border-gray-100">
                                                 <div className="flex items-center">
                                                     {[1, 2, 3, 4, 5].map((star) => (
-                                                        <Star 
-                                                            key={star} 
-                                                            className={`w-5 h-5 ${star <= Math.round(avg) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-200'}`} 
+                                                        <Star
+                                                            key={star}
+                                                            className={`w-5 h-5 ${star <= Math.round(avg) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-200'}`}
                                                         />
                                                     ))}
                                                 </div>
@@ -159,7 +159,7 @@ export default function RetailerRatingsPage() {
                                                     <div>
                                                         <div className="flex items-center justify-between mb-4">
                                                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{r.label}</span>
-                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-[#e09a74]/10 rounded-lg text-[#e09a74] font-black text-xs">
+                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 rounded-lg text-primary font-black text-xs">
                                                                 <Award className="w-3.5 h-3.5" />
                                                                 {r.rating}/5
                                                             </div>

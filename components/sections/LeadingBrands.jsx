@@ -8,10 +8,10 @@ import { useGetBrands } from "@/hooks/useBrand";
 import { getBrandImageUrl } from "@/lib/productUtils";
 
 const LeadingBrands = () => {
-    const { data: brandsData, isLoading } = useGetBrands({ 
-        showOnHomepage: 1, 
+    const { data: brandsData, isLoading } = useGetBrands({
+        showOnHomepage: 1,
         limit: 16,
-        type: 'frontend' 
+        type: 'frontend'
     });
 
     const brands = brandsData?.data || [];
@@ -30,7 +30,7 @@ const LeadingBrands = () => {
 
                 {isLoading ? (
                     <div className="flex justify-center items-center py-20">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#E09A74]"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                     </div>
                 ) : brands.length > 0 ? (
                     <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
@@ -38,11 +38,11 @@ const LeadingBrands = () => {
                             <Link
                                 key={brand._id || index}
                                 href={`/brand/${brand._id}`}
-                                className="group relative bg-white w-[calc(50%-1rem)] xs:w-40 sm:w-48 aspect-square flex items-center justify-center p-6 rounded-2xl border border-gray-100 hover:border-[#E09A74]/30 hover:shadow-xl hover:shadow-[#E09A74]/5 transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-1"
+                                className="group relative bg-white w-[calc(50%-1rem)] xs:w-40 sm:w-48 aspect-square flex items-center justify-center p-6 rounded-2xl border border-gray-100 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5 transition-all duration-500 cursor-pointer overflow-hidden transform hover:-translate-y-1"
                             >
                                 {/* Subtle Background Pattern */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-gray-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                
+
                                 {/* Image Container */}
                                 <div className="relative w-full h-full">
                                     <Image
@@ -55,7 +55,7 @@ const LeadingBrands = () => {
                                 </div>
 
                                 {/* Hover Border Indicator */}
-                                <div className="absolute inset-x-0 bottom-0 h-1 bg-[#E09A74] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-1 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
                             </Link>
                         ))}
                     </div>
