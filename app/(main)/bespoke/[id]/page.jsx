@@ -34,7 +34,10 @@ const BespokeBrandPage = () => {
     const reviews = bespoke.reviews || [];
     const totalProducts = selectedProductIds.length || productsData?.data?.pagination?.totalItems || products.length;
     const heroImage = getImageUrl(bespoke.heroImage, "brands");
-    const galleryMedia = [...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])].slice(0, 8);
+    // Filter out any null/falsy entries — customImage may be null if it was deleted via the dashboard
+    const galleryMedia = [...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])]
+        .filter((m) => m && (typeof m === "string" ? m.trim() : (m?.secure_url || m?.url || m?.location)))
+        .slice(0, 8);
 
     if (brandLoading) {
         return (
@@ -375,6 +378,9 @@ const isVideoMedia = (media) => {
 const ShowcaseTile = ({ media, brandName, featured }) => {
     const url = getImageUrl(media, "brands");
     const isVideo = isVideoMedia(media);
+
+    // Don't render a tile if there's no valid URL (e.g. cleared customImage)
+    if (!url && !isVideo) return null;
 
     return (
         <div className={`relative h-[260px] shrink-0 snap-start overflow-hidden rounded-lg border border-gray-200 bg-gray-100 shadow-sm sm:h-[320px] ${featured ? "w-[88%] sm:w-[560px] lg:w-[640px]" : "w-[82%] sm:w-[360px] lg:w-[400px]"}`}>

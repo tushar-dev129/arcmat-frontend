@@ -53,6 +53,9 @@ const BespokeEditorPage = () => {
     const [existingGalleryMedia, setExistingGalleryMedia] = useState([]);
     const [galleryMedia, setGalleryMedia] = useState([]);
 
+    // Seed local state once per brand (i.e. when the page first loads or switches brand).
+    // After a save, we re-sync from the mutation response instead (see savePage below),
+    // so the dep array stays a constant size — satisfying React's rules of hooks.
     useEffect(() => {
         if (!brand) return;
         setHeadline(bespoke.headline || "");
@@ -110,7 +113,15 @@ const BespokeEditorPage = () => {
         });
 
         try {
-            await updateBrand.mutateAsync({ id: brandId, data: formData });
+            const response = await updateBrand.mutateAsync({ id: brandId, data: formData });
+            // Re-sync gallery from the server response so any removed images
+            // stay gone without waiting for the useEffect to re-run.
+            const savedBespoke = response?.data?.bespokePage || response?.bespokePage;
+            if (savedBespoke) {
+                setExistingGalleryMedia(
+                    [...(savedBespoke.galleryMedia || []), ...(savedBespoke.customImage ? [savedBespoke.customImage] : [])].slice(0, 8)
+                );
+            }
             setHeroImage(null);
             setGalleryMedia([]);
             toast.success("Bespoke page updated");
@@ -521,26 +532,54 @@ const GalleryInput = ({ existingMedia, newMedia, onExistingChange, onNewChange }
     );
 };
 
-const MediaTile = ({ url, isVideo, onRemove }) => (
-    <div className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
-        {isVideo ? (
-            <video src={url} className="h-full w-full object-cover" muted playsInline />
-        ) : (
-            <Image src={url || "/Icons/arcmatlogo.svg"} alt="Gallery media" fill className="object-cover" unoptimized />
-        )}
-        <button
-            onClick={onRemove}
-            className="absolute right-2 top-2 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-red-600 opacity-0 shadow-sm transition group-hover:opacity-100"
-        >
-            Remove
-        </button>
-        {isVideo && (
-            <span className="absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
-                Video
-            </span>
-        )}
-    </div>
-);
+const MediaTile = ({ url, isVideo, onRemove }) => {
+    const [confirming, setConfirming] = React.useState(false);
+
+    return (
+        <div className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+            {isVideo ? (
+                <video src={url} className="h-full w-full object-cover" muted playsInline />
+            ) : (
+                <Image src={url || "/Icons/arcmatlogo.svg"} alt="Gallery media" fill className="object-cover" unoptimized />
+            )}
+
+            {confirming ? (
+                /* Confirmation overlay */
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/70 backdrop-blur-sm">
+                    <p className="text-xs font-bold text-white text-center px-2">Delete this image?</p>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => { onRemove(); setConfirming(false); }}
+                            className="rounded-full bg-red-600 px-3 py-1 text-xs font-bold text-white hover:bg-red-700 transition-colors"
+                        >
+                            Yes, Delete
+                        </button>
+                        <button
+                            onClick={() => setConfirming(false)}
+                            className="rounded-full bg-white/20 border border-white/40 px-3 py-1 text-xs font-bold text-white hover:bg-white/30 transition-colors"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                /* Initial Remove button — shows on hover */
+                <button
+                    onClick={() => setConfirming(true)}
+                    className="absolute right-2 top-2 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-red-600 opacity-0 shadow-sm transition group-hover:opacity-100 hover:bg-red-600 hover:text-white"
+                >
+                    Remove
+                </button>
+            )}
+
+            {isVideo && !confirming && (
+                <span className="absolute bottom-2 left-2 rounded-full bg-black/65 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-white">
+                    Video
+                </span>
+            )}
+        </div>
+    );
+};
 
 const SelectionSection = ({ title, description, isLoading, items, selectedIds, onToggle, renderItem }) => (
     <section className="rounded-lg border border-gray-200 bg-white p-6">

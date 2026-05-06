@@ -76,7 +76,10 @@ export const useUpdateBrand = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, data }) => brandService.updateBrand(id, data),
-        onSuccess: () => {
+        onSuccess: (_, variables) => {
+            // resetQueries clears the cache immediately (ignores staleTime) so both
+            // the dashboard and the public bespoke page show fresh data after save.
+            queryClient.resetQueries({ queryKey: BRAND_KEYS.detail(variables.id) });
             queryClient.invalidateQueries({ queryKey: BRAND_KEYS.all });
         },
     });
