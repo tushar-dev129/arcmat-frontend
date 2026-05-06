@@ -280,7 +280,7 @@ const BespokeEditorPage = () => {
                         onToggle={(id) => setSelectedRetailers((current) => toggleId(current, id))}
                         renderItem={(retailer) => (
                             <OptionRow
-                                image={retailer.profile || "/Icons/arcmatlogo.svg"}
+                                image={getImageUrl(retailer.profile, "userprofile")}
                                 title={retailer.retailerProfile?.companyName || retailer.name}
                                 subtitle={retailer.retailerProfile?.cityRegion || retailer.email}
                             />
@@ -296,7 +296,7 @@ const BespokeEditorPage = () => {
                         onToggle={(id) => setSelectedContractors((current) => toggleId(current, id))}
                         renderItem={(contractor) => (
                             <OptionRow
-                                image={getImageUrl(contractor.profileImage, "contractor") || "/Icons/arcmatlogo.svg"}
+                                image={getImageUrl(contractor.profileImage, "contractor")}
                                 title={contractor.businessName}
                                 subtitle={`${contractor.location?.city || "India"}${contractor.experienceYears ? `, ${contractor.experienceYears}+ years` : ""}`}
                             />
@@ -322,7 +322,7 @@ const BespokeEditorPage = () => {
                                         <div key={request._id} className="rounded-lg border border-gray-200 bg-gray-50 p-4">
                                             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                                 <OptionRow
-                                                    image={getImageUrl(contractor?.profileImage, "contractor") || "/Icons/arcmatlogo.svg"}
+                                                    image={getImageUrl(contractor?.profileImage, "contractor")}
                                                     title={contractor?.businessName || "Contractor"}
                                                     subtitle={request.message || contractor?.tagline || "Requested display on this brand page"}
                                                 />
@@ -616,17 +616,34 @@ const SelectionSection = ({ title, description, isLoading, items, selectedIds, o
     </section>
 );
 
-const OptionRow = ({ image, title, subtitle }) => (
-    <div className="flex items-center gap-3">
-        <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
-            <Image src={image || "/Icons/arcmatlogo.svg"} alt={title || "Option"} fill className="object-cover" unoptimized />
+const OptionRow = ({ image, title, subtitle }) => {
+    const [failed, setFailed] = useState(false);
+    const isLogo = !image || image === "/Icons/arcmatlogo.svg";
+    const initial = String(title || "A").trim().charAt(0).toUpperCase() || "A";
+
+    return (
+        <div className="flex items-center gap-3">
+            <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gray-100 text-lg font-black text-gray-500">
+                {!failed && !isLogo ? (
+                    <Image 
+                        src={image} 
+                        alt={title || "Option"} 
+                        fill 
+                        className="object-cover" 
+                        unoptimized 
+                        onError={() => setFailed(true)}
+                    />
+                ) : (
+                    <span>{initial}</span>
+                )}
+            </div>
+            <div className="min-w-0">
+                <p className="truncate text-sm font-bold text-gray-950">{title || "Untitled"}</p>
+                <p className="truncate text-xs font-medium text-gray-500">{subtitle || "Available"}</p>
+            </div>
         </div>
-        <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-gray-950">{title || "Untitled"}</p>
-            <p className="truncate text-xs font-medium text-gray-500">{subtitle || "Available"}</p>
-        </div>
-    </div>
-);
+    );
+};
 
 const SummaryPill = ({ label, value }) => (
     <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
