@@ -18,7 +18,7 @@ import {
     Play
 } from "lucide-react";
 import Link from "next/link";
-import { toast } from "react-hot-toast";
+import { toast } from "@/components/ui/Toast";
 
 export default function ContractorProfilePage({ params }) {
     const { slug } = params;

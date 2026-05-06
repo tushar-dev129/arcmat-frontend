@@ -144,6 +144,12 @@ const Navbar = () => {
 
                         <div className="hidden lg:flex items-center ml-6 pl-6 border-l border-[hsl(30,15%,85%)]">
                             <Link 
+                                href="/bespoke" 
+                                className="group mr-3 px-4 py-2 text-[13px] font-bold text-[hsl(20,10%,15%)] bg-white hover:bg-gray-50 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-gray-200"
+                            >
+                                Bespoke Brands
+                            </Link>
+                            <Link 
                                 href="/contractors" 
                                 className="group px-4 py-2 text-[13px] font-bold text-[hsl(20,10%,15%)] bg-[#ead4ce]/30 hover:bg-[#ead4ce]/60 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-[#ead4ce]"
                             >

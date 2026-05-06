@@ -11,6 +11,31 @@ export const brandService = {
         return response.data;
     },
 
+    getBespokeOptions: async (id) => {
+        const response = await api.get(`/brand/${id}/bespoke-options`);
+        return response.data;
+    },
+
+    createContractorRequest: async ({ brandId, message }) => {
+        const response = await api.post(`/brand/${brandId}/contractor-requests`, { message });
+        return response.data;
+    },
+
+    getContractorRequests: async ({ brandId, mine } = {}) => {
+        const response = await api.get(`/brand/${brandId}/contractor-requests`, {
+            params: mine ? { mine } : {}
+        });
+        return response.data;
+    },
+
+    decideContractorRequest: async ({ brandId, requestId, status, brandNote }) => {
+        const response = await api.patch(`/brand/${brandId}/contractor-requests/${requestId}`, {
+            status,
+            brandNote
+        });
+        return response.data;
+    },
+
     createBrand: async (brandData) => {
         const config = brandData instanceof FormData
             ? { headers: { 'Content-Type': 'multipart/form-data' } }

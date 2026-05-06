@@ -285,7 +285,7 @@ export default function ProductListPage() {
                         </div>
                     )}
 
-                    {filteredAndSortedProducts.length === 0 && (
+                    {!isLoading && isInitialized && filteredAndSortedProducts.length === 0 && (
                         <div className="flex flex-col items-center justify-center py-20 grayscale opacity-50">
                             <p className="text-xl font-medium text-gray-500">No Products Found</p>
                         </div>

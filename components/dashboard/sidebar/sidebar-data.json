@@ -38,6 +38,12 @@
             "href": "/dashboard/homepage"
         },
         {
+            "id": "bespoke",
+            "label": "Bespoke Page",
+            "icon": "Sparkles",
+            "href": "/dashboard/bespoke"
+        },
+        {
             "id": "profile",
             "label": "Profile",
             "icon": "User",
@@ -214,6 +220,12 @@
             "label": "Marketplace Profile",
             "icon": "User",
             "href": "/dashboard/contractor/profile"
+        },
+        {
+            "id": "brand-requests",
+            "label": "Brand Requests",
+            "icon": "Send",
+            "href": "/dashboard/contractor/brand-requests"
         },
         {
             "id": "portfolio",

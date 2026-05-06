@@ -129,6 +129,25 @@ export const MobileMenu = () => {
                             </div>
                         </div>
 
+                        <div className="mb-4 grid grid-cols-1 gap-2">
+                            <Link
+                                href="/bespoke"
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3 text-[15px] font-bold text-[hsl(20,10%,15%)]"
+                            >
+                                Bespoke Brands
+                                <ChevronRight className="h-4 w-4 text-[#e09a74]" />
+                            </Link>
+                            <Link
+                                href="/contractors"
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center justify-between rounded-xl border border-[#ead4ce] bg-[#ead4ce]/30 px-4 py-3 text-[15px] font-bold text-[hsl(20,10%,15%)]"
+                            >
+                                Contractors & Services
+                                <ChevronRight className="h-4 w-4 text-[#e09a74]" />
+                            </Link>
+                        </div>
+
                         <ul className="space-y-1">
                             {navItems.map((item, index) => {
                                 const isOpen = openIndex === index;
