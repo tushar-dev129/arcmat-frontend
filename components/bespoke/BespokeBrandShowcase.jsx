@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useGetBrandById } from "@/hooks/useBrand";
 import { useGetRetailerProducts } from "@/hooks/useProduct";
+import Container from "@/components/ui/Container";
 import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getProductThumbnail } from "@/lib/productUtils";
 
 const tabsLeft = [
@@ -73,6 +74,7 @@ const resolvePartnerImages = (item, type) => {
 const defaultTheme = {
     name: "Bespoke",
     mode: "light",
+    color: "#E6AE90",
     accent: "#333333",
     soft: "#f5f5f5",
     stone: "#888888",
@@ -221,6 +223,13 @@ export default function BespokeBrandShowcase() {
     const [activeTab, setActiveTab] = useState("overview");
     const [modal, setModal] = useState(null);
     const [loadingIntro, setLoadingIntro] = useState(true);
+    const [showTopBtn, setShowTopBtn] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => setShowTopBtn(window.scrollY > 400);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     const productPayload = productsData?.data?.data || productsData?.data || [];
     const template = useMemo(() => buildBrandPayload(brand, productPayload), [brand, productPayload]);
@@ -269,13 +278,13 @@ export default function BespokeBrandShowcase() {
     }
 
     return (
-        <main className="min-h-screen bg-white text-[#333] font-sans antialiased">
-            <motion.div className="fixed left-0 right-0 top-0 z-[100] h-[2px] origin-left bg-black" style={{ scaleX: progress }} />
+        <main className="min-h-screen bg-white text-[#333] font-sans antialiased" style={{ "--brand-color": template.theme.color || "#E6AE90" }}>
+            <motion.div className="fixed left-0 right-0 top-0 z-[100] h-[2px] origin-left bg-[var(--brand-color)]" style={{ scaleX: progress }} />
 
             <HeroSection template={template} savedBrand={savedBrand} setSavedBrand={setSavedBrand} setModal={setModal} />
             <StickyTabs activeTab={activeTab} setActiveTab={setActiveTab} tabsLeft={visibleTabsLeft} tabsRight={visibleTabsRight} />
 
-            <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8 pb-20">
+            <Container className="pb-20">
                 <OverviewSection template={template} />
                 <GallerySection items={template.gallery} brandName={template.hero.name} setModal={setModal} />
                 <SolutionsSection items={template.solutions} brandName={template.hero.name} setModal={setModal} />
@@ -285,13 +294,23 @@ export default function BespokeBrandShowcase() {
                 <NewsSection items={template.news} brandName={template.hero.name} setModal={setModal} />
                 <VideoSection items={template.videos} brandName={template.hero.name} setModal={setModal} />
                 <PartnerSection items={template.partners} brandName={template.hero.name} setModal={setModal} />
-                <ContactSection template={template} />
-            </div>
-
-            <PremiumFooter template={template} />
+            </Container>
+            
+            <ContactSection template={template} />
 
             <AnimatePresence>
                 {modal && <DetailModal modal={modal} onClose={() => setModal(null)} />}
+                {showTopBtn && (
+                    <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                        className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--brand-color)] text-white shadow-lg transition-transform hover:scale-105"
+                    >
+                        <ChevronUp className="h-5 w-5" />
+                    </motion.button>
+                )}
             </AnimatePresence>
         </main>
     );
@@ -319,7 +338,7 @@ function buildBrandPayload(brand, apiProducts = []) {
             eyebrow: bespoke.headline || "Bespoke brand page",
             name: brand?.name || "Premium Brand",
             brandId: brand?._id || brand?.id || "",
-            location: brand?.country || "Cerreto Guidi / Italy",
+            location: bespoke.contact?.address || [brand?.shippingAddress?.city, brand?.shippingAddress?.state, brand?.country].filter(Boolean).join(", ") || "Global Headquarters",
             website: brand?.website || "",
             bannerType: "image",
             banner: heroImage || defaultHeroImage,
@@ -401,6 +420,16 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
 
     return (
         <section className="relative w-full">
+            <div className="w-full bg-white z-20 relative">
+                <Container className="py-3">
+                    <div className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
+                        <Link href="/bespoke" className="hover:text-black transition-colors">Brands</Link>
+                        <ChevronRight className="h-3 w-3" />
+                        <span className="text-black font-semibold">{template.hero.name}</span>
+                    </div>
+                </Container>
+            </div>
+
             <div className="relative h-[250px] sm:h-[350px] lg:h-[450px] w-full bg-[#f4f4f4]">
                 {template.hero.bannerType === "video" ? (
                     <video src={template.hero.banner} className="h-full w-full object-cover" autoPlay muted loop playsInline />
@@ -409,7 +438,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
                 )}
             </div>
 
-            <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8">
+            <Container>
                 <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between relative -mt-16 sm:-mt-20 z-10 pb-6 border-b border-gray-200">
                     <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 w-full">
                         <div className="relative h-28 w-28 sm:h-36 sm:w-36 bg-white border border-gray-200 shadow-sm flex items-center justify-center p-3 rounded-md overflow-hidden shrink-0">
@@ -424,7 +453,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
                             <p className="mt-1 flex items-center gap-1 text-[11px] uppercase tracking-wider text-gray-500 font-semibold"><MapPin className="h-3 w-3" /> {template.hero.location}</p>
                         </div>
                         <div className="flex items-center gap-2 pb-2 mt-4 sm:mt-0 w-full sm:w-auto">
-                            <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="flex h-10 items-center justify-center gap-2 bg-[#2c2c2c] hover:bg-black text-white px-5 rounded-[4px] text-[11px] font-bold uppercase tracking-widest transition-colors w-full sm:w-auto">
+                            <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="flex h-10 items-center justify-center gap-2 bg-[var(--brand-color)] hover:opacity-90 text-white px-5 rounded-[4px] text-[11px] font-bold uppercase tracking-widest transition-all w-full sm:w-auto">
                                 <Send className="h-3 w-3" /> Contact
                             </button>
                             <a href={template.hero.website} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-center gap-2 border border-gray-300 bg-white hover:bg-gray-50 px-4 rounded-[4px] text-[11px] font-bold uppercase tracking-widest transition-colors">
@@ -436,7 +465,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Container>
         </section>
     );
 }
@@ -444,7 +473,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
 function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
     return (
         <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
-            <div className="mx-auto flex flex-col sm:flex-row justify-between max-w-[1240px] px-4 sm:px-6 lg:px-8">
+            <Container className="flex flex-col sm:flex-row justify-between">
                 <div className="flex overflow-x-auto no-scrollbar sm:gap-6 gap-4">
                     {tabsLeft.map(([key, label]) => (
                         <button
@@ -456,7 +485,7 @@ function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
                             className={`relative shrink-0 py-4 text-[12px] font-bold tracking-wide transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
-                            {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-black" />}
+                            {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--brand-color)]" />}
                         </button>
                     ))}
                 </div>
@@ -471,11 +500,11 @@ function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
                             className={`relative shrink-0 py-4 text-[11px] font-bold tracking-wide uppercase transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
-                            {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-black" />}
+                            {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--brand-color)]" />}
                         </button>
                     ))}
                 </div>
-            </div>
+            </Container>
         </nav>
     );
 }
@@ -484,7 +513,7 @@ function OverviewSection({ template }) {
     const [open, setOpen] = useState(false);
     return (
         <section id="overview" className="scroll-mt-32 pt-8 pb-12 border-b border-gray-200">
-            <div className="max-w-[1240px]">
+            <div className="w-full">
                 <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800">
                     {template.overview.body}
                     {!open && (
@@ -511,7 +540,7 @@ function OverviewSection({ template }) {
 function SolutionsSection({ items, brandName }) {
     if (items.length === 0) return null;
     return (
-        <Section id="solutions" title={`Solutions ${brandName}`} action="ALL SOLUTIONS">
+        <Section id="solutions" title={`Solutions ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
                     <Link key={item.id} href={item.href} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
@@ -534,7 +563,7 @@ function SolutionsSection({ items, brandName }) {
 function CollectionsSection({ items, brandName, setModal }) {
     if (items.length === 0) return null;
     return (
-        <Section id="collections" title={`Collections ${brandName}`} action="ALL COLLECTIONS">
+        <Section id="collections" title={`Collections ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
                     <button key={item.id} onClick={() => setModal({ type: "collection", ...item })} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
@@ -588,7 +617,7 @@ function ProductsSection({ products, brandName, brandId, productsLoading, setMod
 function CatalogSection({ items, brandName, setModal }) {
     if (items.length === 0) return null;
     return (
-        <Section id="catalogs" title={`Catalogs ${brandName}`} action="VIEW ALL">
+        <Section id="catalogs" title={`Catalogs ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
                     <button key={item.id} onClick={() => setModal({ type: "catalog", ...item })} className="group relative w-[220px] shrink-0 text-left">
@@ -610,7 +639,7 @@ function CatalogSection({ items, brandName, setModal }) {
 function NewsSection({ items, brandName, setModal }) {
     if (items.length === 0) return null;
     return (
-        <Section id="news" title={`News ${brandName}`} action="SEE ALL NEWS">
+        <Section id="news" title={`News ${brandName}`}>
             <div className="grid gap-6 md:grid-cols-3">
                 {items.map((item) => (
                     <button key={item.id} onClick={() => setModal({ type: "article", ...item })} className="group text-left flex flex-col">
@@ -660,7 +689,7 @@ function GallerySection({ items, brandName, setModal }) {
     if (items.length === 0) return null;
 
     return (
-        <Section id="gallery" title={`Gallery ${brandName}`} action="VIEW ALL">
+        <Section id="gallery" title={`Gallery ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
                     <button key={item.id} onClick={() => setModal({ type: "image", ...item })} className="block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-gray-100 rounded-sm relative border border-gray-200 hover:shadow-md transition-shadow group">
@@ -675,12 +704,12 @@ function GallerySection({ items, brandName, setModal }) {
 function PartnerSection({ items, brandName, setModal }) {
     if (items.length === 0) return null;
     return (
-        <Section id="retailers" title={`Retailers ${brandName}`} action="VIEW MAP">
+        <Section id="retailers" title={`Retailers ${brandName}`}>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
                     <div key={item.id} className="border border-gray-200 rounded-sm p-4 flex gap-4 bg-white hover:border-gray-400 transition-colors">
                         <div className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-sm shrink-0 overflow-hidden">
-                            <Image src={item.image} alt={item.name} fill unoptimized className="object-contain p-1" />
+                            <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-1" />
                         </div>
                         <div className="flex-1 min-w-0">
                             <h3 className="text-[13px] font-bold text-gray-900 truncate">{item.name}</h3>
@@ -689,7 +718,7 @@ function PartnerSection({ items, brandName, setModal }) {
                                 <span className="text-[10px] uppercase font-bold text-gray-400">{item.category}</span>
                                 {item.verified && <ShieldCheck className="h-3 w-3 text-green-600" />}
                             </div>
-                            <button onClick={() => setModal({ type: "partner", ...item })} className="mt-3 text-[11px] font-bold text-blue-600 uppercase hover:underline">Contact</button>
+                            <button onClick={() => setModal({ type: "partner", ...item })} className="mt-3 text-[11px] font-bold text-[var(--brand-color)] uppercase hover:opacity-80">Contact</button>
                         </div>
                     </div>
                 ))}
@@ -699,69 +728,44 @@ function PartnerSection({ items, brandName, setModal }) {
 }
 
 function ContactSection({ template }) {
-    const [submitted, setSubmitted] = useState(false);
-    const submit = (event) => {
-        event.preventDefault();
-        setSubmitted(true);
-    };
     const socials = Array.isArray(template.contact.socials) ? template.contact.socials.filter(Boolean).map(parseSocialLink) : [];
 
     return (
-        <section id="contact" className="mt-16 pt-16 border-t border-gray-200">
-            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-                <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gray-400">Brand Contact</p>
-                    <h2 className="mt-3 text-2xl font-serif text-gray-900">Contact {template.hero.name}</h2>
-                    <p className="mt-3 max-w-md text-sm leading-6 text-gray-500">For inquiries, catalogs, retailer support, and customized project solutions.</p>
+        <section id="contact" className="w-full bg-black text-center text-white border-t border-[#222] relative overflow-hidden py-24">
+            {/* Background Accent Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[var(--brand-color)] blur-[100px] opacity-20 pointer-events-none" />
 
-                    <div className="mt-8 grid gap-3">
-                        <ContactInfoRow icon={<Mail className="h-4 w-4" />} label="Email" value={template.contact.email} href={`mailto:${template.contact.email}`} />
-                        {template.contact.phone && <ContactInfoRow icon={<Phone className="h-4 w-4" />} label="Phone" value={template.contact.phone} href={`tel:${template.contact.phone}`} />}
-                        {template.contact.address && <ContactInfoRow icon={<MapPin className="h-4 w-4" />} label="Headquarters" value={template.contact.address} />}
+            <div className="mx-auto max-w-4xl relative z-10 px-4 sm:px-6 lg:px-8">
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/50 relative z-10">Brand Contact</p>
+                <h2 className="mt-3 text-3xl font-serif text-white relative z-10">Contact {template.hero.name}</h2>
+                <p className="mt-4 mx-auto max-w-md text-sm leading-relaxed text-white/60 relative z-10">For inquiries, catalogs, retailer support, and customized project solutions.</p>
+
+                <div className="mt-12 grid gap-4 max-w-lg mx-auto text-left relative z-10">
+                    <ContactInfoRow icon={<Mail className="h-4 w-4" />} label="Email" value={template.contact.email} href={`mailto:${template.contact.email}`} />
+                    {template.contact.phone && <ContactInfoRow icon={<Phone className="h-4 w-4" />} label="Phone" value={template.contact.phone} href={`tel:${template.contact.phone}`} />}
+                    {template.contact.address && <ContactInfoRow icon={<MapPin className="h-4 w-4" />} label="Headquarters" value={template.contact.address} />}
+                </div>
+
+                {socials.length > 0 && (
+                    <div className="mt-12 pt-10 border-t border-[#222] relative z-10">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">Social Channels</p>
+                        <div className="mt-5 flex flex-wrap justify-center gap-3">
+                            {socials.map((social) => {
+                                const Icon = socialIcons[social.key] || Globe;
+                                const className = "inline-flex h-10 items-center gap-2 rounded-md border border-[#333] bg-[#111] px-4 text-[11px] font-bold uppercase tracking-wider text-white/80 transition-all hover:border-[var(--brand-color)] hover:bg-[#1a1a1a] hover:text-white";
+                                return social.href ? (
+                                    <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className={className}>
+                                        <Icon className="h-3.5 w-3.5 text-[var(--brand-color)]" /> {social.label}
+                                    </a>
+                                ) : (
+                                    <span key={social.label} className={className}>
+                                        <Icon className="h-3.5 w-3.5 text-[var(--brand-color)]" /> {social.label}
+                                    </span>
+                                );
+                            })}
+                        </div>
                     </div>
-
-                    {socials.length > 0 && (
-                        <div className="mt-8">
-                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400">Social Channels</p>
-                            <div className="mt-3 flex flex-wrap gap-2">
-                                {socials.map((social) => {
-                                    const Icon = socialIcons[social.key] || Globe;
-                                    const className = "inline-flex h-9 items-center gap-2 rounded-sm border border-gray-200 bg-white px-3 text-[11px] font-bold uppercase tracking-wider text-gray-700 transition hover:border-black hover:text-black";
-                                    return social.href ? (
-                                        <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className={className}>
-                                            <Icon className="h-3 w-3" /> {social.label}
-                                        </a>
-                                    ) : (
-                                        <span key={social.label} className={className}>
-                                            <Icon className="h-3 w-3" /> {social.label}
-                                        </span>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                <div>
-                    {submitted ? (
-                        <div className="p-8 bg-green-50 border border-green-200 rounded-sm text-green-800">
-                            <Check className="h-8 w-8 mx-auto mb-2" />
-                            <h3 className="font-bold text-lg">Inquiry Sent</h3>
-                            <p className="text-sm mt-1">The brand team will contact you shortly.</p>
-                        </div>
-                    ) : (
-                        <form onSubmit={submit} className="grid gap-4 text-left">
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <input required placeholder="Name" className="h-12 border border-gray-300 rounded-sm px-4 text-sm focus:border-black outline-none" />
-                                <input required type="email" placeholder="Email" className="h-12 border border-gray-300 rounded-sm px-4 text-sm focus:border-black outline-none" />
-                            </div>
-                            <textarea required placeholder="Message" className="h-32 border border-gray-300 rounded-sm p-4 text-sm focus:border-black outline-none resize-none" />
-                            <button className="h-12 bg-[#2c2c2c] text-white text-[11px] font-bold uppercase tracking-wider rounded-sm hover:bg-black transition-colors">
-                                Send Message
-                            </button>
-                        </form>
-                    )}
-                </div>
+                )}
             </div>
         </section>
     );
@@ -769,54 +773,28 @@ function ContactSection({ template }) {
 
 function ContactInfoRow({ icon, label, value, href }) {
     const content = (
-        <div className="flex items-start gap-3 rounded-sm border border-gray-200 bg-white p-4 transition hover:border-gray-300">
-            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50 text-gray-500">{icon}</span>
-            <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">{label}</p>
-                <p className="mt-1 break-words text-sm font-medium text-gray-900">{value || "Not provided"}</p>
+        <div className="group flex items-center gap-4 rounded-lg border border-[#222] bg-[#111] p-5 transition-all hover:border-[var(--brand-color)] hover:bg-[#1a1a1a] cursor-pointer">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#222] text-[var(--brand-color)] transition-colors group-hover:bg-[#2a2a2a]">{icon}</span>
+            <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">{label}</p>
+                <p className="mt-1 break-words text-[14px] font-medium text-white">{value || "Not provided"}</p>
             </div>
+            {href && <ArrowRight className="h-4 w-4 text-white/20 transition-all group-hover:translate-x-1 group-hover:text-[var(--brand-color)]" />}
         </div>
     );
-    return href && value ? <a href={href}>{content}</a> : content;
+    return href && value ? <a href={href} className="block">{content}</a> : content;
 }
-
-function PremiumFooter({ template }) {
-    const socials = Array.isArray(template.contact.socials) ? template.contact.socials.filter(Boolean).map(parseSocialLink) : [];
-    return (
-        <footer className="border-t border-gray-200 bg-gray-50 py-12">
-            <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 text-center sm:text-left">
-                <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-                    <div>
-                        <h2 className="text-lg font-bold text-gray-900">{template.hero.name}</h2>
-                        <p className="text-xs text-gray-500 mt-1">{template.contact.address || "Powered by ArcMat"}</p>
-                    </div>
-                    <div className="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
-                        {socials.slice(0, 4).map((social) => social.href ? (
-                            <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className="hover:text-black">{social.label}</a>
-                        ) : (
-                            <span key={social.label} className="hover:text-black">{social.label}</span>
-                        ))}
-                        <span className="hover:text-black cursor-pointer">Privacy Policy</span>
-                        <span className="hover:text-black cursor-pointer">Terms of Service</span>
-                        <span className="hover:text-black cursor-pointer">Cookies</span>
-                    </div>
-                </div>
-            </div>
-        </footer>
-    );
-}
-
 // ---------------- Helper Components ----------------
 
-function Section({ id, title, action, children }) {
+function Section({ id, title, action, actionHref, children }) {
     return (
         <section id={id} className="scroll-mt-32 pt-16">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h2 className="text-[20px] font-medium text-[#333] font-serif">{title}</h2>
-                {action && (
-                    <button className="h-9 px-4 border border-gray-300 bg-white text-[10px] font-bold text-gray-600 uppercase tracking-wider rounded-[2px] hover:bg-gray-50 transition-colors">
+                {action && actionHref && (
+                    <Link href={actionHref} className="h-9 px-4 border border-gray-300 bg-white text-[10px] font-bold text-gray-600 uppercase tracking-wider rounded-[2px] hover:bg-gray-50 transition-colors flex items-center justify-center">
                         {action}
-                    </button>
+                    </Link>
                 )}
             </div>
             {children}
@@ -852,7 +830,7 @@ function HorizontalRail({ children }) {
 
 function DetailModal({ modal, onClose }) {
     const isVideo = modal.type === "video";
-    const image = modal.image || modal.cover || modal.poster;
+    const image = modal.image || modal.cover || modal.poster || modal.images?.[0];
     const catalogFileUrl = modal.type === "catalog" ? (resolveUrl(modal.file, "brands") || modal.url) : null;
     const videoEmbedUrl = isVideo ? getVideoEmbedUrl(modal) : "";
     return (
@@ -885,7 +863,7 @@ function DetailModal({ modal, onClose }) {
                             <a
                                 href={catalogFileUrl}
                                 download
-                                className="inline-flex h-11 items-center justify-center gap-2 rounded-sm bg-black px-5 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-gray-800"
+                                className="inline-flex h-11 items-center justify-center gap-2 rounded-sm bg-[var(--brand-color)] hover:opacity-90 px-5 text-xs font-bold uppercase tracking-[0.14em] text-white transition-all"
                             >
                                 <ArrowDownToLine className="h-4 w-4" />
                                 Download PDF
@@ -923,10 +901,10 @@ function ShowcaseSkeleton() {
     return (
         <main className="min-h-screen bg-white">
             <div className="h-[350px] w-full animate-pulse bg-gray-100" />
-            <div className="mx-auto max-w-[1240px] px-8 mt-10">
+            <Container className="mt-10">
                 <div className="h-10 w-full animate-pulse bg-gray-100 mb-8" />
                 <div className="flex gap-4"><div className="h-64 w-[260px] animate-pulse bg-gray-100" /><div className="h-64 w-[260px] animate-pulse bg-gray-100" /></div>
-            </div>
+            </Container>
         </main>
     );
 }
