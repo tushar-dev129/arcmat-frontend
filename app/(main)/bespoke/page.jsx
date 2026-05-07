@@ -5,38 +5,47 @@ import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
 import { useGetBrands } from "@/hooks/useBrand";
+import { useGetCategoryTree } from "@/hooks/useCategory";
+import { useDebounce } from "@/hooks/useDebounce";
 import { getBrandImageUrl } from "@/lib/productUtils";
-import { ArrowRight, Building2, Loader2, Search, Sparkles } from "lucide-react";
+import { ArrowRight, Building2, Loader2, Search, Sparkles, FilterX } from "lucide-react";
 
 const getBrandId = (brand) => brand?._id || brand?.id;
 
 const BespokePage = () => {
     const [searchTerm, setSearchTerm] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [selectedSubcategory, setSelectedSubcategory] = useState("");
+    const [selectedSubSubcategory, setSelectedSubSubcategory] = useState("");
+
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+    const { data: treeDataRaw } = useGetCategoryTree();
+    const treeData = useMemo(() => {
+        return Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
+    }, [treeDataRaw]);
+
     const { data: brandsData, isLoading } = useGetBrands({
         limit: 100,
         type: "frontend",
+        ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
+        ...(selectedCategory && { categoryId: selectedCategory }),
+        ...(selectedSubcategory && { subcategoryId: selectedSubcategory }),
+        ...(selectedSubSubcategory && { subsubcategoryId: selectedSubSubcategory }),
     });
 
-    const brands = brandsData?.data || [];
+    const filteredBrands = brandsData?.data || [];
 
-    const filteredBrands = useMemo(() => {
-        const query = searchTerm.trim().toLowerCase();
-        if (!query) return brands;
+    const activeCategoryObj = useMemo(() => treeData.find(c => c._id === selectedCategory || c.id === selectedCategory), [treeData, selectedCategory]);
+    const subcategories = activeCategoryObj?.children || [];
+    const activeSubcategoryObj = useMemo(() => subcategories.find(c => c._id === selectedSubcategory || c.id === selectedSubcategory), [subcategories, selectedSubcategory]);
+    const subsubcategories = activeSubcategoryObj?.children || [];
 
-        return brands.filter((brand) => {
-            const searchable = [
-                brand?.name,
-                brand?.description,
-                brand?.country,
-                brand?.website,
-            ]
-                .filter(Boolean)
-                .join(" ")
-                .toLowerCase();
-
-            return searchable.includes(query);
-        });
-    }, [brands, searchTerm]);
+    const handleClearFilters = () => {
+        setSelectedCategory("");
+        setSelectedSubcategory("");
+        setSelectedSubSubcategory("");
+    };
 
     return (
         <main className="min-h-screen bg-[#f7f7f5]">
@@ -62,7 +71,7 @@ const BespokePage = () => {
                                     <Building2 className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm font-bold text-gray-950">{brands.length || 0} brands</p>
+                                    <p className="text-sm font-bold text-gray-950">{filteredBrands.length || 0} brands</p>
                                     <p className="text-sm font-medium text-gray-500">Connected to bespoke pages</p>
                                 </div>
                             </div>
@@ -86,6 +95,66 @@ const BespokePage = () => {
                             className="h-12 w-full rounded-full border border-gray-200 bg-white pl-11 pr-4 text-sm font-medium text-gray-800 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
                         />
                     </div>
+                </div>
+
+                <div className="mb-8 flex flex-wrap items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="flex-1 min-w-[200px]">
+                        <select
+                            value={selectedCategory}
+                            onChange={(e) => {
+                                setSelectedCategory(e.target.value);
+                                setSelectedSubcategory("");
+                                setSelectedSubSubcategory("");
+                            }}
+                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white"
+                        >
+                            <option value="">All Categories</option>
+                            {treeData.map((cat) => (
+                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex-1 min-w-[200px]">
+                        <select
+                            value={selectedSubcategory}
+                            onChange={(e) => {
+                                setSelectedSubcategory(e.target.value);
+                                setSelectedSubSubcategory("");
+                            }}
+                            disabled={!selectedCategory || subcategories.length === 0}
+                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white disabled:opacity-50"
+                        >
+                            <option value="">All Subcategories</option>
+                            {subcategories.map((cat) => (
+                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className="flex-1 min-w-[200px]">
+                        <select
+                            value={selectedSubSubcategory}
+                            onChange={(e) => setSelectedSubSubcategory(e.target.value)}
+                            disabled={!selectedSubcategory || subsubcategories.length === 0}
+                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white disabled:opacity-50"
+                        >
+                            <option value="">All Sub-subcategories</option>
+                            {subsubcategories.map((cat) => (
+                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {(selectedCategory || selectedSubcategory || selectedSubSubcategory) && (
+                        <button
+                            onClick={handleClearFilters}
+                            className="flex h-[42px] items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-4 text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                        >
+                            <FilterX className="h-4 w-4" />
+                            Clear
+                        </button>
+                    )}
                 </div>
 
                 {isLoading ? (
