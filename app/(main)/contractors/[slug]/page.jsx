@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import { useGetContractorBySlug, useCreateContractorLead } from "@/hooks/useContractor";
 import Container from "@/components/ui/Container";
 import { getImageUrl } from "@/lib/productUtils";
@@ -22,7 +22,7 @@ import Link from "next/link";
 import { toast } from "@/components/ui/Toast";
 
 export default function ContractorProfilePage({ params }) {
-    const { slug } = params;
+    const { slug } = use(params);
     const { data: contractorResponse, isLoading, error } = useGetContractorBySlug(slug);
     const createLeadMutation = useCreateContractorLead();
 

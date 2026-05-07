@@ -10,7 +10,7 @@ import {
     useCreateContractorPortfolioItem,
     useDeleteContractorPortfolioItem
 } from "@/hooks/useContractor";
-import { useGetCategoryTree } from "@/hooks/useCategory";
+import { HARDCODED_CATEGORIES } from "@/constants/contractorCategories";
 import { getImageUrl } from "@/lib/productUtils";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -47,14 +47,13 @@ import Image from "next/image";
 export default function MarketplaceProfilePage() {
     const { user } = useAuth();
     const { data: profileData, isLoading: profileLoading, refetch: refetchProfile } = useGetMyContractorProfile(user?._id);
-    const { data: categoriesData } = useGetCategoryTree();
     const createMutation = useCreateContractorProfile();
     const updateMutation = useUpdateContractorProfile();
     const uploadMutation = useUploadContractorImage();
     const createPortfolioMutation = useCreateContractorPortfolioItem();
     const deletePortfolioMutation = useDeleteContractorPortfolioItem();
 
-    const categories = (categoriesData?.data || categoriesData) || [];
+    const categories = HARDCODED_CATEGORIES;
 
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -479,7 +478,7 @@ export default function MarketplaceProfilePage() {
                                 </select>
                             ) : (
                                 <div className="inline-flex items-center px-3 py-1 bg-orange-50 text-[hsl(15,80%,60%)] rounded-full text-sm font-bold border border-orange-100">
-                                    {profile?.categoryId?.name || "Uncategorized"}
+                                    {categories.find(c => c._id === formData.categoryId)?.name || profile?.categoryId?.name || "Uncategorized"}
                                 </div>
                             )}
                         </Field>
@@ -498,7 +497,9 @@ export default function MarketplaceProfilePage() {
                                     ))}
                                 </select>
                             ) : (
-                                <div className="text-gray-700">{profile?.subcategoryId?.name || "None"}</div>
+                                <div className="text-gray-700">
+                                    {categories.find(c => c._id === formData.categoryId)?.children?.find(s => s._id === formData.subcategoryId)?.name || profile?.subcategoryId?.name || "None"}
+                                </div>
                             )}
                         </Field>
                     </div>

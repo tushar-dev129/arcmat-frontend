@@ -61,5 +61,10 @@ export const contractorService = {
     deletePortfolioItem: async (itemId) => {
         const response = await api.delete(`/contractor/portfolio/${itemId}`);
         return response.data;
+    },
+    
+    getPortfolioItemById: async (itemId) => {
+        const response = await api.get(`/contractor/portfolio/${itemId}`);
+        return response.data;
     }
 };

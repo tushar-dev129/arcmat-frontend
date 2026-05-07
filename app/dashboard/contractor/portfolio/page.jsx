@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { toast } from "@/components/ui/Toast";
 import { getImageUrl } from "@/lib/productUtils";
+import Link from 'next/link';
 
 export default function PortfolioPage() {
     const { user } = useAuth();
@@ -118,7 +119,7 @@ export default function PortfolioPage() {
     }
 
     return (
-        <div className="p-8 space-y-8 max-w-7xl mx-auto">
+        <div className="p-4 md:p-8 space-y-6 md:space-y-8 max-w-7xl mx-auto">
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -135,7 +136,7 @@ export default function PortfolioPage() {
             </div>
 
             {/* Filter and Search Bar */}
-            <div className="bg-white p-2 rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-3 items-center">
+            <div className="bg-white p-3 md:p-2 rounded-2xl md:rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-2 md:gap-3 items-center">
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input 
@@ -204,9 +205,9 @@ export default function PortfolioPage() {
                                             </div>
                                         )}
                                     </div>
-                                    <button className="text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                                    <Link href={`/projects/${item._id}`} className="text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
                                         View Project <ExternalLink className="w-4 h-4" />
-                                    </button>
+                                    </Link>
                                 </div>
                             </div>
                         </div>
@@ -238,8 +239,8 @@ export default function PortfolioPage() {
                         className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300" 
                         onClick={() => setIsModalOpen(false)}
                     />
-                    <div className="relative bg-white w-full max-w-2xl rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in-95 fade-in duration-300">
-                        <div className="p-8 md:p-10">
+                    <div className="relative bg-white w-full max-w-2xl max-h-[90vh] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-y-auto animate-in zoom-in-95 fade-in duration-300">
+                        <div className="p-6 md:p-10">
                             <div className="flex items-center justify-between mb-8">
                                 <div>
                                     <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add Portfolio Project</h2>
@@ -330,7 +331,7 @@ export default function PortfolioPage() {
                                     )}
                                 </div>
 
-                                <div className="pt-4 flex gap-4">
+                                <div className="pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
                                     <button 
                                         type="button"
                                         onClick={() => setIsModalOpen(false)}

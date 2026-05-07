@@ -78,3 +78,11 @@ export const useDeleteContractorPortfolioItem = () => {
         },
     });
 };
+ 
+export const useGetPortfolioItemById = (itemId) => {
+    return useQuery({
+        queryKey: ['portfolio-item', itemId],
+        queryFn: () => contractorService.getPortfolioItemById(itemId),
+        enabled: !!itemId,
+    });
+};
