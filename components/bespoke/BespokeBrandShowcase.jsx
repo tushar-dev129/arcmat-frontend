@@ -7,8 +7,8 @@ import { useParams } from "next/navigation";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import {
     ArrowDownToLine, ArrowRight, Bookmark, Check, ChevronLeft, ChevronRight, ChevronUp, ChevronDown,
-    ExternalLink, Eye, FileText, Globe, Heart, Mail, MapPin, Play,
-    Search, Send, Share2, ShieldCheck, Star, Upload, X, ImageIcon, Layers
+    ExternalLink, Eye, FileText, Globe, Heart, ImageIcon, Instagram, Layers, Linkedin, Mail, MapPin, Phone, Play,
+    Search, Send, Share2, ShieldCheck, Star, Upload, X, Youtube
 } from "lucide-react";
 import { useGetBrandById } from "@/hooks/useBrand";
 import { useGetRetailerProducts } from "@/hooks/useProduct";
@@ -16,17 +16,17 @@ import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getP
 
 const tabsLeft = [
     ["overview", "Overview"],
-    ["products", "Products"],
     ["solutions", "Solutions"],
     ["collections", "Collections"],
+    ["products", "Products"],
 ];
 
 const tabsRight = [
     ["catalogs", "Catalogs"],
-    ["retailers", "Resellers"],
+
     ["news", "News"],
     ["videos", "Video"],
-    ["badge", "Badge"],
+    ["retailers", "Resellers"],
     ["contact", "Info"],
 ];
 
@@ -34,6 +34,40 @@ const resolveUrl = (value, folder = "brands") => {
     if (!value) return null;
     if (typeof value === "string" && value.startsWith("http")) return value;
     return getImageUrl(value, folder) || value;
+};
+
+const compact = (items) => [...new Set(items.filter(Boolean))];
+
+const resolveStoredMedia = (value, folders = []) => {
+    if (!value) return [];
+    if (typeof value === "object") {
+        const direct = value.secure_url || value.url || value.location;
+        if (direct) return [direct];
+        if (value.public_id) return resolveStoredMedia(value.public_id, folders);
+    }
+    if (typeof value !== "string") return [];
+
+    const raw = value.trim();
+    if (!raw) return [];
+    if (/^(https?:|data:|blob:|\/)/i.test(raw)) return [raw];
+
+    const clean = raw.replace(/^\/+/, "");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
+    const s3Base = process.env.NEXT_PUBLIC_S3_BASE_URL || "https://arcmatv2.s3.ap-south-1.amazonaws.com";
+
+    return compact([
+        `${s3Base}/${clean}`,
+        ...folders.map((folder) => getImageUrl(clean, folder)),
+        ...folders.map((folder) => `${apiUrl}/public/uploads/${folder}/${clean}`),
+        getImageUrl(clean),
+    ]);
+};
+
+const resolvePartnerImages = (item, type) => {
+    if (type === "contractor") {
+        return resolveStoredMedia(item?.profileImage || item?.logo || item?.userId?.profile, ["contractors", "contractor", "userprofile", "profile"]);
+    }
+    return resolveStoredMedia(item?.profile || item?.retailerProfile?.profile || item?.retailerProfile?.logo || item?.logo, ["userprofile", "profile", "retailer", "retailers"]);
 };
 
 const defaultTheme = {
@@ -46,6 +80,56 @@ const defaultTheme = {
 
 const defaultHeroImage = "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=2200&q=85";
 
+const socialIcons = {
+    instagram: Instagram,
+    linkedin: Linkedin,
+    linkdin: Linkedin,
+    youtube: Youtube,
+};
+
+const normalizeExternalUrl = (value) => {
+    const trimmed = String(value || "").trim();
+    if (!trimmed) return "";
+    if (/^https?:\/\//i.test(trimmed)) return trimmed;
+    return `https://${trimmed}`;
+};
+
+const getHostnameLabel = (value) => {
+    try {
+        return new URL(normalizeExternalUrl(value)).hostname.replace(/^www\./, "");
+    } catch {
+        return value;
+    }
+};
+
+const inferSocialKey = (label, href = "") => {
+    const haystack = `${label || ""} ${href || ""}`.toLowerCase();
+    if (haystack.includes("instagram")) return "instagram";
+    if (haystack.includes("linkedin") || haystack.includes("linkdin")) return "linkedin";
+    if (haystack.includes("youtube") || haystack.includes("youtu.be")) return "youtube";
+    return String(label || "").toLowerCase();
+};
+
+const parseSocialLink = (social) => {
+    const raw = String(social || "").trim();
+    const match = raw.match(/^([^:-]+?)\s*[-:]\s*(https?:\/\/.+|www\..+|[\w.-]+\.\w{2,}.+)$/i);
+    if (match) {
+        const label = match[1].trim();
+        const href = normalizeExternalUrl(match[2]);
+        return {
+            key: inferSocialKey(label, href),
+            label,
+            href,
+        };
+    }
+    if (/^(https?:\/\/|www\.|[\w.-]+\.\w{2,})/i.test(raw)) {
+        const href = normalizeExternalUrl(raw);
+        const label = getHostnameLabel(raw);
+        return { key: inferSocialKey(label, href), label, href };
+    }
+    return { key: inferSocialKey(raw), label: raw, href: "" };
+};
+
 const normalizedApiProduct = (item, index) => ({
     id: item?._id || item?.id || item?.override_id || `api-${index}`,
     name: getProductName(item),
@@ -54,6 +138,7 @@ const normalizedApiProduct = (item, index) => ({
     material: item?.material || item?.finish || item?.color || item?.productId?.material || "Architectural finish",
     image: getProductThumbnail(item),
     price: "Request info",
+    createdAt: item?.createdAt || item?.productId?.createdAt || item?.updatedAt || item?.productId?.updatedAt || "",
     raw: item,
 });
 
@@ -90,6 +175,43 @@ const deriveSolutionsFromProducts = (products, brandId) => {
     return Array.from(byThirdCategory.values());
 };
 
+const getVideoEmbedUrl = (item) => {
+    const rawValue = String(item?.videoId || item?.url || "").trim();
+    if (!rawValue) return "";
+
+    try {
+        const url = rawValue.startsWith("http") ? new URL(rawValue) : null;
+        if (url) {
+            const host = url.hostname.replace(/^www\./, "");
+            if (host.includes("youtube.com")) {
+                const id = url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop();
+                return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : "";
+            }
+            if (host.includes("youtu.be")) {
+                const id = url.pathname.split("/").filter(Boolean)[0];
+                return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : "";
+            }
+            if (host.includes("vimeo.com")) {
+                const id = url.pathname.split("/").filter(Boolean).pop();
+                return id ? `https://player.vimeo.com/video/${id}?autoplay=1` : "";
+            }
+            return rawValue;
+        }
+    } catch {
+        // Fall through to treating it as an ID.
+    }
+
+    return `https://www.youtube.com/embed/${rawValue}?autoplay=1`;
+};
+
+const normalizeCollections = (collections = []) => normalizeMediaRows(collections).map((collection) => ({
+    ...collection,
+    description: collection.description || "",
+    products: (collection.productIds || [])
+        .filter((item) => item && typeof item === "object")
+        .map(normalizedApiProduct),
+}));
+
 export default function BespokeBrandShowcase() {
     const { id } = useParams();
     const { data: brandData, isLoading: brandLoading } = useGetBrandById(id);
@@ -105,6 +227,21 @@ export default function BespokeBrandShowcase() {
     const { scrollYProgress } = useScroll();
     const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28 });
 
+    const visibleTabsLeft = useMemo(() => tabsLeft.filter(([key]) => {
+        if (key === "products") return template.products?.length > 0;
+        if (key === "solutions") return template.solutions?.length > 0;
+        if (key === "collections") return template.collections?.length > 0;
+        return true;
+    }), [template]);
+
+    const visibleTabsRight = useMemo(() => tabsRight.filter(([key]) => {
+        if (key === "catalogs") return template.catalogs?.length > 0;
+        if (key === "retailers") return template.partners?.length > 0;
+        if (key === "news") return template.news?.length > 0;
+        if (key === "videos") return template.videos?.length > 0;
+        return true;
+    }), [template]);
+
     useEffect(() => {
         const timer = window.setTimeout(() => setLoadingIntro(false), 500);
         return () => window.clearTimeout(timer);
@@ -118,14 +255,14 @@ export default function BespokeBrandShowcase() {
                     .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
                 if (visible?.target?.id) setActiveTab(visible.target.id);
             },
-            { rootMargin: "-15% 0px -80% 0px", threshold: [0, 0.2] }
+            { rootMargin: "-120px 0px -40% 0px", threshold: 0 }
         );
-        [...tabsLeft, ...tabsRight].forEach(([key]) => {
+        [...visibleTabsLeft, ...visibleTabsRight].forEach(([key]) => {
             const node = document.getElementById(key);
             if (node) observer.observe(node);
         });
         return () => observer.disconnect();
-    }, [loadingIntro]);
+    }, [loadingIntro, visibleTabsLeft, visibleTabsRight]);
 
     if (brandLoading || loadingIntro) {
         return <ShowcaseSkeleton />;
@@ -134,16 +271,16 @@ export default function BespokeBrandShowcase() {
     return (
         <main className="min-h-screen bg-white text-[#333] font-sans antialiased">
             <motion.div className="fixed left-0 right-0 top-0 z-[100] h-[2px] origin-left bg-black" style={{ scaleX: progress }} />
-            
+
             <HeroSection template={template} savedBrand={savedBrand} setSavedBrand={setSavedBrand} setModal={setModal} />
-            <StickyTabs activeTab={activeTab} />
+            <StickyTabs activeTab={activeTab} setActiveTab={setActiveTab} tabsLeft={visibleTabsLeft} tabsRight={visibleTabsRight} />
 
             <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8 pb-20">
                 <OverviewSection template={template} />
                 <GallerySection items={template.gallery} brandName={template.hero.name} setModal={setModal} />
                 <SolutionsSection items={template.solutions} brandName={template.hero.name} setModal={setModal} />
                 <CollectionsSection items={template.collections} brandName={template.hero.name} setModal={setModal} />
-                <ProductsSection products={template.products} brandName={template.hero.name} productsLoading={productsLoading} setModal={setModal} />
+                <ProductsSection products={template.products} brandName={template.hero.name} brandId={template.hero.brandId} productsLoading={productsLoading} setModal={setModal} />
                 <CatalogSection items={template.catalogs} brandName={template.hero.name} setModal={setModal} />
                 <NewsSection items={template.news} brandName={template.hero.name} setModal={setModal} />
                 <VideoSection items={template.videos} brandName={template.hero.name} setModal={setModal} />
@@ -165,7 +302,11 @@ function buildBrandPayload(brand, apiProducts = []) {
     const selectedProducts = (bespoke.selectedProductIds || [])
         .filter((item) => item && typeof item === "object")
         .map(normalizedApiProduct);
-    const mergedProducts = selectedProducts.length ? selectedProducts : apiProducts.map(normalizedApiProduct).slice(0, 12);
+    const latestProducts = apiProducts
+        .map(normalizedApiProduct)
+        .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
+        .slice(0, 12);
+    const mergedProducts = selectedProducts.length ? selectedProducts : latestProducts;
     const heroImage = resolveUrl(bespoke.heroImage, "brands") || resolveUrl(brand?.banner || brand?.coverImage, "brand") || defaultHeroImage;
     const galleryMedia = [...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])]
         .filter(Boolean)
@@ -177,6 +318,7 @@ function buildBrandPayload(brand, apiProducts = []) {
         hero: {
             eyebrow: bespoke.headline || "Bespoke brand page",
             name: brand?.name || "Premium Brand",
+            brandId: brand?._id || brand?.id || "",
             location: brand?.country || "Cerreto Guidi / Italy",
             website: brand?.website || "",
             bannerType: "image",
@@ -194,8 +336,8 @@ function buildBrandPayload(brand, apiProducts = []) {
                 { label: "Contractors", value: String((bespoke.selectedContractorIds || []).length) },
             ],
         },
-        solutions: normalizeMediaRows(bespoke.solutions),
-        collections: normalizeMediaRows(bespoke.collections),
+        solutions: deriveSolutionsFromProducts(mergedProducts, brand?._id || brand?.id),
+        collections: normalizeCollections(bespoke.collections),
         products: mergedProducts,
         catalogs: normalizeMediaRows(bespoke.catalogs),
         videos: normalizeMediaRows(bespoke.videos),
@@ -208,7 +350,7 @@ function buildBrandPayload(brand, apiProducts = []) {
                 location: item?.retailerProfile?.cityRegion || "India",
                 category: "Retailer",
                 verified: true,
-                image: getImageUrl(item?.profile, "userprofile") || "/Icons/arcmatlogo.svg",
+                images: resolvePartnerImages(item, "retailer"),
             })),
             ...(bespoke.selectedContractorIds || []).map((item, index) => ({
                 id: item?._id || `contractor-${index}`,
@@ -218,7 +360,7 @@ function buildBrandPayload(brand, apiProducts = []) {
                 location: item?.location?.city || "India",
                 category: "Contractor",
                 verified: true,
-                image: getImageUrl(item?.profileImage, "contractor") || "/Icons/arcmatlogo.svg",
+                images: resolvePartnerImages(item, "contractor"),
             })),
         ],
         reviews: (bespoke.reviews || []).filter((review) => review?.name || review?.comment || review?.text),
@@ -242,6 +384,7 @@ function normalizeMediaRows(rows = []) {
             image: resolveUrl(item.image, "brands") || item.image,
             cover: resolveUrl(item.cover, "brands") || item.cover,
             poster: resolveUrl(item.poster, "brands") || item.poster,
+            file: resolveUrl(item.file, "brands") || item.file,
         }));
 }
 
@@ -265,7 +408,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
                     <Image src={template.hero.banner} alt={`${template.hero.name} banner`} fill priority unoptimized className="object-cover" />
                 )}
             </div>
-            
+
             <div className="mx-auto w-full max-w-[1240px] px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between relative -mt-16 sm:-mt-20 z-10 pb-6 border-b border-gray-200">
                     <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 w-full">
@@ -298,7 +441,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
     );
 }
 
-function StickyTabs({ activeTab }) {
+function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
     return (
         <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
             <div className="mx-auto flex flex-col sm:flex-row justify-between max-w-[1240px] px-4 sm:px-6 lg:px-8">
@@ -306,7 +449,10 @@ function StickyTabs({ activeTab }) {
                     {tabsLeft.map(([key, label]) => (
                         <button
                             key={key}
-                            onClick={() => document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                            onClick={() => {
+                                setActiveTab(key);
+                                document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }}
                             className={`relative shrink-0 py-4 text-[12px] font-bold tracking-wide transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
@@ -318,7 +464,10 @@ function StickyTabs({ activeTab }) {
                     {tabsRight.map(([key, label]) => (
                         <button
                             key={key}
-                            onClick={() => document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                            onClick={() => {
+                                setActiveTab(key);
+                                document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            }}
                             className={`relative shrink-0 py-4 text-[11px] font-bold tracking-wide uppercase transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
@@ -359,20 +508,23 @@ function OverviewSection({ template }) {
     );
 }
 
-function SolutionsSection({ items, brandName, setModal }) {
+function SolutionsSection({ items, brandName }) {
     if (items.length === 0) return null;
     return (
         <Section id="solutions" title={`Solutions ${brandName}`} action="ALL SOLUTIONS">
             <HorizontalRail>
                 {items.map((item) => (
-                    <button key={item.id} onClick={() => setModal({ type: "solution", ...item })} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
+                    <Link key={item.id} href={item.href} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
                         <div className="relative h-[190px] w-full bg-[#f4f4f4] overflow-hidden">
                             {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover" />}
                         </div>
                         <div className="flex items-center justify-center h-[90px] px-4">
-                            <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
+                            <div>
+                                <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
+                                <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">{item.count} products</p>
+                            </div>
                         </div>
-                    </button>
+                    </Link>
                 ))}
             </HorizontalRail>
         </Section>
@@ -390,7 +542,10 @@ function CollectionsSection({ items, brandName, setModal }) {
                             {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover" />}
                         </div>
                         <div className="flex items-center justify-center h-[90px] px-4">
-                            <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
+                            <div>
+                                <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
+                                {item.products?.length > 0 && <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">{item.products.length} products</p>}
+                            </div>
                         </div>
                     </button>
                 ))}
@@ -399,9 +554,10 @@ function CollectionsSection({ items, brandName, setModal }) {
     );
 }
 
-function ProductsSection({ products, brandName, productsLoading, setModal }) {
+function ProductsSection({ products, brandName, brandId, productsLoading, setModal }) {
+    const allProductsHref = brandId ? `/productlist?brands=${brandId}` : "/productlist";
     return (
-        <Section id="products" title={`Products ${brandName}`} action="VIEW ALL PRODUCTS">
+        <Section id="products" title={`Products ${brandName}`} action="VIEW ALL PRODUCTS" actionHref={allProductsHref}>
             {productsLoading ? (
                 <div className="flex gap-4 overflow-x-hidden">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-[360px] w-[280px] animate-pulse bg-gray-100 rounded-sm" />)}</div>
             ) : products.length === 0 ? (
@@ -548,14 +704,45 @@ function ContactSection({ template }) {
         event.preventDefault();
         setSubmitted(true);
     };
+    const socials = Array.isArray(template.contact.socials) ? template.contact.socials.filter(Boolean).map(parseSocialLink) : [];
 
     return (
         <section id="contact" className="mt-16 pt-16 border-t border-gray-200">
-            <div className="max-w-2xl mx-auto text-center">
-                <h2 className="text-2xl font-serif text-gray-900">Contact {template.hero.name}</h2>
-                <p className="mt-2 text-sm text-gray-500">For inquiries, catalogs, and customized solutions.</p>
-                
-                <div className="mt-8">
+            <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
+                <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-gray-400">Brand Contact</p>
+                    <h2 className="mt-3 text-2xl font-serif text-gray-900">Contact {template.hero.name}</h2>
+                    <p className="mt-3 max-w-md text-sm leading-6 text-gray-500">For inquiries, catalogs, retailer support, and customized project solutions.</p>
+
+                    <div className="mt-8 grid gap-3">
+                        <ContactInfoRow icon={<Mail className="h-4 w-4" />} label="Email" value={template.contact.email} href={`mailto:${template.contact.email}`} />
+                        {template.contact.phone && <ContactInfoRow icon={<Phone className="h-4 w-4" />} label="Phone" value={template.contact.phone} href={`tel:${template.contact.phone}`} />}
+                        {template.contact.address && <ContactInfoRow icon={<MapPin className="h-4 w-4" />} label="Headquarters" value={template.contact.address} />}
+                    </div>
+
+                    {socials.length > 0 && (
+                        <div className="mt-8">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-gray-400">Social Channels</p>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                                {socials.map((social) => {
+                                    const Icon = socialIcons[social.key] || Globe;
+                                    const className = "inline-flex h-9 items-center gap-2 rounded-sm border border-gray-200 bg-white px-3 text-[11px] font-bold uppercase tracking-wider text-gray-700 transition hover:border-black hover:text-black";
+                                    return social.href ? (
+                                        <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className={className}>
+                                            <Icon className="h-3 w-3" /> {social.label}
+                                        </a>
+                                    ) : (
+                                        <span key={social.label} className={className}>
+                                            <Icon className="h-3 w-3" /> {social.label}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div>
                     {submitted ? (
                         <div className="p-8 bg-green-50 border border-green-200 rounded-sm text-green-800">
                             <Check className="h-8 w-8 mx-auto mb-2" />
@@ -580,16 +767,35 @@ function ContactSection({ template }) {
     );
 }
 
+function ContactInfoRow({ icon, label, value, href }) {
+    const content = (
+        <div className="flex items-start gap-3 rounded-sm border border-gray-200 bg-white p-4 transition hover:border-gray-300">
+            <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gray-50 text-gray-500">{icon}</span>
+            <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">{label}</p>
+                <p className="mt-1 break-words text-sm font-medium text-gray-900">{value || "Not provided"}</p>
+            </div>
+        </div>
+    );
+    return href && value ? <a href={href}>{content}</a> : content;
+}
+
 function PremiumFooter({ template }) {
+    const socials = Array.isArray(template.contact.socials) ? template.contact.socials.filter(Boolean).map(parseSocialLink) : [];
     return (
         <footer className="border-t border-gray-200 bg-gray-50 py-12">
             <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8 text-center sm:text-left">
                 <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                     <div>
                         <h2 className="text-lg font-bold text-gray-900">{template.hero.name}</h2>
-                        <p className="text-xs text-gray-500 mt-1">Powered by ArcMat</p>
+                        <p className="text-xs text-gray-500 mt-1">{template.contact.address || "Powered by ArcMat"}</p>
                     </div>
-                    <div className="flex gap-6 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                    <div className="flex flex-wrap justify-center gap-4 text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+                        {socials.slice(0, 4).map((social) => social.href ? (
+                            <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className="hover:text-black">{social.label}</a>
+                        ) : (
+                            <span key={social.label} className="hover:text-black">{social.label}</span>
+                        ))}
                         <span className="hover:text-black cursor-pointer">Privacy Policy</span>
                         <span className="hover:text-black cursor-pointer">Terms of Service</span>
                         <span className="hover:text-black cursor-pointer">Cookies</span>
@@ -647,6 +853,8 @@ function HorizontalRail({ children }) {
 function DetailModal({ modal, onClose }) {
     const isVideo = modal.type === "video";
     const image = modal.image || modal.cover || modal.poster;
+    const catalogFileUrl = modal.type === "catalog" ? (resolveUrl(modal.file, "brands") || modal.url) : null;
+    const videoEmbedUrl = isVideo ? getVideoEmbedUrl(modal) : "";
     return (
         <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={onClose}>
             <motion.div initial={{ y: 20, opacity: 0, scale: 0.98 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 10, opacity: 0 }} transition={{ duration: 0.2 }} onClick={(e) => e.stopPropagation()} className="max-h-[90vh] w-full max-w-4xl overflow-auto rounded-sm bg-white text-[#333] shadow-2xl flex flex-col">
@@ -657,7 +865,13 @@ function DetailModal({ modal, onClose }) {
                 <div className="p-6 sm:p-10 flex-1">
                     {isVideo ? (
                         <div className="aspect-video w-full bg-black mb-8 rounded-sm overflow-hidden">
-                            <iframe title={modal.title} src={`https://www.youtube.com/embed/${modal.videoId}?autoplay=1`} className="h-full w-full border-0" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
+                            {videoEmbedUrl ? (
+                                <iframe title={modal.title} src={videoEmbedUrl} className="h-full w-full border-0" allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen />
+                            ) : (
+                                <div className="flex h-full items-center justify-center px-6 text-center text-sm font-bold uppercase tracking-[0.14em] text-white/70">
+                                    Add a YouTube or Vimeo URL for this video.
+                                </div>
+                            )}
                         </div>
                     ) : image ? (
                         <div className="relative h-[300px] sm:h-[400px] w-full bg-gray-50 mb-8 rounded-sm overflow-hidden border border-gray-200">
@@ -665,7 +879,40 @@ function DetailModal({ modal, onClose }) {
                         </div>
                     ) : null}
                     <h2 className="text-2xl sm:text-3xl font-serif font-medium">{modal.title || modal.name}</h2>
-                    <p className="mt-4 text-[14px] leading-relaxed text-gray-600">{modal.text || modal.excerpt || modal.material || "Additional product details and specifications."}</p>
+                    <p className="mt-4 text-[14px] leading-relaxed text-gray-600">{modal.description || modal.text || modal.excerpt || modal.material || "Additional product details and specifications."}</p>
+                    {catalogFileUrl && (
+                        <div className="mt-6 flex flex-wrap gap-3">
+                            <a
+                                href={catalogFileUrl}
+                                download
+                                className="inline-flex h-11 items-center justify-center gap-2 rounded-sm bg-black px-5 text-xs font-bold uppercase tracking-[0.14em] text-white transition hover:bg-gray-800"
+                            >
+                                <ArrowDownToLine className="h-4 w-4" />
+                                Download PDF
+                            </a>
+
+                        </div>
+                    )}
+                    {modal.type === "collection" && modal.products?.length > 0 && (
+                        <div className="mt-8 border-t border-gray-200 pt-6">
+                            <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-gray-500">Products in this collection</h3>
+                            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                {modal.products.map((product) => (
+                                    <button
+                                        key={product.id}
+                                        onClick={() => window.location.assign(`/productdetails/${product.id}`)}
+                                        className="group rounded-sm border border-gray-200 bg-white p-3 text-left transition hover:border-gray-400"
+                                    >
+                                        <div className="relative aspect-square overflow-hidden bg-gray-100">
+                                            <Image src={product.image} alt={product.name} fill unoptimized className="object-cover transition duration-500 group-hover:scale-105" />
+                                        </div>
+                                        <p className="mt-3 text-[13px] font-bold text-black">{product.name}</p>
+                                        <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">{product.sku}</p>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </motion.div>
         </div>
