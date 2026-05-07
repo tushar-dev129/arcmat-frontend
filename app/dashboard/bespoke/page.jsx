@@ -29,6 +29,7 @@ const emptyCollection = () => ({ title: "", description: "", image: "", productI
 const emptyCatalog = () => ({ title: "", year: "", pages: "", featured: false, cover: "", file: null });
 const emptyVideo = () => ({ title: "", provider: "youtube", videoId: "", poster: "", url: "" });
 const emptyNews = () => ({ title: "", date: "", readTime: "", image: "", excerpt: "", body: "" });
+const emptyProject = () => ({ title: "", overview: "", price: "", mainImage: "", gallery: [], mainImageFile: null, galleryFiles: [null, null, null, null] });
 
 const csvToArray = (value) => String(value || "").split(",").map((item) => item.trim()).filter(Boolean);
 const arrayToCsv = (value) => Array.isArray(value) ? value.join(", ") : String(value || "");
@@ -82,6 +83,7 @@ const NAV_LINKS = [
     { id: "story", label: "Story & Hero", icon: <Layout className="w-4 h-4" /> },
     { id: "gallery", label: "Brand Gallery", icon: <ImageIcon className="w-4 h-4" /> },
     { id: "content", label: "Showcase Content", icon: <Briefcase className="w-4 h-4" /> },
+    { id: "projects", label: "Project Showcase", icon: <Layout className="w-4 h-4" /> },
     { id: "products", label: "Products", icon: <Box className="w-4 h-4" /> },
     { id: "network", label: "Network", icon: <Users className="w-4 h-4" /> },
     { id: "reviews", label: "Reviews", icon: <Star className="w-4 h-4" /> },
@@ -124,6 +126,7 @@ export default function BespokeEditorPage() {
     const [catalogs, setCatalogs] = useState([]);
     const [videos, setVideos] = useState([]);
     const [news, setNews] = useState([]);
+    const [projects, setProjects] = useState([]);
 
     // Fix for Dashboard Layout `overflow-y-auto` breaking sticky positioning
     useEffect(() => {
@@ -164,6 +167,12 @@ export default function BespokeEditorPage() {
         setCatalogs((bespoke.catalogs || []).map((item) => ({ ...emptyCatalog(), ...item })));
         setVideos((bespoke.videos || []).map((item) => ({ ...emptyVideo(), ...item })));
         setNews((bespoke.news || []).map((item) => ({ ...emptyNews(), ...item })));
+        setProjects((bespoke.projects || []).map((item) => ({
+            ...emptyProject(),
+            ...item,
+            gallery: Array.isArray(item.gallery) ? item.gallery : [],
+            galleryFiles: [null, null, null, null]
+        })));
     }, [brand?._id]);
 
     useEffect(() => {
@@ -223,11 +232,20 @@ export default function BespokeEditorPage() {
         formData.append("bespokeCatalogs", JSON.stringify(catalogs.map(withoutFileFields)));
         formData.append("bespokeVideos", JSON.stringify(videos.map(withoutFileFields)));
         formData.append("bespokeNews", JSON.stringify(news.map(withoutFileFields)));
+        formData.append("bespokeProjects", JSON.stringify(projects.map(({ mainImageFile, galleryFiles, ...item }) => item)));
         appendCardFiles(formData, "bespokeCollectionImage", collections, "imageFile");
         appendCardFiles(formData, "bespokeCatalogCover", catalogs, "coverFile");
         appendCardFiles(formData, "bespokeCatalogFile", catalogs, "fileUpload");
         appendCardFiles(formData, "bespokeVideoPoster", videos, "posterFile");
         appendCardFiles(formData, "bespokeNewsImage", news, "imageFile");
+        appendCardFiles(formData, "bespokeProjectMainImage", projects, "mainImageFile");
+        projects.forEach((project, pIndex) => {
+            (project.galleryFiles || []).forEach((file, gIndex) => {
+                if (file) {
+                    formData.append(`bespokeProjectGallery_${pIndex}_${gIndex}`, file);
+                }
+            });
+        });
         if (heroImage) formData.append("bespokeHeroImage", heroImage);
         galleryMedia.slice(0, Math.max(0, 8 - existingGalleryMedia.length)).forEach((file) => {
             formData.append("bespokeGalleryMedia", file);
@@ -470,6 +488,45 @@ export default function BespokeEditorPage() {
                                     )}
                                 </EditableList>
                             </div>
+                        </SectionContainer>
+
+                        {/* Section 3.5: Projects */}
+                        <SectionContainer id="projects" title="Project Showcase" description="Highlight specific projects with a main photo, gallery, and details.">
+                            <EditableList title="Projects" items={projects} setItems={setProjects} createItem={emptyProject}>
+                                {(item, update) => (
+                                    <>
+                                        <TextInput label="Project Title" value={item.title} onChange={(v) => update("title", v)} placeholder="Luxury Villa" />
+                                        <TextInput label="Price Range" value={item.price} onChange={(v) => update("price", v)} placeholder="₹50,000 - ₹1,00,000" />
+                                        
+                                        <div className="md:col-span-2">
+                                            <TextareaInput label="Project Overview" value={item.overview} onChange={(v) => update("overview", v)} placeholder="A detailed overview of the project and materials used..." />
+                                        </div>
+
+                                        <div className="md:col-span-2 mt-4">
+                                            <h4 className="text-sm font-bold text-black mb-4">Project Media (1 Main + 4 Gallery)</h4>
+                                            <div className="grid gap-4 sm:grid-cols-2">
+                                                <CardFileInput label="Main Project Photo" accept="image/*" currentFile={item.mainImageFile} currentMedia={item.mainImage} onChange={(f) => update("mainImageFile", f)} />
+                                            </div>
+                                            <div className="grid gap-4 sm:grid-cols-2 mt-4">
+                                                {[0, 1, 2, 3].map((gIndex) => (
+                                                    <CardFileInput 
+                                                        key={`gallery-${gIndex}`} 
+                                                        label={`Gallery Image ${gIndex + 1}`} 
+                                                        accept="image/*" 
+                                                        currentFile={item.galleryFiles?.[gIndex]} 
+                                                        currentMedia={item.gallery?.[gIndex]} 
+                                                        onChange={(f) => {
+                                                            const newFiles = [...(item.galleryFiles || [null, null, null, null])];
+                                                            newFiles[gIndex] = f;
+                                                            update("galleryFiles", newFiles);
+                                                        }} 
+                                                    />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </EditableList>
                         </SectionContainer>
 
                         {/* Section 4: Products */}

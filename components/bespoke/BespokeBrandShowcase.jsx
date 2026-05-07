@@ -17,6 +17,7 @@ import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getP
 
 const tabsLeft = [
     ["overview", "Overview"],
+    ["projects", "Projects"],
     ["solutions", "Solutions"],
     ["collections", "Collections"],
     ["products", "Products"],
@@ -237,6 +238,7 @@ export default function BespokeBrandShowcase() {
     const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 28 });
 
     const visibleTabsLeft = useMemo(() => tabsLeft.filter(([key]) => {
+        if (key === "projects") return template.projects?.length > 0;
         if (key === "products") return template.products?.length > 0;
         if (key === "solutions") return template.solutions?.length > 0;
         if (key === "collections") return template.collections?.length > 0;
@@ -286,6 +288,7 @@ export default function BespokeBrandShowcase() {
 
             <Container className="pb-20">
                 <OverviewSection template={template} />
+                <ProjectShowcaseSection items={template.projects} brandName={template.hero.name} setModal={setModal} />
                 <GallerySection items={template.gallery} brandName={template.hero.name} setModal={setModal} />
                 <SolutionsSection items={template.solutions} brandName={template.hero.name} setModal={setModal} />
                 <CollectionsSection items={template.collections} brandName={template.hero.name} setModal={setModal} />
@@ -299,9 +302,10 @@ export default function BespokeBrandShowcase() {
             <ContactSection template={template} />
 
             <AnimatePresence>
-                {modal && <DetailModal modal={modal} onClose={() => setModal(null)} />}
+                {modal && <DetailModal key="modal" modal={modal} onClose={() => setModal(null)} />}
                 {showTopBtn && (
                     <motion.button
+                        key="top-btn"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
@@ -348,7 +352,7 @@ function buildBrandPayload(brand, apiProducts = []) {
         overview: {
             title: bespoke.headline || `The ${brand?.name || "brand"} story`,
             body: bespoke.bio || brand?.description || "The history begins with craftsmen specializing in the processing of premium materials for furniture. Within a few years, production expanded with mirrors, light fixtures and accessories. The success achieved necessitates the expansion of the company.",
-            extended: "Driven by material excellence, this showcase provides immediate access to catalogs, verified partners, and bespoke solutions. The brand has established itself globally with a strong commitment to architectural integration and innovative design.",
+            extended: "",
             stats: [
                 { label: "Products", value: String(mergedProducts.length) },
                 { label: "Retailers", value: String((bespoke.selectedRetailerIds || []).length) },
@@ -383,6 +387,12 @@ function buildBrandPayload(brand, apiProducts = []) {
             })),
         ],
         reviews: (bespoke.reviews || []).filter((review) => review?.name || review?.comment || review?.text),
+        projects: (bespoke.projects || []).filter(p => p.title || p.mainImage).map((item, index) => ({
+            ...item,
+            id: `project-${index}`,
+            mainImage: resolveUrl(item.mainImage, "brands"),
+            gallery: (item.gallery || []).map(g => resolveUrl(g, "brands")).filter(Boolean)
+        })),
         gallery: galleryMedia,
         news: normalizeMediaRows(bespoke.news),
         contact: {
@@ -511,18 +521,20 @@ function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
 
 function OverviewSection({ template }) {
     const [open, setOpen] = useState(false);
+    const hasExtended = Boolean(template.overview.extended?.trim());
+
     return (
         <section id="overview" className="scroll-mt-32 pt-8 pb-12 border-b border-gray-200">
             <div className="w-full">
                 <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800">
                     {template.overview.body}
-                    {!open && (
+                    {hasExtended && !open && (
                         <button onClick={() => setOpen(true)} className="ml-2 font-bold text-black hover:underline">
                             ... more
                         </button>
                     )}
                 </p>
-                {open && (
+                {hasExtended && open && (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="mt-4">
                         <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800">
                             {template.overview.extended}
@@ -554,6 +566,29 @@ function SolutionsSection({ items, brandName }) {
                             </div>
                         </div>
                     </Link>
+                ))}
+            </HorizontalRail>
+        </Section>
+    );
+}
+
+function ProjectShowcaseSection({ items, brandName, setModal }) {
+    if (!items || items.length === 0) return null;
+    
+    return (
+        <Section id="projects" title={`Featured Projects`}>
+            <HorizontalRail>
+                {items.map((project, idx) => (
+                    <button key={project.id || idx} onClick={() => setModal({ type: "project", ...project })} className="group block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-black rounded-sm relative border border-gray-200 hover:shadow-md transition-shadow text-left">
+                        {project.mainImage && <Image src={project.mainImage} alt={project.title || "Project"} fill unoptimized loading="lazy" className="object-cover opacity-80 group-hover:opacity-100 transition-all group-hover:scale-105 duration-700" />}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                            <h3 className="text-xl font-serif font-medium mb-2">{project.title || "Featured Project"}</h3>
+                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-color)]">
+                                <span>View Details</span> <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </div>
+                        </div>
+                    </button>
                 ))}
             </HorizontalRail>
         </Section>
@@ -851,13 +886,52 @@ function DetailModal({ modal, onClose }) {
                                 </div>
                             )}
                         </div>
-                    ) : image ? (
+                    ) : image && modal.type !== "project" ? (
                         <div className="relative h-[300px] sm:h-[400px] w-full bg-gray-50 mb-8 rounded-sm overflow-hidden border border-gray-200">
                             <Image src={image} alt={modal.title || "Detail"} fill unoptimized className="object-contain" />
                         </div>
                     ) : null}
+                    {modal.type === "project" && (() => {
+                        const validGallery = (modal.gallery || []).filter(Boolean);
+                        const count = validGallery.length;
+                        return (
+                            <div className="mb-8">
+                                <div className={`grid gap-1 md:gap-2 p-1 md:p-2 bg-gray-50 rounded-sm mb-6 ${count === 0 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-3'}`}>
+                                    <div className={`${count === 0 ? 'md:col-span-3' : 'md:col-span-2'} relative aspect-[4/3] md:aspect-auto md:h-[400px] w-full bg-gray-200 overflow-hidden`}>
+                                        {modal.mainImage && (
+                                            <Image src={modal.mainImage} alt={modal.title || "Project Main"} fill unoptimized className="object-cover" />
+                                        )}
+                                    </div>
+                                    {count > 0 && (
+                                        <div className={`grid gap-1 md:gap-2 h-auto md:h-[400px] ${
+                                            count === 1 ? 'grid-cols-1 grid-rows-1' :
+                                            count === 2 ? 'grid-cols-1 grid-rows-2' :
+                                            count === 3 ? 'grid-cols-2 grid-rows-2' :
+                                            'grid-cols-2 grid-rows-2'
+                                        }`}>
+                                            {validGallery.map((img, i) => (
+                                                <div key={i} className={`relative w-full h-full aspect-square md:aspect-auto bg-gray-200 overflow-hidden ${count === 3 && i === 0 ? 'col-span-2' : ''}`}>
+                                                    <Image src={img} alt={`Gallery ${i}`} fill unoptimized className="object-cover" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                                {modal.price && (
+                                    <div className="inline-block bg-gray-50 border border-gray-200 px-6 py-3 rounded-sm mb-4">
+                                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Project Value</p>
+                                        <p className="text-lg font-bold text-black">
+                                            {String(modal.price).includes('₹') || String(modal.price).includes('$') 
+                                                ? modal.price 
+                                                : `₹ ${modal.price}`}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })()}
                     <h2 className="text-2xl sm:text-3xl font-serif font-medium">{modal.title || modal.name}</h2>
-                    <p className="mt-4 text-[14px] leading-relaxed text-gray-600">{modal.description || modal.text || modal.excerpt || modal.material || "Additional product details and specifications."}</p>
+                    <p className="mt-4 text-[14px] leading-relaxed text-gray-600 whitespace-pre-wrap">{modal.overview || modal.description || modal.text || modal.excerpt || modal.material || "Additional project details."}</p>
                     {catalogFileUrl && (
                         <div className="mt-6 flex flex-wrap gap-3">
                             <a
