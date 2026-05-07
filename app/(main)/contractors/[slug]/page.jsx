@@ -172,7 +172,7 @@ export default function ContractorProfilePage({ params }) {
                                 {contractor.portfolio && contractor.portfolio.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         {contractor.portfolio.map((item, idx) => (
-                                            <div key={idx} className="group relative h-72 rounded-3xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500">
+                                            <Link href={`/projects/${item._id}`} key={idx} className="group relative h-72 rounded-3xl overflow-hidden cursor-pointer border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 block">
                                                 {item.images?.[0] ? (
                                                     <Image 
                                                         src={getImageUrl(item.images[0], "contractor-portfolio") || "/images/placeholder-project.jpg"} 
@@ -198,7 +198,7 @@ export default function ContractorProfilePage({ params }) {
                                                         <p className="text-gray-300 text-sm mt-3 line-clamp-2 leading-relaxed font-medium">{item.description}</p>
                                                     )}
                                                 </div>
-                                            </div>
+                                            </Link>
                                         ))}
                                     </div>
                                 ) : (
