@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Container from "@/components/ui/Container";
+import Pagination from "@/components/ui/Pagination";
 import { useGetBrands } from "@/hooks/useBrand";
 import { useGetCategoryTree } from "@/hooks/useCategory";
 import { useDebounce } from "@/hooks/useDebounce";
 import { getBrandImageUrl } from "@/lib/productUtils";
-import { ArrowRight, Building2, Loader2, Search, Sparkles, FilterX } from "lucide-react";
+import { ArrowRight, Building2, Loader2, Sparkles, Filter } from "lucide-react";
+import BespokeFilterSidebar from "@/components/bespoke/BespokeFilterSidebar";
 
 const getBrandId = (brand) => brand?._id || brand?.id;
 
@@ -17,8 +19,22 @@ const BespokePage = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedSubcategory, setSelectedSubcategory] = useState("");
     const [selectedSubSubcategory, setSelectedSubSubcategory] = useState("");
+    const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
+    const [page, setPage] = useState(1);
+    const [limit, setLimit] = useState(20);
+    const [sortBy, setSortBy] = useState("Featured");
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+    // Reset page to 1 when search term or sort changes
+    useEffect(() => {
+        setPage(1);
+    }, [debouncedSearchTerm, sortBy]);
+
+    // Scroll to top when filters or page change
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [page, selectedCategory, selectedSubcategory, selectedSubSubcategory]);
 
     const { data: treeDataRaw } = useGetCategoryTree();
     const treeData = useMemo(() => {
@@ -26,7 +42,6 @@ const BespokePage = () => {
     }, [treeDataRaw]);
 
     const { data: brandsData, isLoading } = useGetBrands({
-        limit: 100,
         type: "frontend",
         ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
         ...(selectedCategory && { categoryId: selectedCategory }),
@@ -34,178 +49,214 @@ const BespokePage = () => {
         ...(selectedSubSubcategory && { subsubcategoryId: selectedSubSubcategory }),
     });
 
-    const filteredBrands = brandsData?.data || [];
+    const allBrands = brandsData?.data || [];
 
-    const activeCategoryObj = useMemo(() => treeData.find(c => c._id === selectedCategory || c.id === selectedCategory), [treeData, selectedCategory]);
-    const subcategories = activeCategoryObj?.children || [];
-    const activeSubcategoryObj = useMemo(() => subcategories.find(c => c._id === selectedSubcategory || c.id === selectedSubcategory), [subcategories, selectedSubcategory]);
-    const subsubcategories = activeSubcategoryObj?.children || [];
+    // Apply Sorting
+    const sortedBrands = useMemo(() => {
+        let sorted = [...allBrands];
+        if (sortBy === "A - Z") {
+            sorted.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+        } else if (sortBy === "Newest") {
+            sorted.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+        } else if (sortBy === "Featured") {
+            sorted.sort((a, b) => {
+                if (a.showOnHomepage && !b.showOnHomepage) return -1;
+                if (!a.showOnHomepage && b.showOnHomepage) return 1;
+                return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+            });
+        }
+        return sorted;
+    }, [allBrands, sortBy]);
 
-    const handleClearFilters = () => {
-        setSelectedCategory("");
-        setSelectedSubcategory("");
-        setSelectedSubSubcategory("");
+    // Apply Pagination
+    const totalItems = sortedBrands.length;
+    const totalPages = Math.ceil(totalItems / limit) || 1;
+    const paginatedBrands = sortedBrands.slice((page - 1) * limit, page * limit);
+
+    const handleFilterChange = (catId, subcatId, subsubcatId) => {
+        setSelectedCategory(catId);
+        setSelectedSubcategory(subcatId);
+        setSelectedSubSubcategory(subsubcatId);
+        setPage(1);
     };
 
     return (
-        <main className="min-h-screen bg-[#f7f7f5]">
-            <section className="bg-white border-b border-gray-200">
-                <Container className="py-12 sm:py-16 lg:py-20">
-                    <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
-                        <div className="max-w-4xl">
-                            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-[#fff7f2] px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#b76b45]">
-                                <Sparkles className="h-4 w-4" />
-                                Bespoke brand library
-                            </div>
-                            <h1 className="mt-6 text-4xl font-bold leading-tight tracking-tight text-gray-950 sm:text-5xl lg:text-6xl">
-                                Explore every brand through a dedicated project page.
-                            </h1>
-                            <p className="mt-5 max-w-2xl text-base font-medium leading-7 text-gray-600 sm:text-lg">
-                                Browse brand cards, open the one you need, and review its story, catalogue, and available materials in one focused place.
-                            </p>
+        <main className="min-h-screen ">
+            <section className="relative overflow-hidden border-b border-gray-200 bg-[#f8f5f1]">
+                {/* Background Blur */}
+                <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute left-[-120px] top-[-120px] h-[320px] w-[320px] rounded-full bg-[#f3c8a7]/30 blur-3xl" />
+                    <div className="absolute bottom-[-140px] right-[-120px] h-[300px] w-[300px] rounded-full bg-[#e7bfa8]/20 blur-3xl" />
+                </div>
+
+                <Container className="relative py-10 sm:py-12 lg:py-14">
+                    <div className="max-w-4xl">
+
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 rounded-full border border-[#d8b8a4] bg-white/80 px-5 py-2 shadow-sm backdrop-blur">
+                            <Sparkles className="h-4 w-4 text-[#b76b45]" />
+
+                            <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#b76b45]">
+                                Bespoke Brand Library
+                            </span>
                         </div>
 
-                        <div className="rounded-lg border border-gray-200 bg-gray-50 p-5">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white text-primary shadow-sm">
-                                    <Building2 className="h-5 w-5" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-bold text-gray-950">{filteredBrands.length || 0} brands</p>
-                                    <p className="text-sm font-medium text-gray-500">Connected to bespoke pages</p>
-                                </div>
-                            </div>
-                        </div>
+                        {/* Heading */}
+                        <h1 className="mt-7 text-2xl  leading-[1.05] tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
+                            Explore every brand through a beautifully crafted bespoke page.
+                        </h1>
+
+                        {/* Description */}
+                        <p className="mt-6 max-w-2xl text-base leading-8 text-gray-600 sm:text-lg">
+                            Browse premium brand showcases featuring immersive galleries,
+                            downloadable catalogues, curated collections, videos, articles,
+                            and project stories — all designed in one elegant experience.
+                        </p>
+
                     </div>
                 </Container>
             </section>
 
             <Container className="py-10 sm:py-14">
-                <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <h2 className="text-2xl font-bold tracking-tight text-gray-950">Brand Cards</h2>
-                        <p className="mt-1 text-sm font-medium text-gray-500">Click any card to open that brand's bespoke page.</p>
-                    </div>
-                    <div className="relative w-full md:max-w-sm">
-                        <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                        <input
-                            value={searchTerm}
-                            onChange={(event) => setSearchTerm(event.target.value)}
-                            placeholder="Search brands"
-                            className="h-12 w-full rounded-full border border-gray-200 bg-white pl-11 pr-4 text-sm font-medium text-gray-800 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
-                        />
-                    </div>
-                </div>
+                <div className="flex flex-col lg:flex-row gap-8 items-start">
+                    {/* Sidebar Filters */}
+                    <BespokeFilterSidebar
+                        treeData={treeData}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        selectedCategory={selectedCategory}
+                        selectedSubcategory={selectedSubcategory}
+                        selectedSubSubcategory={selectedSubSubcategory}
+                        onFilterChange={handleFilterChange}
+                        isMobileOpen={isMobileFiltersOpen}
+                        setIsMobileOpen={setIsMobileFiltersOpen}
+                    />
 
-                <div className="mb-8 flex flex-wrap items-center gap-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-                    <div className="flex-1 min-w-[200px]">
-                        <select
-                            value={selectedCategory}
-                            onChange={(e) => {
-                                setSelectedCategory(e.target.value);
-                                setSelectedSubcategory("");
-                                setSelectedSubSubcategory("");
-                            }}
-                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white"
-                        >
-                            <option value="">All Categories</option>
-                            {treeData.map((cat) => (
-                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
+                    {/* Main Content Area */}
+                    <div className="flex-1 w-full min-w-0 min-h-[calc(100vh-200px)]">
+                        {/* Header above brand grid */}
+                        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 lg:justify-end">
 
-                    <div className="flex-1 min-w-[200px]">
-                        <select
-                            value={selectedSubcategory}
-                            onChange={(e) => {
-                                setSelectedSubcategory(e.target.value);
-                                setSelectedSubSubcategory("");
-                            }}
-                            disabled={!selectedCategory || subcategories.length === 0}
-                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white disabled:opacity-50"
-                        >
-                            <option value="">All Subcategories</option>
-                            {subcategories.map((cat) => (
-                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="flex-1 min-w-[200px]">
-                        <select
-                            value={selectedSubSubcategory}
-                            onChange={(e) => setSelectedSubSubcategory(e.target.value)}
-                            disabled={!selectedSubcategory || subsubcategories.length === 0}
-                            className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-medium text-gray-700 outline-none transition focus:border-primary focus:bg-white disabled:opacity-50"
-                        >
-                            <option value="">All Sub-subcategories</option>
-                            {subsubcategories.map((cat) => (
-                                <option key={cat._id || cat.id} value={cat._id || cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    {(selectedCategory || selectedSubcategory || selectedSubSubcategory) && (
-                        <button
-                            onClick={handleClearFilters}
-                            className="flex h-[42px] items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-4 text-sm font-bold text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors"
-                        >
-                            <FilterX className="h-4 w-4" />
-                            Clear
-                        </button>
-                    )}
-                </div>
-
-                {isLoading ? (
-                    <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
-                        <Loader2 className="h-9 w-9 animate-spin text-primary" />
-                    </div>
-                ) : filteredBrands.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {filteredBrands.map((brand) => {
-                            const brandId = getBrandId(brand);
-
-                            return (
-                                <Link
-                                    key={brandId}
-                                    href={`/bespoke/${brandId}`}
-                                    className="group flex min-h-[320px] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl hover:shadow-gray-200/70"
+                            {/* Mobile/Tablet Controls Wrapper */}
+                            <div className="flex items-center gap-3 w-full sm:w-auto lg:hidden">
+                                <button
+                                    onClick={() => setIsMobileFiltersOpen(true)}
+                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-colors"
                                 >
-                                    <div className="relative flex h-44 items-center justify-center border-b border-gray-100 bg-gray-50 p-8">
-                                        <Image
-                                            src={getBrandImageUrl(brand.logo)}
-                                            alt={brand.name || "Brand logo"}
-                                            fill
-                                            className="object-contain p-8 transition duration-500 group-hover:scale-105"
-                                            unoptimized
+                                    <Filter className="h-4 w-4" />
+                                    Filters
+                                </button>
+
+                                {/* Mobile Sorting Button */}
+                                <div className="flex-1 sm:hidden relative flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                                    <span>Sort: {sortBy === "A - Z" ? "A-Z" : sortBy}</span>
+                                    <select
+                                        value={sortBy}
+                                        onChange={(e) => setSortBy(e.target.value)}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                    >
+                                        <option value="Featured">Featured</option>
+                                        <option value="Newest">Newest</option>
+                                        <option value="A - Z">A - Z</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {/* Sorting Dropdown (Tablet & Desktop) */}
+                            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 font-medium">
+                                <span>Sort by:</span>
+                                <select
+                                    value={sortBy}
+                                    onChange={(e) => setSortBy(e.target.value)}
+                                    className="bg-transparent font-bold text-gray-900 outline-none cursor-pointer transition-colors"
+                                >
+                                    <option value="Featured">Featured</option>
+                                    <option value="Newest">Newest</option>
+                                    <option value="A - Z">A - Z</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Brand Grid */}
+                        {isLoading ? (
+                            <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
+                                <Loader2 className="h-9 w-9 animate-spin text-primary" />
+                            </div>
+                        ) : totalItems > 0 ? (
+                            <>
+                                <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                                    {paginatedBrands.map((brand) => {
+                                        const brandId = getBrandId(brand);
+
+                                        return (
+
+                                            <Link
+                                                key={brandId}
+
+                                                href={`/bespoke/${brandId}`}
+                                                className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#ed8b4e] hover:shadow-[0_12px_40px_rgba(183,107,69,0.18)]"
+                                            >
+                                                {/* Top accent bar */}
+                                                <div className="h-[3px] w-full bg-gradient-to-r from-[#b76b45] to-[#ffffff]" />
+
+                                                {/* Image */}
+                                                <div className="relative flex h-[120px] items-center justify-center bg-[#ffffff]">
+                                                    <Image
+                                                        src={getBrandImageUrl(brand.logo)}
+                                                        alt={brand.name || "Brand logo"}
+                                                        fill
+                                                        className="object-contain p-8 transition duration-700 group-hover:scale-105"
+                                                        unoptimized
+                                                    />
+
+                                                </div>
+
+                                                {/* Body */}
+                                                <div className="flex flex-1 flex-col p-4 pt-5">
+                                                    <h3 className="line-clamp-2 text-sm font-medium leading-snug text-gray-950 transition duration-300 group-hover:text-[#b76b45]">
+                                                        {brand.name || "Untitled Brand"}
+                                                    </h3>
+                                                    <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-gray-500">
+                                                        {brand.description ||
+                                                            "Explore curated collections, premium materials, and immersive brand experiences."}
+                                                    </p>
+
+                                                    {/* Meta */}
+                                                    <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-3">
+                                                        <span className="text-xs text-gray-400">{brand.country || "Global"}</span>
+                                                        <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#d9b8a3] text-[#b76b45] transition duration-300 group-hover:bg-[#fff6f1]">
+                                                            <ArrowRight className="h-3.5 w-3.5 transition duration-300 group-hover:translate-x-0.5" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+
+                                {totalItems > 0 && (
+                                    <div className="mt-10 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+                                        <Pagination
+                                            currentPage={page}
+                                            totalPages={totalPages}
+                                            pageSize={limit}
+                                            onPageChange={setPage}
+                                            onPageSizeChange={(newSize) => { setLimit(newSize); setPage(1); }}
+                                            totalItems={totalItems}
                                         />
                                     </div>
-                                    <div className="flex flex-1 flex-col p-5">
-                                        <div className="mb-3 flex items-center justify-between gap-3">
-                                            <h3 className="line-clamp-2 text-lg font-bold leading-snug text-gray-950">
-                                                {brand.name || "Untitled Brand"}
-                                            </h3>
-                                            <ArrowRight className="h-5 w-5 shrink-0 text-gray-300 transition group-hover:translate-x-1 group-hover:text-primary" />
-                                        </div>
-                                        <p className="line-clamp-3 text-sm font-medium leading-6 text-gray-500">
-                                            {brand.description || "Open this bespoke page to explore the brand profile and catalogue."}
-                                        </p>
-                                        <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4 text-xs font-bold uppercase tracking-[0.14em] text-gray-400">
-                                            <span>{brand.country || "Global"}</span>
-                                            <span className="text-[#b76b45]">View page</span>
-                                        </div>
-                                    </div>
-                                </Link>
-                            );
-                        })}
+                                )}
+                            </>
+                        ) : (
+                            <div className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+                                <h3 className="text-lg font-bold text-gray-900">No brands found</h3>
+                                <p className="mt-2 text-sm font-medium text-gray-500">Try adjusting your filters or search term.</p>
+                            </div>
+                        )}
+
+
                     </div>
-                ) : (
-                    <div className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
-                        <h3 className="text-lg font-bold text-gray-900">No brands found</h3>
-                        <p className="mt-2 text-sm font-medium text-gray-500">Try a different search term.</p>
-                    </div>
-                )}
+                </div>
             </Container>
         </main>
     );
