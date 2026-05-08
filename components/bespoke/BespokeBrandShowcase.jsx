@@ -29,6 +29,7 @@ const tabsRight = [
     ["news", "News"],
     ["videos", "Video"],
     ["retailers", "Resellers"],
+    ["reviews", "Reviews"],
     ["contact", "Info"],
 ];
 
@@ -250,6 +251,7 @@ export default function BespokeBrandShowcase() {
         if (key === "retailers") return template.partners?.length > 0;
         if (key === "news") return template.news?.length > 0;
         if (key === "videos") return template.videos?.length > 0;
+        if (key === "reviews") return template.reviews?.length > 0;
         return true;
     }), [template]);
 
@@ -297,6 +299,7 @@ export default function BespokeBrandShowcase() {
                 <NewsSection items={template.news} brandName={template.hero.name} setModal={setModal} />
                 <VideoSection items={template.videos} brandName={template.hero.name} setModal={setModal} />
                 <PartnerSection items={template.partners} brandName={template.hero.name} setModal={setModal} />
+                <ReviewSection items={template.reviews} brandName={template.hero.name} />
             </Container>
             
             <ContactSection template={template} />
@@ -754,6 +757,30 @@ function PartnerSection({ items, brandName, setModal }) {
                                 {item.verified && <ShieldCheck className="h-3 w-3 text-green-600" />}
                             </div>
                             <button onClick={() => setModal({ type: "partner", ...item })} className="mt-3 text-[11px] font-bold text-[var(--brand-color)] uppercase hover:opacity-80">Contact</button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </Section>
+    );
+}
+
+function ReviewSection({ items, brandName }) {
+    if (items.length === 0) return null;
+    return (
+        <Section id="reviews" title={`Customer Endorsements`}>
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {items.map((item, index) => (
+                    <div key={index} className="bg-white border border-gray-200 rounded-sm p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                        <div className="flex gap-1 mb-4">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                                <Star key={i} className={`h-4 w-4 ${i < (item.rating || 5) ? "fill-[#eab308] text-[#eab308]" : "fill-gray-200 text-gray-200"}`} />
+                            ))}
+                        </div>
+                        <p className="text-[14px] leading-relaxed text-gray-700 italic mb-6 flex-1">"{item.comment}"</p>
+                        <div>
+                            <p className="text-[13px] font-bold text-gray-900">{item.name}</p>
+                            {item.role && <p className="text-[11px] font-medium uppercase tracking-wider text-gray-500 mt-1">{item.role}</p>}
                         </div>
                     </div>
                 ))}

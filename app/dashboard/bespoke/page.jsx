@@ -562,6 +562,21 @@ export default function BespokeEditorPage() {
                                             <TextInput label="Reviewer Name" value={review.name} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, name: v } : item))} placeholder="John Doe" />
                                             <TextInput label="Role / Company" value={review.role} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, role: v } : item))} placeholder="Lead Architect" />
                                         </div>
+                                        <div className="mb-4">
+                                            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Rating</span>
+                                            <div className="flex items-center gap-1">
+                                                {[1, 2, 3, 4, 5].map((star) => (
+                                                    <button
+                                                        key={star}
+                                                        type="button"
+                                                        onClick={() => setReviews((c) => c.map((item, i) => i === index ? { ...item, rating: star } : item))}
+                                                        className="focus:outline-none"
+                                                    >
+                                                        <Star className={`h-5 w-5 ${star <= (review.rating || 5) ? "fill-[#eab308] text-[#eab308]" : "fill-gray-200 text-gray-200"} hover:scale-110 transition-transform`} />
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
                                         <TextareaInput label="Review Text" value={review.comment} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, comment: v } : item))} placeholder="Working with this brand was incredible..." />
                                     </div>
                                 ))}
