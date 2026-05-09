@@ -241,7 +241,7 @@ export default function ProductsListPage() {
   if (authLoading) return <div className="p-6">Loading...</div>;
 
   const isAdmin = user?.role === 'admin';
-  const isBrand = user?.role === 'brand';
+  const isBrand = user?.role === 'brand' || user?.role === 'custom_maker';
   const showManagementUI = isAdmin || isBrand;
 
   const handlePageChange = (page) => {
@@ -260,7 +260,7 @@ export default function ProductsListPage() {
   };
 
   return (
-    <RoleGuard allowedRoles={['admin', 'brand']}>
+    <RoleGuard allowedRoles={['admin', 'brand', 'custom_maker']}>
       <Container className="py-6 space-y-6">
 
         {/* Invisible Modals */}
@@ -277,10 +277,12 @@ export default function ProductsListPage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="space-y-1">
             <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-              {isBrand ? 'My Inventory' : 'All Products'}
+              {user?.role === 'custom_maker' ? 'My Custom Maker Products' : isBrand ? 'My Inventory' : 'All Products'}
             </h1>
             <p className="text-gray-500 text-sm">
-              {isBrand
+              {user?.role === 'custom_maker'
+                ? 'Manage products that publish directly to users.'
+                : isBrand
                 ? 'Manage your prices, stock, and listings.'
                 : 'Browse our latest collection.'}
             </p>

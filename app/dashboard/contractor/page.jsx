@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Container from "@/components/ui/Container";
 import { useAuth } from "@/hooks/useAuth";
+import { useGetMyContractorProfile, useGetContractorLeads, useGetContractorStats } from "@/hooks/useContractor";
 import { 
     Users, 
     MessageSquare, 
@@ -12,27 +13,73 @@ import {
     AlertCircle,
     CheckCircle2,
     Briefcase,
-    Clock
+    Clock,
+    ArrowRight
 } from "lucide-react";
 import Link from "next/link";
 
 export default function ContractorDashboard() {
     const { user } = useAuth();
-    const [profileCompletion, setProfileCompletion] = useState(65); // Mock completion
+    const { data: profileResponse } = useGetMyContractorProfile(user?._id);
+    const contractor = profileResponse?.data?.profile || profileResponse?.profile;
+    
+    const { data: leadsResponse, isLoading: leadsLoading } = useGetContractorLeads(contractor?._id);
+    const leads = leadsResponse?.data || leadsResponse || [];
+
+    const { data: statsResponse } = useGetContractorStats(user?._id);
+    const dynamicStats = statsResponse?.data || statsResponse;
+    
+    // Dynamic Profile Completion Calculation
+    const calculateCompletion = () => {
+        if (!contractor) return 0;
+        let score = 0;
+        const total = 8;
+        
+        if (contractor.businessName) score++;
+        if (contractor.tagline) score++;
+        if (contractor.overview) score++;
+        if (contractor.profileImage) score++;
+        if (contractor.categoryId) score++;
+        if (contractor.location?.city) score++;
+        if (contractor.contact?.phone) score++;
+        if (profileResponse?.data?.portfolio?.length > 0) score++;
+        
+        return Math.round((score / total) * 100);
+    };
+
+    const profileCompletion = calculateCompletion();
 
     const stats = [
-        { label: "Active Leads", value: "12", icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-50" },
-        { label: "Profile Views", value: "1.2k", icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-50" },
-        { label: "Avg Rating", value: "4.8", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
-        { label: "Jobs Completed", value: "45", icon: CheckCircle2, color: "text-purple-600", bg: "bg-purple-50" },
+        { label: "Active Leads", value: dynamicStats?.activeLeads?.toString() || "0", icon: MessageSquare, color: "text-blue-600", bg: "bg-blue-50" },
+        { label: "Profile Views", value: dynamicStats?.profileViews?.toString() || "0", icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-50" },
+        { label: "Avg Rating", value: dynamicStats?.avgRating?.toString() || "0.0", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
+        { label: "Jobs Completed", value: dynamicStats?.jobsCompleted?.toString() || "0", icon: CheckCircle2, color: "text-purple-600", bg: "bg-purple-50" },
     ];
 
     return (
         <div className="p-8 space-y-8">
-            {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold text-[hsl(20,10%,15%)]">Contractor Dashboard</h1>
-                <p className="text-gray-500 mt-1">Welcome  {user?.name || "Professional"}. Here's what's happening with your business.</p>
+            {/* Header & Profile Strength */}
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                <div>
+                    <h1 className="text-3xl font-bold text-[hsl(20,10%,15%)]">Contractor Dashboard</h1>
+                    <p className="text-gray-500 mt-1">Welcome  {user?.name || "Professional"}. Here's what's happening with your business.</p>
+                </div>
+                
+                <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 min-w-[280px]">
+                    <div className="relative w-14 h-14 flex items-center justify-center">
+                        <svg className="w-full h-full -rotate-90">
+                            <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-gray-100" />
+                            <circle cx="28" cy="28" r="24" stroke="currentColor" strokeWidth="4" fill="transparent" strokeDasharray={150.8} strokeDashoffset={150.8 - (150.8 * profileCompletion) / 100} className="text-[hsl(15,80%,60%)] transition-all duration-1000" strokeLinecap="round" />
+                        </svg>
+                        <span className="absolute text-xs font-bold text-gray-900">{profileCompletion}%</span>
+                    </div>
+                    <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Profile Strength</p>
+                        <Link href="/dashboard/contractor/profile" className="text-sm font-bold text-[hsl(15,80%,60%)] hover:underline mt-0.5 inline-block">
+                            {profileCompletion < 100 ? "Improve profile" : "Profile is strong"} →
+                        </Link>
+                    </div>
+                </div>
             </div>
 
 
@@ -63,34 +110,40 @@ export default function ContractorDashboard() {
                         <Link href="/dashboard/contractor/leads" className="text-sm font-bold text-[hsl(15,80%,60%)] hover:underline">View All</Link>
                     </div>
                     <div className="divide-y divide-gray-50">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between group">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-[#ead4ce]/30 flex items-center justify-center text-[hsl(15,80%,60%)] font-bold">
-                                        JD
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-gray-900">John Doe <span className="text-xs font-normal text-gray-400 ml-2">via Modular Kitchen</span></h4>
-                                        <p className="text-sm text-gray-500 line-clamp-1 mt-0.5">"Looking for a quote for a 2BHK renovation in Mumbai..."</p>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="text-xs font-bold text-gray-400">2h ago</div>
-                                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[hsl(15,80%,60%)] group-hover:translate-x-1 transition-all inline-block mt-2" />
-                                </div>
+                        {leadsLoading ? (
+                            <div className="p-12 flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                             </div>
-                        ))}
+                        ) : leads.length > 0 ? (
+                            leads.slice(0, 5).map((lead) => (
+                                <Link key={lead._id} href="/dashboard/contractor/leads" className="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between group cursor-pointer">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                            {lead.name.split(' ').map(n => n[0]).join('')}
+                                        </div>
+                                        <div>
+                                            <h4 className="font-bold text-gray-900">{lead.name} <span className="text-xs font-normal text-gray-400 ml-2">via {lead.location}</span></h4>
+                                            <p className="text-sm text-gray-500 line-clamp-1 mt-0.5">"{lead.requirement}"</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className="text-xs font-bold text-gray-400">
+                                            {new Date(lead.createdAt).toLocaleDateString()}
+                                        </div>
+                                        <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-[hsl(15,80%,60%)] group-hover:translate-x-1 transition-all inline-block mt-2" />
+                                    </div>
+                                </Link>
+                            ))
+                        ) : (
+                            <div className="py-20 flex flex-col items-center justify-center text-center">
+                                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                                    <MessageSquare className="w-8 h-8 text-gray-300" />
+                                </div>
+                                <h3 className="font-bold text-gray-900">No leads yet</h3>
+                                <p className="text-sm text-gray-500 mt-1 max-w-xs">Complete your profile to start receiving business inquiries.</p>
+                            </div>
+                        )}
                     </div>
-                    {/* Empty State Mock */}
-                    {false && (
-                        <div className="py-20 flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-                                <MessageSquare className="w-8 h-8 text-gray-300" />
-                            </div>
-                            <h3 className="font-bold text-gray-900">No leads yet</h3>
-                            <p className="text-sm text-gray-500 mt-1 max-w-xs">Complete your profile to start receiving business inquiries.</p>
-                        </div>
-                    )}
                 </div>
 
                 {/* Performance & Tips */}
@@ -106,8 +159,16 @@ export default function ContractorDashboard() {
                                     <Briefcase className="w-5 h-5 text-orange-500" />
                                 </div>
                                 <div>
-                                    <h5 className="text-sm font-bold text-gray-900">Add 3 more projects</h5>
-                                    <p className="text-xs text-gray-500 mt-1">Contractors with 5+ projects get 40% more visibility.</p>
+                                    <h5 className="text-sm font-bold text-gray-900">
+                                        {(profileResponse?.data?.portfolio?.length || 0) < 5 
+                                            ? `Add ${5 - (profileResponse?.data?.portfolio?.length || 0)} more projects` 
+                                            : "Keep updating your portfolio"}
+                                    </h5>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        {(profileResponse?.data?.portfolio?.length || 0) < 5 
+                                            ? "Contractors with 5+ projects get 40% more visibility."
+                                            : "Regularly adding new work keeps you at the top of search results."}
+                                    </p>
                                 </div>
                             </div>
                             <div className="flex gap-4">
@@ -115,8 +176,12 @@ export default function ContractorDashboard() {
                                     <Clock className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <div>
-                                    <h5 className="text-sm font-bold text-gray-900">Reduce response time</h5>
-                                    <p className="text-xs text-gray-500 mt-1">Fast replies increase your booking conversion rate.</p>
+                                    <h5 className="text-sm font-bold text-gray-900">
+                                        {contractor?.responseTime ? "Maintain your response time" : "Set your response time"}
+                                    </h5>
+                                    <p className="text-xs text-gray-500 mt-1">
+                                        Fast replies increase your booking conversion rate by up to 2x.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -135,24 +200,4 @@ export default function ContractorDashboard() {
             </div>
         </div>
     );
-}
-
-function ArrowRight(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-        </svg>
-    )
 }

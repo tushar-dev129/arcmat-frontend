@@ -169,7 +169,7 @@ const Header = ({ variant = 'default' }) => {
                                             <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                                                 Products
                                             </div>
-                                            {products.map((product) => {
+                                            {products.map((product,idx) => {
                                                 const isVariantCentric = Boolean(product.productId && typeof product.productId === 'object');
                                                 const rootProduct = isVariantCentric ? product.productId : product;
                                                 const variantItem = isVariantCentric ? product : null;
@@ -181,7 +181,7 @@ const Header = ({ variant = 'default' }) => {
 
                                                 return (
                                                     <Link
-                                                        key={product.id || product._id || product.override_id}
+                                                        key={`${idx}-${product.id || product._id || product.override_id}`}
                                                         href={`/productdetails/${id}${variantItem ? `?variantId=${variantItem._id}` : ''}`}
                                                         onClick={() => {
                                                             setShowResults(false);

@@ -153,7 +153,7 @@ export const useVerifyOtpMutation = () => {
             }
 
             const role = user?.role;
-            if (role === 'brand' || role === 'vendor' || role === 'retailer' || role === 'admin' || role === 'architect' || role === 'contractor') {
+            if (role === 'brand' || role === 'custom_maker' || role === 'vendor' || role === 'retailer' || role === 'admin' || role === 'architect' || role === 'contractor') {
                 router.push('/dashboard');
             } else {
                 router.push('/');
@@ -211,7 +211,7 @@ export const useLoginMutation = () => {
             } catch (error) {
             }
 
-            if (finalRole === 'brand' || finalRole === 'vendor' || finalRole === 'retailer' || finalRole === 'admin' || finalRole === 'architect' || finalRole === 'contractor') {
+            if (finalRole === 'brand' || finalRole === 'custom_maker' || finalRole === 'vendor' || finalRole === 'retailer' || finalRole === 'admin' || finalRole === 'architect' || finalRole === 'contractor') {
                 setLoading(true);
                 router.push(`/dashboard`);
             } else {

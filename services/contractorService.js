@@ -66,5 +66,13 @@ export const contractorService = {
     getPortfolioItemById: async (itemId) => {
         const response = await api.get(`/contractor/portfolio/${itemId}`);
         return response.data;
+    },
+    getLeads: async (contractorId) => {
+        const response = await api.get(`/contractor/${contractorId}/leads`);
+        return response.data;
+    },
+    getStats: async (userId) => {
+        const response = await api.get(`/contractor/stats/${userId}`);
+        return response.data;
     }
 };

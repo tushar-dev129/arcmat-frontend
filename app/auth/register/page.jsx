@@ -10,9 +10,9 @@ export const metadata = {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex bg-[#F5E9E2]">
+    <div className="h-screen overflow-hidden flex bg-[#F5E9E2]">
 
-      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-between py-4 relative">
+      <div className="hidden lg:flex lg:w-1/2 h-screen overflow-hidden flex-col items-center justify-between py-4 relative">
         <div className="w-full pl-6 ">
           <Logo href="/" />
         </div>
@@ -40,7 +40,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="min-h-screen flex w-full lg:w-1/2 bg-white px-8 sm:px-8 justify-center ">
+      <div className="h-screen overflow-y-auto flex w-full lg:w-1/2 bg-white px-8 sm:px-8 justify-center">
         <RegisterForm />
       </div>
     </div>

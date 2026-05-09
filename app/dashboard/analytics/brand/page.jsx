@@ -30,24 +30,29 @@ import BrandRetailerAnalyticsView from './components/BrandRetailerAnalyticsView'
 export default function UnifiedBrandAnalytics() {
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('products');
+    const isCustomMaker = user?.role === 'custom_maker';
 
     const tabs = [
         { id: 'products', label: 'Product Analytics', icon: BarChart3 },
         { id: 'professionals', label: 'Professional Insights', icon: Briefcase },
-        { id: 'retailers', label: 'Retailer Network', icon: Store },
+        ...(!isCustomMaker ? [{ id: 'retailers', label: 'Retailer Network', icon: Store }] : []),
     ];
 
     return (
-        <RoleGuard allowedRoles={['brand', 'vendor', 'admin']}>
+        <RoleGuard allowedRoles={['brand', 'custom_maker', 'vendor', 'admin']}>
             <div className="p-8 bg-gray-50 min-h-screen">
                 <Container>
                     {/* Header */}
                     <div className="mb-12">
                         <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
                             <TrendingUp className="w-8 h-8 text-primary" />
-                            Brand Analytics
+                            {isCustomMaker ? 'Custom Maker Analytics' : 'Brand Analytics'}
                         </h1>
-                        <p className="text-gray-500 font-medium mt-1">Comprehensive insights into your brand performance, professional reach, and retail network.</p>
+                        <p className="text-gray-500 font-medium mt-1">
+                            {isCustomMaker
+                                ? 'Insights into your direct product performance and professional reach.'
+                                : 'Comprehensive insights into your brand performance, professional reach, and retail network.'}
+                        </p>
                     </div>
 
                     {/* Tab Navigation */}

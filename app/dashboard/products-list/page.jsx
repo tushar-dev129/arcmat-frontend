@@ -42,7 +42,7 @@ export default function ProductsListPage() {
     const [isExporting, setIsExporting] = useState(false);
 
     const isAdmin = user?.role === 'admin';
-    const isBrand = user?.role === 'brand';
+    const isBrand = user?.role === 'brand' || user?.role === 'custom_maker';
 
     const effectiveBrandId = vendorIdFromRoute || (isBrand ? (user?._id || user?.id) : undefined);
 
@@ -124,7 +124,7 @@ export default function ProductsListPage() {
     const handleDataExport = async () => {
         setIsExporting(true);
         try {
-            const blob = await productService.exportProductData(effectiveVendorId);
+            const blob = await productService.exportProductData(effectiveBrandId);
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -189,13 +189,15 @@ export default function ProductsListPage() {
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
                     <div className="xl:col-span-1 border-l-4 border-primary pl-6 py-2">
                         <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
-                            {showBrandList ? 'Product Ecosystem' : (isAdmin ? 'Brand Inventory' : isBrand ? 'My Inventory' : 'All Products')}
+                            {showBrandList ? 'Product Ecosystem' : (isAdmin ? 'Brand Inventory' : user?.role === 'custom_maker' ? 'My Custom Maker Products' : isBrand ? 'My Inventory' : 'All Products')}
                         </h1>
                         <p className="text-gray-500 text-sm mt-2 max-w-md leading-relaxed">
                             {showBrandList
                                 ? 'A panoramic view of all registered brands and their real-time inventory dynamics.'
                                 : isAdmin
                                     ? 'Detailed management interface for the selected brand lifecycle.'
+                                    : user?.role === 'custom_maker'
+                                        ? 'Your products publish directly to users without retailer inventory.'
                                     : isBrand
                                         ? 'Your central command for pricing, stock, and digital assets.'
                                         : 'Architectural collection of premium materials.'}
@@ -263,7 +265,7 @@ export default function ProductsListPage() {
                                 <button
                                     onClick={() => {
                                         setLoading(true);
-                                        router.push(`/dashboard/products-list/${effectiveVendorId}/add`);
+                                        router.push(`/dashboard/products-list/${effectiveBrandId}/add`);
                                     }}
                                     className="flex items-center rounded-full bg-primary text-white cursor-pointer min-w-[120px] py-2 px-4 border border-primary hover:bg-white hover:text-primary duration-300"
                                 >

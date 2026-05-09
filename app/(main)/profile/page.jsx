@@ -15,7 +15,7 @@ const ProfilePage = () => {
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('basic');
 
-    const isBrandRole = user?.role === 'brand';
+    const isBrandRole = user?.role === 'brand' || user?.role === 'custom_maker';
     const isRetailerRole = user?.role === 'retailer';
 
     const tabs = [

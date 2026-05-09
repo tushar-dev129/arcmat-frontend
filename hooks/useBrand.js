@@ -44,8 +44,8 @@ export const useCreateContractorBespokeRequest = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: brandService.createContractorRequest,
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: BRAND_KEYS.contractorRequests(variables.brandId) });
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['brands', 'contractor-requests'] });
         },
     });
 };
@@ -55,7 +55,7 @@ export const useDecideContractorBespokeRequest = () => {
     return useMutation({
         mutationFn: brandService.decideContractorRequest,
         onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: BRAND_KEYS.contractorRequests(variables.brandId) });
+            queryClient.invalidateQueries({ queryKey: ['brands', 'contractor-requests'] });
             queryClient.invalidateQueries({ queryKey: BRAND_KEYS.detail(variables.brandId) });
             queryClient.invalidateQueries({ queryKey: BRAND_KEYS.all });
         },

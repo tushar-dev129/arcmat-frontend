@@ -9,6 +9,8 @@ const authService = {
             password: userData.password,
             profile: userData.profile || '',
             role: userData.role,
+            professionalType: userData.professionalType,
+            providerType: userData.providerType,
             profession: userData.profession,
             city: userData.city
         };

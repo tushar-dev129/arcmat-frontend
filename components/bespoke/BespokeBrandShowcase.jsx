@@ -14,6 +14,8 @@ import { useGetBrandById } from "@/hooks/useBrand";
 import { useGetRetailerProducts } from "@/hooks/useProduct";
 import Container from "@/components/ui/Container";
 import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getProductThumbnail } from "@/lib/productUtils";
+import { toast } from "sonner";
+import { brandService } from "@/services/brandService";
 
 const tabsLeft = [
     ["overview", "Overview"],
@@ -139,7 +141,7 @@ const normalizedApiProduct = (item, index) => ({
     name: getProductName(item),
     sku: item?.skucode || item?.sku || item?.productId?.sku || `ARC-${index + 1}`,
     category: getProductCategory(item),
-    material: item?.material || item?.finish || item?.color || item?.productId?.material || "Architectural finish",
+    material: item?.material || item?.finish || item?.color || item?.productId?.material ,
     image: getProductThumbnail(item),
     price: "Request info",
     createdAt: item?.createdAt || item?.productId?.createdAt || item?.updatedAt || item?.productId?.updatedAt || "",
@@ -155,28 +157,28 @@ const objectId = (value) => {
 };
 
 const deriveSolutionsFromProducts = (products, brandId) => {
-    const byThirdCategory = new Map();
+    const bySubCategory = new Map();
 
     products.forEach((product) => {
         const source = product.raw || product;
-        const thirdCategory = nestedValue(source, "subsubcategoryId");
-        const thirdCategoryId = objectId(thirdCategory);
-        if (!thirdCategoryId) return;
+        const subCategory = nestedValue(source, "subcategoryId");
+        const subCategoryId = objectId(subCategory);
+        if (!subCategoryId) return;
 
-        const existing = byThirdCategory.get(thirdCategoryId);
-        const title = typeof thirdCategory === "object" ? thirdCategory.name : product.category;
-        const categoryImage = typeof thirdCategory === "object" ? getImageUrl(thirdCategory.image, "category") : null;
+        const existing = bySubCategory.get(subCategoryId);
+        const title = typeof subCategory === "object" ? subCategory.name : product.category;
+        const categoryImage = typeof subCategory === "object" ? getImageUrl(subCategory.image, "category") : null;
 
-        byThirdCategory.set(thirdCategoryId, {
-            id: thirdCategoryId,
+        bySubCategory.set(subCategoryId, {
+            id: subCategoryId,
             title: title || product.category || "Category",
             image: categoryImage || existing?.image || product.image,
             count: (existing?.count || 0) + 1,
-            href: `/productlist?category=${thirdCategoryId}${brandId ? `&brands=${brandId}` : ""}`,
+            href: `/productlist?category=${subCategoryId}${brandId ? `&brands=${brandId}` : ""}`,
         });
     });
 
-    return Array.from(byThirdCategory.values());
+    return Array.from(bySubCategory.values());
 };
 
 const getVideoEmbedUrl = (item) => {
@@ -301,14 +303,14 @@ export default function BespokeBrandShowcase() {
                 <PartnerSection items={template.partners} brandName={template.hero.name} setModal={setModal} />
                 <ReviewSection items={template.reviews} brandName={template.hero.name} />
             </Container>
-            
+
             <ContactSection template={template} />
 
             <AnimatePresence>
-                {modal && <DetailModal key="modal" modal={modal} onClose={() => setModal(null)} />}
+                {modal && <DetailModal key="detail-modal" modal={modal} onClose={() => setModal(null)} />}
                 {showTopBtn && (
                     <motion.button
-                        key="top-btn"
+                        key="scroll-top-btn"
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
@@ -325,14 +327,38 @@ export default function BespokeBrandShowcase() {
 
 function buildBrandPayload(brand, apiProducts = []) {
     const bespoke = brand?.bespokePage || {};
+    const allNormalizedProducts = apiProducts.map(normalizedApiProduct);
     const selectedProducts = (bespoke.selectedProductIds || [])
         .filter((item) => item && typeof item === "object")
         .map(normalizedApiProduct);
-    const latestProducts = apiProducts
-        .map(normalizedApiProduct)
-        .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0))
-        .slice(0, 12);
-    const mergedProducts = selectedProducts.length ? selectedProducts : latestProducts;
+        
+    // Diverse selection by category up to 12 products
+    const selectedIds = new Set(selectedProducts.map(p => p.id));
+    const result = [...selectedProducts];
+    
+    const remainingProducts = allNormalizedProducts.filter(p => !selectedIds.has(p.id));
+    remainingProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+    const byCategory = new Map();
+    remainingProducts.forEach(p => {
+        const cat = p.category || "Uncategorized";
+        if (!byCategory.has(cat)) byCategory.set(cat, []);
+        byCategory.get(cat).push(p);
+    });
+
+    const keys = Array.from(byCategory.keys());
+    let i = 0;
+    while (result.length < 12 && keys.length > 0) {
+        const key = keys[i % keys.length];
+        const arr = byCategory.get(key);
+        if (arr.length > 0) {
+            result.push(arr.shift());
+            i++;
+        } else {
+            keys.splice(i % keys.length, 1);
+        }
+    }
+    const mergedProducts = result;
     const heroImage = resolveUrl(bespoke.heroImage, "brands") || resolveUrl(brand?.banner || brand?.coverImage, "brand") || defaultHeroImage;
     const galleryMedia = [...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])]
         .filter(Boolean)
@@ -357,12 +383,12 @@ function buildBrandPayload(brand, apiProducts = []) {
             body: bespoke.bio || brand?.description || "The history begins with craftsmen specializing in the processing of premium materials for furniture. Within a few years, production expanded with mirrors, light fixtures and accessories. The success achieved necessitates the expansion of the company.",
             extended: "",
             stats: [
-                { label: "Products", value: String(mergedProducts.length) },
+                { label: "Products", value: String(allNormalizedProducts.length) },
                 { label: "Retailers", value: String((bespoke.selectedRetailerIds || []).length) },
                 { label: "Contractors", value: String((bespoke.selectedContractorIds || []).length) },
             ],
         },
-        solutions: deriveSolutionsFromProducts(mergedProducts, brand?._id || brand?.id),
+        solutions: deriveSolutionsFromProducts(allNormalizedProducts, brand?._id || brand?.id),
         collections: normalizeCollections(bespoke.collections),
         products: mergedProducts,
         catalogs: normalizeMediaRows(bespoke.catalogs),
@@ -433,15 +459,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
 
     return (
         <section className="relative w-full">
-            <div className="w-full bg-white z-20 relative">
-                <Container className="py-3">
-                    <div className="flex items-center gap-2 text-[12px] font-medium text-gray-500">
-                        <Link href="/bespoke" className="hover:text-black transition-colors">Brands</Link>
-                        <ChevronRight className="h-3 w-3" />
-                        <span className="text-black font-semibold">{template.hero.name}</span>
-                    </div>
-                </Container>
-            </div>
+
 
             <div className="relative h-[250px] sm:h-[350px] lg:h-[450px] w-full bg-[#f4f4f4]">
                 {template.hero.bannerType === "video" ? (
@@ -452,27 +470,30 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
             </div>
 
             <Container>
-                <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between relative -mt-16 sm:-mt-20 z-10 pb-6 border-b border-gray-200">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-end gap-6 w-full">
-                        <div className="relative h-28 w-28 sm:h-36 sm:w-36 bg-white border border-gray-200 shadow-sm flex items-center justify-center p-3 rounded-md overflow-hidden shrink-0">
+                <div className="relative z-20 pb-8 border-b border-gray-200">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-end gap-8 w-full">
+                        {/* Logo with negative margin overlap */}
+                        <div className="relative -mt-16 sm:-mt-24 h-32 w-32 sm:h-44 sm:w-44 bg-white border border-gray-200 shadow-xl flex items-center justify-center p-3 rounded-3xl overflow-hidden shrink-0">
                             {template.hero.logo ? (
-                                <Image src={template.hero.logo} alt="Logo" fill unoptimized className="object-contain p-4" />
+                                <Image src={template.hero.logo} alt="Logo" fill unoptimized className="object-contain p-6" />
                             ) : (
-                                <span className="font-bold text-3xl tracking-tighter text-gray-400">{template.hero.name.charAt(0)}</span>
+                                <span className="font-bold text-4xl tracking-tighter text-gray-400">{template.hero.name.charAt(0)}</span>
                             )}
                         </div>
-                        <div className="flex-1 pb-2">
-                            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">{template.hero.name}</h1>
-                            <p className="mt-1 flex items-center gap-1 text-[11px] uppercase tracking-wider text-gray-500 font-semibold"><MapPin className="h-3 w-3" /> {template.hero.location}</p>
+
+                        {/* Name and Location with clear spacing */}
+                        <div className="flex-1 pt-4 sm:pt-0">
+                            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-700">{template.hero.name}</h1>
+                            <p className="mt-1 flex items-center gap-2 text-[13px]  text-gray-500 font-semibold"><MapPin className="h-4 w-4 text-[var(--brand-color)]" /> {template.hero.location}</p>
                         </div>
                         <div className="flex items-center gap-2 pb-2 mt-4 sm:mt-0 w-full sm:w-auto">
-                            <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="flex h-10 items-center justify-center gap-2 bg-[var(--brand-color)] hover:opacity-90 text-white px-5 rounded-[4px] text-[11px] font-bold uppercase tracking-widest transition-all w-full sm:w-auto">
+                            <button onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })} className="flex h-10 items-center justify-center gap-2 bg-[var(--brand-color)] hover:opacity-90 text-white px-5 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-all w-full sm:w-auto">
                                 <Send className="h-3 w-3" /> Contact
                             </button>
-                            <a href={template.hero.website} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-center gap-2 border border-gray-300 bg-white hover:bg-gray-50 px-4 rounded-[4px] text-[11px] font-bold uppercase tracking-widest transition-colors">
+                            <a href={template.hero.website} target="_blank" rel="noopener noreferrer" className="flex h-10 items-center justify-center gap-2 border border-gray-300 bg-white hover:bg-gray-50 px-4 rounded-lg text-[11px] font-bold uppercase tracking-widest transition-colors">
                                 <ExternalLink className="h-3 w-3" /> Website
                             </a>
-                            <button onClick={shareBrand} className="flex h-10 w-10 items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 rounded-[4px] transition-colors">
+                            <button onClick={shareBrand} className="flex h-10 w-10 items-center justify-center border border-gray-300 bg-white hover:bg-gray-50 rounded-lg transition-colors">
                                 <Share2 className="h-4 w-4 text-gray-600" />
                             </button>
                         </div>
@@ -485,7 +506,7 @@ function HeroSection({ template, savedBrand, setSavedBrand, setModal }) {
 
 function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
     return (
-        <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <nav className=" bg-white/95 backdrop-blur-md border-b border-gray-200">
             <Container className="flex flex-col sm:flex-row justify-between">
                 <div className="flex overflow-x-auto no-scrollbar sm:gap-6 gap-4">
                     {tabsLeft.map(([key, label]) => (
@@ -495,14 +516,14 @@ function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
                                 setActiveTab(key);
                                 document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" });
                             }}
-                            className={`relative shrink-0 py-4 text-[12px] font-bold tracking-wide transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
+                            className={`relative shrink-0 py-4 text-[14px] font-semibold tracking-wide transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
                             {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--brand-color)]" />}
                         </button>
                     ))}
                 </div>
-                <div className="hidden sm:flex overflow-x-auto no-scrollbar gap-6">
+                <div className="hidden sm:flex overflow-x-auto no-scrollbar gap-8">
                     {tabsRight.map(([key, label]) => (
                         <button
                             key={key}
@@ -510,7 +531,7 @@ function StickyTabs({ activeTab, setActiveTab, tabsLeft, tabsRight }) {
                                 setActiveTab(key);
                                 document.getElementById(key)?.scrollIntoView({ behavior: "smooth", block: "start" });
                             }}
-                            className={`relative shrink-0 py-4 text-[11px] font-bold tracking-wide uppercase transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
+                            className={`relative shrink-0 py-4 text-[14px] font-semibold tracking-wide transition-colors ${activeTab === key ? "text-black" : "text-gray-500 hover:text-black"}`}
                         >
                             {label}
                             {activeTab === key && <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--brand-color)]" />}
@@ -532,8 +553,8 @@ function OverviewSection({ template }) {
                 <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800">
                     {template.overview.body}
                     {hasExtended && !open && (
-                        <button onClick={() => setOpen(true)} className="ml-2 font-bold text-black hover:underline">
-                            ... more
+                        <button onClick={() => setOpen(true)} className="ml-2 font-bold text-[var(--brand-color)] hover:opacity-80 uppercase tracking-widest text-[11px]">
+                            ... read more
                         </button>
                     )}
                 </p>
@@ -542,8 +563,8 @@ function OverviewSection({ template }) {
                         <p className="text-[13px] sm:text-[14px] leading-relaxed text-gray-800">
                             {template.overview.extended}
                         </p>
-                        <button onClick={() => setOpen(false)} className="mt-2 text-[12px] font-bold text-gray-500 hover:text-black uppercase tracking-wider">
-                            Show less
+                        <button onClick={() => setOpen(false)} className="mt-4 text-[11px] font-bold text-[var(--brand-color)] hover:opacity-80 uppercase tracking-widest flex items-center gap-1">
+                            <ChevronUp className="h-3 w-3" /> Show less
                         </button>
                     </motion.div>
                 )}
@@ -558,15 +579,13 @@ function SolutionsSection({ items, brandName }) {
         <Section id="solutions" title={`Solutions ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
-                    <Link key={item.id} href={item.href} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
+                    <Link key={item.id} href={item.href} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden text-center hover:shadow-md hover:border-gray-300 transition-all">
                         <div className="relative h-[190px] w-full bg-[#f4f4f4] overflow-hidden">
-                            {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover" />}
+                            {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />}
                         </div>
-                        <div className="flex items-center justify-center h-[90px] px-4">
-                            <div>
-                                <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
-                                <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">{item.count} products</p>
-                            </div>
+                        <div className="flex flex-col items-center justify-center flex-1 px-4">
+                            <p className="text-[13px] font-bold text-gray-800 uppercase tracking-wide">{item.title}</p>
+                            <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-500">{item.count} products</p>
                         </div>
                     </Link>
                 ))}
@@ -577,17 +596,17 @@ function SolutionsSection({ items, brandName }) {
 
 function ProjectShowcaseSection({ items, brandName, setModal }) {
     if (!items || items.length === 0) return null;
-    
+
     return (
         <Section id="projects" title={`Featured Projects`}>
             <HorizontalRail>
                 {items.map((project, idx) => (
-                    <button key={project.id || idx} onClick={() => setModal({ type: "project", ...project })} className="group block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-black rounded-sm relative border border-gray-200 hover:shadow-md transition-shadow text-left">
+                    <button key={project.id || idx} onClick={() => setModal({ type: "project", ...project })} className="group block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-black rounded-lg relative shadow-sm hover:shadow-lg transition-all text-left">
                         {project.mainImage && <Image src={project.mainImage} alt={project.title || "Project"} fill unoptimized loading="lazy" className="object-cover opacity-80 group-hover:opacity-100 transition-all group-hover:scale-105 duration-700" />}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                            <h3 className="text-xl font-serif font-medium mb-2">{project.title || "Featured Project"}</h3>
-                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[var(--brand-color)]">
+                            <h3 className="text-xl font-serif font-medium mb-3">{project.title || "Featured Project"}</h3>
+                            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-white">
                                 <span>View Details</span> <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </div>
                         </div>
@@ -604,15 +623,13 @@ function CollectionsSection({ items, brandName, setModal }) {
         <Section id="collections" title={`Collections ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
-                    <button key={item.id} onClick={() => setModal({ type: "collection", ...item })} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-sm overflow-hidden text-center hover:border-gray-400 transition-colors">
-                        <div className="relative h-[190px] w-full bg-[#f9f9f9] overflow-hidden p-2">
-                            {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover" />}
+                    <button key={item.id} onClick={() => setModal({ type: "collection", ...item })} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden text-center hover:shadow-md hover:border-gray-300 transition-all">
+                        <div className="relative h-[190px] w-full bg-[#f9f9f9] overflow-hidden">
+                            {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />}
                         </div>
-                        <div className="flex items-center justify-center h-[90px] px-4">
-                            <div>
-                                <p className="text-[13px] font-semibold text-gray-800">{item.title}</p>
-                                {item.products?.length > 0 && <p className="mt-1 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">{item.products.length} products</p>}
-                            </div>
+                        <div className="flex flex-col items-center justify-center flex-1 px-4">
+                            <p className="text-[13px] font-bold text-gray-800 uppercase tracking-wide">{item.title}</p>
+                            {item.products?.length > 0 && <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-500">{item.products.length} products</p>}
                         </div>
                     </button>
                 ))}
@@ -626,22 +643,22 @@ function ProductsSection({ products, brandName, brandId, productsLoading, setMod
     return (
         <Section id="products" title={`Products ${brandName}`} action="VIEW ALL PRODUCTS" actionHref={allProductsHref}>
             {productsLoading ? (
-                <div className="flex gap-4 overflow-x-hidden">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-[360px] w-[280px] animate-pulse bg-gray-100 rounded-sm" />)}</div>
+                <div className="flex gap-4 overflow-x-hidden">{Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-[360px] w-[280px] animate-pulse bg-gray-100 rounded-lg" />)}</div>
             ) : products.length === 0 ? (
                 <EmptyNote title="No products found" />
             ) : (
                 <HorizontalRail>
-                    {products.map((item) => (
-                        <div key={item.id} className="group relative flex flex-col w-[280px] shrink-0">
-                            <div className="relative h-[280px] w-full bg-[#f2f2f2] rounded-sm overflow-hidden flex items-center justify-center p-6 cursor-pointer" onClick={() => setModal({ type: "product", ...item })}>
-                                <Image src={item.image} alt={item.name} fill unoptimized className="object-cover mix-blend-multiply" />
-                                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {products.slice(0, 12).map((item,idx) => (
+                        <div key={`${idx}-${item.id}`} className="group relative flex flex-col w-[280px] shrink-0 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all overflow-hidden">
+                            <div className="relative h-[250px] w-full bg-[#f2f2f2] flex items-center justify-center cursor-pointer" onClick={() => setModal({ type: "product", ...item })}>
+                                <Image src={item.image} alt={item.name} fill unoptimized className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
                             </div>
-                            <div className="pt-4 pb-2">
-                                <p className="text-[11px] font-bold text-gray-900 mb-1">{brandName}</p>
-                                <h3 className="text-[13px] text-gray-700 leading-snug line-clamp-2 min-h-[38px]">{item.name} - {item.material} {item.category}</h3>
-                                <button onClick={() => setModal({ type: "inquiry", ...item })} className="mt-3 text-[12px] font-semibold text-[#e13c3c] hover:underline">
-                                    Request info
+                            <div className="flex flex-col flex-1 p-5">
+                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{brandName}</p>
+                                <h3 className="text-[14px] font-medium text-gray-900 leading-snug line-clamp-2 py-1 ">{item.name}</h3>
+                                <p className="text-[12px] text-gray-500 mb-4 capitalize">{item.material} {item.category}</p>
+                                <button onClick={() => setModal({ type: "inquiry", ...item })} className="mt-auto flex h-10 w-full items-center justify-center gap-2 bg-[var(--brand-color)] hover:bg-black text-white rounded-lg text-[11px] font-bold uppercase tracking-widest transition-colors">
+                                    Request Info <ArrowRight className="h-3 w-3" />
                                 </button>
                             </div>
                         </div>
@@ -658,14 +675,14 @@ function CatalogSection({ items, brandName, setModal }) {
         <Section id="catalogs" title={`Catalogs ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
-                    <button key={item.id} onClick={() => setModal({ type: "catalog", ...item })} className="group relative w-[220px] shrink-0 text-left">
-                        <div className="relative h-[310px] w-full bg-black rounded-sm shadow-md overflow-hidden border border-gray-200">
-                            {item.cover && <Image src={item.cover} alt={item.title} fill unoptimized className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />}
-                            <div className="absolute top-4 right-0 bg-[#f05050] text-white px-3 py-1 text-[10px] font-bold uppercase rounded-l-sm shadow-sm">PDF</div>
+                    <button key={item.id} onClick={() => setModal({ type: "catalog", ...item })} className="group relative w-[220px] shrink-0 text-left bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md hover:border-gray-300 transition-all">
+                        <div className="relative h-[270px] w-full bg-gray-100 rounded-[2px] overflow-hidden">
+                            {item.cover && <Image src={item.cover} alt={item.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />}
+                            <div className="absolute top-2 right-2 bg-black text-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded-[2px]">PDF</div>
                         </div>
-                        <div className="mt-4">
-                            <p className="text-[12px] font-medium text-gray-800 line-clamp-2">{item.title}</p>
-                            <p className="mt-1 text-[11px] text-gray-500">{item.year || "Catalog"} ({item.pages || "Multiple"} pages)</p>
+                        <div className="mt-4 px-1">
+                            <p className="text-[13px] font-bold text-gray-900 line-clamp-2">{item.title}</p>
+                            <p className="mt-1 text-[11px] text-gray-500 uppercase tracking-widest font-semibold">{item.year || "Catalog"} • {item.pages || "Multiple"} Pgs</p>
                         </div>
                     </button>
                 ))}
@@ -704,9 +721,9 @@ function VideoSection({ items, brandName, setModal }) {
         <Section id="videos" title={`Video ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
-                    <button key={item.id} onClick={() => setModal({ type: "video", ...item })} className="group flex flex-col w-[300px] shrink-0 border border-gray-200 rounded-sm overflow-hidden bg-white text-left">
+                    <button key={item.id} onClick={() => setModal({ type: "video", ...item })} className="group flex flex-col w-[300px] shrink-0 border border-gray-200 rounded-lg overflow-hidden bg-white text-left hover:shadow-md transition-all">
                         <div className="relative h-[170px] w-full bg-black overflow-hidden">
-                            {item.poster && <Image src={item.poster} alt={item.title} fill unoptimized className="object-cover opacity-80" />}
+                            {item.poster && <Image src={item.poster} alt={item.title} fill unoptimized className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />}
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white text-white bg-black/30 backdrop-blur-sm group-hover:scale-110 transition-transform">
                                     <Play className="h-5 w-5 fill-current ml-1" />
@@ -714,7 +731,7 @@ function VideoSection({ items, brandName, setModal }) {
                             </div>
                         </div>
                         <div className="p-4 h-[90px]">
-                            <p className="text-[11px] font-medium leading-relaxed text-gray-600 line-clamp-3">{item.title}</p>
+                            <p className="text-[13px] font-medium leading-relaxed text-gray-800 line-clamp-2">{item.title}</p>
                         </div>
                     </button>
                 ))}
@@ -730,8 +747,8 @@ function GallerySection({ items, brandName, setModal }) {
         <Section id="gallery" title={`Gallery ${brandName}`}>
             <HorizontalRail>
                 {items.map((item) => (
-                    <button key={item.id} onClick={() => setModal({ type: "image", ...item })} className="block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-gray-100 rounded-sm relative border border-gray-200 hover:shadow-md transition-shadow group">
-                        <Image src={item.image} alt={item.category || "Gallery"} fill unoptimized loading="lazy" className="object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
+                    <button key={item.id} onClick={() => setModal({ type: "image", ...item })} className="block w-[320px] sm:w-[500px] h-[240px] sm:h-[350px] shrink-0 overflow-hidden bg-gray-100 rounded-lg relative border border-gray-200 hover:shadow-md transition-all group">
+                        <Image src={item.image} alt={item.category || "Gallery"} fill unoptimized loading="lazy" className="object-cover group-hover:scale-105 transition-transform duration-500" />
                     </button>
                 ))}
             </HorizontalRail>
@@ -745,18 +762,18 @@ function PartnerSection({ items, brandName, setModal }) {
         <Section id="retailers" title={`Retailers ${brandName}`}>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
-                    <div key={item.id} className="border border-gray-200 rounded-sm p-4 flex gap-4 bg-white hover:border-gray-400 transition-colors">
-                        <div className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-sm shrink-0 overflow-hidden">
-                            <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-1" />
+                    <div key={item.id} className="border border-gray-200 rounded-lg p-5 flex gap-4 bg-white hover:border-gray-300 hover:shadow-md transition-all">
+                        <div className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-lg shrink-0 overflow-hidden">
+                            <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-2" />
                         </div>
                         <div className="flex-1 min-w-0">
-                            <h3 className="text-[13px] font-bold text-gray-900 truncate">{item.name}</h3>
+                            <h3 className="text-[14px] font-bold text-gray-900 truncate">{item.name}</h3>
                             <p className="text-[12px] text-gray-500 mt-1">{item.location}</p>
-                            <div className="flex items-center gap-2 mt-2">
-                                <span className="text-[10px] uppercase font-bold text-gray-400">{item.category}</span>
-                                {item.verified && <ShieldCheck className="h-3 w-3 text-green-600" />}
+                            <div className="flex items-center gap-2 mt-2 mb-3">
+                                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest">{item.category}</span>
+                                {item.verified && <ShieldCheck className="h-3.5 w-3.5 text-green-600" />}
                             </div>
-                            <button onClick={() => setModal({ type: "partner", ...item })} className="mt-3 text-[11px] font-bold text-[var(--brand-color)] uppercase hover:opacity-80">Contact</button>
+                            <button onClick={() => setModal({ type: "partner", ...item })} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors">Contact Partner <ArrowRight className="h-3 w-3" /></button>
                         </div>
                     </div>
                 ))}
@@ -790,61 +807,131 @@ function ReviewSection({ items, brandName }) {
 }
 
 function ContactSection({ template }) {
+    const [loading, setLoading] = useState(false);
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        phone: "",
+        location: "",
+        query: ""
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            await brandService.createBrandQuery(template.hero.brandId, formData);
+            toast.success("Query submitted successfully! We will contact you soon.");
+            setFormData({ name: "", email: "", phone: "", location: "", query: "" });
+        } catch (error) {
+            console.error("Query submission failed:", error);
+            toast.error(error.response?.data?.message || "Failed to submit query. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
     const socials = Array.isArray(template.contact.socials) ? template.contact.socials.filter(Boolean).map(parseSocialLink) : [];
 
     return (
-        <section id="contact" className="w-full bg-black text-center text-white border-t border-[#222] relative overflow-hidden py-24">
-            {/* Background Accent Glow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-32 bg-[var(--brand-color)] blur-[100px] opacity-20 pointer-events-none" />
-
-            <div className="mx-auto max-w-4xl relative z-10 px-4 sm:px-6 lg:px-8">
-                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/50 relative z-10">Brand Contact</p>
-                <h2 className="mt-3 text-3xl font-serif text-white relative z-10">Contact {template.hero.name}</h2>
-                <p className="mt-4 mx-auto max-w-md text-sm leading-relaxed text-white/60 relative z-10">For inquiries, catalogs, retailer support, and customized project solutions.</p>
-
-                <div className="mt-12 grid gap-4 max-w-lg mx-auto text-left relative z-10">
-                    <ContactInfoRow icon={<Mail className="h-4 w-4" />} label="Email" value={template.contact.email} href={`mailto:${template.contact.email}`} />
-                    {template.contact.phone && <ContactInfoRow icon={<Phone className="h-4 w-4" />} label="Phone" value={template.contact.phone} href={`tel:${template.contact.phone}`} />}
-                    {template.contact.address && <ContactInfoRow icon={<MapPin className="h-4 w-4" />} label="Headquarters" value={template.contact.address} />}
-                </div>
-
-                {socials.length > 0 && (
-                    <div className="mt-12 pt-10 border-t border-[#222] relative z-10">
-                        <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">Social Channels</p>
-                        <div className="mt-5 flex flex-wrap justify-center gap-3">
-                            {socials.map((social) => {
-                                const Icon = socialIcons[social.key] || Globe;
-                                const className = "inline-flex h-10 items-center gap-2 rounded-md border border-[#333] bg-[#111] px-4 text-[11px] font-bold uppercase tracking-wider text-white/80 transition-all hover:border-[var(--brand-color)] hover:bg-[#1a1a1a] hover:text-white";
-                                return social.href ? (
-                                    <a key={`${social.label}-${social.href}`} href={social.href} target="_blank" rel="noopener noreferrer" className={className}>
-                                        <Icon className="h-3.5 w-3.5 text-[var(--brand-color)]" /> {social.label}
-                                    </a>
-                                ) : (
-                                    <span key={social.label} className={className}>
-                                        <Icon className="h-3.5 w-3.5 text-[var(--brand-color)]" /> {social.label}
-                                    </span>
-                                );
-                            })}
+        <section id="contact" className="w-full bg-[#fafafa] py-24 border-t border-gray-100">
+            <Container>
+                <div className="grid lg:grid-cols-2 gap-16 items-start">
+                    {/* Left Side: Form */}
+                    <div className="bg-white p-8 sm:p-12 rounded-lg shadow-sm border border-gray-200 order-2 lg:order-1">
+                        <div className="mb-8">
+                            <h2 className="text-3xl font-serif text-[#333]">Send a Query</h2>
+                            <p className="text-gray-600 mt-2">Interested in {template.hero.name}? Fill out the form below and we'll get back to you.</p>
                         </div>
+
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="grid sm:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Full Name</label>
+                                    <input required name="name" value={formData.name} onChange={handleChange} type="text" placeholder="John Doe" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Email Address</label>
+                                    <input required name="email" value={formData.email} onChange={handleChange} type="email" placeholder="john@example.com" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
+                                </div>
+                            </div>
+
+                            <div className="grid sm:grid-cols-2 gap-5">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Phone Number</label>
+                                    <input required name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="+91 00000 00000" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Location</label>
+                                    <input required name="location" value={formData.location} onChange={handleChange} type="text" placeholder="Mumbai, India" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Your Query</label>
+                                <textarea required name="query" value={formData.query} onChange={handleChange} rows="4" placeholder="How can we help you?" className="w-full p-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm resize-none"></textarea>
+                            </div>
+
+                            <button disabled={loading} type="submit" className="w-full h-12 bg-[var(--brand-color)] hover:bg-black text-white rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3">
+                                {loading ? "Sending..." : "Submit Inquiry"}
+                                {!loading && <Send className="h-3.5 w-3.5" />}
+                            </button>
+                        </form>
                     </div>
-                )}
-            </div>
+
+                    {/* Right Side: Attractive Content */}
+                    <div className="lg:sticky lg:top-32 space-y-12 order-1 lg:order-2">
+                        <div>
+                            <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-[var(--brand-color)]">Connect with Brand</p>
+                            <h2 className="mt-4 text-4xl sm:text-5xl font-serif text-[#333] leading-tight">Get in touch with {template.hero.name}</h2>
+                            <p className="mt-6 text-gray-600 leading-relaxed max-w-md text-sm sm:text-base">Our team and global partners are ready to assist you with catalogs, technical specifications, and customized project solutions.</p>
+                        </div>
+
+                        <div className="grid gap-6">
+                            <ContactDetail icon={<Mail className="h-5 w-5" />} label="Email Us" value={template.contact.email} />
+                            {template.contact.phone && <ContactDetail icon={<Phone className="h-5 w-5" />} label="Call Support" value={template.contact.phone} />}
+                            <ContactDetail icon={<MapPin className="h-5 w-5" />} label="Headquarters" value={template.contact.address} />
+                        </div>
+
+                        {socials.length > 0 && (
+                            <div className="pt-8 border-t border-gray-200">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-5">Social Channels</p>
+                                <div className="flex flex-wrap gap-3">
+                                    {socials.map((social, i) => {
+                                        const Icon = socialIcons[social.key] || Globe;
+                                        return (
+                                            <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2.5 px-5 py-2.5 bg-white border border-gray-200 rounded-full text-[11px] font-bold text-gray-700 hover:border-[var(--brand-color)] hover:text-[var(--brand-color)] hover:shadow-sm transition-all">
+                                                <Icon className="h-4 w-4 text-[var(--brand-color)]" />
+                                                {social.label}
+                                            </a>
+                                        )
+                                    })}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </Container>
         </section>
     );
 }
 
-function ContactInfoRow({ icon, label, value, href }) {
-    const content = (
-        <div className="group flex items-center gap-4 rounded-lg border border-[#222] bg-[#111] p-5 transition-all hover:border-[var(--brand-color)] hover:bg-[#1a1a1a] cursor-pointer">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#222] text-[var(--brand-color)] transition-colors group-hover:bg-[#2a2a2a]">{icon}</span>
-            <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">{label}</p>
-                <p className="mt-1 break-words text-[14px] font-medium text-white">{value || "Not provided"}</p>
+function ContactDetail({ icon, label, value }) {
+    return (
+        <div className="flex items-start gap-5 group">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white border border-gray-100 text-[var(--brand-color)] shadow-sm group-hover:scale-110 transition-transform">
+                {icon}
             </div>
-            {href && <ArrowRight className="h-4 w-4 text-white/20 transition-all group-hover:translate-x-1 group-hover:text-[var(--brand-color)]" />}
+            <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{label}</p>
+                <p className="mt-1 text-[15px] font-medium text-[#333] truncate">{value || "Available on request"}</p>
+            </div>
         </div>
     );
-    return href && value ? <a href={href} className="block">{content}</a> : content;
 }
 // ---------------- Helper Components ----------------
 
@@ -852,9 +939,9 @@ function Section({ id, title, action, actionHref, children }) {
     return (
         <section id={id} className="scroll-mt-32 pt-16">
             <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <h2 className="text-[20px] font-medium text-[#333] font-serif">{title}</h2>
+                <h2 className="text-[24px] sm:text-[28px] font-medium text-[#333] font-serif">{title}</h2>
                 {action && actionHref && (
-                    <Link href={actionHref} className="h-9 px-4 border border-gray-300 bg-white text-[10px] font-bold text-gray-600 uppercase tracking-wider rounded-[2px] hover:bg-gray-50 transition-colors flex items-center justify-center">
+                    <Link href={actionHref} className="h-10 px-5 border border-gray-200 bg-white text-[11px] font-bold text-gray-600 uppercase tracking-widest rounded-lg hover:border-[var(--brand-color)] hover:text-[var(--brand-color)] transition-colors flex items-center justify-center">
                         {action}
                     </Link>
                 )}
@@ -930,12 +1017,11 @@ function DetailModal({ modal, onClose }) {
                                         )}
                                     </div>
                                     {count > 0 && (
-                                        <div className={`grid gap-1 md:gap-2 h-auto md:h-[400px] ${
-                                            count === 1 ? 'grid-cols-1 grid-rows-1' :
+                                        <div className={`grid gap-1 md:gap-2 h-auto md:h-[400px] ${count === 1 ? 'grid-cols-1 grid-rows-1' :
                                             count === 2 ? 'grid-cols-1 grid-rows-2' :
-                                            count === 3 ? 'grid-cols-2 grid-rows-2' :
-                                            'grid-cols-2 grid-rows-2'
-                                        }`}>
+                                                count === 3 ? 'grid-cols-2 grid-rows-2' :
+                                                    'grid-cols-2 grid-rows-2'
+                                            }`}>
                                             {validGallery.map((img, i) => (
                                                 <div key={i} className={`relative w-full h-full aspect-square md:aspect-auto bg-gray-200 overflow-hidden ${count === 3 && i === 0 ? 'col-span-2' : ''}`}>
                                                     <Image src={img} alt={`Gallery ${i}`} fill unoptimized className="object-cover" />
@@ -948,8 +1034,8 @@ function DetailModal({ modal, onClose }) {
                                     <div className="inline-block bg-gray-50 border border-gray-200 px-6 py-3 rounded-sm mb-4">
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Project Value</p>
                                         <p className="text-lg font-bold text-black">
-                                            {String(modal.price).includes('₹') || String(modal.price).includes('$') 
-                                                ? modal.price 
+                                            {String(modal.price).includes('₹') || String(modal.price).includes('$')
+                                                ? modal.price
                                                 : `₹ ${modal.price}`}
                                         </p>
                                     </div>

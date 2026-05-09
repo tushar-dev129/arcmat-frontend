@@ -23,7 +23,7 @@ export default function RetailerBrandsPage() {
     const { user } = useAuthStore();
     const effectiveRetailerId = retailerId || user?._id || user?.id;
 
-    const { data: allBrandsData, isLoading: allLoading } = useGetBrands();
+    const { data: allBrandsData, isLoading: allLoading } = useGetBrands({ excludeCustomMakers: true });
     const { data: myBrandsData, isLoading: myLoading } = useGetRetailerBrands(effectiveRetailerId);
     const { data: addressesData, isLoading: addressLoading } = useGetAddresses(effectiveRetailerId);
     const updateBrands = useUpdateRetailerBrands();

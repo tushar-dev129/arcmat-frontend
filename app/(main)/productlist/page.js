@@ -36,24 +36,14 @@ export default function ProductListPage() {
     const { clearSelection } = useSelectionStore();
     const { activeProjectId, activeMoodboardId, isActiveTemplate } = useProjectStore();
 
-    const [selectedCategory, setSelectedCategory] = useState("All");
+    const initialParsed = useMemo(() => parseFiltersFromURL(searchParams), []);
+
+    const [selectedCategory, setSelectedCategory] = useState(initialParsed.category);
     const [isDrawerOpen, setDrawerOpen] = useState(false);
     const [visibleItems, setVisibleItems] = useState(15);
-    const [activeFilters, setActiveFilters] = useState({
-        brands: [],
-        colors: [],
-        cities: [],
-        availability: [],
-        attributes: {}, // Dynamic attributes
-        priceRange: [0, 500000],
-        toggles: {
-            commercial: false,
-            residential: false,
-            allColorways: false
-        }
-    });
+    const [activeFilters, setActiveFilters] = useState(initialParsed.filters);
 
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);
 

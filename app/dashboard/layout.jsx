@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function DashboardLayout({ children }) {
   return (
-    <RoleGuard allowedRoles={['brand', 'professional', 'customer', 'architect', 'admin', 'retailer', 'contractor']}>
+    <RoleGuard allowedRoles={['brand', 'custom_maker', 'professional', 'customer', 'architect', 'admin', 'retailer', 'contractor']}>
       <div className="flex flex-col min-h-screen bg-white">
         {/* Header: Explicitly set variant to 'dashboard' */}
         <Header variant="dashboard" />

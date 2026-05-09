@@ -255,6 +255,7 @@ export default function MarketplaceProfilePage() {
                     data: formData 
                 });
                 toast.success("Profile updated successfully!");
+                await refetchProfile();
                 setIsEditing(false);
             } else {
                 // Create
@@ -264,8 +265,10 @@ export default function MarketplaceProfilePage() {
                     providerType: "contractor"
                 });
                 toast.success("Profile created successfully!");
-                await refetchProfile();
-                setIsEditing(false);
+                const { data: newData } = await refetchProfile();
+                if (newData) {
+                    setIsEditing(false);
+                }
             }
         } catch (error) {
             toast.error(error.message || "Something went wrong");

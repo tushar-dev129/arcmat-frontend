@@ -448,3 +448,11 @@ html {
 .stagger-5 {
   animation-delay: 0.5s;
 }
+
+/* Global Table Styling */
+table,
+table tr,
+table th,
+table td {
+  white-space: nowrap !important;
+}

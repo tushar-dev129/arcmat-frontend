@@ -298,12 +298,12 @@ export default function UsersPage() {
                                             <span className={clsx(
                                                 "px-2.5 py-1 text-[10px] font-bold rounded-full uppercase",
                                                 u.role === 'admin' ? "bg-purple-50 text-purple-700 border border-purple-100" :
-                                                    (u.role === 'brand' || u.role === 'vendor') ? "bg-blue-50 text-blue-700 border border-blue-100" :
+                                                    (u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') ? "bg-blue-50 text-blue-700 border border-blue-100" :
                                                         u.role === 'architect' ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
                                                             u.role === 'retailer' ? "bg-amber-50 text-amber-700 border border-amber-100" :
                                                                 "bg-gray-50 text-gray-700 border border-gray-100"
                                             )}>
-                                                {u.role === 'customer' ? 'Professional' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role)}
+                                                {u.role === 'customer' ? 'Professional' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -342,7 +342,7 @@ export default function UsersPage() {
                                                         <UserDetailTooltip user={u} index={users.indexOf(u)} total={users.length} />
                                                     </div>
                                                 </div>
-                                                {(u.role === 'brand' || u.role === 'vendor') && (
+                                                {(u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') && (
                                                     <Link
                                                         href={`/dashboard/products-list/${u._id}`}
                                                         className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-all"

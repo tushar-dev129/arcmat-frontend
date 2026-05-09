@@ -183,11 +183,11 @@ export default function DashboardPage() {
     };
 
     const { data: allProductsData, isLoading: isLoadingAll } = useGetProducts({
-        userId: user?.role === 'brand' ? user?._id : undefined,
+        userId: (user?.role === 'brand' || user?.role === 'custom_maker') ? user?._id : undefined,
         page: 1,
         limit: 50,
         status: 'all',
-        enabled: mounted && (user?.role === 'brand' || user?.role === 'admin')
+        enabled: mounted && (user?.role === 'brand' || user?.role === 'custom_maker' || user?.role === 'admin')
     });
 
     const allProducts = allProductsData?.data?.data || allProductsData?.data || [];
@@ -204,7 +204,7 @@ export default function DashboardPage() {
 
     const { data: ordersData, isLoading: isLoadingOrders } = useGetOrders({
         limit: 5,
-        enabled: mounted && (user?.role === 'brand' || user?.role === 'admin')
+        enabled: mounted && (user?.role === 'brand' || user?.role === 'custom_maker' || user?.role === 'admin')
     });
     const recentOrders = ordersData?.data?.data || ordersData?.data || [];
 
@@ -300,7 +300,7 @@ export default function DashboardPage() {
         );
     }
 
-    if (user?.role === 'brand' || user?.role === 'admin') {
+    if (user?.role === 'brand' || user?.role === 'custom_maker' || user?.role === 'admin') {
         return (
             <Container className="py-8">
                 <div className="mb-8">
@@ -321,12 +321,12 @@ export default function DashboardPage() {
                             <div className="flex-1 text-center md:text-left">
                                 <h3 className="text-lg font-bold text-amber-900">Complete Your Business Profile</h3>
                                 <p className="text-amber-800 text-sm mt-1">
-                                    To start listing products and reach more professionals, please complete your business profile. 
+                                    To start listing products and reach more professionals, please complete your business profile.
                                     <span className="font-semibold block mt-1">Missing: {missingFields.join(', ')}</span>
                                 </p>
                             </div>
-                            <Link 
-                                href="/profile" 
+                            <Link
+                                href="/profile"
                                 className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-sm hover:shadow-md whitespace-nowrap"
                             >
                                 Complete Profile
@@ -489,7 +489,7 @@ export default function DashboardPage() {
                             ) : recentProducts.length > 0 ? (
                                 recentProducts.map((product) => (
                                     <div key={product._id} className="flex items-center gap-4 p-2 hover:bg-gray-50 rounded-lg transition-colors border-b border-gray-50 last:border-0 pb-3">
-                                        <Link 
+                                        <Link
                                             href={`/dashboard/products-list/${product.createdBy?._id || product.createdBy || user?._id}/edit/${product._id}`}
                                             className="flex items-center gap-4 flex-1 min-w-0"
                                         >
@@ -577,8 +577,8 @@ export default function DashboardPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             {allProducts.filter(p => p.status === 0 || p.status === '0').length > 0 ? (
                                 allProducts.filter(p => p.status === 0 || p.status === '0').slice(0, 6).map((product) => (
-                                    <Link 
-                                        key={product._id} 
+                                    <Link
+                                        key={product._id}
                                         href={`/dashboard/products-list/${product.createdBy?._id || product.createdBy || ''}/edit/${product._id}`}
                                         className="flex items-center gap-3 p-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition-colors group"
                                     >
@@ -618,7 +618,7 @@ export default function DashboardPage() {
                         <span className="text-xs font-normal text-gray-400">(Low stock prioritised)</span>
                     </h2>
                     <div className="overflow-x-auto">
-                        <table className="w-full text-left">
+                        <table className="w-full text-left whitespace-nowrap">
                             <thead className="bg-gray-50 text-gray-500 text-xs uppercase font-medium">
                                 <tr>
                                     <th className="px-4 py-3 rounded-l-lg border-b-0">Product & Variant</th>
@@ -632,7 +632,7 @@ export default function DashboardPage() {
                                     lowStockVariants.map((variant, idx) => (
                                         <tr key={idx} className="hover:bg-gray-50 transition-colors">
                                             <td className="px-4 py-3">
-                                                <Link 
+                                                <Link
                                                     href={`/dashboard/products-list/${user?._id}/edit/${variant?.productId}`}
                                                     className="flex flex-col group"
                                                 >
@@ -644,8 +644,8 @@ export default function DashboardPage() {
                                             <td className="px-4 py-3">
                                                 <span className={clsx(
                                                     "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
-                                                    (variant.stock === undefined || variant.stock === null || variant.stock === '') 
-                                                        ? "bg-blue-50 text-blue-700 border border-blue-100" 
+                                                    (variant.stock === undefined || variant.stock === null || variant.stock === '')
+                                                        ? "bg-blue-50 text-blue-700 border border-blue-100"
                                                         : (variant.stock <= 5 ? "bg-red-100 text-red-800" : (variant.stock <= 20 ? "bg-yellow-100 text-yellow-800" : "bg-green-100 text-green-800"))
                                                 )}>
                                                     {(variant.stock === undefined || variant.stock === null || variant.stock === '') ? 'Available' : `${variant.stock} in stock`}

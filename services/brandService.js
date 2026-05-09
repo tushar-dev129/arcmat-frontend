@@ -56,4 +56,12 @@ export const brandService = {
         const response = await api.delete(`/brand/${id}`);
         return response.data;
     },
+    createBrandQuery: async (brandId, queryData) => {
+        const response = await api.post(`/brand/${brandId}/queries`, queryData);
+        return response.data;
+    },
+    getBrandLeads: async (params = {}) => {
+        const response = await api.get('/brand/queries/all', { params });
+        return response.data;
+    },
 };

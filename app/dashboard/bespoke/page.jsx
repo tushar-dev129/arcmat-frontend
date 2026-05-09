@@ -92,7 +92,8 @@ const NAV_LINKS = [
 
 export default function BespokeEditorPage() {
     const { user, loading } = useAuth();
-    const brandLookupId = user?.role === "brand" ? user?._id : user?.selectedBrands?.[0]?._id;
+    const isCustomMaker = user?.role === "custom_maker";
+    const brandLookupId = (user?.role === "brand" || isCustomMaker) ? user?._id : user?.selectedBrands?.[0]?._id;
     const { data: brandData, isLoading: brandLoading } = useGetBrandById(brandLookupId);
     const brand = brandData?.data;
     const brandId = brand?._id;
@@ -145,7 +146,7 @@ export default function BespokeEditorPage() {
         setBio(bespoke.bio || brand.description || "");
         setIsPublished(bespoke.isPublished !== false);
         setSelectedProducts((bespoke.selectedProductIds || []).map(idOf).filter(Boolean));
-        setSelectedRetailers((bespoke.selectedRetailerIds || []).map(idOf).filter(Boolean));
+        setSelectedRetailers(isCustomMaker ? [] : (bespoke.selectedRetailerIds || []).map(idOf).filter(Boolean));
         setSelectedContractors((bespoke.selectedContractorIds || []).map(idOf).filter(Boolean));
         setReviews((bespoke.reviews?.length ? bespoke.reviews : [{ name: "", role: "", rating: 5, comment: "" }]));
         setExistingGalleryMedia([...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])].slice(0, 8));
@@ -192,21 +193,19 @@ export default function BespokeEditorPage() {
 
     const contractorOptions = useMemo(() => {
         const optionMap = new Map();
-        (options.contractors || []).forEach((contractor) => {
-            const contractorId = idOf(contractor);
-            if (contractorId) optionMap.set(contractorId, contractor);
-        });
         (bespoke.selectedContractorIds || []).forEach((contractor) => {
             const contractorId = idOf(contractor);
             if (contractorId && typeof contractor === "object") optionMap.set(contractorId, contractor);
         });
         contractorRequests.forEach((request) => {
-            const contractor = request.contractorId;
-            const contractorId = idOf(contractor);
-            if (contractorId && typeof contractor === "object") optionMap.set(contractorId, contractor);
+            if (request.status === "approved") {
+                const contractor = request.contractorId;
+                const contractorId = idOf(contractor);
+                if (contractorId && typeof contractor === "object") optionMap.set(contractorId, contractor);
+            }
         });
         return Array.from(optionMap.values());
-    }, [options.contractors, bespoke.selectedContractorIds, contractorRequests]);
+    }, [bespoke.selectedContractorIds, contractorRequests]);
 
     const savePage = async () => {
         if (!brandId) return;
@@ -216,7 +215,7 @@ export default function BespokeEditorPage() {
         formData.append("bespokeBio", bio);
         formData.append("bespokeIsPublished", String(isPublished));
         formData.append("bespokeSelectedProductIds", JSON.stringify(selectedProducts));
-        formData.append("bespokeSelectedRetailerIds", JSON.stringify(selectedRetailers));
+        formData.append("bespokeSelectedRetailerIds", JSON.stringify(isCustomMaker ? [] : selectedRetailers));
         formData.append("bespokeSelectedContractorIds", JSON.stringify(selectedContractors));
         formData.append("bespokeReviews", JSON.stringify(reviews));
         formData.append("bespokeExistingGalleryMedia", JSON.stringify(existingGalleryMedia));
@@ -307,20 +306,20 @@ export default function BespokeEditorPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#fafafa] pb-24 text-gray-900 font-sans">
+        <div className="min-h-screen bg-[hsl(30,20%,98%)] pb-24 text-gray-900 font-sans">
             {/* Sticky Header */}
-            <div className="sticky top-[64px] z-40 bg-white border-b border-gray-200 shadow-sm">
+            <div className="sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-[hsl(30,15%,90%)] shadow-sm">
                 <Container>
-                    <div className="flex flex-col sm:flex-row items-center justify-between py-4 gap-4">
+                    <div className="flex flex-col sm:flex-row items-center justify-between py-5 gap-4">
                         <div className="flex flex-col">
-                            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-black">Bespoke Editor</h1>
-                            <p className="text-xs sm:text-sm font-medium text-gray-500 mt-0.5">Managing <span className="font-bold text-black">{brand.name}</span></p>
+                            <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-[#111827]">Bespoke Editor</h1>
+                            <p className="text-sm sm:text-base font-medium text-[#64748b] mt-1">Managing <span className="font-semibold text-[#111827]">{brand.name}</span></p>
                         </div>
                         <div className="flex items-center gap-3 w-full sm:w-auto">
-                            <Link href={`/bespoke/${brandId}`} target="_blank" className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-bold text-gray-700 hover:border-black hover:text-black transition-colors">
+                            <Link href={`/bespoke/${brandId}`} target="_blank" className="flex-1 sm:flex-none h-12 flex items-center justify-center gap-2 rounded-2xl border border-[hsl(30,15%,90%)] bg-white px-5 text-sm font-medium text-gray-500 hover:text-black transition-colors">
                                 Preview <ArrowUpRight className="h-4 w-4" />
                             </Link>
-                            <button onClick={savePage} disabled={updateBrand.isPending} className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-md bg-black px-6 py-2 text-sm font-bold text-white hover:bg-gray-800 disabled:opacity-60 transition-colors shadow-md">
+                            <button onClick={savePage} disabled={updateBrand.isPending} className="flex-1 sm:flex-none h-12 flex items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-all shadow-lg shadow-primary/20">
                                 {updateBrand.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                                 Save Changes
                             </button>
@@ -329,54 +328,56 @@ export default function BespokeEditorPage() {
                 </Container>
             </div>
 
-            <div className="mx-auto w-full max-w-[1280px] px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12">
+            <div className="mx-auto w-full max-w-7xl  px-4 sm:px-6 lg:px-8 ">
                 <div className="flex flex-col lg:flex-row gap-10 items-start relative">
                     
                     {/* Sticky Navigation Sidebar */}
-                    <div className="hidden lg:block sticky top-[160px] w-[240px] shrink-0 self-start z-10">
-                        <nav className="flex flex-col max-h-[calc(100vh-180px)] overflow-y-auto no-scrollbar pb-10">
+                    <div className="hidden lg:block sticky top-[170px] pt-3 w-[240px] shrink-0 self-start z-10">
+                        <nav className="flex flex-col max-h-[calc(100vh-180px)] overflow-y-auto no-scrollbar">
                             <div className="space-y-1 pr-6 border-r border-gray-200 py-2">
                                 {NAV_LINKS.map((link) => (
                                     <button
                                         key={link.id}
                                         onClick={() => scrollTo(link.id)}
-                                        className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-md text-sm font-bold transition-colors ${activeSection === link.id ? "bg-black text-white shadow-md" : "text-gray-500 hover:bg-gray-100 hover:text-black"}`}
+                                        className={`w-full flex items-center gap-3 px-5 py-3 rounded-2xl text-[14px] font-medium   transition-all border-2 ${activeSection === link.id ? "bg-white border-primary text-primary shadow-sm" : "bg-transparent border-transparent text-[#64748b] hover:bg-white hover:text-[#111827]"}`}
                                     >
-                                        {link.icon}
+                                        <div className={`${activeSection === link.id ? "text-primary" : "text-[#64748b]"}`}>
+                                            {link.icon}
+                                        </div>
                                         {link.label}
                                     </button>
                                 ))}
                             </div>
                             
-                            <div className="mt-8 pr-6 space-y-4">
-                                <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 pl-4">Metrics</h3>
+                            {/* <div className="mt-8 pr-6 space-y-4">
+                                <h3 className="text-xs font-bold  tracking-widest text-gray-400 pl-4">Metrics</h3>
                                 <div className="grid grid-cols-2 gap-2 pl-4">
                                     <div className="bg-white border border-gray-200 rounded-md p-3 shadow-sm text-center">
                                         <p className="text-xl font-bold text-black">{selectedProducts.length || "Auto"}</p>
-                                        <p className="text-[10px] uppercase font-bold text-gray-400 mt-1">Products</p>
+                                        <p className="text-[14px]  font-bold text-gray-400 mt-1">Products</p>
                                     </div>
                                     <div className="bg-white border border-gray-200 rounded-md p-3 shadow-sm text-center">
                                         <p className="text-xl font-bold text-black">{activeReviewCount}</p>
-                                        <p className="text-[10px] uppercase font-bold text-gray-400 mt-1">Reviews</p>
+                                        <p className="text-[14px]  font-bold text-gray-400 mt-1">Reviews</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
                         </nav>
                     </div>
 
                     {/* Main Content Area */}
-                    <div className="flex-1 min-w-0 w-full space-y-12">
+                    <div className="flex-1 min-w-0 w-full pt-7 space-y-12">
                         
                         {/* Section 1: Story & Hero */}
                         <SectionContainer id="story" title="Story & Hero" description="The primary messaging and branding visible at the top of the showcase.">
                             <div className="flex items-center justify-between p-5 bg-gray-50 rounded-lg border border-gray-200 mb-6">
                                 <div>
-                                    <h4 className="text-sm font-bold text-black">Visibility Status</h4>
+                                    <h4 className="text-sm font-bold text-gray-600">Visibility Status</h4>
                                     <p className="text-xs text-gray-500 mt-1">When published, the bespoke page is accessible publicly.</p>
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" className="sr-only peer" checked={isPublished} onChange={(e) => setIsPublished(e.target.checked)} />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
+                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
                                 </label>
                             </div>
 
@@ -541,9 +542,11 @@ export default function BespokeEditorPage() {
 
                         {/* Section 5: Network */}
                         <div id="network" className="space-y-12">
-                            <SelectionSection title="Official Retailers" description="Highlight certified resellers to direct customer traffic." isLoading={optionsLoading} items={options.retailers || []} selectedIds={selectedRetailers} onToggle={(id) => setSelectedRetailers((c) => toggleId(c, id))} renderItem={(retailer) => (
-                                <OptionRow image={getImageUrl(retailer.profile, "userprofile")} title={retailer.retailerProfile?.companyName || retailer.name} subtitle={retailer.retailerProfile?.cityRegion || retailer.email} />
-                            )} />
+                            {!isCustomMaker && (
+                                <SelectionSection title="Official Retailers" description="Highlight certified resellers to direct customer traffic." isLoading={optionsLoading} items={options.retailers || []} selectedIds={selectedRetailers} onToggle={(id) => setSelectedRetailers((c) => toggleId(c, id))} renderItem={(retailer) => (
+                                    <OptionRow image={getImageUrl(retailer.profile, "userprofile")} title={retailer.retailerProfile?.companyName || retailer.name} subtitle={retailer.retailerProfile?.cityRegion || retailer.email} />
+                                )} />
+                            )}
 
                             <SelectionSection title="Trusted Contractors" description="Curate a list of approved makers who successfully implement your products." isLoading={optionsLoading || requestsLoading} items={contractorOptions} selectedIds={selectedContractors} onToggle={(id) => setSelectedContractors((c) => toggleId(c, id))} renderItem={(contractor) => (
                                 <OptionRow image={getImageUrl(contractor.profileImage, "contractor")} title={contractor.businessName} subtitle={`${contractor.location?.city || "India"}`} />
@@ -600,12 +603,12 @@ export default function BespokeEditorPage() {
                                                 <div className="flex items-center gap-2">
                                                     {request.status === "pending" && (
                                                         <>
-                                                            <button onClick={() => decideContractorRequest(request, "rejected")} className="px-4 py-2 text-xs font-bold text-gray-600 border border-gray-200 rounded-md hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors">Reject</button>
-                                                            <button onClick={() => decideContractorRequest(request, "approved")} className="px-4 py-2 text-xs font-bold text-white bg-black rounded-md hover:bg-gray-800 transition-colors">Approve</button>
+                                                            <button onClick={() => decideContractorRequest(request, "rejected")} className="px-5 py-2.5 text-[14px] font-medium  tracking-widest text-gray-400 border border-gray-200 rounded-xl hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all">Reject</button>
+                                                            <button onClick={() => decideContractorRequest(request, "approved")} className="px-5 py-2.5 text-[14px] font-medium  tracking-widest text-white bg-primary rounded-xl hover:opacity-90 shadow-lg shadow-primary/20 transition-all">Approve</button>
                                                         </>
                                                     )}
                                                     {request.status !== "pending" && (
-                                                        <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider bg-gray-100 text-gray-500 rounded-full">{request.status}</span>
+                                                        <span className="px-3 py-1 text-xs font-bold  tracking-wider bg-gray-100 text-gray-500 rounded-full">{request.status}</span>
                                                     )}
                                                 </div>
                                             </div>
@@ -630,11 +633,14 @@ export default function BespokeEditorPage() {
 
 const SectionContainer = ({ id, title, description, children }) => (
     <section id={id} className="scroll-mt-36">
-        <div className="mb-6">
-            <h2 className="text-xl font-bold tracking-tight text-black">{title}</h2>
-            {description && <p className="mt-1 text-sm font-medium text-gray-500">{description}</p>}
+        <div className="mb-6 flex items-start gap-4">
+            <div className="w-1 h-8 bg-primary rounded-full mt-1 shrink-0" />
+            <div>
+                <h2 className="text-xl font-bold tracking-tight text-[#111827]">{title}</h2>
+                {description && <p className="mt-1 text-sm font-medium text-[#64748b]">{description}</p>}
+            </div>
         </div>
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8">
+        <div className="bg-white rounded-[2rem] shadow-sm border border-[hsl(30,15%,90%)] p-8 sm:p-10">
             {children}
         </div>
     </section>
@@ -642,39 +648,39 @@ const SectionContainer = ({ id, title, description, children }) => (
 
 const TextInput = ({ label, value, onChange, placeholder, helper }) => (
     <label className="block w-full">
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">{label}</span>
-        <input value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full h-11 rounded-md border border-gray-300 px-4 text-sm font-medium text-black placeholder:text-gray-400 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all bg-white" />
-        {helper && <p className="mt-1.5 text-[11px] font-medium text-gray-400">{helper}</p>}
+        <span className="text-[14px] font-medium   text-gray-400 mb-2 block ml-1">{label}</span>
+        <input value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full h-12 rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 px-5 text-sm font-medium text-gray-800 placeholder:text-gray-300 outline-none focus:border-primary focus:bg-white transition-all" />
+        {helper && <p className="mt-2 text-[11px] font-medium text-gray-400 ml-1">{helper}</p>}
     </label>
 );
 
 const TextareaInput = ({ label, value, onChange, placeholder, helper }) => (
     <label className="block w-full">
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">{label}</span>
-        <textarea value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={4} className="w-full rounded-md border border-gray-300 p-4 text-sm font-medium text-black placeholder:text-gray-400 outline-none focus:border-black focus:ring-1 focus:ring-black transition-all bg-white resize-y" />
-        {helper && <p className="mt-1.5 text-[11px] font-medium text-gray-400">{helper}</p>}
+        <span className="text-[14px] font-medium   text-gray-400 mb-2 block ml-1">{label}</span>
+        <textarea value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={4} className="w-full rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 p-5 text-sm font-medium text-gray-800 placeholder:text-gray-300 outline-none focus:border-primary focus:bg-white transition-all resize-y" />
+        {helper && <p className="mt-2 text-[11px] font-medium text-gray-400 ml-1">{helper}</p>}
     </label>
 );
 
 const SocialLinksInput = ({ value, onChange }) => (
     <div>
-        <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Social Links</span>
-        <div className="grid gap-3 sm:grid-cols-3">
+        <span className="text-[14px] font-medium   text-gray-400 mb-4 block ml-1">Social Channels</span>
+        <div className="grid gap-4 sm:grid-cols-3">
             {SOCIAL_CHANNELS.map(({ key, label, icon: Icon, placeholder }) => (
                 <label key={key} className="block">
-                    <span className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-gray-500">
-                        <Icon className="h-3.5 w-3.5" /> {label}
+                    <span className="mb-2 flex items-center gap-2 text-[14px] font-medium  tracking-[0.1em] text-gray-400 ml-1">
+                        <Icon className="h-4 w-4 text-primary" /> {label}
                     </span>
                     <input
                         value={getSocialLinkValue(value, label)}
                         onChange={(event) => onChange(setSocialLinkValue(value, label, event.target.value))}
                         placeholder={placeholder}
-                        className="h-11 w-full rounded-md border border-gray-300 bg-white px-4 text-sm font-medium text-black outline-none transition-all placeholder:text-gray-400 focus:border-black focus:ring-1 focus:ring-black"
+                        className="h-12 w-full rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 px-5 text-sm font-medium text-gray-800 outline-none transition-all placeholder:text-gray-300 focus:border-primary focus:bg-white"
                     />
                 </label>
             ))}
         </div>
-        <p className="mt-1.5 text-[11px] font-medium text-gray-400">Saved as Instagram - link, LinkedIn - link, and YouTube - link for clickable public social chips.</p>
+        <p className="mt-3 text-[11px] font-medium text-gray-400 ml-1">Saved for clickable public social chips.</p>
     </div>
 );
 
@@ -682,19 +688,19 @@ const ImageInput = ({ label, currentImage, file, onChange }) => {
     const preview = file ? URL.createObjectURL(file) : getImageUrl(currentImage, "brands");
     return (
         <label className="block">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">{label}</span>
-            <div className="relative group cursor-pointer overflow-hidden rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:border-black hover:bg-gray-100 transition-colors aspect-[21/9] sm:aspect-[4/1] flex items-center justify-center">
+            <span className="text-[14px] font-medium   text-gray-400 mb-2 block ml-1">{label}</span>
+            <div className="relative group cursor-pointer overflow-hidden rounded-3xl border-2 border-dashed border-[hsl(30,15%,90%)] bg-gray-50 hover:border-primary hover:bg-white transition-all aspect-[21/9] sm:aspect-[4/1] flex items-center justify-center shadow-inner">
                 {preview ? (
                     <>
                         <Image src={preview} alt={label} fill className="object-cover opacity-90 group-hover:opacity-100 transition-opacity" unoptimized />
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <span className="text-xs font-bold text-white bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">Change Image</span>
+                            <span className="text-[14px] font-medium   text-white bg-black/50 px-6 py-3 rounded-2xl backdrop-blur-sm">Change Image</span>
                         </div>
                     </>
                 ) : (
-                    <div className="flex flex-col items-center gap-2 text-gray-400">
-                        <ImagePlus className="w-6 h-6" />
-                        <span className="text-xs font-bold">Click to upload</span>
+                    <div className="flex flex-col items-center gap-3 text-gray-300">
+                        <ImagePlus className="w-8 h-8" />
+                        <span className="text-[14px] font-medium  tracking-widest">Click to upload</span>
                     </div>
                 )}
                 <input type="file" accept="image/*" onChange={(e) => onChange(e.target.files?.[0] || null)} className="hidden" />
@@ -708,17 +714,17 @@ const CardFileInput = ({ label, accept, currentFile, currentMedia, onChange }) =
     const existingName = typeof currentMedia === "string" ? currentMedia : currentMedia?.originalname || currentMedia?.key;
     return (
         <label className="block w-full">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block flex justify-between">
+            <span className="text-[14px] font-medium   text-gray-400 mb-2 block flex justify-between ml-1">
                 {label}
                 {currentFile && <button type="button" onClick={(e) => { e.preventDefault(); onChange(null); }} className="text-red-500 hover:text-red-700">Clear</button>}
             </span>
-            <div className="relative flex items-center gap-4 p-3 rounded-md border border-gray-300 bg-white hover:border-black transition-colors cursor-pointer group">
-                <div className="h-12 w-16 bg-gray-100 rounded flex items-center justify-center shrink-0 overflow-hidden relative border border-gray-200">
-                    {preview ? <Image src={preview} alt={label} fill className="object-cover" unoptimized /> : <ImageIcon className="w-4 h-4 text-gray-400" />}
+            <div className="relative flex items-center gap-4 p-4 rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 hover:border-primary hover:bg-white transition-all cursor-pointer group shadow-sm">
+                <div className="h-14 w-20 bg-white rounded-xl flex items-center justify-center shrink-0 overflow-hidden relative border border-[hsl(30,15%,90%)]">
+                    {preview ? <Image src={preview} alt={label} fill className="object-cover" unoptimized /> : <ImageIcon className="w-5 h-5 text-gray-300" />}
                 </div>
                 <div className="min-w-0 flex-1">
-                    <p className="text-xs font-bold text-black truncate">{currentFile?.name || existingName || "No file selected"}</p>
-                    <p className="text-[10px] text-gray-500 mt-0.5">Click to browse files</p>
+                    <p className="text-[13px] font-medium text-gray-800 truncate">{currentFile?.name || existingName || "No file selected"}</p>
+                    <p className="text-[14px] text-gray-400 font-medium  tracking-wide mt-1">Browse Files</p>
                 </div>
                 <input type="file" accept={accept} onChange={(e) => onChange(e.target.files?.[0] || null)} className="hidden" />
             </div>
@@ -736,12 +742,12 @@ const GalleryInput = ({ existingMedia, newMedia, onExistingChange, onNewChange }
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h4 className="text-sm font-bold text-black">{totalCount} / 8 slots used</h4>
-                    <p className="text-xs text-gray-500 mt-0.5">High-res landscape images work best.</p>
+                    <h4 className="text-base font-medium text-gray-800">{totalCount} / 8 slots used</h4>
+                    <p className="text-sm font-medium text-gray-400 mt-1">High-res landscape images work best.</p>
                 </div>
-                <label className={`cursor-pointer flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold transition-colors ${remainingSlots > 0 ? "bg-black text-white hover:bg-gray-800 shadow-sm" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
+                <label className={`cursor-pointer h-12 flex items-center gap-2 px-6 rounded-2xl text-xs font-medium  tracking-widest transition-all ${remainingSlots > 0 ? "bg-primary text-white hover:opacity-90 shadow-lg shadow-primary/20" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}>
                     <Plus className="w-4 h-4" /> Add Media
                     <input type="file" accept="image/*,video/mp4" multiple disabled={remainingSlots === 0} onChange={(e) => addFiles(e.target.files)} className="hidden" />
                 </label>
@@ -768,16 +774,16 @@ const MediaTile = ({ url, isVideo, onRemove }) => {
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                 <button onClick={(e) => { e.preventDefault(); onRemove(); }} className="bg-red-600 text-white px-3 py-1.5 rounded-md text-xs font-bold hover:bg-red-700 shadow-sm">Remove</button>
             </div>
-            {isVideo && <span className="absolute bottom-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-bold text-white uppercase tracking-wider">Video</span>}
+            {isVideo && <span className="absolute bottom-2 left-2 bg-black/80 px-2 py-0.5 rounded text-[9px] font-bold text-white  tracking-wider">Video</span>}
         </div>
     );
 };
 
 const EditableList = ({ title, items, setItems, createItem, children }) => (
-    <div className="mt-8 border-t border-gray-200 pt-8">
-        <div className="flex items-center justify-between mb-6">
-            <h3 className="text-base font-bold text-black">{title} <span className="text-xs font-medium text-gray-400 ml-2">({items.length})</span></h3>
-            <button type="button" onClick={() => setItems((c) => [...c, createItem()])} className="flex items-center gap-1.5 text-xs font-bold text-black hover:text-gray-600 bg-gray-100 px-3 py-1.5 rounded-md transition-colors"><Plus className="w-3.5 h-3.5" /> Add New</button>
+    <div className="mt-12 border-t border-[hsl(30,15%,90%)] pt-12">
+        <div className="flex items-center justify-between mb-8">
+            <h3 className="text-lg font-medium text-gray-800">{title} <span className="text-sm font-medium text-gray-400 ml-2">({items.length})</span></h3>
+            <button type="button" onClick={() => setItems((c) => [...c, createItem()])} className="h-10 flex items-center gap-2 text-[14px] font-medium  tracking-widest text-primary hover:bg-primary/5 px-5 rounded-xl border border-primary/20 transition-all shadow-sm"><Plus className="w-3.5 h-3.5" /> Add New</button>
         </div>
         {items.length > 0 ? (
             <div className="grid gap-6">
@@ -801,21 +807,21 @@ const EditableList = ({ title, items, setItems, createItem, children }) => (
 const SelectionSection = ({ title, description, isLoading, items, selectedIds, onToggle, renderItem }) => (
     <SectionContainer id={title.toLowerCase().split(" ")[0]} title={title} description={description}>
         <div className="mb-4 flex items-center justify-end">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-black bg-gray-100 px-3 py-1 rounded-full">{selectedIds.length} currently active</span>
+            <span className="text-[11px] font-bold  tracking-wider text-black bg-gray-100 px-3 py-1 rounded-full">{selectedIds.length} currently active</span>
         </div>
         {isLoading ? (
             <div className="flex h-32 items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-black" /></div>
         ) : items.length > 0 ? (
-            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {items.map((item) => {
                     const itemId = idOf(item);
                     const selected = selectedIds.includes(itemId);
                     return (
-                        <button key={itemId} onClick={() => onToggle(itemId)} className={`group rounded-lg border p-3 text-left transition-all ${selected ? "border-black bg-gray-50 shadow-[0_0_0_1px_rgba(0,0,0,1)]" : "border-gray-200 bg-white hover:border-gray-400 hover:bg-gray-50"}`}>
+                        <button key={itemId} onClick={() => onToggle(itemId)} className={`group rounded-[2rem] border p-4 text-left transition-all ${selected ? "border-primary bg-primary/5 shadow-lg shadow-primary/5" : "border-[hsl(30,15%,90%)] bg-white hover:border-primary hover:bg-primary/5"}`}>
                             <div className="flex items-center justify-between">
                                 {renderItem(item)}
-                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center ml-2 shrink-0 ${selected ? "border-black bg-black" : "border-gray-300"}`}>
-                                    {selected && <div className="w-1.5 h-1.5 bg-white rounded-full" />}
+                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ml-2 shrink-0 ${selected ? "border-primary bg-primary" : "border-gray-200"}`}>
+                                    {selected && <div className="w-2 h-2 bg-white rounded-full" />}
                                 </div>
                             </div>
                         </button>
@@ -864,7 +870,7 @@ const FeaturedProductsSection = ({ isLoading, products, selectedIds, setSelected
                 <div className="rounded-lg border border-gray-200 bg-gray-50 p-5">
                     <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div>
-                            <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Product override</p>
+                            <p className="text-xs font-bold  tracking-wider text-gray-500">Product override</p>
                             <p className="mt-1 text-sm font-medium text-gray-500">
                                 {selectedIds.length ? `${selectedIds.length} selected. These will replace the automatic latest-products list.` : "Auto mode is active: latest 12 products will display."}
                             </p>
@@ -962,24 +968,24 @@ const ProductPicker = ({ products, selectedIds, onToggle }) => {
 
     return (
         <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-            <div className="mb-3 flex items-center justify-between gap-3">
+            <div className="mb-4 flex items-center justify-between gap-3">
                 <div>
-                    <p className="text-xs font-bold uppercase tracking-wider text-gray-500">Collection Products</p>
+                    <p className="text-[14px] font-medium   text-gray-400">Collection Products</p>
                     <p className="mt-1 text-xs font-medium text-gray-400">Search and add products already uploaded by this brand.</p>
                 </div>
-                <span className="shrink-0 rounded-full bg-white px-3 py-1 text-[11px] font-bold text-black shadow-sm">
+                <span className="shrink-0 rounded-full bg-white px-4 py-1.5 text-[11px] font-medium text-primary shadow-sm border border-primary/10">
                     {selectedIds.length} selected
                 </span>
             </div>
 
             {selectedProducts.length > 0 && (
-                <div className="mb-3 flex flex-wrap gap-2">
+                <div className="mb-4 flex flex-wrap gap-2">
                     {selectedProducts.map((product) => (
                         <button
                             key={idOf(product)}
                             type="button"
                             onClick={() => onToggle(idOf(product))}
-                            className="rounded-full border border-black bg-white px-3 py-1.5 text-xs font-bold text-black transition hover:bg-red-50 hover:text-red-600"
+                            className="rounded-full border border-primary/20 bg-white px-4 py-2 text-[14px] font-medium  tracking-widest text-primary transition hover:bg-red-50 hover:text-red-500 hover:border-red-100"
                             title="Remove from collection"
                         >
                             {product.product_name} x
@@ -992,7 +998,7 @@ const ProductPicker = ({ products, selectedIds, onToggle }) => {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Search products to add"
-                className="h-11 w-full rounded-md border border-gray-300 bg-white px-4 text-sm font-medium text-black outline-none transition focus:border-black focus:ring-1 focus:ring-black"
+                className="h-12 w-full rounded-2xl border border-[hsl(30,15%,90%)] bg-white px-5 text-sm font-medium text-gray-800 outline-none transition focus:border-primary focus:bg-white placeholder:text-gray-300"
             />
 
             {normalizedQuery && (
@@ -1029,13 +1035,13 @@ const ProductPicker = ({ products, selectedIds, onToggle }) => {
 const OptionRow = ({ image, title, subtitle }) => {
     const [failed, setFailed] = useState(false);
     return (
-        <div className="flex items-center gap-3 min-w-0">
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-white border border-gray-200 text-lg font-bold text-gray-400 shadow-sm">
+        <div className="flex items-center gap-4 min-w-0">
+            <div className="relative flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white border border-[hsl(30,15%,90%)] text-lg font-medium text-gray-200 shadow-sm">
                 {!failed && image && image !== "/Icons/arcmatlogo.svg" ? <Image src={image} alt={title} fill className="object-cover" unoptimized onError={() => setFailed(true)} /> : <span>{title?.charAt(0) || "A"}</span>}
             </div>
             <div className="min-w-0 flex-1">
-                <p className="truncate text-[13px] font-bold text-black">{title || "Untitled"}</p>
-                <p className="truncate text-[11px] font-medium text-gray-500 mt-0.5">{subtitle || "Available"}</p>
+                <p className="truncate text-sm font-medium text-gray-800">{title || "Untitled"}</p>
+                <p className="truncate text-[11px] font-medium  tracking-widest text-gray-400 mt-0.5">{subtitle || "Available"}</p>
             </div>
         </div>
     );

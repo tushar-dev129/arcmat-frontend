@@ -41,13 +41,14 @@
             "id": "bespoke",
             "label": "Bespoke Page",
             "icon": "Sparkles",
-            "href": "/dashboard/bespoke"
+            "href": "/dashboard/bespoke",
+            "brandOnly": true
         },
         {
-            "id": "profile",
-            "label": "Profile",
-            "icon": "User",
-            "href": "/profile"
+            "id": "bespoke-connections",
+            "label": "Bespoke Inquiries",
+            "icon": "Send",
+            "href": "/dashboard/bespoke-connections"
         },
         {
             "id": "users",
@@ -112,12 +113,6 @@
             "label": "Performance",
             "icon": "Star",
             "href": "/dashboard/retailer/ratings"
-        },
-        {
-            "id": "profile",
-            "label": "Profile",
-            "icon": "User",
-            "href": "/profile"
         },
         {
             "id": "help",

@@ -120,7 +120,7 @@ const Navbar = () => {
 
                         <div
                             ref={scrollContainerRef}
-                            className="flex-1 overflow-x-hidden"
+                            className="flex-1 overflow-x-auto no-scrollbar"
                         >
                             <ul className="flex items-center justify-between w-full min-h-[44px]">
                                 {isLoading ? (
@@ -145,30 +145,18 @@ const Navbar = () => {
                         <div className="hidden lg:flex items-center ml-6 pl-6 border-l border-[hsl(30,15%,85%)]">
                             <Link 
                                 href="/bespoke" 
-                                className="group mr-3 px-4 py-2 text-[13px] font-bold text-[hsl(20,10%,15%)] bg-white hover:bg-gray-50 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-gray-200"
+                                className="group mr-3 px-4 py-2 text-[13px] font-bold hover:bg-primary hover:text-white text-[hsl(20,10%,15%)] bg-white hover:bg-gray-50 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-gray-200"
                             >
                                 Bespoke Brands
                             </Link>
                             <Link 
                                 href="/contractors" 
-                                className="group px-4 py-2 text-[13px] font-bold text-[hsl(20,10%,15%)] bg-[#ead4ce]/30 hover:bg-[#ead4ce]/60 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-[#ead4ce]"
+                                className="group mr-3 px-4 py-2 text-[13px] hover:bg-primary hover:text-white font-bold text-[hsl(20,10%,15%)] bg-white hover:bg-gray-50 rounded-full transition-all duration-200 whitespace-nowrap flex items-center gap-2 border border-gray-200"
+
                             >
-                                <span className="w-2 h-2 rounded-full bg-[hsl(15,80%,65%)] animate-pulse" />
-                                Contractors & Services
-                                <svg 
-                                    xmlns="http://www.w3.org/2000/svg" 
-                                    width="16" 
-                                    height="16" 
-                                    viewBox="0 0 24 24" 
-                                    fill="none" 
-                                    stroke="currentColor" 
-                                    strokeWidth="2.5" 
-                                    strokeLinecap="round" 
-                                    strokeLinejoin="round" 
-                                    className="ml-1 transition-transform duration-200 group-hover:translate-x-1"
-                                >
-                                    <path d="M5 12h14m-7-7 7 7-7 7"/>
-                                </svg>
+                                {/* <span className="w-2 h-2 rounded-full bg-[hsl(15,80%,65%)] animate-pulse" /> */}
+                                Contractors 
+                               
                             </Link>
                         </div>
 

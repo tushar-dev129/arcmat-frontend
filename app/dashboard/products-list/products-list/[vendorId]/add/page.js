@@ -25,8 +25,9 @@ export default function AddProductPage() {
     const [createdProductData, setCreatedProductData] = useState(null);
 
     const brand = user?.selectedBrands?.[0];
-    const effectiveVendorId = user?.role === 'brand'
-        ? (brand?._id || (typeof brand === 'string' ? brand : undefined))
+    const isBrandLike = user?.role === 'brand' || user?.role === 'custom_maker';
+    const effectiveVendorId = isBrandLike
+        ? (brand?._id || (typeof brand === 'string' ? brand : undefined) || vendorId)
         : vendorId;
 
     const handleCreateProduct = async (formData) => {
@@ -57,7 +58,7 @@ export default function AddProductPage() {
     };
 
     return (
-        <RoleGuard allowedRoles={['admin', 'brand']}>
+        <RoleGuard allowedRoles={['admin', 'brand', 'custom_maker']}>
             <Container className="py-8 max-w-5xl mx-auto">
                 {/* Progress Header */}
                 <div className="flex items-center justify-between mb-12">
@@ -93,7 +94,7 @@ export default function AddProductPage() {
 
                 {/* Conditional wizard content */}
                 {(() => {
-                    if (user?.role !== 'brand') return null;
+                    if (!isBrandLike) return null;
                     const { complete, missingFields } = isProfileComplete(user?.selectedBrands?.[0]);
                     if (complete) return null;
 
@@ -132,7 +133,7 @@ export default function AddProductPage() {
                 })()}
 
                 {/* Conditional wizard content */}
-                {(user?.role !== 'brand' || isProfileComplete(user?.selectedBrands?.[0]).complete) && (
+                {(!isBrandLike || isProfileComplete(user?.selectedBrands?.[0]).complete) && (
                     !createdProductId ? (
                         <div className="animate-in fade-in slide-in-from-left-4 duration-500">
                             <ProductForm

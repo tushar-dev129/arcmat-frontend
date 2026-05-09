@@ -37,6 +37,8 @@ export default function Sidebar() {
   const { user, isAuthenticated } = useAuthStore();
   const isAdmin = user?.role === 'admin';
   const isBrand = user?.role === 'brand' || user?.role === 'vendor';
+  const isCustomMaker = user?.role === 'custom_maker';
+  const isBrandLike = isBrand || isCustomMaker;
   const isRetailer = user?.role === 'retailer';
   const isArchitect = user?.role === 'architect';
   const isContractor = user?.role === 'contractor';
@@ -62,11 +64,11 @@ export default function Sidebar() {
       setMobileOpen(false);
     }
     // BUG FIX 3: Added isMobileOpen and setMobileOpen to dependency array
-  }, [pathname, isMobileOpen, setMobileOpen]);
+  }, [pathname, setMobileOpen]);
 
   const menuItems = (!mounted || !user)
     ? USER_MENU_ITEMS
-    : (isAdmin || isBrand
+    : (isAdmin || isBrandLike
       ? BRAND_MENU_ITEMS
       : isRetailer
         ? RETAILER_MENU_ITEMS
@@ -78,7 +80,7 @@ export default function Sidebar() {
 
   const visibleItems = menuItems
     .map(item => {
-      if (isBrand && item.id === 'products-list' && (user?._id || user?.id)) {
+      if (isBrandLike && item.id === 'products-list' && (user?._id || user?.id)) {
         return { ...item, href: `/dashboard/products-list/${user._id || user.id}` };
       }
 
@@ -101,7 +103,7 @@ export default function Sidebar() {
         }
       }
 
-      if (isBrand && item.id === 'analytics') {
+      if (isBrandLike && item.id === 'analytics') {
         return { ...item, href: '/dashboard/analytics/brand' };
       }
 
@@ -111,7 +113,7 @@ export default function Sidebar() {
       if (!mounted) return item.id === 'dashboard';
       if (item.requiresAuth && !isAuthenticated) return false;
       if ((item.id === 'categories' || item.id === 'attributes' || item.id === 'users' || item.id === 'homepage') && !isAdmin) return false;
-      if (item.brandOnly && !isBrand) return false;
+      if (item.brandOnly && !isBrandLike) return false;
       if (item.retailerOnly && !isRetailer) return false;
       if (item.id === 'boards' && user?.professionalType === 'Contractor / Builder') return false;
       return true;

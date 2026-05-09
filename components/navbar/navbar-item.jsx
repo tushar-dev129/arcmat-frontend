@@ -17,7 +17,7 @@ export const NavbarItem = ({ item, activeItem, onMouseEnter, onMouseLeave, isFir
             <Link
                 href={href}
                 className={cn(
-                    "block px-3 py-2 text-[13px] font-bold transition-all duration-200 outline-none rounded-full whitespace-nowrap text-center",
+                    "block px-4 py-2 text-[13px] font-bold transition-all duration-200 outline-none rounded-full whitespace-nowrap text-center",
                     item.isSpecial ? "text-[hsl(15,80%,65%)]" : "text-[hsl(20,10%,15%)]",
                     isActive
                         ? "bg-[#ead4ce] text-[hsl(20,10%,15%)]"

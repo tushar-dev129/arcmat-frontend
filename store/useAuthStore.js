@@ -19,7 +19,7 @@ const useAuthStoreBase = create(
         // Normalize: handle API wrappers like { data: user } or { user: user }
         const finalUser = userData?.data || userData?.user || userData;
 
-        const brandId = finalUser?.role === 'brand'
+        const brandId = finalUser?.role === 'brand' || finalUser?.role === 'custom_maker'
           ? (finalUser.brandId || finalUser.id)
           : null;
 
@@ -56,7 +56,7 @@ const useAuthStoreBase = create(
           const userData = rawData?.data || rawData?.user || rawData;
 
 
-          const brandId = userData?.role === 'brand' ? (userData.brandId || userData.id) : null;
+          const brandId = userData?.role === 'brand' || userData?.role === 'custom_maker' ? (userData.brandId || userData.id) : null;
           const brands = userData?.selectedBrands || [];
 
           set({

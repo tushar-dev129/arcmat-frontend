@@ -30,6 +30,8 @@ export const useCreateContractorProfile = () => {
         mutationFn: (data) => contractorService.createProfile(data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['contractors'] });
+            queryClient.invalidateQueries({ queryKey: ['my-contractor-profile'] });
+            queryClient.invalidateQueries({ queryKey: ['user-info'] });
         },
     });
 };
@@ -40,6 +42,7 @@ export const useUpdateContractorProfile = () => {
         mutationFn: ({ id, data }) => contractorService.updateProfile(id, data),
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['contractors'] });
+            queryClient.invalidateQueries({ queryKey: ['my-contractor-profile'] });
             queryClient.invalidateQueries({ queryKey: ['contractor', data.slug] });
         },
     });
@@ -84,5 +87,21 @@ export const useGetPortfolioItemById = (itemId) => {
         queryKey: ['portfolio-item', itemId],
         queryFn: () => contractorService.getPortfolioItemById(itemId),
         enabled: !!itemId,
+    });
+};
+
+export const useGetContractorLeads = (contractorId) => {
+    return useQuery({
+        queryKey: ['contractor-leads', contractorId],
+        queryFn: () => contractorService.getLeads(contractorId),
+        enabled: !!contractorId,
+    });
+};
+
+export const useGetContractorStats = (userId) => {
+    return useQuery({
+        queryKey: ['contractor-stats', userId],
+        queryFn: () => contractorService.getStats(userId),
+        enabled: !!userId,
     });
 };

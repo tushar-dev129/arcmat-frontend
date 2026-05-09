@@ -10,7 +10,7 @@ import {
 } from "@/hooks/useBrand";
 import { getBrandImageUrl } from "@/lib/productUtils";
 import { toast } from "@/components/ui/Toast";
-import { Loader2, Send, ShieldCheck } from "lucide-react";
+import { Loader2, RotateCcw, Send, ShieldCheck } from "lucide-react";
 
 const requestStatusClass = {
     pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -83,7 +83,7 @@ const ContractorBrandRequestsPage = () => {
                                     </div>
                                 </div>
 
-                                {status ? (
+                                {status && status !== "rejected" ? (
                                     <div className={`mt-5 rounded-lg border px-4 py-3 text-sm font-bold capitalize ${requestStatusClass[status] || requestStatusClass.pending}`}>
                                         <div className="flex items-center gap-2">
                                             <ShieldCheck className="h-4 w-4" />
@@ -95,6 +95,17 @@ const ContractorBrandRequestsPage = () => {
                                     </div>
                                 ) : (
                                     <>
+                                        {status === "rejected" && (
+                                            <div className={`mt-5 mb-3 rounded-lg border px-4 py-3 text-sm font-bold capitalize ${requestStatusClass.rejected}`}>
+                                                <div className="flex items-center gap-2">
+                                                    <ShieldCheck className="h-4 w-4" />
+                                                    {status}
+                                                </div>
+                                                {existingRequest.brandNote && (
+                                                    <p className="mt-2 text-xs font-medium normal-case">{existingRequest.brandNote}</p>
+                                                )}
+                                            </div>
+                                        )}
                                         <textarea
                                             value={messageByBrand[brandId] || ""}
                                             onChange={(event) => setMessageByBrand((current) => ({ ...current, [brandId]: event.target.value }))}
@@ -107,8 +118,14 @@ const ContractorBrandRequestsPage = () => {
                                             disabled={createRequest.isPending}
                                             className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-white hover:bg-[#c97f58] disabled:opacity-60"
                                         >
-                                            {createRequest.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                                            Request Display
+                                            {createRequest.isPending && createRequest.variables?.brandId === brandId ? (
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                            ) : status === "rejected" ? (
+                                                <RotateCcw className="h-4 w-4" />
+                                            ) : (
+                                                <Send className="h-4 w-4" />
+                                            )}
+                                            {status === "rejected" ? "Send Request Again" : "Request Display"}
                                         </button>
                                     </>
                                 )}
