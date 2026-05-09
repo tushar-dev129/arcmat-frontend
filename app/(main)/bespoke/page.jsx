@@ -37,7 +37,7 @@ const BespokePage = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [page, selectedCategory, selectedSubcategory, selectedSubSubcategory]);
 
-    const { data: treeDataRaw } = useGetCategoryTree();
+    const { data: treeDataRaw } = useGetCategoryTree({ ownerType: brandType });
     const treeData = useMemo(() => {
         return Array.isArray(treeDataRaw?.data) ? treeDataRaw.data : (Array.isArray(treeDataRaw) ? treeDataRaw : []);
     }, [treeDataRaw]);
@@ -84,42 +84,9 @@ const BespokePage = () => {
 
     return (
         <main className="min-h-screen ">
-            <section className="relative overflow-hidden border-b border-gray-200 bg-[#f8f5f1]">
-                {/* Background Blur */}
-                <div className="absolute inset-0 overflow-hidden">
-                    <div className="absolute left-[-120px] top-[-120px] h-[320px] w-[320px] rounded-full bg-[#f3c8a7]/30 blur-3xl" />
-                    <div className="absolute bottom-[-140px] right-[-120px] h-[300px] w-[300px] rounded-full bg-[#e7bfa8]/20 blur-3xl" />
-                </div>
 
-                <Container className="relative py-10 sm:py-12 lg:py-14">
-                    <div className="max-w-4xl">
 
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2 rounded-full border border-[#d8b8a4] bg-white/80 px-5 py-2 shadow-sm backdrop-blur">
-                            <Sparkles className="h-4 w-4 text-[#b76b45]" />
-
-                            <span className="text-xs font-bold uppercase tracking-[0.22em] text-[#b76b45]">
-                                Bespoke Brand Library
-                            </span>
-                        </div>
-
-                        {/* Heading */}
-                        <h1 className="mt-7 text-2xl  leading-[1.05] tracking-tight text-gray-950 sm:text-4xl lg:text-5xl">
-                            Explore every brand through a beautifully crafted bespoke page.
-                        </h1>
-
-                        {/* Description */}
-                        <p className="mt-6 max-w-2xl text-base leading-8 text-gray-600 sm:text-lg">
-                            Browse premium brand showcases featuring immersive galleries,
-                            downloadable catalogues, curated collections, videos, articles,
-                            and project stories — all designed in one elegant experience.
-                        </p>
-
-                    </div>
-                </Container>
-            </section>
-
-            <Container className="py-10 sm:py-14">
+            <Container className="py-4 sm:py-4">
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Sidebar Filters */}
                     <BespokeFilterSidebar
@@ -138,30 +105,28 @@ const BespokePage = () => {
                     <div className="flex-1 w-full min-w-0 min-h-[calc(100vh-200px)]">
                         {/* Header above brand grid */}
                         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                            
+
                             {/* Brand Type Toggle */}
                             <div className="flex p-1 bg-gray-100/80 backdrop-blur-sm rounded-xl border border-gray-200/50 w-fit">
                                 <button
                                     onClick={() => setBrandType("custom_maker")}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
-                                        brandType === "custom_maker"
-                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
-                                            : "text-gray-500 hover:text-gray-700"
-                                    }`}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "custom_maker"
+                                        ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                        : "text-gray-500 hover:text-gray-700"
+                                        }`}
                                 >
                                     <Sparkles className={`h-4 w-4 ${brandType === "custom_maker" ? "text-[#b76b45]" : "text-gray-400"}`} />
-                                    Custom Makers
+                                    Besopke Brands
                                 </button>
                                 <button
                                     onClick={() => setBrandType("brand")}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
-                                        brandType === "brand"
-                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
-                                            : "text-gray-500 hover:text-gray-700"
-                                    }`}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "brand"
+                                        ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                        : "text-gray-500 hover:text-gray-700"
+                                        }`}
                                 >
                                     <Building2 className={`h-4 w-4 ${brandType === "brand" ? "text-[#b76b45]" : "text-gray-400"}`} />
-                                    Brands
+                                    All Brands
                                 </button>
                             </div>
 
@@ -228,6 +193,13 @@ const BespokePage = () => {
                                             >
                                                 {/* Top accent bar */}
                                                 <div className="h-[3px] w-full bg-gradient-to-r from-[#b76b45] to-[#ffffff]" />
+
+                                                {brand.ownerType === 'custom_maker' && (
+                                                    <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E6AE90] shadow-sm">
+                                                        <Sparkles className="h-2.5 w-2.5 text-white fill-white" />
+                                                        <span className="text-[9px] font-bold uppercase tracking-wider text-white">Bespoke</span>
+                                                    </div>
+                                                )}
 
                                                 {/* Image */}
                                                 <div className="relative flex h-[120px] items-center justify-center bg-[#ffffff]">

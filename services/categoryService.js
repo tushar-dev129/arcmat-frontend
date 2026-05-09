@@ -8,8 +8,8 @@ const categoryService = {
     },
 
     // Get categories tree structure
-    getCategoryTree: async () => {
-        const response = await api.get('/category/tree');
+    getCategoryTree: async (params = {}) => {
+        const response = await api.get('/category/tree', { params });
         return response.data;
     },
 

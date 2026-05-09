@@ -14,10 +14,10 @@ export const useGetCategories = ({ enabled = true, ...params } = {}) => {
 };
 
 // Hook to get category tree
-export const useGetCategoryTree = () => {
+export const useGetCategoryTree = (params = {}) => {
     return useQuery({
-        queryKey: ['categories-tree'],
-        queryFn: categoryService.getCategoryTree,
+        queryKey: ['categories-tree', params],
+        queryFn: () => categoryService.getCategoryTree(params),
     });
 };
 

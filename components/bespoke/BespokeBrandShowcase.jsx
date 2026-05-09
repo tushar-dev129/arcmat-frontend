@@ -141,7 +141,7 @@ const normalizedApiProduct = (item, index) => ({
     name: getProductName(item),
     sku: item?.skucode || item?.sku || item?.productId?.sku || `ARC-${index + 1}`,
     category: getProductCategory(item),
-    material: item?.material || item?.finish || item?.color || item?.productId?.material ,
+    material: item?.material || item?.finish || item?.color || item?.productId?.material,
     image: getProductThumbnail(item),
     price: "Request info",
     createdAt: item?.createdAt || item?.productId?.createdAt || item?.updatedAt || item?.productId?.updatedAt || "",
@@ -287,6 +287,20 @@ export default function BespokeBrandShowcase() {
         <main className="min-h-screen bg-white text-[#333] font-sans antialiased" style={{ "--brand-color": template.theme.color || "#E6AE90" }}>
             <motion.div className="fixed left-0 right-0 top-0 z-[100] h-[2px] origin-left bg-[var(--brand-color)]" style={{ scaleX: progress }} />
 
+            {/* Premium Breadcrumb Header */}
+            <div className="bg-white border-b border-gray-100/80 sticky top-0 z-[90]">
+                <Container className="py-3.5">
+                    <nav className="flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                        <Link href="/bespoke" className="flex items-center gap-1.5 hover:text-[var(--brand-color)] transition-colors group">
+                            <ChevronLeft className="h-3.5 w-3.5 -ml-1 transition-transform group-hover:-translate-x-0.5" />
+                            Bespoke
+                        </Link>
+                        <span className="h-3 w-[1px] bg-gray-200 mx-1" />
+                        <span className="text-gray-900 truncate max-w-[200px]">{template.hero.name}</span>
+                    </nav>
+                </Container>
+            </div>
+
             <HeroSection template={template} savedBrand={savedBrand} setSavedBrand={setSavedBrand} setModal={setModal} />
             <StickyTabs activeTab={activeTab} setActiveTab={setActiveTab} tabsLeft={visibleTabsLeft} tabsRight={visibleTabsRight} />
 
@@ -331,11 +345,11 @@ function buildBrandPayload(brand, apiProducts = []) {
     const selectedProducts = (bespoke.selectedProductIds || [])
         .filter((item) => item && typeof item === "object")
         .map(normalizedApiProduct);
-        
+
     // Diverse selection by category up to 12 products
     const selectedIds = new Set(selectedProducts.map(p => p.id));
     const result = [...selectedProducts];
-    
+
     const remainingProducts = allNormalizedProducts.filter(p => !selectedIds.has(p.id));
     remainingProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
@@ -413,6 +427,8 @@ function buildBrandPayload(brand, apiProducts = []) {
                 category: "Contractor",
                 verified: true,
                 images: resolvePartnerImages(item, "contractor"),
+                slug: item?.slug,
+                href: item?.slug ? `/contractors/${item.slug}` : null,
             })),
         ],
         reviews: (bespoke.reviews || []).filter((review) => review?.name || review?.comment || review?.text),
@@ -648,7 +664,7 @@ function ProductsSection({ products, brandName, brandId, productsLoading, setMod
                 <EmptyNote title="No products found" />
             ) : (
                 <HorizontalRail>
-                    {products.slice(0, 12).map((item,idx) => (
+                    {products.slice(0, 12).map((item, idx) => (
                         <div key={`${idx}-${item.id}`} className="group relative flex flex-col w-[280px] shrink-0 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-all overflow-hidden">
                             <div className="relative h-[250px] w-full bg-[#f2f2f2] flex items-center justify-center cursor-pointer" onClick={() => setModal({ type: "product", ...item })}>
                                 <Image src={item.image} alt={item.name} fill unoptimized className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
@@ -763,17 +779,43 @@ function PartnerSection({ items, brandName, setModal }) {
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((item) => (
                     <div key={item.id} className="border border-gray-200 rounded-lg p-5 flex gap-4 bg-white hover:border-gray-300 hover:shadow-md transition-all">
-                        <div className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-lg shrink-0 overflow-hidden">
-                            <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-2" />
-                        </div>
+                        {item.href ? (
+                            <Link href={item.href} className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-lg shrink-0 overflow-hidden">
+                                <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-2" />
+                            </Link>
+                        ) : (
+                            <div className="relative h-16 w-16 bg-gray-50 border border-gray-100 rounded-lg shrink-0 overflow-hidden">
+                                <Image src={item.images?.[0] || "/Icons/arcmatlogo.svg"} alt={item.name} fill unoptimized className="object-contain p-2" />
+                            </div>
+                        )}
                         <div className="flex-1 min-w-0">
-                            <h3 className="text-[14px] font-bold text-gray-900 truncate">{item.name}</h3>
+                            {item.href ? (
+                                <Link href={item.href}>
+                                    <h3 className="text-[14px] font-bold text-gray-900 truncate hover:text-[var(--brand-color)] transition-colors">{item.name}</h3>
+                                </Link>
+                            ) : (
+                                <h3 className="text-[14px] font-bold text-gray-900 truncate">{item.name}</h3>
+                            )}
                             <p className="text-[12px] text-gray-500 mt-1">{item.location}</p>
                             <div className="flex items-center gap-2 mt-2 mb-3">
                                 <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest">{item.category}</span>
                                 {item.verified && <ShieldCheck className="h-3.5 w-3.5 text-green-600" />}
                             </div>
-                            <button onClick={() => setModal({ type: "partner", ...item })} className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors">Contact Partner <ArrowRight className="h-3 w-3" /></button>
+                            {item.href ? (
+                                <Link
+                                    href={item.href}
+                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors"
+                                >
+                                    Contact Partner <ArrowRight className="h-3 w-3" />
+                                </Link>
+                            ) : (
+                                <button
+                                    onClick={() => setModal({ type: "partner", ...item })}
+                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors"
+                                >
+                                    Contact Partner <ArrowRight className="h-3 w-3" />
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -892,8 +934,7 @@ function ContactSection({ template }) {
                         </div>
 
                         <div className="grid gap-6">
-                            <ContactDetail icon={<Mail className="h-5 w-5" />} label="Email Us" value={template.contact.email} />
-                            {template.contact.phone && <ContactDetail icon={<Phone className="h-5 w-5" />} label="Call Support" value={template.contact.phone} />}
+
                             <ContactDetail icon={<MapPin className="h-5 w-5" />} label="Headquarters" value={template.contact.address} />
                         </div>
 
