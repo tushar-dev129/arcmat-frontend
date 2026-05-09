@@ -9,7 +9,7 @@ import { useGetBrands } from "@/hooks/useBrand";
 import { useGetCategoryTree } from "@/hooks/useCategory";
 import { useDebounce } from "@/hooks/useDebounce";
 import { getBrandImageUrl } from "@/lib/productUtils";
-import { ArrowRight, Building2, Loader2, Sparkles, Filter } from "lucide-react";
+import { ArrowRight, Building2, Loader2, Sparkles, Filter, LayoutGrid, ShoppingBag } from "lucide-react";
 import BespokeFilterSidebar from "@/components/bespoke/BespokeFilterSidebar";
 
 const getBrandId = (brand) => brand?._id || brand?.id;
@@ -23,13 +23,14 @@ const BespokePage = () => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(20);
     const [sortBy, setSortBy] = useState("Featured");
+    const [brandType, setBrandType] = useState("custom_maker"); // 'custom_maker' or 'brand'
 
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    // Reset page to 1 when search term or sort changes
+    // Reset page to 1 when search term, sort, or brand type changes
     useEffect(() => {
         setPage(1);
-    }, [debouncedSearchTerm, sortBy]);
+    }, [debouncedSearchTerm, sortBy, brandType]);
 
     // Scroll to top when filters or page change
     useEffect(() => {
@@ -43,6 +44,7 @@ const BespokePage = () => {
 
     const { data: brandsData, isLoading } = useGetBrands({
         type: "frontend",
+        ownerType: brandType,
         ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
         ...(selectedCategory && { categoryId: selectedCategory }),
         ...(selectedSubcategory && { subcategoryId: selectedSubcategory }),
@@ -135,45 +137,73 @@ const BespokePage = () => {
                     {/* Main Content Area */}
                     <div className="flex-1 w-full min-w-0 min-h-[calc(100vh-200px)]">
                         {/* Header above brand grid */}
-                        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 lg:justify-end">
-
-                            {/* Mobile/Tablet Controls Wrapper */}
-                            <div className="flex items-center gap-3 w-full sm:w-auto lg:hidden">
+                        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                            
+                            {/* Brand Type Toggle */}
+                            <div className="flex p-1 bg-gray-100/80 backdrop-blur-sm rounded-xl border border-gray-200/50 w-fit">
                                 <button
-                                    onClick={() => setIsMobileFiltersOpen(true)}
-                                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-colors"
+                                    onClick={() => setBrandType("custom_maker")}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                                        brandType === "custom_maker"
+                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                            : "text-gray-500 hover:text-gray-700"
+                                    }`}
                                 >
-                                    <Filter className="h-4 w-4" />
-                                    Filters
+                                    <Sparkles className={`h-4 w-4 ${brandType === "custom_maker" ? "text-[#b76b45]" : "text-gray-400"}`} />
+                                    Custom Makers
                                 </button>
+                                <button
+                                    onClick={() => setBrandType("brand")}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${
+                                        brandType === "brand"
+                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                            : "text-gray-500 hover:text-gray-700"
+                                    }`}
+                                >
+                                    <Building2 className={`h-4 w-4 ${brandType === "brand" ? "text-[#b76b45]" : "text-gray-400"}`} />
+                                    Brands
+                                </button>
+                            </div>
 
-                                {/* Mobile Sorting Button */}
-                                <div className="flex-1 sm:hidden relative flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
-                                    <span>Sort: {sortBy === "A - Z" ? "A-Z" : sortBy}</span>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 ml-auto">
+                                {/* Mobile/Tablet Controls Wrapper */}
+                                <div className="flex items-center gap-3 lg:hidden">
+                                    <button
+                                        onClick={() => setIsMobileFiltersOpen(true)}
+                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-colors"
+                                    >
+                                        <Filter className="h-4 w-4" />
+                                        Filters
+                                    </button>
+
+                                    {/* Mobile Sorting Button */}
+                                    <div className="flex-1 sm:hidden relative flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                                        <span>Sort: {sortBy === "A - Z" ? "A-Z" : sortBy}</span>
+                                        <select
+                                            value={sortBy}
+                                            onChange={(e) => setSortBy(e.target.value)}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        >
+                                            <option value="Featured">Featured</option>
+                                            <option value="Newest">Newest</option>
+                                            <option value="A - Z">A - Z</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {/* Sorting Dropdown (Tablet & Desktop) */}
+                                <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 font-medium bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
+                                    <span>Sort by:</span>
                                     <select
                                         value={sortBy}
                                         onChange={(e) => setSortBy(e.target.value)}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        className="bg-transparent font-bold text-gray-900 outline-none cursor-pointer transition-colors"
                                     >
                                         <option value="Featured">Featured</option>
                                         <option value="Newest">Newest</option>
                                         <option value="A - Z">A - Z</option>
                                     </select>
                                 </div>
-                            </div>
-
-                            {/* Sorting Dropdown (Tablet & Desktop) */}
-                            <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 font-medium">
-                                <span>Sort by:</span>
-                                <select
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                    className="bg-transparent font-bold text-gray-900 outline-none cursor-pointer transition-colors"
-                                >
-                                    <option value="Featured">Featured</option>
-                                    <option value="Newest">Newest</option>
-                                    <option value="A - Z">A - Z</option>
-                                </select>
                             </div>
                         </div>
 
