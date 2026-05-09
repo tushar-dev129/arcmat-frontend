@@ -11,7 +11,7 @@ import {
     Search, Send, Share2, ShieldCheck, Star, Upload, X, Youtube
 } from "lucide-react";
 import { useGetBrandById } from "@/hooks/useBrand";
-import { useGetRetailerProducts } from "@/hooks/useProduct";
+import { useGetProducts } from "@/hooks/useProduct";
 import Container from "@/components/ui/Container";
 import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getProductThumbnail } from "@/lib/productUtils";
 import { toast } from "sonner";
@@ -222,7 +222,7 @@ export default function BespokeBrandShowcase() {
     const { id } = useParams();
     const { data: brandData, isLoading: brandLoading } = useGetBrandById(id);
     const brand = brandData?.data;
-    const { data: productsData, isLoading: productsLoading } = useGetRetailerProducts({ brand: id, limit: 100 });
+    const { data: productsData, isLoading: productsLoading } = useGetProducts({ brandId: id, limit: 100, onlyRetailerProducts: 'true' });
     const [savedBrand, setSavedBrand] = useState(false);
     const [activeTab, setActiveTab] = useState("overview");
     const [modal, setModal] = useState(null);

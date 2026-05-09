@@ -8,7 +8,7 @@ import ProductCard from "@/components/cards/ProductCard";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Image from "next/image";
-import { useGetVariants, useGetRetailerProducts } from "@/hooks/useProduct";
+import { useGetVariants, useGetProducts } from "@/hooks/useProduct";
 import { useGetMoodboard } from "@/hooks/useMoodboard";
 import { useGetMoodboardTemplateById } from "@/hooks/useTemplate";
 import { useGetVendors } from "@/hooks/useVendor";
@@ -47,10 +47,10 @@ export default function ProductListPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(12);
 
-    const { data: apiData, isLoading } = useGetRetailerProducts({
-        type: 'storefront',
+    const { data: apiData, isLoading } = useGetProducts({
         page: currentPage,
         limit: pageSize,
+        onlyRetailerProducts: 'true',
         categoryId: selectedCategory !== "All" ? selectedCategory : undefined,
         brand: activeFilters.brands.join(','),
         color: activeFilters.colors.join(','),
