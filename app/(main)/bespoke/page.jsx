@@ -237,7 +237,7 @@ const BespokePage = () => {
                                 </div>
 
                                 {totalItems > 0 && (
-                                    <div className="mt-10 overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+                                    <div className="mt-10 overflow-hidden rounded-lg !border-t border-gray-100 bg-white ">
                                         <Pagination
                                             currentPage={page}
                                             totalPages={totalPages}
