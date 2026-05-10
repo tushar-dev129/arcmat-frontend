@@ -20,7 +20,7 @@ import { brandService } from "@/services/brandService";
 const tabsLeft = [
     ["overview", "Overview"],
     ["projects", "Projects"],
-    ["solutions", "Solutions"],
+    ["Categories", "Categories"],
     ["collections", "Collections"],
     ["products", "Products"],
 ];
@@ -243,7 +243,7 @@ export default function BespokeBrandShowcase() {
     const visibleTabsLeft = useMemo(() => tabsLeft.filter(([key]) => {
         if (key === "projects") return template.projects?.length > 0;
         if (key === "products") return template.products?.length > 0;
-        if (key === "solutions") return template.solutions?.length > 0;
+        if (key === "Categories") return template.solutions?.length > 0;
         if (key === "collections") return template.collections?.length > 0;
         return true;
     }), [template]);
@@ -315,7 +315,7 @@ export default function BespokeBrandShowcase() {
                 <NewsSection items={template.news} brandName={template.hero.name} setModal={setModal} />
                 <VideoSection items={template.videos} brandName={template.hero.name} setModal={setModal} />
                 <PartnerSection items={template.partners} brandName={template.hero.name} setModal={setModal} />
-                <ReviewSection items={template.reviews} brandName={template.hero.name} />
+                {/* <ReviewSection items={template.reviews} brandName={template.hero.name} /> */}
             </Container>
 
             <ContactSection template={template} />
@@ -592,7 +592,7 @@ function OverviewSection({ template }) {
 function SolutionsSection({ items, brandName }) {
     if (items.length === 0) return null;
     return (
-        <Section id="solutions" title={`Solutions ${brandName}`}>
+        <Section id="Categories" title={`Categories`}>
             <HorizontalRail>
                 {items.map((item) => (
                     <Link key={item.id} href={item.href} className="group flex flex-col h-[280px] w-[260px] shrink-0 bg-white border border-gray-200 rounded-lg overflow-hidden text-center hover:shadow-md hover:border-gray-300 transition-all">
@@ -824,29 +824,29 @@ function PartnerSection({ items, brandName, setModal }) {
     );
 }
 
-function ReviewSection({ items, brandName }) {
-    if (items.length === 0) return null;
-    return (
-        <Section id="reviews" title={`Customer Endorsements`}>
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {items.map((item, index) => (
-                    <div key={index} className="bg-white border border-gray-200 rounded-sm p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
-                        <div className="flex gap-1 mb-4">
-                            {Array.from({ length: 5 }).map((_, i) => (
-                                <Star key={i} className={`h-4 w-4 ${i < (item.rating || 5) ? "fill-[#eab308] text-[#eab308]" : "fill-gray-200 text-gray-200"}`} />
-                            ))}
-                        </div>
-                        <p className="text-[14px] leading-relaxed text-gray-700 italic mb-6 flex-1">"{item.comment}"</p>
-                        <div>
-                            <p className="text-[13px] font-bold text-gray-900">{item.name}</p>
-                            {item.role && <p className="text-[11px] font-medium uppercase tracking-wider text-gray-500 mt-1">{item.role}</p>}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </Section>
-    );
-}
+// function ReviewSection({ items, brandName }) {
+//     if (items.length === 0) return null;
+//     return (
+//         <Section id="reviews" title={`Customer Endorsements`}>
+//             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+//                 {items.map((item, index) => (
+//                     <div key={index} className="bg-white border border-gray-200 rounded-sm p-6 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+//                         <div className="flex gap-1 mb-4">
+//                             {Array.from({ length: 5 }).map((_, i) => (
+//                                 <Star key={i} className={`h-4 w-4 ${i < (item.rating || 5) ? "fill-[#eab308] text-[#eab308]" : "fill-gray-200 text-gray-200"}`} />
+//                             ))}
+//                         </div>
+//                         <p className="text-[14px] leading-relaxed text-gray-700 italic mb-6 flex-1">"{item.comment}"</p>
+//                         <div>
+//                             <p className="text-[13px] font-bold text-gray-900">{item.name}</p>
+//                             {item.role && <p className="text-[11px] font-medium uppercase tracking-wider text-gray-500 mt-1">{item.role}</p>}
+//                         </div>
+//                     </div>
+//                 ))}
+//             </div>
+//         </Section>
+//     );
+// }
 
 function ContactSection({ template }) {
     const [loading, setLoading] = useState(false);

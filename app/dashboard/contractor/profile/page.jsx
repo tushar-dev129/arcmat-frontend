@@ -247,6 +247,12 @@ export default function MarketplaceProfilePage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!formData.profileImage) {
+            toast.error("Please upload a profile image/logo");
+            return;
+        }
+
         try {
             if (profile) {
                 // Update
@@ -375,7 +381,10 @@ export default function MarketplaceProfilePage() {
                         </div>
                     )}
                     <div className="relative group">
-                        <div className="w-28 h-28 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-gray-50 border-2 border-dashed border-gray-200 flex items-center justify-center overflow-hidden relative">
+                        <div className={clsx(
+                            "w-28 h-28 md:w-32 md:h-32 rounded-2xl md:rounded-3xl bg-gray-50 border-2 border-dashed flex items-center justify-center overflow-hidden relative transition-colors",
+                            isEditing && !formData.profileImage ? "border-red-200 bg-red-50" : "border-gray-200"
+                        )}>
                             {(getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url) ? (
                                 <img 
                                     src={getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url} 
@@ -569,13 +578,14 @@ export default function MarketplaceProfilePage() {
                         </Field>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Field label="Years of Experience" icon={Calendar}>
+                            <Field label="Years of Experience" icon={Calendar} required={isEditing}>
                                 {isEditing ? (
                                     <input 
                                         type="number" 
                                         name="experienceYears"
                                         value={formData.experienceYears}
                                         onChange={handleChange}
+                                        required
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. 10"
                                     />
@@ -587,13 +597,14 @@ export default function MarketplaceProfilePage() {
                                 )}
                             </Field>
 
-                            <Field label="Team Size" icon={Users}>
+                            <Field label="Team Size" icon={Users} required={isEditing}>
                                 {isEditing ? (
                                     <input 
                                         type="number" 
                                         name="teamSize"
                                         value={formData.teamSize}
                                         onChange={handleChange}
+                                        required
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
                                         placeholder="e.g. 25"
                                     />

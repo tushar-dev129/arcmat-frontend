@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit } from 'lucide-react';
+import { Edit, MapPin, Globe, Truck, CreditCard } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { getBrandImageUrl } from '@/lib/productUtils';
 
@@ -42,12 +42,13 @@ const ProfileDetails = ({ brand, onEdit }) => {
                             </span>
                         )}
                     </div>
-                    <div className="flex-1 space-y-4">
+                    <div className="flex-1 space-y-2 ">
                         <div>
                             <div className="flex items-center gap-3 mb-1">
                                 <h2 className="text-2xl font-bold text-gray-900">{brand.name}</h2>
                             </div>
                             <p className="text-gray-500 flex items-center gap-2 text-sm">
+                                <MapPin size={16} />
                                 {brand.country}
                             </p>
                         </div>
@@ -57,16 +58,34 @@ const ProfileDetails = ({ brand, onEdit }) => {
                                 href={brand.website}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex text-primary hover:underline text-sm"
+                                className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
                             >
+                                <Globe size={16} />
                                 {brand.website}
                             </a>
                         )}
 
-                        <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 text-gray-600 text-sm leading-relaxed">
+                        <div className=" text-gray-600 text-sm leading-relaxed">
                             {brand.description || "No description added."}
                         </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
+                            <div className="space-y-2">
+                                <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+                                    <Truck size={16} className="text-gray-400" />
+                                    Shipping Address
+                                </h4>
+                                <p className="text-gray-600 text-sm ml-6">{formatAddress(brand.shippingAddress)}</p>
+                            </div>
+                            <div className="space-y-2">
+                                <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-900 uppercase tracking-wider">
+                                    <CreditCard size={16} className="text-gray-400" />
+                                    Billing Address
+                                </h4>
+                                <p className="text-gray-600 text-sm ml-6">{formatAddress(brand.billingAddress)}</p>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
                 <button
                     onClick={onEdit}
@@ -77,16 +96,7 @@ const ProfileDetails = ({ brand, onEdit }) => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
-                <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Shipping Address</h4>
-                    <p className="text-gray-600 text-sm">{formatAddress(brand.shippingAddress)}</p>
-                </div>
-                <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider">Billing Address</h4>
-                    <p className="text-gray-600 text-sm">{formatAddress(brand.billingAddress)}</p>
-                </div>
-            </div>
+
         </div>
     );
 };

@@ -169,7 +169,7 @@ const Header = ({ variant = 'default' }) => {
                                             <div className="px-4 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
                                                 Products
                                             </div>
-                                            {products.map((product,idx) => {
+                                            {products.map((product, idx) => {
                                                 const isVariantCentric = Boolean(product.productId && typeof product.productId === 'object');
                                                 const rootProduct = isVariantCentric ? product.productId : product;
                                                 const variantItem = isVariantCentric ? product : null;
@@ -404,6 +404,9 @@ const Header = ({ variant = 'default' }) => {
                                         <div className="px-4 py-3 border-b border-gray-50 bg-gray-50/50">
                                             <p className="text-sm font-semibold text-[#4D4E58] truncate">{user.name || user.fullName}</p>
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                                            {user.role && (
+                                                <p className="text-[10px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                            )}
                                         </div>
 
                                         <Link href="/profile" className="flex items-center gap-2 px-4 py-2.5 text-sm text-gray-600 hover:bg-[#fcf6f3] hover:text-primary transition-colors">
@@ -474,6 +477,9 @@ const Header = ({ variant = 'default' }) => {
                                             <p className="text-sm font-semibold text-[#4D4E58] truncate">
                                                 {user.name || user.fullName}
                                             </p>
+                                            {user.role && (
+                                                <p className="text-[10px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                            )}
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                         </div>
 
@@ -486,7 +492,7 @@ const Header = ({ variant = 'default' }) => {
                                             Profile
                                         </Link>
 
-                                        {(!user || user.role !== 'brand') && (
+                                        {user?.role === 'architect' && (
                                             <Link
                                                 href={
                                                     activeProjectId && activeMoodboardId

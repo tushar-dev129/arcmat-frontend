@@ -25,11 +25,6 @@ const BusinessProfileTab = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [currentBrand, setCurrentBrand] = useState(null);
 
-    // Update loader state
-    useEffect(() => {
-        setLoading(isBrandLoading);
-    }, [isBrandLoading, setLoading]);
-
     // Process brand data
     useEffect(() => {
         if (brandData) {

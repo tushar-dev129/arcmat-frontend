@@ -36,7 +36,7 @@ const ProfilePage = () => {
                             <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
 
                             {/* Tab Navigation */}
-                            <div className="flex justify-start sm:justify-around space-x-1 bg-gray-100 p-1 rounded-xl mb-8 overflow-x-auto scrollbar-hide">
+                            <div className="flex justify-start sm:justify-around space-x-1 bg-gray-100 p-1 rounded-xl mb-8 overflow-x-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;

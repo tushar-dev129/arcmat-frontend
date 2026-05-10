@@ -84,7 +84,7 @@ export default function TemplateSpacesPage() {
     return (
         <div className="min-h-screen bg-[#fafafb] pb-20">
             {/* Header */}
-            <div className="bg-white border-b border-gray-100 sticky top-0 z-40">
+            <div className="bg-white border-b border-gray-100 sticky top-0 z-30">
                 <Container className="py-6">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex items-center gap-4">

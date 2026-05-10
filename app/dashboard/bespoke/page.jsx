@@ -14,7 +14,7 @@ import {
 } from "@/hooks/useBrand";
 import { getImageUrl, getProductImageUrl } from "@/lib/productUtils";
 import { toast } from "@/components/ui/Toast";
-import { ArrowUpRight, ImagePlus, Loader2, Plus, Save, Trash2, Layout, Image as ImageIcon, Briefcase, Box, Users, Star, MessageSquare, Instagram, Linkedin, Youtube } from "lucide-react";
+import { Eye, ImagePlus, Loader2, Plus, Save, Trash2, Layout, Image as ImageIcon, Briefcase, Box, Users, Star, MessageSquare, Instagram, Linkedin, Youtube } from "lucide-react";
 
 // ---------------- Helper Functions ----------------
 
@@ -308,20 +308,21 @@ export default function BespokeEditorPage() {
     return (
         <div className="min-h-screen bg-[hsl(30,20%,98%)] pb-24 text-gray-900 font-sans">
             {/* Sticky Header */}
-            <div className="sticky top-[64px] z-40 bg-white/95 backdrop-blur-md border-b border-[hsl(30,15%,90%)] shadow-sm">
+            <div className="sticky top-[64px] z-30 bg-white/95 backdrop-blur-md border-b border-[hsl(30,15%,90%)] shadow-sm">
                 <Container>
-                    <div className="flex flex-col sm:flex-row items-center justify-between py-5 gap-4">
-                        <div className="flex flex-col">
-                            <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-[#111827]">Bespoke Editor</h1>
-                            <p className="text-sm sm:text-base font-medium text-[#64748b] mt-1">Managing <span className="font-semibold text-[#111827]">{brand.name}</span></p>
+                    <div className="flex flex-row items-center justify-between py-5 px-3 gap-4">
+                        <div className="flex flex-col min-w-0">
+                            <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-[#111827] truncate">Bespoke Editor</h1>
+                            <p className="text-sm sm:text-base font-medium text-[#64748b] mt-1 truncate">Managing <span className="font-semibold text-[#111827]">{brand.name}</span></p>
                         </div>
-                        <div className="flex items-center gap-3 w-full sm:w-auto">
-                            <Link href={`/bespoke/${brandId}`} target="_blank" className="flex-1 sm:flex-none h-12 flex items-center justify-center gap-2 rounded-2xl border border-[hsl(30,15%,90%)] bg-white px-5 text-sm font-medium text-gray-500 hover:text-black transition-colors">
-                                Preview <ArrowUpRight className="h-4 w-4" />
+                        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                            <Link href={`/bespoke/${brandId}`} target="_blank" className="h-10 w-10 sm:h-12 sm:w-auto flex items-center justify-center sm:gap-2 rounded-xl sm:rounded-2xl border border-[hsl(30,15%,90%)] bg-white sm:px-5 text-sm font-medium text-gray-500 hover:text-black transition-colors">
+                                <span className="hidden sm:inline">Preview</span>
+                                <Eye className="h-4 w-4" />
                             </Link>
-                            <button onClick={savePage} disabled={updateBrand.isPending} className="flex-1 sm:flex-none h-12 flex items-center justify-center gap-2 rounded-2xl bg-primary px-8 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-all shadow-lg shadow-primary/20">
+                            <button onClick={savePage} disabled={updateBrand.isPending} className="h-10 w-10 sm:h-12 sm:w-auto flex items-center justify-center sm:gap-2 rounded-xl sm:rounded-2xl bg-primary sm:px-8 text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-all shadow-lg shadow-primary/20">
                                 {updateBrand.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-                                Save Changes
+                                <span className="hidden sm:inline">Save Changes</span>
                             </button>
                         </div>
                     </div>
@@ -330,7 +331,7 @@ export default function BespokeEditorPage() {
 
             <div className="mx-auto w-full max-w-7xl  px-4 sm:px-6 lg:px-8 ">
                 <div className="flex flex-col lg:flex-row gap-10 items-start relative">
-                    
+
                     {/* Sticky Navigation Sidebar */}
                     <div className="hidden lg:block sticky top-[170px] pt-3 w-[240px] shrink-0 self-start z-10">
                         <nav className="flex flex-col max-h-[calc(100vh-180px)] overflow-y-auto no-scrollbar">
@@ -348,7 +349,7 @@ export default function BespokeEditorPage() {
                                     </button>
                                 ))}
                             </div>
-                            
+
                             {/* <div className="mt-8 pr-6 space-y-4">
                                 <h3 className="text-xs font-bold  tracking-widest text-gray-400 pl-4">Metrics</h3>
                                 <div className="grid grid-cols-2 gap-2 pl-4">
@@ -367,7 +368,7 @@ export default function BespokeEditorPage() {
 
                     {/* Main Content Area */}
                     <div className="flex-1 min-w-0 w-full pt-7 space-y-12">
-                        
+
                         {/* Section 1: Story & Hero */}
                         <SectionContainer id="story" title="Story & Hero" description="The primary messaging and branding visible at the top of the showcase.">
                             <div className="flex items-center justify-between p-5 bg-gray-50 rounded-lg border border-gray-200 mb-6">
@@ -498,7 +499,7 @@ export default function BespokeEditorPage() {
                                     <>
                                         <TextInput label="Project Title" value={item.title} onChange={(v) => update("title", v)} placeholder="Luxury Villa" />
                                         <TextInput label="Price Range" value={item.price} onChange={(v) => update("price", v)} placeholder="₹50,000 - ₹1,00,000" />
-                                        
+
                                         <div className="md:col-span-2">
                                             <TextareaInput label="Project Overview" value={item.overview} onChange={(v) => update("overview", v)} placeholder="A detailed overview of the project and materials used..." />
                                         </div>
@@ -510,17 +511,17 @@ export default function BespokeEditorPage() {
                                             </div>
                                             <div className="grid gap-4 sm:grid-cols-2 mt-4">
                                                 {[0, 1, 2, 3].map((gIndex) => (
-                                                    <CardFileInput 
-                                                        key={`gallery-${gIndex}`} 
-                                                        label={`Gallery Image ${gIndex + 1}`} 
-                                                        accept="image/*" 
-                                                        currentFile={item.galleryFiles?.[gIndex]} 
-                                                        currentMedia={item.gallery?.[gIndex]} 
+                                                    <CardFileInput
+                                                        key={`gallery-${gIndex}`}
+                                                        label={`Gallery Image ${gIndex + 1}`}
+                                                        accept="image/*"
+                                                        currentFile={item.galleryFiles?.[gIndex]}
+                                                        currentMedia={item.gallery?.[gIndex]}
                                                         onChange={(f) => {
                                                             const newFiles = [...(item.galleryFiles || [null, null, null, null])];
                                                             newFiles[gIndex] = f;
                                                             update("galleryFiles", newFiles);
-                                                        }} 
+                                                        }}
                                                     />
                                                 ))}
                                             </div>
@@ -554,7 +555,7 @@ export default function BespokeEditorPage() {
                         </div>
 
                         {/* Section 6: Reviews */}
-                        <SectionContainer id="reviews" title="Customer Endorsements" description="Manually input high-value reviews or testimonials to display.">
+                        {/* <SectionContainer id="reviews" title="Customer Endorsements" description="Manually input high-value reviews or testimonials to display.">
                             <div className="space-y-4">
                                 {reviews.map((review, index) => (
                                     <div key={index} className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:shadow-md relative group">
@@ -587,7 +588,7 @@ export default function BespokeEditorPage() {
                                     <Plus className="h-4 w-4" /> Add Review
                                 </button>
                             </div>
-                        </SectionContainer>
+                        </SectionContainer> */}
 
                         {/* Section 7: Requests */}
                         <SectionContainer id="requests" title="Contractor Inbound Requests" description="Contractors applying to feature on your bespoke page.">

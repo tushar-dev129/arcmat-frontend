@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Star, MapPin, Briefcase, ChevronRight, Mail, Phone } from "lucide-react";
 import clsx from "clsx";
 
+import { HARDCODED_CATEGORIES } from "@/constants/contractorCategories";
+
 const ContractorCard = ({ contractor }) => {
     const {
         businessName,
@@ -17,23 +19,35 @@ const ContractorCard = ({ contractor }) => {
         isVerified,
         isTopRated,
         contact,
+        categoryId,
         rating = 4.8,
         reviewCount = 12
     } = contractor;
 
+    // Get primary category name
+    const getCategoryName = () => {
+        if (typeof categoryId === 'object' && categoryId?.name) {
+            return categoryId.name;
+        }
+        if (typeof categoryId === 'string') {
+            const hardcoded = HARDCODED_CATEGORIES.find(c => c._id === categoryId);
+            return hardcoded ? hardcoded.name : null;
+        }
+        return null;
+    };
+    const primaryCategory = getCategoryName();
+
     // Helper to get image URL
     const getImageUrl = (img, type = "cover") => {
-        if (!img) {
-            if (type === "cover") return "/Icons/arcmatlogo.svg";
-            return "/images/placeholder-profile.jpg";
+        if (!img || img === 'undefined' || img === 'null') {
+            return "/Icons/arcmatlogo.svg";
         }
         
         // Handle different image object structures
         const url = typeof img === 'string' ? img : img.url || img.secure_url;
         
-        if (!url) {
-            if (type === "cover") return "/Icons/arcmatlogo.svg";
-            return "/images/placeholder-profile.jpg";
+        if (!url || url === 'undefined' || url === 'null') {
+            return "/Icons/arcmatlogo.svg";
         }
         
         return url;
@@ -89,12 +103,12 @@ const ContractorCard = ({ contractor }) => {
                     </div>
                 </div>
 
-                {/* Rating Overlay */}
-                <div className="absolute top-2 right-5 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg border border-[hsl(30,15%,90%)] shadow-sm">
-                    <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-                    <span className="text-xs font-bold text-gray-800">{rating}</span>
-                    <span className="text-[10px] text-gray-400">({reviewCount})</span>
-                </div>
+                {/* Category Overlay */}
+                {primaryCategory && (
+                    <div className="absolute top-2 right-5 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg border border-[hsl(30,15%,90%)] shadow-sm">
+                        <span className="text-[10px] font-black text-primary uppercase tracking-wider">{primaryCategory}</span>
+                    </div>
+                )}
 
                 <div className="mt-2">
                     <h3 className="text-lg font-bold text-[hsl(20,10%,15%)] group-hover:text-[hsl(15,80%,55%)] transition-colors duration-300 truncate">

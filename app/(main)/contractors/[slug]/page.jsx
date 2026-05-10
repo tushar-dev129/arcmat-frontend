@@ -4,6 +4,7 @@ import { useState, use } from "react";
 import { useGetContractorBySlug, useCreateContractorLead } from "@/hooks/useContractor";
 import Container from "@/components/ui/Container";
 import { getImageUrl } from "@/lib/productUtils";
+import clsx from "clsx";
 import Image from "next/image";
 import { 
     Star, 
@@ -61,7 +62,7 @@ export default function ContractorProfilePage({ params }) {
                     <div className="flex items-center justify-between py-4">
                         <Link href="/contractors" className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-primary transition-all">
                             <ChevronLeft className="w-4 h-4" />
-                            Back to Network
+                            Back 
                         </Link>
                         <div className="flex items-center gap-4">
                             <button className="p-2.5 rounded-xl border border-gray-100 hover:bg-gray-50 transition-all">
@@ -78,10 +79,10 @@ export default function ContractorProfilePage({ params }) {
             {/* Hero Section */}
             <section className="relative h-80 w-full overflow-hidden">
                 <Image 
-                    src={contractor.coverImage?.url || "/Icons/arcmatlogo.svg"} 
+                    src={getImageUrl(contractor.coverImage, "contractors") || "/Icons/arcmatlogo.svg"} 
                     alt={contractor.businessName}
                     fill
-                    className="p-10"
+                    className="p-10 object-contain opacity-20 grayscale"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
             </section>
@@ -96,10 +97,15 @@ export default function ContractorProfilePage({ params }) {
                                 {/* Profile Image */}
                                 <div className="relative h-32 w-32 rounded-3xl overflow-hidden border-4 border-white shadow-2xl bg-gray-50 flex-shrink-0">
                                     <Image 
-                                        src={getImageUrl(contractor.profileImage, "contractors") || "/images/placeholder-profile.jpg"} 
+                                        src={getImageUrl(contractor.profileImage, "contractors") || "/Icons/arcmatlogo.svg"} 
                                         alt={contractor.businessName}
                                         fill
-                                        className="object-cover"
+                                        className={clsx(
+                                            "transition-all duration-300",
+                                            (contractor.profileImage && contractor.profileImage !== 'undefined' && contractor.profileImage !== 'null') 
+                                                ? "object-cover" 
+                                                : "object-contain p-6 opacity-30 grayscale"
+                                        )}
                                     />
                                 </div>
                                 
@@ -218,7 +224,7 @@ export default function ContractorProfilePage({ params }) {
                         <div className="sticky top-24">
                             
                             {/* Lead Form */}
-                            <div className="bg-white rounded-[2rem] p-8 md:p-10 border-2 border-primary/10 shadow-2xl shadow-primary/5 relative overflow-hidden group">
+                            <div className="bg-white rounded-2xl p-4 md:p-5 border-2 border-primary/10 shadow-2xl shadow-primary/5 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-10 -mt-10 transition-transform duration-500 group-hover:scale-110" />
                                 
                                 <div className="relative z-10">

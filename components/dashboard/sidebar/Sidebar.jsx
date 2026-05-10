@@ -126,7 +126,7 @@ export default function Sidebar() {
     <>
       {isMobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-50 md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -134,7 +134,7 @@ export default function Sidebar() {
       <aside
         suppressHydrationWarning
         className={clsx(
-          "fixed md:sticky md:top-16 z-40 h-screen md:h-[calc(100vh-64px)] border-r border-gray-200 bg-white transition-all duration-300 flex flex-col shrink-0",
+          "fixed md:sticky md:top-16 z-50 h-screen md:h-[calc(100vh-64px)] border-r border-gray-200 bg-white transition-all duration-300 flex flex-col shrink-0",
           safeCollapsed ? "w-20" : "w-64",
           isMobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         )}
