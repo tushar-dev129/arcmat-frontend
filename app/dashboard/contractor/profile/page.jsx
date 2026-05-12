@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { 
     useGetMyContractorProfile, 
@@ -10,7 +10,7 @@ import {
     useCreateContractorPortfolioItem,
     useDeleteContractorPortfolioItem
 } from "@/hooks/useContractor";
-import { HARDCODED_CATEGORIES } from "@/constants/contractorCategories";
+import { useGetCategoryTree } from "@/hooks/useCategory";
 import { getImageUrl } from "@/lib/productUtils";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -46,14 +46,16 @@ import Image from "next/image";
 
 export default function MarketplaceProfilePage() {
     const { user } = useAuth();
+    const { data: categoriesResponse, isLoading: isCategoriesLoading } = useGetCategoryTree({ categoryType: 'contractor_service' });
+    const categories = categoriesResponse?.data || categoriesResponse || [];
+
+
     const { data: profileData, isLoading: profileLoading, refetch: refetchProfile } = useGetMyContractorProfile(user?._id);
     const createMutation = useCreateContractorProfile();
     const updateMutation = useUpdateContractorProfile();
     const uploadMutation = useUploadContractorImage();
     const createPortfolioMutation = useCreateContractorPortfolioItem();
     const deletePortfolioMutation = useDeleteContractorPortfolioItem();
-
-    const categories = HARDCODED_CATEGORIES;
 
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
@@ -63,6 +65,9 @@ export default function MarketplaceProfilePage() {
         profileImage: null,
         categoryId: "",
         subcategoryId: "",
+        subcategoryIds: [],
+        otherCategoryName: "",
+        otherSubcategoryName: "",
         experienceYears: "",
         teamSize: "",
         contact: {
@@ -79,6 +84,15 @@ export default function MarketplaceProfilePage() {
         serviceAreas: [],
         visibility: "public"
     });
+
+    const contractorGroups = useMemo(() => {
+        const root = categories.find(c => c.slug === "find-contractors" || c.name === "Find Contractors");
+        return root?.children || [];
+    }, [categories]);
+
+    const selectedGroup = useMemo(() => {
+        return contractorGroups.find(c => c._id === formData.categoryId);
+    }, [contractorGroups, formData.categoryId]);
 
     const [newArea, setNewArea] = useState("");
     const [portfolioForm, setPortfolioForm] = useState({
@@ -100,6 +114,9 @@ export default function MarketplaceProfilePage() {
                 profileImage: profile.profileImage || null,
                 categoryId: profile.categoryId?._id || profile.categoryId || "",
                 subcategoryId: profile.subcategoryId?._id || profile.subcategoryId || "",
+                subcategoryIds: profile.subcategoryIds || [],
+                otherCategoryName: profile.otherCategoryName || "",
+                otherSubcategoryName: profile.otherSubcategoryName || "",
                 experienceYears: profile.experienceYears || "",
                 teamSize: profile.teamSize || "",
                 contact: {
@@ -476,41 +493,149 @@ export default function MarketplaceProfilePage() {
 
                         <Field label="Primary Category" required={isEditing}>
                             {isEditing ? (
-                                <select 
-                                    name="categoryId"
-                                    value={formData.categoryId}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all bg-white"
-                                >
-                                    <option value="">Select Category</option>
-                                    {categories?.map(cat => (
-                                        <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                    ))}
-                                </select>
+                                <div className="space-y-3">
+                                    <select 
+                                        name="categoryId"
+                                        value={formData.categoryId}
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            // Reset subcategories and other names when category changes
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                subcategoryIds: [],
+                                                otherCategoryName: "",
+                                                otherSubcategoryName: ""
+                                            }));
+                                        }}
+                                        required
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all bg-white font-medium"
+                                    >
+                                        <option value="">Select Category</option>
+                                        {contractorGroups.map(cat => (
+                                            <option key={cat._id} value={cat._id}>{cat.name}</option>
+                                        ))}
+                                    </select>
+                                    
+                                    {formData.categoryId === "other" && (
+                                        <div className="relative animate-in slide-in-from-top-2 duration-300">
+                                            <input 
+                                                type="text"
+                                                name="otherCategoryName"
+                                                value={formData.otherCategoryName}
+                                                onChange={handleChange}
+                                                required
+                                                placeholder="Specify your category..."
+                                                className="w-full px-4 py-3 rounded-xl border border-primary/30 bg-primary/5 focus:border-primary outline-none transition-all font-medium"
+                                            />
+                                            <p className="text-[10px] text-primary mt-1 font-bold uppercase tracking-wider px-1">Admin will review and add this category</p>
+                                        </div>
+                                    )}
+                                </div>
                             ) : (
                                 <div className="inline-flex items-center px-3 py-1 bg-orange-50 text-[hsl(15,80%,60%)] rounded-full text-sm font-bold border border-orange-100">
-                                    {categories.find(c => c._id === formData.categoryId)?.name || profile?.categoryId?.name || "Uncategorized"}
+                                    {formData.categoryId === "other" 
+                                        ? `Other: ${formData.otherCategoryName || "Not specified"}`
+                                        : (contractorGroups.find(c => c._id === formData.categoryId)?.name || profile?.categoryId?.name || "Uncategorized")}
                                 </div>
                             )}
                         </Field>
 
-                        <Field label="Subcategory" required={isEditing}>
+                        <Field label="Subcategories (Select multiple)" required={isEditing}>
                             {isEditing ? (
-                                <select 
-                                    name="subcategoryId"
-                                    value={formData.subcategoryId}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all bg-white"
-                                >
-                                    <option value="">Select Subcategory</option>
-                                    {categories?.find(cat => cat._id === formData.categoryId)?.children?.map(sub => (
-                                        <option key={sub._id} value={sub._id}>{sub.name}</option>
-                                    ))}
-                                </select>
+                                <div className="space-y-3">
+                                    {formData.categoryId ? (
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                            {selectedGroup?.children?.map(sub => (
+                                                <label key={sub._id} className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all group">
+                                                    <input 
+                                                        type="checkbox"
+                                                        checked={formData.subcategoryIds.includes(sub._id)}
+                                                        onChange={(e) => {
+                                                            const checked = e.target.checked;
+                                                            setFormData(prev => ({
+                                                                ...prev,
+                                                                subcategoryIds: checked 
+                                                                    ? [...prev.subcategoryIds, sub._id]
+                                                                    : prev.subcategoryIds.filter(id => id !== sub._id)
+                                                            }));
+                                                        }}
+                                                        className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                                    />
+                                                    <span className={clsx(
+                                                        "text-sm font-medium transition-colors",
+                                                        formData.subcategoryIds.includes(sub._id) ? "text-primary font-bold" : "text-gray-600"
+                                                    )}>
+                                                        {sub.name}
+                                                    </span>
+                                                </label>
+                                            ))}
+                                            
+                                            {/* "Other" subcategory option - can be handled by the user's "Others" in the list or dynamically */}
+                                            <label className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all">
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={formData.subcategoryIds.includes("other_sub")}
+                                                    onChange={(e) => {
+                                                        const checked = e.target.checked;
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            subcategoryIds: checked 
+                                                                ? [...prev.subcategoryIds, "other_sub"]
+                                                                : prev.subcategoryIds.filter(id => id !== "other_sub")
+                                                        }));
+                                                    }}
+                                                    className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                                />
+                                                <span className={clsx(
+                                                    "text-sm font-medium",
+                                                    formData.subcategoryIds.includes("other_sub") ? "text-primary font-bold" : "text-gray-600"
+                                                )}>
+                                                    Others
+                                                </span>
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <div className="p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200 text-center text-xs text-gray-400">
+                                            Select a primary category first
+                                        </div>
+                                    )}
+
+                                    {formData.subcategoryIds.includes("other_sub") && (
+                                        <div className="relative animate-in slide-in-from-top-2 duration-300">
+                                            <input 
+                                                type="text"
+                                                name="otherSubcategoryName"
+                                                value={formData.otherSubcategoryName}
+                                                onChange={handleChange}
+                                                required
+                                                placeholder="Specify other subcategories..."
+                                                className="w-full px-4 py-3 rounded-xl border border-primary/30 bg-primary/5 focus:border-primary outline-none transition-all font-medium"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
                             ) : (
-                                <div className="text-gray-700">
-                                    {categories.find(c => c._id === formData.categoryId)?.children?.find(s => s._id === formData.subcategoryId)?.name || profile?.subcategoryId?.name || "None"}
+                                <div className="flex flex-wrap gap-2">
+                                    {formData.subcategoryIds.length > 0 ? (
+                                        <>
+                                            {formData.subcategoryIds.map(subId => {
+                                                if (subId === "other_sub") return null;
+                                                const subName = selectedGroup?.children?.find(s => s._id === subId)?.name;
+                                                return subName ? (
+                                                    <span key={subId} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold border border-gray-200">
+                                                        {subName}
+                                                    </span>
+                                                ) : null;
+                                            })}
+                                            {formData.subcategoryIds.includes("other_sub") && (
+                                                <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold border border-primary/20">
+                                                    Other: {formData.otherSubcategoryName}
+                                                </span>
+                                            )}
+                                        </>
+                                    ) : (
+                                        <span className="text-gray-400 italic text-sm">No subcategories selected</span>
+                                    )}
                                 </div>
                             )}
                         </Field>

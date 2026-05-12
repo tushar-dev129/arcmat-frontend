@@ -32,35 +32,41 @@
             "href": "/dashboard/categories"
         },
         {
-            "id": "homepage",
-            "label": "Homepage Content",
-            "icon": "Image",
-            "href": "/dashboard/homepage"
-        },
-        {
             "id": "bespoke",
-            "label": "Bespoke Page",
+            "label": "Page Editor",
             "icon": "Sparkles",
             "href": "/dashboard/bespoke",
             "brandOnly": true
         },
         {
             "id": "bespoke-connections",
-            "label": "Bespoke Inquiries",
+            "label": "Inquiries",
             "icon": "Send",
             "href": "/dashboard/bespoke-connections"
         },
         {
-            "id": "users",
-            "label": "Users",
-            "icon": "Users",
-            "href": "/dashboard/users"
+            "id": "category-requests",
+            "label": "Category Requests",
+            "icon": "Bell",
+            "href": "/dashboard/category-requests"
         },
         {
             "id": "product-leads",
             "label": "Product Leads",
             "icon": "MessageSquare",
             "href": "/dashboard/product-leads"
+        },
+        {
+            "id": "homepage",
+            "label": "Homepage Content",
+            "icon": "Image",
+            "href": "/dashboard/homepage"
+        },
+        {
+            "id": "users",
+            "label": "Users",
+            "icon": "Users",
+            "href": "/dashboard/users"
         },
         {
             "id": "help",

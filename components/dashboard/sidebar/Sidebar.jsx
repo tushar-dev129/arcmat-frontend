@@ -1,5 +1,6 @@
 'use client';
 
+
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -7,7 +8,7 @@ import {
   HelpCircle, ChevronRight, ChevronLeft, Plus,
   Package, Tags, Layers, Heart, ShoppingBag, User, Users,
   LayoutDashboard, Image, HardHat, Store, Palette,
-  PlayCircle, BarChart3, Briefcase, MessageSquare, Star, Folder, Sparkles, Send
+  PlayCircle, BarChart3, Briefcase, MessageSquare, Star, Folder, Sparkles, Send, Bell
 } from 'lucide-react';
 import clsx from 'clsx';
 import useAuthStore from '@/store/useAuthStore';
@@ -21,7 +22,7 @@ import { useNotificationCounts } from '@/hooks/useNotificationCounts';
 const ICON_MAP = {
   Package, Tags, Layers, HelpCircle, ShoppingBag, Heart,
   User, Users, LayoutDashboard, Image, HardHat, Store,
-  Palette, PlayCircle, BarChart3, Briefcase, MessageSquare, Star, Folder, Sparkles, Send
+  Palette, PlayCircle, BarChart3, Briefcase, MessageSquare, Star, Folder, Sparkles, Send, Bell
 };
 
 const mapIcons = (items) => items.map(item => ({ ...item, icon: ICON_MAP[item.icon] }));
@@ -112,7 +113,7 @@ export default function Sidebar() {
     .filter(item => {
       if (!mounted) return item.id === 'dashboard';
       if (item.requiresAuth && !isAuthenticated) return false;
-      if ((item.id === 'categories' || item.id === 'attributes' || item.id === 'users' || item.id === 'homepage') && !isAdmin) return false;
+      if ((item.id === 'categories' || item.id === 'attributes' || item.id === 'users' || item.id === 'homepage' || item.id === 'category-requests') && !isAdmin) return false;
       if (item.brandOnly && !isBrandLike) return false;
       if (item.retailerOnly && !isRetailer) return false;
       if (item.id === 'boards' && user?.professionalType === 'Contractor / Builder') return false;
@@ -174,9 +175,27 @@ export default function Sidebar() {
           )}
 
           <nav className="flex-1 space-y-2">
-            {visibleItems.map((item) => (
-              <SidebarItem key={item.id} item={item} isCollapsed={safeCollapsed} />
-            ))}
+            {visibleItems.map((item) => {
+              if (item.type === 'section') {
+                return (
+                  <div key={item.id} className={clsx(
+                    "pt-6 pb-2",
+                    safeCollapsed ? "flex justify-center" : "px-3"
+                  )}>
+                    {safeCollapsed ? (
+                      <div className="w-8 h-px bg-gray-200" />
+                    ) : (
+                      <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                        {item.label}
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <SidebarItem key={item.id} item={item} isCollapsed={safeCollapsed} />
+              );
+            })}
           </nav>
         </div>
       </aside>

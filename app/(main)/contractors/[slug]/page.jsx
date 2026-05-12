@@ -21,11 +21,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "@/components/ui/Toast";
+import { useGetCategoryTree } from "@/hooks/useCategory";
 
 export default function ContractorProfilePage({ params }) {
     const { slug } = use(params);
     const { data: contractorResponse, isLoading, error } = useGetContractorBySlug(slug);
     const createLeadMutation = useCreateContractorLead();
+    
+    const { data: categoriesResponse } = useGetCategoryTree({ categoryType: 'contractor_service' });
+    const categories = categoriesResponse?.data || categoriesResponse || [];
 
     const [leadForm, setLeadForm] = useState({
         name: "",
@@ -33,6 +37,19 @@ export default function ContractorProfilePage({ params }) {
         requirement: "",
         location: ""
     });
+
+    // Helper to find category by ID in a nested tree
+    const findCategoryInTree = (tree, id) => {
+        if (!tree || !id) return null;
+        for (const node of tree) {
+            if (String(node._id) === String(id)) return node;
+            if (node.children) {
+                const found = findCategoryInTree(node.children, id);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
 
     if (isLoading) return <div className="min-h-screen flex items-center justify-center">Loading Profile...</div>;
 
@@ -59,10 +76,10 @@ export default function ContractorProfilePage({ params }) {
             {/* Navigation Bar */}
             <div className="bg-white border-b border-[hsl(30,15%,90%)] sticky top-0 z-40">
                 <Container>
-                    <div className="flex items-center justify-between py-4">
-                        <Link href="/contractors" className="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-primary transition-all">
+                    <div className="flex items-center justify-between py-2">
+                        <Link href="/contractors" className="flex items-center gap-1.5 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-primary transition-all">
                             <ChevronLeft className="w-4 h-4" />
-                            Back 
+                            Back to Contractors
                         </Link>
                         <div className="flex items-center gap-4">
                             <button className="p-2.5 rounded-xl border border-gray-100 hover:bg-gray-50 transition-all">
@@ -77,17 +94,19 @@ export default function ContractorProfilePage({ params }) {
             </div>
 
             {/* Hero Section */}
-            <section className="relative h-80 w-full overflow-hidden">
-                <Image 
-                    src={getImageUrl(contractor.coverImage, "contractors") || "/Icons/arcmatlogo.svg"} 
-                    alt={contractor.businessName}
-                    fill
-                    className="p-10 object-contain opacity-20 grayscale"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
+            <section className="relative h-32 w-full overflow-hidden bg-gradient-to-br from-white via-orange-50/20 to-white">
+                {contractor.coverImage && (
+                    <Image 
+                        src={getImageUrl(contractor.coverImage, "contractors")} 
+                        alt={contractor.businessName}
+                        fill
+                        className="object-cover opacity-60"
+                    />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[hsl(30,20%,98%)] via-transparent to-transparent" />
             </section>
 
-            <Container className="-mt-20 relative z-10">
+            <Container className="-mt-16 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     
                     {/* Left Column: Profile Info */}
@@ -148,6 +167,56 @@ export default function ContractorProfilePage({ params }) {
                                                 <span className="text-sm font-bold text-gray-800">4.8 / 5.0</span>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    {/* Categories & Subcategories */}
+                                    <div className="mt-8 flex flex-wrap gap-4">
+                                        <div className="space-y-2">
+                                            <span className="block text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">Primary Category</span>
+                                            <div className="inline-flex items-center px-4 py-1.5 bg-primary/10 text-primary rounded-xl text-sm font-bold border border-primary/20">
+                                                {contractor.categoryId === 'other' 
+                                                    ? contractor.otherCategoryName 
+                                                    : (typeof contractor.categoryId === 'object' 
+                                                        ? (contractor.categoryId.name || "Professional")
+                                                        : (findCategoryInTree(categories, contractor.categoryId)?.name || "Professional"))}
+                                            </div>
+                                        </div>
+                                        
+                                        {(contractor.subcategoryIds?.length > 0 || contractor.subcategoryId) && (
+                                            <div className="space-y-2">
+                                                <span className="block text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">Specializations</span>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {/* Handle legacy single subcategoryId */}
+                                                    {contractor.subcategoryId && !contractor.subcategoryIds?.includes(contractor.subcategoryId) && (
+                                                        <span className="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold border border-gray-200">
+                                                            {findCategoryInTree(categories, contractor.categoryId)?.children?.find(s => s._id === contractor.subcategoryId)?.name || "General"}
+                                                        </span>
+                                                    )}
+                                                    {/* Handle new multiple subcategoryIds */}
+                                                    {contractor.subcategoryIds?.map(subId => {
+                                                        if (subId === "other_sub") return (
+                                                            <span key={subId} className="px-3 py-1 bg-primary/5 text-primary rounded-lg text-xs font-bold border border-primary/10">
+                                                                Other: {contractor.otherSubcategoryName}
+                                                            </span>
+                                                        );
+                                                        
+                                                        // Find subcategory in the tree
+                                                        let subName = null;
+                                                        const catId = typeof contractor.categoryId === 'object' ? contractor.categoryId._id : contractor.categoryId;
+                                                        const group = findCategoryInTree(categories, catId);
+                                                        if (group) {
+                                                            subName = group.children?.find(s => s._id === subId)?.name;
+                                                        }
+
+                                                        return subName ? (
+                                                            <span key={subId} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-lg text-xs font-bold border border-gray-200">
+                                                                {subName}
+                                                            </span>
+                                                        ) : null;
+                                                    })}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

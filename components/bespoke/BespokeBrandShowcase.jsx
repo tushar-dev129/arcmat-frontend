@@ -288,12 +288,13 @@ export default function BespokeBrandShowcase() {
             <motion.div className="fixed left-0 right-0 top-0 z-[100] h-[2px] origin-left bg-[var(--brand-color)]" style={{ scaleX: progress }} />
 
             {/* Premium Breadcrumb Header */}
-            <div className="bg-white border-b border-gray-100/80 sticky top-0 z-[90]">
+            <div className="bg-white border-b border-gray-100/80 sticky top-0 z-[10]">
                 <Container className="py-3.5">
                     <nav className="flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                        <span className="h-3 w-[1px] bg-gray-200 mx-1" />
                         <Link href="/bespoke" className="flex items-center gap-1.5 hover:text-[var(--brand-color)] transition-colors group">
                             <ChevronLeft className="h-3.5 w-3.5 -ml-1 transition-transform group-hover:-translate-x-0.5" />
-                            Bespoke
+                            Bespoke Brands
                         </Link>
                         <span className="h-3 w-[1px] bg-gray-200 mx-1" />
                         <span className="text-gray-900 truncate max-w-[200px]">{template.hero.name}</span>

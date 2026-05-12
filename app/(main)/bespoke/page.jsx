@@ -116,7 +116,7 @@ const BespokePage = () => {
                                         }`}
                                 >
                                     <Sparkles className={`h-4 w-4 ${brandType === "custom_maker" ? "text-[#b76b45]" : "text-gray-400"}`} />
-                                    Besopke Brands
+                                    Bespoke Brands
                                 </button>
                                 <button
                                     onClick={() => setBrandType("brand")}

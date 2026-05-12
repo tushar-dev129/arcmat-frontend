@@ -23,6 +23,7 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
         meta_description: '',
         meta_keywords: '',
         status: 'Active',
+        categoryType: 'product',
         category_image: null,
         showcase: []
     });
@@ -60,6 +61,7 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
             meta_description: '',
             meta_keywords: '',
             status: 'Active',
+            categoryType: 'product',
             category_image: null,
             showcase: []
         });
@@ -122,6 +124,7 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
             if (categoryData.meta_keywords) formData.append('meta_keywords', categoryData.meta_keywords);
 
             formData.append('status', categoryData.status);
+            formData.append('categoryType', categoryData.categoryType);
 
             if (step === 1 && categoryData.showcase?.length > 0) {
                 categoryData.showcase.forEach(val => formData.append('showcase[]', val));
@@ -367,6 +370,18 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
                                     </select>
                                 </div>
                                 <div>
+                                    <label className="block text-sm font-bold text-gray-800 mb-2">Category Type *</label>
+                                    <select
+                                        value={categoryData.categoryType}
+                                        onChange={(e) => setCategoryData(prev => ({ ...prev, categoryType: e.target.value }))}
+                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9a88a] text-gray-900"
+                                    >
+                                        <option value="product">Product Catalog</option>
+                                        <option value="contractor_service">Contractor Service</option>
+                                        <option value="custom_maker">Custom Maker</option>
+                                    </select>
+                                </div>
+                                <div className="md:col-span-2">
                                     <label className="block text-sm font-bold text-gray-800 mb-2">Category Image (Optional)</label>
                                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:bg-gray-50 transition-colors relative">
                                         <input

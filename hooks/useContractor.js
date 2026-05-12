@@ -105,3 +105,10 @@ export const useGetContractorStats = (userId) => {
         enabled: !!userId,
     });
 };
+
+export const useGetCategoryRequests = () => {
+    return useQuery({
+        queryKey: ['category-requests'],
+        queryFn: () => contractorService.getCategoryRequests(),
+    });
+};

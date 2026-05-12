@@ -2,166 +2,136 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Star, MapPin, Briefcase, ChevronRight, Mail, Phone } from "lucide-react";
-import clsx from "clsx";
+import { MapPin, Briefcase, ChevronRight, ShieldCheck, Star } from "lucide-react";
 
-import { HARDCODED_CATEGORIES } from "@/constants/contractorCategories";
+import { useGetCategoryTree } from "@/hooks/useCategory";
 
 const ContractorCard = ({ contractor }) => {
+    const { data: categoriesResponse } = useGetCategoryTree({ categoryType: 'contractor_service' });
+    const categories = categoriesResponse?.data || categoriesResponse || [];
+
     const {
         businessName,
         slug,
         tagline,
         profileImage,
-        coverImage,
         location,
         experienceYears,
         isVerified,
         isTopRated,
-        contact,
         categoryId,
+        otherCategoryName,
         rating = 4.8,
         reviewCount = 12
     } = contractor;
 
-    // Get primary category name
     const getCategoryName = () => {
-        if (typeof categoryId === 'object' && categoryId?.name) {
-            return categoryId.name;
-        }
+        if (categoryId === 'other') return otherCategoryName || "Other";
+        if (typeof categoryId === 'object' && categoryId?.name) return categoryId.name;
         if (typeof categoryId === 'string') {
-            const hardcoded = HARDCODED_CATEGORIES.find(c => c._id === categoryId);
-            return hardcoded ? hardcoded.name : null;
+            const found = categories.find(c => c._id === categoryId);
+            return found ? found.name : null;
         }
         return null;
     };
     const primaryCategory = getCategoryName();
 
-    // Helper to get image URL
-    const getImageUrl = (img, type = "cover") => {
-        if (!img || img === 'undefined' || img === 'null') {
-            return "/Icons/arcmatlogo.svg";
-        }
-        
-        // Handle different image object structures
+    const getProfileImageUrl = (img) => {
+        if (!img || img === 'undefined' || img === 'null') return "/Icons/arcmatlogo.svg";
         const url = typeof img === 'string' ? img : img.url || img.secure_url;
-        
-        if (!url || url === 'undefined' || url === 'null') {
-            return "/Icons/arcmatlogo.svg";
-        }
-        
+        if (!url || url === 'undefined' || url === 'null') return "/Icons/arcmatlogo.svg";
         return url;
     };
 
     return (
-        <div className="group relative bg-white rounded-2xl overflow-hidden border border-[hsl(30,15%,90%)] hover:shadow-xl transition-all duration-500 flex flex-col h-full">
-            {/* Cover Image Area */}
-            <div className={clsx(
-                "relative h-40 w-full overflow-hidden",
-                !coverImage && "bg-gray-50 flex items-center justify-center p-8"
-            )}>
-                <Image
-                    src={getImageUrl(coverImage, "cover")}
-                    alt={businessName}
-                    fill={!!coverImage}
-                    width={!coverImage ? 120 : undefined}
-                    height={!coverImage ? 120 : undefined}
-                    className={clsx(
-                        "transition-transform duration-700 group-hover:scale-110",
-                        coverImage ? "object-cover" : "object-contain opacity-20 grayscale"
-                    )}
-                />
-                {coverImage && <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60" />}
-                
-                {/* Badges */}
-                <div className="absolute top-3 left-3 flex flex-wrap gap-2">
+        <div className="group relative bg-white rounded-2xl border border-[hsl(30,15%,88%)] hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
+
+            {/* Top accent line */}
+            <div className="h-1 w-full bg-gradient-to-r from-[hsl(15,80%,60%)] via-[hsl(30,90%,65%)] to-[hsl(15,80%,60%)]" />
+
+            {/* Profile image + identity block */}
+            <div className="flex flex-col items-center pt-7 pb-5 px-5 text-center">
+
+                {/* Avatar with ring */}
+                <div className="relative mb-4">
+                    <div className="h-20 w-20 rounded-full ring-4 ring-[hsl(30,15%,90%)] group-hover:ring-[hsl(15,80%,70%)] transition-all duration-300 overflow-hidden bg-gray-100 shadow-lg">
+                        <div className="relative h-full w-full">
+                            <Image
+                                src={getProfileImageUrl(profileImage)}
+                                alt={businessName}
+                                fill
+                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                        </div>
+                    </div>
                     {isVerified && (
-                        <span className="px-2 py-1 bg-blue-500/90 text-white text-[10px] font-bold rounded-md backdrop-blur-md flex items-center gap-1 shadow-lg">
-                            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"></path></svg>
-                            VERIFIED
+                        <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1 shadow-md ring-2 ring-white">
+                            <ShieldCheck className="w-3 h-3 text-white" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Name */}
+                <h3 className="text-[15px] font-bold text-[hsl(20,10%,12%)] group-hover:text-[hsl(15,80%,50%)] transition-colors duration-300 leading-tight">
+                    {businessName}
+                </h3>
+
+                {/* Tagline */}
+                <p className="text-[11px] text-[hsl(20,5%,50%)] mt-1 line-clamp-1 italic px-2">
+                    {tagline || "Providing premium bespoke services."}
+                </p>
+
+                {/* Badges row */}
+                <div className="flex items-center gap-2 mt-3">
+                    {isTopRated && (
+                        <span className="flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 text-[10px] font-bold rounded-full">
+                            <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                            TOP RATED
                         </span>
                     )}
-                    {isTopRated && (
-                        <span className="px-2 py-1 bg-[hsl(15,80%,65%)] text-white text-[10px] font-bold rounded-md backdrop-blur-md shadow-lg">
-                            TOP RATED
+                    {primaryCategory && (
+                        <span className="px-2.5 py-0.5 bg-[hsl(15,80%,96%)] border border-[hsl(15,80%,85%)] text-[hsl(15,70%,45%)] text-[10px] font-black uppercase tracking-wide rounded-full">
+                            {primaryCategory}
                         </span>
                     )}
                 </div>
             </div>
 
-            {/* Profile Content */}
-            <div className="relative px-5 pt-12 pb-6 flex-1 flex flex-col">
-                {/* Profile Avatar Overlay */}
-                <div className="absolute -top-10 left-5 h-20 w-20 rounded-xl bg-white p-1 shadow-xl border border-[hsl(30,15%,95%)] overflow-hidden">
-                    <div className="relative h-full w-full rounded-lg overflow-hidden bg-gray-50">
-                        <Image
-                            src={getImageUrl(profileImage, "profile")}
-                            alt={businessName}
-                            fill
-                            className="object-cover"
-                        />
+            {/* Divider */}
+            <div className="mx-5 border-t border-dashed border-[hsl(30,15%,88%)]" />
+
+            {/* Info row */}
+            <div className="flex items-center justify-around px-5 py-4">
+                <div className="flex items-center gap-1.5">
+                    <div className="p-1.5 bg-[hsl(15,80%,96%)] rounded-lg">
+                        <MapPin className="w-3 h-3 text-[hsl(15,80%,55%)]" />
                     </div>
+                    <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">
+                        {location?.city || "Mumbai"}
+                    </span>
                 </div>
 
-                {/* Category Overlay */}
-                {primaryCategory && (
-                    <div className="absolute top-2 right-5 flex items-center gap-1 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-lg border border-[hsl(30,15%,90%)] shadow-sm">
-                        <span className="text-[10px] font-black text-primary uppercase tracking-wider">{primaryCategory}</span>
+                <div className="w-px h-6 bg-[hsl(30,15%,88%)]" />
+
+                <div className="flex items-center gap-1.5">
+                    <div className="p-1.5 bg-[hsl(15,80%,96%)] rounded-lg">
+                        <Briefcase className="w-3 h-3 text-[hsl(15,80%,55%)]" />
                     </div>
-                )}
-
-                <div className="mt-2">
-                    <h3 className="text-lg font-bold text-[hsl(20,10%,15%)] group-hover:text-[hsl(15,80%,55%)] transition-colors duration-300 truncate">
-                        {businessName}
-                    </h3>
-                    <p className="text-xs text-[hsl(20,5%,45%)] mt-1 line-clamp-1 font-medium italic">
-                        {tagline || "Providing premium bespoke services."}
-                    </p>
+                    <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">
+                        {experienceYears || "5+"} Yrs Exp.
+                    </span>
                 </div>
+            </div>
 
-                {/* Info Grid - Updated with Email and Phone */}
-                <div className="mt-5 grid grid-cols-1 gap-3 pb-5 border-b border-dashed border-[hsl(30,15%,90%)]">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
-                                <MapPin className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
-                            </div>
-                            <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{location?.city || "Mumbai"}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-[#ead4ce]/30 rounded-lg">
-                                <Briefcase className="w-3.5 h-3.5 text-[hsl(15,80%,60%)]" />
-                            </div>
-                            <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">{experienceYears || "5+"} Years Exp.</span>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2.5 mt-1">
-                        {contact?.email && (
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <Mail className="w-3.5 h-3.5 text-primary opacity-70" />
-                                <span className="text-[11px] font-medium truncate">{contact.email}</span>
-                            </div>
-                        )}
-                        {contact?.phone && (
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <Phone className="w-3.5 h-3.5 text-primary opacity-70" />
-                                <span className="text-[11px] font-medium">{contact.phone}</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Footer Action */}
-                <div className="mt-auto pt-4 flex items-center justify-end">
-                    <Link 
-                        href={`/contractors/${slug}`}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-primary/90 hover:bg-primary text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 shadow-lg shadow-black/10 active:scale-95"
-                    >
-                        View Profile
-                        <ChevronRight className="w-4 h-4" />
-                    </Link>
-                </div>
+            {/* CTA */}
+            <div className="px-5 pb-5">
+                <Link
+                    href={`/contractors/${slug}`}
+                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-[hsl(15,80%,60%)] hover:bg-[hsl(15,80%,52%)] text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md shadow-[hsl(15,80%,60%)]/20 active:scale-95"
+                >
+                    View Profile
+                    <ChevronRight className="w-3.5 h-3.5" />
+                </Link>
             </div>
         </div>
     );

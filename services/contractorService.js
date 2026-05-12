@@ -74,5 +74,9 @@ export const contractorService = {
     getStats: async (userId) => {
         const response = await api.get(`/contractor/stats/${userId}`);
         return response.data;
+    },
+    getCategoryRequests: async () => {
+        const response = await api.get('/contractor/admin/category-requests');
+        return response.data;
     }
 };
