@@ -11,6 +11,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { getBrandImageUrl } from "@/lib/productUtils";
 import { ArrowRight, Building2, Loader2, Sparkles, Filter, LayoutGrid, ShoppingBag } from "lucide-react";
 import BespokeFilterSidebar from "@/components/bespoke/BespokeFilterSidebar";
+import RoleGuard from "@/components/auth/RoleGuard";
+
 
 const getBrandId = (brand) => brand?._id || brand?.id;
 
@@ -83,71 +85,85 @@ const BespokePage = () => {
     };
 
     return (
-        <main className="min-h-screen ">
+        <RoleGuard>
+            <main className="min-h-screen ">
+                <Container className="py-4 sm:py-4">
+                    <div className="flex flex-col lg:flex-row gap-8 items-start">
+                        {/* Sidebar Filters */}
+                        <BespokeFilterSidebar
+                            treeData={treeData}
+                            searchTerm={searchTerm}
+                            setSearchTerm={setSearchTerm}
+                            selectedCategory={selectedCategory}
+                            selectedSubcategory={selectedSubcategory}
+                            selectedSubSubcategory={selectedSubSubcategory}
+                            onFilterChange={handleFilterChange}
+                            isMobileOpen={isMobileFiltersOpen}
+                            setIsMobileOpen={setIsMobileFiltersOpen}
+                        />
 
+                        {/* Main Content Area */}
+                        <div className="flex-1 w-full min-w-0 min-h-[calc(100vh-200px)]">
+                            {/* Header above brand grid */}
+                            <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
 
-            <Container className="py-4 sm:py-4">
-                <div className="flex flex-col lg:flex-row gap-8 items-start">
-                    {/* Sidebar Filters */}
-                    <BespokeFilterSidebar
-                        treeData={treeData}
-                        searchTerm={searchTerm}
-                        setSearchTerm={setSearchTerm}
-                        selectedCategory={selectedCategory}
-                        selectedSubcategory={selectedSubcategory}
-                        selectedSubSubcategory={selectedSubSubcategory}
-                        onFilterChange={handleFilterChange}
-                        isMobileOpen={isMobileFiltersOpen}
-                        setIsMobileOpen={setIsMobileFiltersOpen}
-                    />
-
-                    {/* Main Content Area */}
-                    <div className="flex-1 w-full min-w-0 min-h-[calc(100vh-200px)]">
-                        {/* Header above brand grid */}
-                        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-
-                            {/* Brand Type Toggle */}
-                            <div className="flex p-1 bg-gray-100/80 backdrop-blur-sm rounded-xl border border-gray-200/50 w-fit">
-                                <button
-                                    onClick={() => setBrandType("custom_maker")}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "custom_maker"
-                                        ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
-                                        : "text-gray-500 hover:text-gray-700"
-                                        }`}
-                                >
-                                    <Sparkles className={`h-4 w-4 ${brandType === "custom_maker" ? "text-[#b76b45]" : "text-gray-400"}`} />
-                                    Bespoke Brands
-                                </button>
-                                <button
-                                    onClick={() => setBrandType("brand")}
-                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "brand"
-                                        ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
-                                        : "text-gray-500 hover:text-gray-700"
-                                        }`}
-                                >
-                                    <Building2 className={`h-4 w-4 ${brandType === "brand" ? "text-[#b76b45]" : "text-gray-400"}`} />
-                                    All Brands
-                                </button>
-                            </div>
-
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 ml-auto">
-                                {/* Mobile/Tablet Controls Wrapper */}
-                                <div className="flex items-center gap-3 lg:hidden">
+                                {/* Brand Type Toggle */}
+                                <div className="flex p-1 bg-gray-100/80 backdrop-blur-sm rounded-xl border border-gray-200/50 w-fit">
                                     <button
-                                        onClick={() => setIsMobileFiltersOpen(true)}
-                                        className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-colors"
+                                        onClick={() => setBrandType("custom_maker")}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "custom_maker"
+                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                            : "text-gray-500 hover:text-gray-700"
+                                            }`}
                                     >
-                                        <Filter className="h-4 w-4" />
-                                        Filters
+                                        <Sparkles className={`h-4 w-4 ${brandType === "custom_maker" ? "text-[#b76b45]" : "text-gray-400"}`} />
+                                        Bespoke Brands
                                     </button>
+                                    <button
+                                        onClick={() => setBrandType("brand")}
+                                        className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold transition-all duration-300 ${brandType === "brand"
+                                            ? "bg-white text-[#b76b45] shadow-sm ring-1 ring-black/5"
+                                            : "text-gray-500 hover:text-gray-700"
+                                            }`}
+                                    >
+                                        <Building2 className={`h-4 w-4 ${brandType === "brand" ? "text-[#b76b45]" : "text-gray-400"}`} />
+                                        All Brands
+                                    </button>
+                                </div>
 
-                                    {/* Mobile Sorting Button */}
-                                    <div className="flex-1 sm:hidden relative flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
-                                        <span>Sort: {sortBy === "A - Z" ? "A-Z" : sortBy}</span>
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-4 ml-auto">
+                                    {/* Mobile/Tablet Controls Wrapper */}
+                                    <div className="flex items-center gap-3 lg:hidden">
+                                        <button
+                                            onClick={() => setIsMobileFiltersOpen(true)}
+                                            className="flex-1 sm:flex-none flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 hover:bg-gray-50 hover:text-gray-900 shadow-sm transition-colors"
+                                        >
+                                            <Filter className="h-4 w-4" />
+                                            Filters
+                                        </button>
+
+                                        {/* Mobile Sorting Button */}
+                                        <div className="flex-1 sm:hidden relative flex items-center justify-center rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 transition-colors">
+                                            <span>Sort: {sortBy === "A - Z" ? "A-Z" : sortBy}</span>
+                                            <select
+                                                value={sortBy}
+                                                onChange={(e) => setSortBy(e.target.value)}
+                                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            >
+                                                <option value="Featured">Featured</option>
+                                                <option value="Newest">Newest</option>
+                                                <option value="A - Z">A - Z</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    {/* Sorting Dropdown (Tablet & Desktop) */}
+                                    <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 font-medium bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
+                                        <span>Sort by:</span>
                                         <select
                                             value={sortBy}
                                             onChange={(e) => setSortBy(e.target.value)}
-                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                            className="bg-transparent font-bold text-gray-900 outline-none cursor-pointer transition-colors"
                                         >
                                             <option value="Featured">Featured</option>
                                             <option value="Newest">Newest</option>
@@ -155,113 +171,100 @@ const BespokePage = () => {
                                         </select>
                                     </div>
                                 </div>
+                            </div>
 
-                                {/* Sorting Dropdown (Tablet & Desktop) */}
-                                <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 font-medium bg-white px-4 py-2 rounded-lg border border-gray-200 shadow-sm">
-                                    <span>Sort by:</span>
-                                    <select
-                                        value={sortBy}
-                                        onChange={(e) => setSortBy(e.target.value)}
-                                        className="bg-transparent font-bold text-gray-900 outline-none cursor-pointer transition-colors"
-                                    >
-                                        <option value="Featured">Featured</option>
-                                        <option value="Newest">Newest</option>
-                                        <option value="A - Z">A - Z</option>
-                                    </select>
+                            {/* Brand Grid */}
+                            {isLoading ? (
+                                <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
+                                    <Loader2 className="h-9 w-9 animate-spin text-primary" />
                                 </div>
-                            </div>
-                        </div>
+                            ) : totalItems > 0 ? (
+                                <>
+                                    <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                                        {paginatedBrands.map((brand) => {
+                                            const brandId = getBrandId(brand);
 
-                        {/* Brand Grid */}
-                        {isLoading ? (
-                            <div className="flex min-h-[320px] items-center justify-center rounded-lg border border-gray-200 bg-white">
-                                <Loader2 className="h-9 w-9 animate-spin text-primary" />
-                            </div>
-                        ) : totalItems > 0 ? (
-                            <>
-                                <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-                                    {paginatedBrands.map((brand) => {
-                                        const brandId = getBrandId(brand);
+                                            return (
 
-                                        return (
+                                                <Link
+                                                    key={brandId}
 
-                                            <Link
-                                                key={brandId}
+                                                    href={`/bespoke/${brandId}`}
+                                                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#ed8b4e] hover:shadow-[0_12px_40px_rgba(183,107,69,0.18)]"
+                                                >
+                                                    {/* Top accent bar */}
+                                                    <div className="h-[3px] w-full bg-gradient-to-r from-[#b76b45] to-[#ffffff]" />
 
-                                                href={`/bespoke/${brandId}`}
-                                                className="group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-[#ed8b4e] hover:shadow-[0_12px_40px_rgba(183,107,69,0.18)]"
-                                            >
-                                                {/* Top accent bar */}
-                                                <div className="h-[3px] w-full bg-gradient-to-r from-[#b76b45] to-[#ffffff]" />
+                                                    {brand.ownerType === 'custom_maker' && (
+                                                        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E6AE90] shadow-sm">
+                                                            <Sparkles className="h-2.5 w-2.5 text-white fill-white" />
+                                                            <span className="text-[9px] font-bold uppercase tracking-wider text-white">Bespoke</span>
+                                                        </div>
+                                                    )}
 
-                                                {brand.ownerType === 'custom_maker' && (
-                                                    <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E6AE90] shadow-sm">
-                                                        <Sparkles className="h-2.5 w-2.5 text-white fill-white" />
-                                                        <span className="text-[9px] font-bold uppercase tracking-wider text-white">Bespoke</span>
+                                                    {/* Image */}
+                                                    <div className="relative flex h-[120px] items-center justify-center bg-[#ffffff]">
+                                                        <Image
+                                                            src={getBrandImageUrl(brand.logo)}
+                                                            alt={brand.name || "Brand logo"}
+                                                            fill
+                                                            className="object-contain p-8 transition duration-700 group-hover:scale-105"
+                                                            unoptimized
+                                                        />
+
                                                     </div>
-                                                )}
 
-                                                {/* Image */}
-                                                <div className="relative flex h-[120px] items-center justify-center bg-[#ffffff]">
-                                                    <Image
-                                                        src={getBrandImageUrl(brand.logo)}
-                                                        alt={brand.name || "Brand logo"}
-                                                        fill
-                                                        className="object-contain p-8 transition duration-700 group-hover:scale-105"
-                                                        unoptimized
-                                                    />
+                                                    {/* Body */}
+                                                    <div className="flex flex-1 flex-col p-4 pt-5">
+                                                        <h3 className="line-clamp-2 text-sm font-medium leading-snug text-gray-950 transition duration-300 group-hover:text-[#b76b45]">
+                                                            {brand.name || "Untitled Brand"}
+                                                        </h3>
+                                                        <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-gray-500">
+                                                            {brand.description ||
+                                                                "Explore curated collections, premium materials, and immersive brand experiences."}
+                                                        </p>
 
-                                                </div>
-
-                                                {/* Body */}
-                                                <div className="flex flex-1 flex-col p-4 pt-5">
-                                                    <h3 className="line-clamp-2 text-sm font-medium leading-snug text-gray-950 transition duration-300 group-hover:text-[#b76b45]">
-                                                        {brand.name || "Untitled Brand"}
-                                                    </h3>
-                                                    <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-gray-500">
-                                                        {brand.description ||
-                                                            "Explore curated collections, premium materials, and immersive brand experiences."}
-                                                    </p>
-
-                                                    {/* Meta */}
-                                                    <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-3">
-                                                        <span className="text-xs text-gray-400">{brand.country || "Global"}</span>
-                                                        <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#d9b8a3] text-[#b76b45] transition duration-300 group-hover:bg-[#fff6f1]">
-                                                            <ArrowRight className="h-3.5 w-3.5 transition duration-300 group-hover:translate-x-0.5" />
+                                                        {/* Meta */}
+                                                        <div className="mt-3.5 flex items-center justify-between border-t border-gray-100 pt-3">
+                                                            <span className="text-xs text-gray-400">{brand.country || "Global"}</span>
+                                                            <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#d9b8a3] text-[#b76b45] transition duration-300 group-hover:bg-[#fff6f1]">
+                                                                <ArrowRight className="h-3.5 w-3.5 transition duration-300 group-hover:translate-x-0.5" />
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </Link>
-                                        );
-                                    })}
-                                </div>
-
-                                {totalItems > 0 && (
-                                    <div className="mt-10 overflow-hidden rounded-lg !border-t border-gray-100 bg-white ">
-                                        <Pagination
-                                            currentPage={page}
-                                            totalPages={totalPages}
-                                            pageSize={limit}
-                                            onPageChange={setPage}
-                                            onPageSizeChange={(newSize) => { setLimit(newSize); setPage(1); }}
-                                            totalItems={totalItems}
-                                        />
+                                                </Link>
+                                            );
+                                        })}
                                     </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
-                                <h3 className="text-lg font-bold text-gray-900">No brands found</h3>
-                                <p className="mt-2 text-sm font-medium text-gray-500">Try adjusting your filters or search term.</p>
-                            </div>
-                        )}
+
+                                    {totalItems > 0 && (
+                                        <div className="mt-10 overflow-hidden rounded-lg !border-t border-gray-100 bg-white ">
+                                            <Pagination
+                                                currentPage={page}
+                                                totalPages={totalPages}
+                                                pageSize={limit}
+                                                onPageChange={setPage}
+                                                onPageSizeChange={(newSize) => { setLimit(newSize); setPage(1); }}
+                                                totalItems={totalItems}
+                                            />
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="rounded-lg border border-dashed border-gray-300 bg-white px-6 py-16 text-center">
+                                    <h3 className="text-lg font-bold text-gray-900">No brands found</h3>
+                                    <p className="mt-2 text-sm font-medium text-gray-500">Try adjusting your filters or search term.</p>
+                                </div>
+                            )}
 
 
+                        </div>
                     </div>
-                </div>
-            </Container>
-        </main>
+                </Container>
+            </main>
+        </RoleGuard>
     );
+
 };
 
 export default BespokePage;

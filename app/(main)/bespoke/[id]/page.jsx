@@ -1,4 +1,6 @@
 import BespokeBrandShowcase from "@/components/bespoke/BespokeBrandShowcase";
+import RoleGuard from "@/components/auth/RoleGuard";
+
 
 export const metadata = {
     title: "Bespoke Brand Showcase | ArcMat",
@@ -11,5 +13,10 @@ export const metadata = {
 };
 
 export default function BespokeBrandPage() {
-    return <BespokeBrandShowcase />;
+    return (
+        <RoleGuard>
+            <BespokeBrandShowcase />
+        </RoleGuard>
+    );
 }
+
