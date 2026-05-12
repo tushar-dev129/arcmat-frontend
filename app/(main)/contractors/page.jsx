@@ -13,12 +13,13 @@ export default function ContractorListingPage() {
     const [search, setSearch] = useState("");
     const [city, setCity] = useState("");
     
-    const { data: contractorData, isLoading } = useGetContractors({
+    const { data: contractorData, isLoading, error } = useGetContractors({
         search,
         city
     });
 
     const contractors = contractorData?.data?.data || [];
+    const errorMessage = error?.message || (contractorData?.status === 'failed' ? contractorData.message : null);
 
     return (
         <RoleGuard>

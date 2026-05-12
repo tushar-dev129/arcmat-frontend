@@ -2,7 +2,9 @@ import api from '@/lib/api';
 
 export const contractorService = {
     getContractors: async (params = {}) => {
+        console.log('Fetching contractors with params:', params);
         const response = await api.get('/contractor', { params });
+        console.log('Contractor API Response:', response.data);
         return response.data;
     },
 
@@ -38,9 +40,11 @@ export const contractorService = {
     },
 
     uploadImage: async (formData) => {
+        console.log('Uploading contractor image...');
         const response = await api.post('/contractor/upload', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
+        console.log('Upload API Response:', response.data);
         return response.data;
     },
 
