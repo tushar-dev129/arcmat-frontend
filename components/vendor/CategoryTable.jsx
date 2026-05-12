@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { Pencil, Trash2, ChevronRight, ChevronDown, FolderTree, Folder, Tag } from 'lucide-react';
+import { Pencil, Trash2, ChevronRight, ChevronDown, FolderTree, Folder, Tag, Plus } from 'lucide-react';
 import clsx from 'clsx';
 import { buildCategoryTree } from '@/lib/categoryUtils';
 
-const CategoryItem = ({ category, level, onEdit, onDelete }) => {
+const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const hasChildren = category.children && category.children.length > 0;
 
@@ -103,6 +103,25 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
 
                 {/* Actions */}
                 <div className="flex items-center gap-0.5 md:gap-1 shrink-0">
+                    {/* Inline Add buttons for Contractor Service only */}
+                    {category.categoryType === 'contractor_service' && isL1 && (
+                        <button
+                            onClick={() => onAddChild?.(category, 2)}
+                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-[#d9a88a] border border-[#d9a88a]/40 hover:bg-orange-50 rounded-lg transition-all mr-1"
+                            title="Add Sub-Category"
+                        >
+                            <Plus className="w-3 h-3" /> Sub-Category
+                        </button>
+                    )}
+                    {category.categoryType === 'contractor_service' && isL2 && (
+                        <button
+                            onClick={() => onAddChild?.(category, 3)}
+                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-purple-500 border border-purple-300/50 hover:bg-purple-50 rounded-lg transition-all mr-1"
+                            title="Add Item"
+                        >
+                            <Plus className="w-3 h-3" /> Add Item
+                        </button>
+                    )}
                     <button
                         onClick={() => onEdit(category)}
                         className="p-1.5 md:p-2 text-gray-400 hover:text-primary hover:bg-orange-50 rounded-lg transition-all cursor-pointer"
@@ -132,6 +151,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
                             level={level + 1}
                             onEdit={onEdit}
                             onDelete={onDelete}
+                            onAddChild={onAddChild}
                         />
                     ))}
                 </div>
@@ -140,7 +160,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete }) => {
     );
 };
 
-export default function CategoryTable({ categories, onEdit, onDelete }) {
+export default function CategoryTable({ categories, onEdit, onDelete, onAddChild }) {
     // Transform flat list to tree
     const categoryTree = useMemo(() => buildCategoryTree(categories), [categories]);
 
@@ -168,6 +188,7 @@ export default function CategoryTable({ categories, onEdit, onDelete }) {
                     level={1}
                     onEdit={onEdit}
                     onDelete={onDelete}
+                    onAddChild={onAddChild}
                 />
             ))}
         </div>

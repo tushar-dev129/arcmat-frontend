@@ -47,7 +47,14 @@ import Image from "next/image";
 export default function MarketplaceProfilePage() {
     const { user } = useAuth();
     const { data: categoriesResponse, isLoading: isCategoriesLoading } = useGetCategoryTree({ categoryType: 'contractor_service' });
-    const categories = categoriesResponse?.data || categoriesResponse || [];
+    // Handle all possible API response shapes: { data: [...] }, { data: { data: [...] } }, or []
+    const categories = Array.isArray(categoriesResponse?.data)
+        ? categoriesResponse.data
+        : Array.isArray(categoriesResponse?.data?.data)
+            ? categoriesResponse.data.data
+            : Array.isArray(categoriesResponse)
+                ? categoriesResponse
+                : [];
 
 
     const { data: profileData, isLoading: profileLoading, refetch: refetchProfile } = useGetMyContractorProfile(user?._id);
@@ -85,8 +92,22 @@ export default function MarketplaceProfilePage() {
         visibility: "public"
     });
 
+    // Recursively search for the "Find Contractors" root in the whole tree
     const contractorGroups = useMemo(() => {
-        const root = categories.find(c => c.slug === "find-contractors" || c.name === "Find Contractors");
+        const findRoot = (nodes) => {
+            if (!Array.isArray(nodes)) return null;
+            for (const node of nodes) {
+                if (node.slug === 'find-contractors' || node.name === 'Find Contractors') {
+                    return node;
+                }
+                if (node.children?.length) {
+                    const found = findRoot(node.children);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+        const root = findRoot(categories);
         return root?.children || [];
     }, [categories]);
 

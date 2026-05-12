@@ -6,6 +6,7 @@ import CategoryStats from '@/components/vendor/CategoryStats';
 import CategoryTable from '@/components/vendor/CategoryTable';
 import AddCategoryModal from '@/components/vendor/AddCategoryModal';
 import EditCategoryModal from '@/components/vendor/EditCategoryModal';
+import QuickAddCategoryModal from '@/components/vendor/QuickAddCategoryModal';
 import ConfirmationModal from '@/components/ui/ConfirmationModal';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
@@ -23,7 +24,8 @@ export default function CategoriesPage() {
     const [editingCategory, setEditingCategory] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [categoryToDelete, setCategoryToDelete] = useState(null);
-    const [activeTab, setActiveTab] = useState('all'); // 'all', 'product', 'custom_maker', 'contractor_service'
+    const [activeTab, setActiveTab] = useState('all');
+    const [quickAdd, setQuickAdd] = useState({ open: false, parent: null, level: 2 });
 
     // Pass null to fetch ALL categories regardless of vendor
     const { data: apiResponse, isLoading, error } = useGetCategories();
@@ -197,6 +199,7 @@ export default function CategoriesPage() {
                     categories={filteredCategories}
                     onEdit={handleEdit}
                     onDelete={handleDeleteClick}
+                    onAddChild={(parent, level) => setQuickAdd({ open: true, parent, level })}
                 />
 
                 <AddCategoryModal
@@ -204,6 +207,7 @@ export default function CategoriesPage() {
                     existingCategories={categoryData}
                     onClose={() => setIsAddModalOpen(false)}
                     onAdd={handleAddCategory}
+                    defaultCategoryType={activeTab !== 'all' ? activeTab : 'product'}
                 />
 
                 <EditCategoryModal
@@ -211,6 +215,15 @@ export default function CategoriesPage() {
                     category={editingCategory}
                     categories={categoryData}
                     onClose={() => setEditingCategory(null)}
+                />
+
+                <QuickAddCategoryModal
+                    isOpen={quickAdd.open}
+                    onClose={() => setQuickAdd({ open: false, parent: null, level: 2 })}
+                    onAdd={handleAddCategory}
+                    parentCategory={quickAdd.parent}
+                    level={quickAdd.level}
+                    categoryType="contractor_service"
                 />
 
                 <ConfirmationModal

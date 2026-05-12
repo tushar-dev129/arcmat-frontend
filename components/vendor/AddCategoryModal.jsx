@@ -7,7 +7,7 @@ import { toast } from '@/components/ui/Toast';
 import clsx from 'clsx';
 import { generateSlug } from '@/lib/productUtils';
 
-export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCategories = [] }) {
+export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCategories = [], defaultCategoryType = 'product' }) {
     const [step, setStep] = useState(1); // 1: Root, 2: Level 2, 3: Level 3
     const [parentIds, setParentIds] = useState({ level1: null, level2: null });
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,7 +23,7 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
         meta_description: '',
         meta_keywords: '',
         status: 'Active',
-        categoryType: 'product',
+        categoryType: defaultCategoryType,
         category_image: null,
         showcase: []
     });
@@ -61,7 +61,7 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
             meta_description: '',
             meta_keywords: '',
             status: 'Active',
-            categoryType: 'product',
+            categoryType: defaultCategoryType,
             category_image: null,
             showcase: []
         });
@@ -369,17 +369,45 @@ export default function AddCategoryModal({ isOpen, onClose, onAdd, existingCateg
                                         <option value="Inactive">Inactive</option>
                                     </select>
                                 </div>
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-800 mb-2">Category Type *</label>
-                                    <select
-                                        value={categoryData.categoryType}
-                                        onChange={(e) => setCategoryData(prev => ({ ...prev, categoryType: e.target.value }))}
-                                        className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#d9a88a] text-gray-900"
-                                    >
-                                        <option value="product">Product Catalog</option>
-                                        <option value="contractor_service">Contractor Service</option>
-                                        <option value="custom_maker">Custom Maker</option>
-                                    </select>
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-bold text-gray-800 mb-3">Category Type *</label>
+                                    <div className="grid grid-cols-3 gap-3">
+                                        {[
+                                            { value: 'product', label: 'Product Catalog', emoji: '📦', color: 'blue' },
+                                            { value: 'custom_maker', label: 'Custom Maker', emoji: '🎨', color: 'purple' },
+                                        ].map(({ value, label, emoji, color }) => {
+                                            const isSelected = categoryData.categoryType === value;
+                                            const colorMap = {
+                                                blue: { border: 'border-blue-400', bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
+                                                purple: { border: 'border-purple-400', bg: 'bg-purple-50', text: 'text-purple-700', dot: 'bg-purple-500' },
+                                                orange: { border: 'border-[#d9a88a]', bg: 'bg-orange-50', text: 'text-[#b87044]', dot: 'bg-[#d9a88a]' },
+                                            };
+                                            const c = colorMap[color];
+                                            return (
+                                                <label
+                                                    key={value}
+                                                    className={clsx(
+                                                        'flex flex-col items-center gap-2 p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 select-none',
+                                                        isSelected ? `${c.border} ${c.bg}` : 'border-gray-200 hover:border-gray-300 bg-white'
+                                                    )}
+                                                >
+                                                    <input
+                                                        type="radio"
+                                                        name="categoryType"
+                                                        value={value}
+                                                        checked={isSelected}
+                                                        onChange={() => setCategoryData(prev => ({ ...prev, categoryType: value }))}
+                                                        className="hidden"
+                                                    />
+                                                    <span className="text-2xl">{emoji}</span>
+                                                    <span className={clsx('text-xs font-bold text-center leading-tight', isSelected ? c.text : 'text-gray-500')}>
+                                                        {label}
+                                                    </span>
+                                                    <div className={clsx('w-3 h-3 rounded-full border-2 transition-all', isSelected ? `${c.dot} border-transparent` : 'border-gray-300')} />
+                                                </label>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
                                 <div className="md:col-span-2">
                                     <label className="block text-sm font-bold text-gray-800 mb-2">Category Image (Optional)</label>
