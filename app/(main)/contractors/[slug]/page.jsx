@@ -61,6 +61,10 @@ export default function ContractorProfilePage({ params }) {
 
     const handleSubmitLead = async (e) => {
         e.preventDefault();
+        if (leadForm.phone && !/^\d{10}$/.test(leadForm.phone)) {
+            toast.error("Please provide a valid 10-digit phone number");
+            return;
+        }
         try {
             await createLeadMutation.mutateAsync({
                 contractorId: contractor._id,
@@ -321,7 +325,8 @@ export default function ContractorProfilePage({ params }) {
                                                     type="tel" 
                                                     required
                                                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 outline-none focus:border-primary focus:bg-white transition-all text-sm font-bold text-gray-800"
-                                                    placeholder="+91 XXXXX XXXXX"
+                                                    placeholder="10-digit Mobile Number"
+                                                    maxLength="10"
                                                     value={leadForm.phone}
                                                     onChange={(e) => setLeadForm({...leadForm, phone: e.target.value})}
                                                 />

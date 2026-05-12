@@ -58,7 +58,7 @@ const ROLE_OPTIONS = [
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  mobile: z.string().min(10, 'Mobile must be at least 10 characters').regex(/^\d+$/, 'Mobile number must contain only digits'),
+  mobile: z.string().length(10, 'Mobile number must be exactly 10 digits').regex(/^\d+$/, 'Mobile number must contain only digits'),
   email: z.string().email('Please enter a valid business email'),
   city: z.string().min(2, 'City must be at least 2 characters'),
   profession: z.string().optional(),
@@ -230,7 +230,9 @@ export default function RegisterForm() {
           <input
             type="tel"
             placeholder="Mobile Number"
+            maxLength="10"
             {...register('mobile')}
+
             className={clsx(
               'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
               errors.mobile ? 'border-red-500' : 'border-[#e2e8f0]'

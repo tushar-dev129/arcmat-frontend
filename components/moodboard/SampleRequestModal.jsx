@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useCreateSampleRequest } from '@/hooks/useSampleRequest';
 import { Loader2, X, PackageOpen } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import { toast } from '@/components/ui/Toast';
 
 export default function SampleRequestModal({ isOpen, onClose, projectId, spaceId, materialId, materialName }) {
     const createMutation = useCreateSampleRequest(projectId);
@@ -18,6 +19,10 @@ export default function SampleRequestModal({ isOpen, onClose, projectId, spaceId
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (address.phone && !/^\d{10}$/.test(address.phone)) {
+            toast.error("Please provide a valid 10-digit phone number");
+            return;
+        }
         createMutation.mutate(
             {
                 spaceId,
@@ -74,9 +79,10 @@ export default function SampleRequestModal({ isOpen, onClose, projectId, spaceId
                                 <input
                                     required
                                     value={address.phone}
+                                    maxLength="10"
                                     onChange={e => setAddress({ ...address, phone: e.target.value })}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:border-[#d9a88a] focus:ring-1 focus:ring-[#d9a88a] outline-none text-sm font-medium transition-all"
-                                    placeholder="Mobile number"
+                                    placeholder="10-digit number"
                                 />
                             </div>
                             <div>

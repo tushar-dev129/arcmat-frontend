@@ -862,6 +862,11 @@ function ContactSection({ template }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+            toast.error("Please provide a valid 10-digit phone number");
+            setLoading(false);
+            return;
+        }
         try {
             await brandService.createBrandQuery(template.hero.brandId, formData);
             toast.success("Query submitted successfully! We will contact you soon.");
@@ -906,7 +911,7 @@ function ContactSection({ template }) {
                             <div className="grid sm:grid-cols-2 gap-5">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Phone Number</label>
-                                    <input required name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="+91 00000 00000" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
+                                    <input required name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="10-digit Phone Number" maxLength="10" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Location</label>

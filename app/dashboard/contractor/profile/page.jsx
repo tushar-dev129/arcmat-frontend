@@ -270,6 +270,16 @@ export default function MarketplaceProfilePage() {
             return;
         }
 
+        if (formData.contact.phone && !/^\d{10}$/.test(formData.contact.phone)) {
+            toast.error("Please provide a valid 10-digit phone number");
+            return;
+        }
+
+        if (formData.contact.whatsapp && !/^\d{10}$/.test(formData.contact.whatsapp)) {
+            toast.error("Please provide a valid 10-digit WhatsApp number");
+            return;
+        }
+
         try {
             if (profile) {
                 // Update
@@ -754,8 +764,9 @@ export default function MarketplaceProfilePage() {
                                     name="contact.phone"
                                     value={formData.contact.phone}
                                     onChange={handleChange}
+                                    maxLength="10"
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
-                                    placeholder="+91 XXXXX XXXXX"
+                                    placeholder="10-digit phone number"
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">
@@ -772,8 +783,9 @@ export default function MarketplaceProfilePage() {
                                     name="contact.whatsapp"
                                     value={formData.contact.whatsapp}
                                     onChange={handleChange}
+                                    maxLength="10"
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
-                                    placeholder="+91 XXXXX XXXXX"
+                                    placeholder="10-digit WhatsApp number"
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">

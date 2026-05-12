@@ -26,6 +26,11 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
             return;
         }
 
+        if (address.phone && !/^\d{10}$/.test(address.phone)) {
+            toast.warning("Please provide a valid 10-digit phone number.");
+            return;
+        }
+
         createSampleMutation.mutate({
             productId: product._id,
             productName: product.product_name,
@@ -86,8 +91,9 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
                                 className="w-full p-4 rounded-2xl border-2 border-gray-50 bg-white font-bold text-[#2d3142] focus:border-[#d9a88a] outline-none transition-all placeholder:text-gray-300"
                             />
                             <input
-                                placeholder="Phone Number"
+                                placeholder="10-digit Phone Number"
                                 value={address.phone}
+                                maxLength="10"
                                 onChange={(e) => setAddress({ ...address, phone: e.target.value })}
                                 className="w-full p-4 rounded-2xl border-2 border-gray-50 bg-white font-bold text-[#2d3142] focus:border-[#d9a88a] outline-none transition-all placeholder:text-gray-300"
                             />

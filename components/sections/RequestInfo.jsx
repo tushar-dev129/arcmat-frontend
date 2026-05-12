@@ -71,6 +71,11 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
             return;
         }
 
+        if (formData.tel && !/^\d{10}$/.test(formData.tel)) {
+            toast.error('Please provide a valid 10-digit phone number', 'Invalid Phone');
+            return;
+        }
+
         if (!formData.consent) {
             toast.error('Please consent to the processing of your data', 'Consent Required');
             return;
@@ -277,7 +282,8 @@ const RequestInfo = ({ product, initialRequest = {}, onClose, isModal = false })
                                 name="tel"
                                 value={formData.tel}
                                 onChange={handleChange}
-                                placeholder="Tel."
+                                placeholder="Tel. (10 digits)"
+                                maxLength="10"
                                 className="md:col-span-2 px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                             />
                         </div>
