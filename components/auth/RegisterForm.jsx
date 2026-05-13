@@ -26,7 +26,7 @@ const ROLE_OPTIONS = [
   },
   {
     id: 'professional',
-    label: 'Professional',
+    label: 'Consultant',
     description: 'Create projects, request samples, and manage specifications.',
     role: 'architect',
     icon: BriefcaseBusiness,
@@ -232,7 +232,7 @@ export default function RegisterForm() {
             {PROFESSIONS.map((prof, index) => {
               // Map icons to professions
               const Icon = prof.includes('Architect') ? BriefcaseBusiness :
-                           prof.includes('Interior') ? UserRound : Hammer;
+                prof.includes('Interior') ? UserRound : Hammer;
 
               return (
                 <motion.button
@@ -288,8 +288,8 @@ export default function RegisterForm() {
             {selectedRole.needsProfession ? 'Change profession' : 'Change role'}
           </button>
           <h2 className="text-3xl font-bold text-[#2d3748] mb-3 leading-tight">
-            Join as {selectedRole.needsProfession 
-              ? `${['A', 'E', 'I', 'O', 'u'].includes(selectedProfession?.[0]) ? 'an' : 'a'} ${selectedProfession}` 
+            Join as {selectedRole.needsProfession
+              ? `${['A', 'E', 'I', 'O', 'u'].includes(selectedProfession?.[0]) ? 'an' : 'a'} ${selectedProfession}`
               : `a ${selectedRole.label}`}
           </h2>
           <p className="text-[#718096] text-lg">

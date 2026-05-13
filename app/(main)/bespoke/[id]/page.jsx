@@ -1,5 +1,5 @@
 import BespokeBrandShowcase from "@/components/bespoke/BespokeBrandShowcase";
-import RoleGuard from "@/components/auth/RoleGuard";
+
 
 
 export const metadata = {
@@ -14,9 +14,7 @@ export const metadata = {
 
 export default function BespokeBrandPage() {
     return (
-        <RoleGuard>
-            <BespokeBrandShowcase />
-        </RoleGuard>
+        <BespokeBrandShowcase />
     );
 }
 

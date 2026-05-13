@@ -3,12 +3,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { AnimatePresence, motion, useScroll, useSpring } from "framer-motion";
 import {
     ArrowDownToLine, ArrowRight, Bookmark, Check, ChevronLeft, ChevronRight, ChevronUp, ChevronDown,
     ExternalLink, Eye, FileText, Globe, Heart, ImageIcon, Instagram, Layers, Linkedin, Mail, MapPin, Phone, Play,
-    Search, Send, Share2, ShieldCheck, Star, Upload, X, Youtube
+    Search, Send, Share2, ShieldCheck, Star, Upload, X, Youtube, Lock
 } from "lucide-react";
 import { useGetBrandById } from "@/hooks/useBrand";
 import { useGetProducts } from "@/hooks/useProduct";
@@ -16,6 +16,7 @@ import Container from "@/components/ui/Container";
 import { getBrandImageUrl, getImageUrl, getProductCategory, getProductName, getProductThumbnail } from "@/lib/productUtils";
 import { toast } from "sonner";
 import { brandService } from "@/services/brandService";
+import { useAuth } from "@/hooks/useAuth";
 
 const tabsLeft = [
     ["overview", "Overview"],
@@ -851,6 +852,8 @@ function PartnerSection({ items, brandName, setModal }) {
 
 function ContactSection({ template }) {
     const [loading, setLoading] = useState(false);
+    const { user, isAuthenticated } = useAuth();
+    const router = useRouter();
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -859,8 +862,27 @@ function ContactSection({ template }) {
         query: ""
     });
 
+    // Pre-fill form with logged-in user's data
+    useEffect(() => {
+        if (user) {
+            setFormData(prev => ({
+                ...prev,
+                name: user.name || prev.name,
+                email: user.email || prev.email,
+                phone: user.mobile || user.phone || prev.phone,
+                location: user.city || user.location?.city || prev.location,
+            }));
+        }
+    }, [user]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Guard: require login to submit
+        if (!isAuthenticated) {
+            toast.error("Please log in to send an inquiry.");
+            router.push("/auth/login");
+            return;
+        }
         setLoading(true);
         if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
             toast.error("Please provide a valid 10-digit phone number");
@@ -925,8 +947,8 @@ function ContactSection({ template }) {
                             </div>
 
                             <button disabled={loading} type="submit" className="w-full h-12 bg-[var(--brand-color)] hover:bg-black text-white rounded-lg font-bold uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3">
-                                {loading ? "Sending..." : "Submit Inquiry"}
-                                {!loading && <Send className="h-3.5 w-3.5" />}
+                                {loading ? "Sending..." : isAuthenticated ? "Submit Inquiry" : "Login to Submit"}
+                                {!loading && (isAuthenticated ? <Send className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />)}
                             </button>
                         </form>
                     </div>

@@ -47,14 +47,14 @@ const ContractorCard = ({ contractor }) => {
         <div className="group relative bg-white rounded-2xl border border-[hsl(30,15%,88%)] hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
 
             {/* Top accent line */}
-            <div className="h-1 w-full bg-gradient-to-r from-[hsl(15,80%,60%)] via-[hsl(30,90%,65%)] to-[hsl(15,80%,60%)]" />
+            <div className="h-1 w-full bg-gradient-to-r from-[hsl(24,49%,70%)] via-[hsl(30,50%,85%)] to-[hsl(24,49%,70%)]" />
 
             {/* Profile image + identity block */}
             <div className="flex flex-col items-center pt-7 pb-5 px-5 text-center">
 
                 {/* Avatar with ring */}
                 <div className="relative mb-4">
-                    <div className="h-20 w-20 rounded-full ring-4 ring-[hsl(30,15%,90%)] group-hover:ring-[hsl(15,80%,70%)] transition-all duration-300 overflow-hidden bg-gray-100 shadow-lg">
+                    <div className="h-20 w-20 rounded-full ring-4 ring-[hsl(30,15%,90%)] group-hover:ring-[hsl(24,49%,85%)] transition-all duration-300 overflow-hidden bg-gray-100 shadow-lg">
                         <div className="relative h-full w-full">
                             <Image
                                 src={getProfileImageUrl(profileImage)}
@@ -72,7 +72,7 @@ const ContractorCard = ({ contractor }) => {
                 </div>
 
                 {/* Name */}
-                <h3 className="text-[15px] font-bold text-[hsl(20,10%,12%)] group-hover:text-[hsl(15,80%,50%)] transition-colors duration-300 leading-tight">
+                <h3 className="text-[15px] font-bold text-[hsl(20,10%,12%)] group-hover:text-[hsl(24,49%,50%)] transition-colors duration-300 leading-tight">
                     {businessName}
                 </h3>
 
@@ -90,7 +90,7 @@ const ContractorCard = ({ contractor }) => {
                         </span>
                     )}
                     {primaryCategory && (
-                        <span className="px-2.5 py-0.5 bg-[hsl(15,80%,96%)] border border-[hsl(15,80%,85%)] text-[hsl(15,70%,45%)] text-[10px] font-black uppercase tracking-wide rounded-full">
+                        <span className="px-2.5 py-0.5 bg-[hsl(24,49%,97%)] border border-[hsl(24,49%,88%)] text-[hsl(24,49%,45%)] text-[10px] font-black uppercase tracking-wide rounded-full">
                             {primaryCategory}
                         </span>
                     )}
@@ -103,8 +103,8 @@ const ContractorCard = ({ contractor }) => {
             {/* Info row */}
             <div className="flex items-center justify-around px-5 py-4">
                 <div className="flex items-center gap-1.5">
-                    <div className="p-1.5 bg-[hsl(15,80%,96%)] rounded-lg">
-                        <MapPin className="w-3 h-3 text-[hsl(15,80%,55%)]" />
+                    <div className="p-1.5 bg-[hsl(24,49%,97%)] rounded-lg">
+                        <MapPin className="w-3 h-3 text-[hsl(24,49%,65%)]" />
                     </div>
                     <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">
                         {location?.city || "Mumbai"}
@@ -114,8 +114,8 @@ const ContractorCard = ({ contractor }) => {
                 <div className="w-px h-6 bg-[hsl(30,15%,88%)]" />
 
                 <div className="flex items-center gap-1.5">
-                    <div className="p-1.5 bg-[hsl(15,80%,96%)] rounded-lg">
-                        <Briefcase className="w-3 h-3 text-[hsl(15,80%,55%)]" />
+                    <div className="p-1.5 bg-[hsl(24,49%,97%)] rounded-lg">
+                        <Briefcase className="w-3 h-3 text-[hsl(24,49%,65%)]" />
                     </div>
                     <span className="text-[11px] font-semibold text-[hsl(20,10%,30%)]">
                         {experienceYears || "5+"} Yrs Exp.
@@ -127,7 +127,7 @@ const ContractorCard = ({ contractor }) => {
             <div className="px-5 pb-5">
                 <Link
                     href={`/contractors/${slug}`}
-                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-[hsl(15,80%,60%)] hover:bg-[hsl(15,80%,52%)] text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md shadow-[hsl(15,80%,60%)]/20 active:scale-95"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary hover:bg-[#c99775] text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md shadow-primary/20 active:scale-95"
                 >
                     View Profile
                     <ChevronRight className="w-3.5 h-3.5" />

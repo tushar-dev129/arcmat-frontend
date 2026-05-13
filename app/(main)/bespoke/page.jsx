@@ -11,7 +11,7 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { getBrandImageUrl } from "@/lib/productUtils";
 import { ArrowRight, Building2, Loader2, Sparkles, Filter, LayoutGrid, ShoppingBag } from "lucide-react";
 import BespokeFilterSidebar from "@/components/bespoke/BespokeFilterSidebar";
-import RoleGuard from "@/components/auth/RoleGuard";
+
 
 
 const getBrandId = (brand) => brand?._id || brand?.id;
@@ -85,7 +85,6 @@ const BespokePage = () => {
     };
 
     return (
-        <RoleGuard>
             <main className="min-h-screen ">
                 <Container className="py-4 sm:py-4">
                     <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -262,7 +261,6 @@ const BespokePage = () => {
                     </div>
                 </Container>
             </main>
-        </RoleGuard>
     );
 
 };
