@@ -8,6 +8,7 @@ const Button = ({ text, onClick, className, children, href, isLoading, loading, 
         href={href}
         className={`rounded-full inline-flex duration-200 items-center whitespace-nowrap justify-center ${className}`}
       >
+        {children}
         {text}
       </Link>
     );
