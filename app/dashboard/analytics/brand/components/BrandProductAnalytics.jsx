@@ -23,7 +23,7 @@ export default function BrandProductAnalytics() {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
                 <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Aggregating product performance...</p>
+                <p className="text-sm font-bold text-gray-300 uppercase tracking-widest">Aggregating product performance...</p>
             </div>
         );
     }
@@ -47,8 +47,8 @@ export default function BrandProductAnalytics() {
                         <div className={`w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center mb-6 transition-transform group-hover:scale-110`}>
                             <stat.icon className={`w-6 h-6 ${stat.color}`} />
                         </div>
-                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{stat.label}</p>
-                        <h3 className="text-4xl font-black text-gray-900 mt-2">{stat.value || 0}</h3>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
+                        <h3 className="text-4xl font-bold text-gray-900 mt-2">{stat.value || 0}</h3>
                     </div>
                 ))}
             </div>
@@ -59,7 +59,7 @@ export default function BrandProductAnalytics() {
                 <div className="lg:col-span-2 bg-white p-10 rounded-[48px] border border-gray-100 shadow-sm relative overflow-hidden">
                     <div className="flex items-center justify-between mb-10 relative z-10">
                         <div>
-                            <h3 className="text-xl font-black text-gray-900">Most Viewed Products</h3>
+                            <h3 className="text-xl font-bold text-gray-900">Most Viewed Products</h3>
                             <p className="text-sm font-medium text-gray-400">Products gaining the most attention</p>
                         </div>
                         <TrendingUp className="w-6 h-6 text-primary" />
@@ -77,12 +77,12 @@ export default function BrandProductAnalytics() {
                                         />
                                     </div>
                                     <div>
-                                        <h4 className="text-sm font-black text-gray-900">{product.product_name}</h4>
+                                        <h4 className="text-sm font-bold text-gray-900">{product.product_name}</h4>
                                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">ID: {product.product_unique_id}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-xl font-black text-primary">{product.views || 0}</p>
+                                    <p className="text-xl font-bold text-primary">{product.views || 0}</p>
                                     <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Unique Views</p>
                                 </div>
                             </div>
@@ -100,7 +100,7 @@ export default function BrandProductAnalytics() {
                         <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center mb-8 shadow-2xl">
                             <TrendingUp className="w-6 h-6 text-white" />
                         </div>
-                        <h3 className="text-2xl font-black mb-4">Growth Tips</h3>
+                        <h3 className="text-2xl font-bold mb-4">Growth Tips</h3>
                         <p className="text-gray-400 font-medium leading-relaxed mb-8">
                             High view counts but low requests? Consider updating your product imagery or providing more technical specifications to help architects make decisions.
                         </p>
@@ -117,7 +117,7 @@ export default function BrandProductAnalytics() {
                         </div>
                     </div>
 
-                    <button className="mt-12 w-full py-4 bg-primary rounded-2xl text-sm font-black text-white hover:bg-[#d88963] transition-all shadow-xl shadow-primary/20 relative z-10">
+                    <button className="mt-12 w-full py-4 bg-primary rounded-2xl text-sm font-bold text-white hover:bg-[#d88963] transition-all shadow-xl shadow-primary/20 relative z-10">
                         View Marketing Resources
                     </button>
                 </div>

@@ -10,15 +10,15 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex bg-[#F5E9E2]">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden flex bg-[#F5E9E2]">
 
-      <div className="hidden lg:flex lg:w-1/2 flex-col items-center justify-between p-2 relative">
+      <div className="hidden lg:flex lg:w-6/10 flex-col items-center justify-between p-2 relative">
         <div className="w-full pl-4 pt-2">
           <Logo href="/"/>
         </div>
 
-        <div className="flex flex-col items-center justify-start flex-1 mt-10 py-8 px-8">
-          <h1 className="text-[36px] font-semibold text-[#4D4E58] text-center leading-[50px] max-w-[500px] mb-6">
+        <div className="flex flex-col items-center justify-start flex-1mt-5 py-8 px-8">
+          <h1 className="text-4xl font-semibold text-[#4D4E58] text-center leading-[50px] max-w-[500px] mb-6">
             The marketplace where architects and brands build the future together.
           </h1>
 
@@ -49,7 +49,7 @@ export default function LoginPage() {
       </div>
 
 
-      <div className="min-h-screen flex w-full lg:w-1/2 bg-white px-8 sm:px-8 justify-center bg-red-500">
+      <div className="h-screen overflow-y-auto flex w-full lg:w-4/10 bg-white px-8 sm:px-8 justify-center no-scrollbar">
         <LoginForm />
       </div>
 

@@ -4,13 +4,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 
-const BackLink = ({ href = "/", label = "Back", className, useRouterBack = false }) => {
+const BackLink = ({ href = "/", label = "Back", className, useRouterBack = false, onClick }) => {
   const router = useRouter();
 
-  if (useRouterBack) {
+  if (useRouterBack || onClick) {
     return (
       <button
-        onClick={() => router.back()}
+        onClick={onClick || (() => router.back())}
+        type="button"
         className={clsx("flex items-center gap-3 group w-fit cursor-pointer", className)}
       >
         <div className="w-[18px] h-[14px]">
@@ -31,7 +32,6 @@ const BackLink = ({ href = "/", label = "Back", className, useRouterBack = false
       className={clsx("flex items-center gap-3 group w-fit", className)}
     >
       <div className="w-[18px] h-[14px]">
-        {/* Vector Arrow SVG */}
         <svg width="18" height="14" viewBox="0 0 18 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M17 7H1M1 7L7 1M1 7L7 13" stroke="#4D4E58" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>

@@ -89,7 +89,7 @@ export default function PrivacySettingsModal({ isOpen, onClose, project }) {
                         <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mb-4 text-blue-600">
                             <Shield className="w-6 h-6" />
                         </div>
-                        <h2 className="text-2xl font-black text-[#2d3142] mb-1">Client View Settings</h2>
+                        <h2 className="text-2xl font-bold text-[#2d3142] mb-1">Client View Settings</h2>
                         <p className="text-gray-500 font-medium text-sm">
                             Control what information clients can see when they log into this project.
                         </p>

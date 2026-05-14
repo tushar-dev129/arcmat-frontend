@@ -139,7 +139,7 @@ export default function DetailsPanel({
             <div className="px-4 mt-4 shrink-0">
                 <h2 className="text-base font-bold text-gray-900 leading-tight">{name}</h2>
                 {brandName && <p className="text-sm text-gray-500 mt-0.5">{brandName}</p>}
-                {hasPrice && <p className="text-base font-black text-gray-900 mt-2">{formatCurrency(price)}</p>}
+                {hasPrice && <p className="text-base font-bold text-gray-900 mt-2">{formatCurrency(price)}</p>}
             </div>
 
             {/* DETAILS TAB */}
@@ -224,7 +224,7 @@ export default function DetailsPanel({
                             <div className="p-3 bg-orange-50 border border-orange-100 rounded-xl flex flex-col gap-2">
                                 <div className="flex items-center justify-between">
                                     <span className="text-xs font-semibold text-orange-700">Est. Total</span>
-                                    <span className="text-sm font-black text-orange-700">{formatCurrency(totalBudget)}</span>
+                                    <span className="text-sm font-bold text-orange-700">{formatCurrency(totalBudget)}</span>
                                 </div>
                                 {projectBudget && !isNaN(Number(projectBudget)) && Number(projectBudget) > 0 && (
                                     <div className="flex flex-col gap-1.5 pt-2 border-t border-orange-200/50 mt-1">

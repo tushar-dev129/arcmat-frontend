@@ -176,9 +176,9 @@ export default function CategoriesPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={clsx(
-                                "px-6 py-3 text-xs font-black uppercase tracking-widest transition-all relative whitespace-nowrap",
-                                activeTab === tab.id 
-                                    ? "text-primary" 
+                                "px-6 py-3 text-xs font-bold uppercase tracking-widest transition-all relative whitespace-nowrap",
+                                activeTab === tab.id
+                                    ? "text-primary"
                                     : "text-gray-400 hover:text-gray-600"
                             )}
                         >
@@ -191,7 +191,7 @@ export default function CategoriesPage() {
                 </div>
 
                 <div className="mb-6 flex items-center justify-between">
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">
                         {activeTab === 'all' ? 'FULL STRUCTURE' : `${activeTab.replace('_', ' ')} STRUCTURE`} & HIERARCHY ({filteredCategories.length} ITEMS)
                     </span>
                 </div>

@@ -11,7 +11,7 @@ export default function DownloadTab({
 }) {
     return (
         <div className="h-full overflow-y-auto p-8">
-            <h2 className="text-xl font-black text-[#1a1a2e] mb-2">Download Your Board</h2>
+            <h2 className="text-xl font-bold text-[#1a1a2e] mb-2">Download Your Board</h2>
             <p className="text-sm text-gray-400 mb-8">Export the canvas as an image or download a material spec sheet.</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl">
@@ -67,7 +67,7 @@ function DownloadCard({ title, description, icon, label, onClick, color }) {
         <div className={`flex flex-col gap-4 p-6 border-2 rounded-3xl transition-all ${colors[color]}`}>
             <div className="w-14 h-14 bg-white rounded-2xl shadow-sm flex items-center justify-center">{icon}</div>
             <div>
-                <h3 className="font-black text-[#1a1a2e] text-base mb-1">{title}</h3>
+                <h3 className="font-bold text-[#1a1a2e] text-base mb-1">{title}</h3>
                 <p className="text-xs text-gray-400 font-medium leading-relaxed">{description}</p>
             </div>
             <button

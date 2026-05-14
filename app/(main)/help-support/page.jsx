@@ -90,7 +90,7 @@ export default function HelpSupportPage() {
                         <div className="w-16 h-16 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-6">
                             <MessageCircle className="w-8 h-8 text-primary" />
                         </div>
-                        <h1 className="text-4xl font-black text-gray-900 mb-4 tracking-tight">Help & Support</h1>
+                        <h1 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">Help & Support</h1>
                         <p className="text-lg text-gray-600 font-medium max-w-lg mx-auto leading-relaxed">
                             Need assistance? Our support team is here to help you get the most out of ArcMat.
                         </p>
@@ -179,7 +179,7 @@ export default function HelpSupportPage() {
                                                 ) : (
                                                     <>
                                                         <Plus className="w-6 h-6 text-gray-300 group-hover:text-primary transition-colors" />
-                                                        <span className="text-[9px] font-black text-gray-300 group-hover:text-primary mt-2 uppercase tracking-tighter">Add Photo</span>
+                                                        <span className="text-[9px] font-bold text-gray-300 group-hover:text-primary mt-2 uppercase tracking-tighter">Add Photo</span>
                                                     </>
                                                 )}
                                             </label>
@@ -192,7 +192,7 @@ export default function HelpSupportPage() {
                                     <button
                                         type="submit"
                                         disabled={createQueryMutation.isPending || !formData.subject || !formData.query}
-                                        className="w-full h-16 bg-[#2C2D35] hover:bg-black disabled:bg-gray-100 disabled:text-gray-300 text-white rounded-2xl font-black text-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-xl shadow-gray-200"
+                                        className="w-full h-16 bg-[#2C2D35] hover:bg-black disabled:bg-gray-100 disabled:text-gray-300 text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-3 transition-all hover:scale-[1.01] active:scale-[0.99] shadow-xl shadow-gray-200"
                                     >
                                         {createQueryMutation.isPending ? (
                                             <Loader2 className="w-6 h-6 animate-spin" />

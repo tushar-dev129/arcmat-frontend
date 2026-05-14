@@ -43,7 +43,7 @@ export default function BrandRetailerAnalyticsView() {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
                 <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading network insights...</p>
+                <p className="text-sm font-bold text-gray-300 uppercase tracking-widest">Loading network insights...</p>
             </div>
         );
     }
@@ -56,8 +56,8 @@ export default function BrandRetailerAnalyticsView() {
                     <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                         <Store className="w-6 h-6 text-primary" />
                     </div>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active Retailers</p>
-                    <h3 className="text-4xl font-black text-gray-900 mt-2">{totalRetailers}</h3>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Active Retailers</p>
+                    <h3 className="text-4xl font-bold text-gray-900 mt-2">{totalRetailers}</h3>
                 </div>
 
                 <div className="bg-[#2C2D35] p-8 rounded-[40px] shadow-2xl relative overflow-hidden">
@@ -65,8 +65,8 @@ export default function BrandRetailerAnalyticsView() {
                     <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
                         <Briefcase className="w-6 h-6 text-white" />
                     </div>
-                    <p className="text-[10px] font-black uppercase tracking-widest text-primary">Regional Professionals</p>
-                    <h3 className="text-4xl font-black text-white mt-2">{totalArchitects}</h3>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-primary">Regional Professionals</p>
+                    <h3 className="text-4xl font-bold text-white mt-2">{totalArchitects}</h3>
                     <p className="text-[10px] text-gray-400 mt-2">Architects in your retailer cities</p>
                 </div>
 
@@ -74,8 +74,8 @@ export default function BrandRetailerAnalyticsView() {
                     <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
                         <MapPin className="w-6 h-6 text-blue-600" />
                     </div>
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Top Market</p>
-                    <h3 className="text-4xl font-black text-gray-900 mt-2">{regionalStats[0]?._id || 'N/A'}</h3>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Market</p>
+                    <h3 className="text-4xl font-bold text-gray-900 mt-2">{regionalStats[0]?._id || 'N/A'}</h3>
                 </div>
             </div>
 
@@ -123,7 +123,7 @@ export default function BrandRetailerAnalyticsView() {
                 <div className="bg-white p-10 rounded-[48px] border border-gray-100 shadow-sm">
                     <div className="flex items-center justify-between mb-10">
                         <div>
-                            <h3 className="text-xl font-black text-gray-900">Regional Distribution</h3>
+                            <h3 className="text-xl font-bold text-gray-900">Regional Distribution</h3>
                             <p className="text-sm font-medium text-gray-400">Retailer density by city</p>
                         </div>
                         <BarChart3 className="w-6 h-6 text-gray-300" />
@@ -160,7 +160,7 @@ export default function BrandRetailerAnalyticsView() {
                 <div className="bg-white rounded-[48px] border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                     <div className="p-10 border-b border-gray-50 flex items-center justify-between shrink-0">
                         <div>
-                            <h3 className="text-xl font-black text-gray-900">Retailer Directory</h3>
+                            <h3 className="text-xl font-bold text-gray-900">Retailer Directory</h3>
                             <p className="text-sm font-medium text-gray-400">Verified retailers selling your brand</p>
                         </div>
                     </div>
@@ -168,9 +168,9 @@ export default function BrandRetailerAnalyticsView() {
                         <table className="w-full text-left">
                             <thead>
                                 <tr className="bg-gray-50">
-                                    <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Retailer</th>
-                                    <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Location</th>
-                                    <th className="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Pros</th>
+                                    <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Retailer</th>
+                                    <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Location</th>
+                                    <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Pros</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
@@ -178,11 +178,11 @@ export default function BrandRetailerAnalyticsView() {
                                     <tr key={i} className="hover:bg-gray-50 transition-colors group">
                                         <td className="px-10 py-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-xs">
+                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
                                                     {retailer.retailerName.charAt(0)}
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm font-black text-gray-900">{retailer.retailerName}</p>
+                                                    <p className="text-sm font-bold text-gray-900">{retailer.retailerName}</p>
                                                     <p className="text-[10px] text-gray-400 font-medium">{retailer.retailerEmail}</p>
                                                 </div>
                                             </div>
@@ -194,7 +194,7 @@ export default function BrandRetailerAnalyticsView() {
                                             </div>
                                         </td>
                                         <td className="px-10 py-6 text-right">
-                                            <span className="text-sm font-black text-gray-900">{retailer.architects.length}</span>
+                                            <span className="text-sm font-bold text-gray-900">{retailer.architects.length}</span>
                                         </td>
                                     </tr>
                                 ))}

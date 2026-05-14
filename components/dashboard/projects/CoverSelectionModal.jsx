@@ -37,7 +37,7 @@ export default function CoverSelectionModal({
     };
 
     return (
-        <div 
+        <div
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300"
             onClick={(e) => {
                 e.stopPropagation();
@@ -47,7 +47,7 @@ export default function CoverSelectionModal({
             <div className="bg-white rounded-[32px] w-full max-w-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between">
                     <div>
-                        <h2 className="text-xl font-black text-[#2d3142]">Update Cover Image</h2>
+                        <h2 className="text-xl font-bold text-[#2d3142]">Update Cover Image</h2>
                         <p className="text-sm text-gray-400 font-medium">Upload a custom image for your cover</p>
                     </div>
                     <button onClick={handleClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">

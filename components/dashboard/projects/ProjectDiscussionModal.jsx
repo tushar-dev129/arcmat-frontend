@@ -72,7 +72,7 @@ export default function ProjectDiscussionModal({ isOpen, onClose, projectId, pro
                 {/* Header */}
                 <div className="p-6 border-b border-gray-100 bg-[#fef7f2] shrink-0 rounded-t-3xl relative">
                     <div className="pr-10">
-                        <h2 className="text-xl font-black text-[#2d3142]">Project Messages</h2>
+                        <h2 className="text-xl font-bold text-[#2d3142]">Project Messages</h2>
                         <div className="flex items-center gap-1.5 mt-0.5 truncate">
                             {clientName && (
                                 <span className="text-sm font-bold text-gray-400">{clientName}</span>

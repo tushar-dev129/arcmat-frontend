@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 export default function ContractorListingPage() {
     const [search, setSearch] = useState("");
     const [city, setCity] = useState("");
-    
+
     const { data: contractorData, isLoading, error } = useGetContractors({
         search,
         city
@@ -25,11 +25,11 @@ export default function ContractorListingPage() {
                 {/* Simplified Search Header */}
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-8 tracking-tight">Our Professionals</h1>
-                    
+
                     <div className="bg-white p-2 rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col md:flex-row items-center gap-2">
                         <div className="flex-1 w-full relative">
                             <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input 
+                            <input
                                 type="text"
                                 placeholder="Search by name or service..."
                                 className="w-full pl-14 pr-6 py-4 bg-transparent border-none rounded-2xl outline-none focus:ring-0 transition-all text-sm font-bold text-gray-800"
@@ -40,7 +40,7 @@ export default function ContractorListingPage() {
                         <div className="h-8 w-px bg-gray-100 hidden md:block"></div>
                         <div className="w-full md:w-64 relative">
                             <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                            <input 
+                            <input
                                 type="text"
                                 placeholder="City (e.g. Mumbai)"
                                 className="w-full pl-14 pr-6 py-4 bg-transparent border-none rounded-2xl outline-none focus:ring-0 transition-all text-sm font-bold text-gray-800"
@@ -48,7 +48,7 @@ export default function ContractorListingPage() {
                                 onChange={(e) => setCity(e.target.value)}
                             />
                         </div>
-                        <button className="w-full md:w-auto px-10 py-4 bg-primary text-white font-black uppercase tracking-widest text-[10px] rounded-[1.25rem] transition-all duration-300 shadow-lg shadow-primary/20 active:scale-95">
+                        <button className="w-full md:w-auto px-10 py-4 bg-primary text-white font-bold uppercase tracking-widest text-[10px] rounded-[1.25rem] transition-all duration-300 shadow-lg shadow-primary/20 active:scale-95">
                             Search
                         </button>
                     </div>
@@ -56,7 +56,7 @@ export default function ContractorListingPage() {
                     {/* Quick Filters */}
                     <AnimatePresence>
                         {(search || city) && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}

@@ -2,11 +2,11 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { useGetMyContractorProfile, useGetContractorLeads } from "@/hooks/useContractor";
-import { 
-    MessageSquare, 
-    Calendar, 
-    MapPin, 
-    Phone, 
+import {
+    MessageSquare,
+    Calendar,
+    MapPin,
+    Phone,
     User as UserIcon,
     ChevronRight,
     Search,
@@ -21,7 +21,7 @@ export default function ContractorLeadsPage() {
     const { user } = useAuth();
     const { data: profileResponse, isLoading: profileLoading } = useGetMyContractorProfile(user?._id);
     const contractor = profileResponse?.data?.profile || profileResponse?.profile;
-    
+
     const { data: leadsResponse, isLoading: leadsLoading } = useGetContractorLeads(contractor?._id);
     const leads = leadsResponse?.data || leadsResponse || [];
 
@@ -46,13 +46,13 @@ export default function ContractorLeadsPage() {
                     </div>
                     <p className="text-gray-500">Manage and respond to your potential customers.</p>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                     <div className="relative">
                         <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input 
-                            type="text" 
-                            placeholder="Search leads..." 
+                        <input
+                            type="text"
+                            placeholder="Search leads..."
                             className="pl-10 pr-4 py-2.5 bg-white border border-gray-100 rounded-xl text-sm focus:outline-none focus:border-primary transition-all w-64 shadow-sm"
                         />
                     </div>
@@ -68,12 +68,12 @@ export default function ContractorLeadsPage() {
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Date</th>
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Requester</th>
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Location</th>
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Requirement</th>
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Status</th>
-                                <th className="px-8 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Date</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Requester</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Location</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Requirement</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Status</th>
+                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -88,7 +88,7 @@ export default function ContractorLeadsPage() {
                                         </td>
                                         <td className="px-8 py-6">
                                             <div className="flex items-center gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-xs">
+                                                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
                                                     {lead.name.split(' ').map(n => n[0]).join('')}
                                                 </div>
                                                 <div className="flex flex-col">
@@ -137,7 +137,7 @@ export default function ContractorLeadsPage() {
                         </tbody>
                     </table>
                 </div>
-                
+
                 {/* Footer / Pagination Mock */}
                 {leads.length > 0 && (
                     <div className="px-8 py-4 bg-gray-50/30 border-t border-gray-100 flex items-center justify-between">

@@ -98,8 +98,8 @@ export default function OverviewTab({
     // Calculate total estimation
     const totalEstimation = (products || []).reduce((sum, p) => {
         const meta = (productStatuses || {})[p?._id] || {};
-        const price = (typeof meta === 'object' && meta.price !== undefined) 
-            ? (Number(meta.price) || 0) 
+        const price = (typeof meta === 'object' && meta.price !== undefined)
+            ? (Number(meta.price) || 0)
             : resolvePricing(p).price;
         const qty = typeof meta === 'object' ? (Number(meta.quantity) || 1) : 1;
         return sum + (price * qty);
@@ -145,7 +145,7 @@ export default function OverviewTab({
                             : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                             }`}
                     >
-                        Brands {selectedBrands.length > 0 && <span className="bg-white/20 text-white text-[10px] font-black rounded-full px-1.5">{selectedBrands.length}</span>}
+                        Brands {selectedBrands.length > 0 && <span className="bg-white/20 text-white text-[10px] font-bold rounded-full px-1.5">{selectedBrands.length}</span>}
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${brandFilterOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {brandFilterOpen && (
@@ -254,9 +254,9 @@ export default function OverviewTab({
 
                         const name = contextMenu.isPhoto ? item?.title : (item ? getProductName(item) : '');
                         const image = contextMenu.isPhoto ? item?.previewUrl : (item ? getProductThumbnail(item) : null);
-                        
-                        setSelectedMaterial({ 
-                            id: contextMenu.itemId, 
+
+                        setSelectedMaterial({
+                            id: contextMenu.itemId,
                             name: name,
                             image: image
                         });
@@ -268,10 +268,10 @@ export default function OverviewTab({
                         setActiveModal('replace');
                     }}
                     onDownload={() => {
-                        const photo = contextMenu.isPhoto 
+                        const photo = contextMenu.isPhoto
                             ? customPhotos.find(p => p.id === contextMenu.itemId)
                             : products.find(p => p._id === contextMenu.itemId);
-                        
+
                         const url = contextMenu.isPhoto ? photo?.previewUrl : getProductThumbnail(photo);
                         const name = contextMenu.isPhoto ? photo?.title : getProductName(photo);
                         if (url) downloadImage(url, `${name || 'material'}.jpg`);
@@ -418,7 +418,7 @@ export default function OverviewTab({
                                     onContextMenu={(e) => openContextMenu(e, productId, false)}
                                     className="flex flex-col h-full border border-gray-100 rounded-2xl overflow-hidden hover:shadow-md transition-all group cursor-context-menu bg-white"
                                 >
-                                    <Link 
+                                    <Link
                                         href={`/productdetails/${typeof product?.productId === 'object' ? product?.productId?._id : (product?.productId || product._id)}?variantId=${productId}`}
                                         className="relative aspect-square bg-gray-50 overflow-hidden cursor-pointer block"
                                     >
@@ -453,7 +453,7 @@ export default function OverviewTab({
                                             )}
                                         </div>
                                     </Link>
-                                    <Link 
+                                    <Link
                                         href={`/productdetails/${typeof product?.productId === 'object' ? product?.productId?._id : (product?.productId || product._id)}?variantId=${productId}`}
                                         className="p-3 flex flex-col gap-2 flex-1 cursor-pointer block"
                                     >

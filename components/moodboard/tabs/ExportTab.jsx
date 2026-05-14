@@ -143,7 +143,7 @@ export default function ExportTab({
             {/* Header Summary */}
             <div className="shrink-0 flex flex-col md:flex-row md:items-end justify-between gap-3 md:gap-4 mb-4 md:mb-8 pb-4 md:pb-6 border-b border-gray-100">
                 <div>
-                    <h2 className="text-xl md:text-2xl font-black text-[#1a1a2e] mb-0.5 md:mb-1">Export Summary</h2>
+                    <h2 className="text-xl md:text-2xl font-bold text-[#1a1a2e] mb-0.5 md:mb-1">Export Summary</h2>
                     <p className="text-[12px] md:text-sm text-gray-500 font-medium tracking-tight">Manage and export your project materials</p>
                 </div>
                 <div className="text-left md:text-right">
@@ -156,12 +156,12 @@ export default function ExportTab({
                                         Filtered: ₹{filteredTotal.toLocaleString('en-IN')} /
                                     </span>
                                 )}
-                                <span className="text-3xl font-black text-[#1a1a2e]">
+                                <span className="text-3xl font-bold text-[#1a1a2e]">
                                     ₹{grandTotal.toLocaleString('en-IN')}
                                 </span>
                             </>
                         ) : (
-                            <span className="text-xl font-black text-[#1a1a2e]">
+                            <span className="text-xl font-bold text-[#1a1a2e]">
                                 Price details hidden
                             </span>
                         )}
@@ -205,7 +205,7 @@ export default function ExportTab({
                     {isArchitect && (
                         <button
                             onClick={exportAsCSV}
-                            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-6 py-2.5 md:py-3 bg-[#1a1a2e] text-white rounded-2xl text-sm font-black hover:bg-[#2d2d4a] transition-all shadow-md active:scale-95"
+                            className="flex-1 sm:flex-none justify-center flex items-center gap-2 px-6 py-2.5 md:py-3 bg-[#1a1a2e] text-white rounded-2xl text-sm font-bold hover:bg-[#2d2d4a] transition-all shadow-md active:scale-95"
                         >
                             <Download className="w-4 h-4" /> Export
                         </button>
@@ -245,7 +245,7 @@ export default function ExportTab({
                     <div className="absolute inset-0 bg-[#1a1a2e]/40 backdrop-blur-sm" onClick={() => setShowFiltersModal(false)} />
                     <div className="relative bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl animate-in zoom-in-95 duration-200">
                         <div className="flex items-center justify-between p-6 border-b border-gray-50">
-                            <h3 className="text-xl font-black text-[#1a1a2e] w-full text-center">Filters</h3>
+                            <h3 className="text-xl font-bold text-[#1a1a2e] w-full text-center">Filters</h3>
                             <button onClick={() => setShowFiltersModal(false)} className="absolute right-6 p-2 h-10 w-10 flex items-center justify-center hover:bg-gray-50 rounded-full transition-colors">
                                 <X className="w-5 h-5 text-gray-400" />
                             </button>
@@ -254,7 +254,7 @@ export default function ExportTab({
                         <div className="p-8 max-h-[70vh] overflow-y-auto space-y-8">
                             {/* Spec Status */}
                             <div>
-                                <p className="text-sm font-black text-[#1a1a2e] mb-4">Spec Status</p>
+                                <p className="text-sm font-bold text-[#1a1a2e] mb-4">Spec Status</p>
                                 <div className="flex flex-wrap gap-2">
                                     {specStatuses.map(status => (
                                         <button
@@ -271,7 +271,7 @@ export default function ExportTab({
 
                             {/* Brands */}
                             <div>
-                                <p className="text-sm font-black text-[#1a1a2e] mb-4">Brands</p>
+                                <p className="text-sm font-bold text-[#1a1a2e] mb-4">Brands</p>
                                 <div className="flex flex-wrap gap-2">
                                     {allBrands.map(brand => (
                                         <button
@@ -287,7 +287,7 @@ export default function ExportTab({
 
                             {/* Tags */}
                             <div>
-                                <p className="text-sm font-black text-[#1a1a2e] mb-4">Tags</p>
+                                <p className="text-sm font-bold text-[#1a1a2e] mb-4">Tags</p>
                                 {allTags.length > 0 ? (
                                     <div className="flex flex-wrap gap-2">
                                         {allTags.map(tag => (
@@ -307,7 +307,7 @@ export default function ExportTab({
 
                             {/* Project Status */}
                             <div>
-                                <p className="text-sm font-black text-[#1a1a2e] mb-4">Project Status</p>
+                                <p className="text-sm font-bold text-[#1a1a2e] mb-4">Project Status</p>
                                 <div className="flex flex-wrap gap-2">
                                     {['In Progress', 'Completed', 'On Hold'].map(status => (
                                         <button
@@ -331,7 +331,7 @@ export default function ExportTab({
                             </button>
                             <button
                                 onClick={() => setShowFiltersModal(false)}
-                                className="bg-[#1a1a2e] text-white px-8 py-3.5 rounded-2xl text-sm font-black hover:bg-[#2d2d4a] transition-all shadow-lg active:scale-95 shadow-[#1a1a2e]/20"
+                                className="bg-[#1a1a2e] text-white px-8 py-3.5 rounded-2xl text-sm font-bold hover:bg-[#2d2d4a] transition-all shadow-lg active:scale-95 shadow-[#1a1a2e]/20"
                             >
                                 Show {filteredItems.length} items
                             </button>
@@ -345,16 +345,16 @@ export default function ExportTab({
                 <table className="w-full text-sm border-separate border-spacing-0 min-w-[800px] md:min-w-[1000px]">
                     <thead className="bg-gray-50/95 sticky top-0 z-20 backdrop-blur-sm shadow-[0_1px_0_0_#f3f4f6]">
                         <tr>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest min-w-[200px] md:sticky md:left-0 md:z-30 bg-gray-50/95 shadow-[1px_0_0_0_#f3f4f6]">Name</th>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest min-w-[140px]">Spec Status</th>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Tags</th>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Brand</th>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Unique Code</th>
-                            <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest">Quantity</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[200px] md:sticky md:left-0 md:z-30 bg-gray-50/95 shadow-[1px_0_0_0_#f3f4f6]">Name</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[140px]">Spec Status</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Tags</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Brand</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Unique Code</th>
+                            <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest">Quantity</th>
                             {showPrice && (
                                 <>
-                                    <th className="text-left px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest min-w-[110px]">Unit Price</th>
-                                    <th className="text-right px-3 py-4 text-xs font-black text-gray-400 uppercase tracking-widest min-w-[110px]">Total (₹)</th>
+                                    <th className="text-left px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[110px]">Unit Price</th>
+                                    <th className="text-right px-3 py-4 text-xs font-bold text-gray-400 uppercase tracking-widest min-w-[110px]">Total (₹)</th>
                                 </>
                             )}
                         </tr>
@@ -425,11 +425,11 @@ export default function ExportTab({
                                                                     if (isRow) handleCustomRowUpdate(id, { title: e.target.value });
                                                                     else handlePriceQtyUpdate(id, { title: e.target.value }, true);
                                                                 }}
-                                                                className="font-black text-[#1a1a2e] mb-0.5 leading-tight truncate w-[140px] xl:w-[220px] bg-transparent border-none outline-none focus:ring-1 focus:ring-gray-200 rounded px-1 -mx-1 transition-all"
+                                                                className="font-bold text-[#1a1a2e] mb-0.5 leading-tight truncate w-[140px] xl:w-[220px] bg-transparent border-none outline-none focus:ring-1 focus:ring-gray-200 rounded px-1 -mx-1 transition-all"
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <p className="font-black text-[#1a1a2e] mb-0.5 leading-tight truncate w-[140px] xl:w-[220px] whitespace-nowrap overflow-hidden text-ellipsis">{name}</p>
+                                                        <p className="font-bold text-[#1a1a2e] mb-0.5 leading-tight truncate w-[140px] xl:w-[220px] whitespace-nowrap overflow-hidden text-ellipsis">{name}</p>
                                                     )}
                                                     <p className="text-[9px] text-[#d9a88a] font-bold uppercase tracking-wider truncate overflow-hidden text-ellipsis">{projectName || 'ArcMat'}</p>
                                                 </div>
@@ -439,7 +439,7 @@ export default function ExportTab({
                                             <div className="relative">
                                                 <button
                                                     onClick={() => setStatusDropdown(statusDropdown === id ? null : id)}
-                                                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-black tracking-wider uppercase transition-all border ${st === 'Specified' ? 'bg-green-50 text-green-700 border-green-100 hover:border-green-200 shadow-sm shadow-green-100' :
+                                                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-bold tracking-wider uppercase transition-all border ${st === 'Specified' ? 'bg-green-50 text-green-700 border-green-100 hover:border-green-200 shadow-sm shadow-green-100' :
                                                         st === 'Excluded' ? 'bg-pink-50 text-pink-700 border-pink-100 hover:border-pink-200 shadow-sm shadow-pink-100' :
                                                             'bg-gray-50 text-gray-700 border-gray-100 hover:border-gray-200'
                                                         }`}
@@ -465,7 +465,7 @@ export default function ExportTab({
                                                                         else handleProductStatusChange(id, status);
                                                                         setStatusDropdown(null);
                                                                     }}
-                                                                    className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-[11px] font-black uppercase tracking-wider text-gray-700 flex items-center gap-3 transition-colors"
+                                                                    className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-[11px] font-bold uppercase tracking-wider text-gray-700 flex items-center gap-3 transition-colors"
                                                                 >
                                                                     <div className={`w-1.5 h-1.5 rounded-full ${STATUS_STYLES[status].dot}`} />
                                                                     {status}
@@ -481,7 +481,7 @@ export default function ExportTab({
                                                 {((isPhoto || isRow) ? data.tags : (productStatuses[id]?.tags))?.map((tag, idx) => (
                                                     <span
                                                         key={idx}
-                                                        className="group/tag px-2 py-0.5 bg-gray-50 text-[#1a1a2e] border border-gray-100 rounded-lg text-[9px] font-black flex items-center gap-1 hover:bg-white hover:border-[#d9a88a] transition-all"
+                                                        className="group/tag px-2 py-0.5 bg-gray-50 text-[#1a1a2e] border border-gray-100 rounded-lg text-[9px] font-bold flex items-center gap-1 hover:bg-white hover:border-[#d9a88a] transition-all"
                                                     >
                                                         <span
                                                             className="cursor-pointer"
@@ -514,7 +514,7 @@ export default function ExportTab({
                                             <input
                                                 type="text"
                                                 placeholder="+ Add label"
-                                                className="text-[9px] w-full bg-transparent border-none outline-none text-[#d9a88a] hover:text-[#c48d6d] font-black uppercase tracking-widest placeholder:text-gray-200 transition-colors px-1"
+                                                className="text-[9px] w-full bg-transparent border-none outline-none text-[#d9a88a] hover:text-[#c48d6d] font-bold uppercase tracking-widest placeholder:text-gray-200 transition-colors px-1"
                                                 onKeyDown={(e) => {
                                                     if (e.key === 'Enter' && e.target.value.trim()) {
                                                         const newTag = e.target.value.trim();
@@ -551,7 +551,7 @@ export default function ExportTab({
                                                             else handlePriceQtyUpdate(id, { quantity: 1 }, isPhoto);
                                                         }
                                                     }}
-                                                    className="w-full text-sm font-black bg-transparent outline-none text-center text-[#1a1a2e]"
+                                                    className="w-full text-sm font-bold bg-transparent outline-none text-center text-[#1a1a2e]"
                                                 />
                                             </div>
                                         </td>
@@ -560,7 +560,7 @@ export default function ExportTab({
                                                 <td className="px-3 py-3 text-gray-700 font-medium">
                                                     {(isPhoto || isRow) ? (
                                                         <div className={`flex items-center gap-1 bg-gray-50/50 border border-gray-100 rounded-lg px-2 py-1.5 focus-within:border-[#d9a88a] focus-within:bg-white transition-all group-hover:bg-white ${!isArchitect && 'pointer-events-none'}`}>
-                                                            <span className="text-[10px] text-[#d9a88a] font-black">₹</span>
+                                                            <span className="text-[10px] text-[#d9a88a] font-bold">₹</span>
                                                             <input
                                                                 type="number"
                                                                 min="0"
@@ -571,18 +571,18 @@ export default function ExportTab({
                                                                     if (isRow) handleCustomRowUpdate(id, { price: e.target.value });
                                                                     else handlePriceQtyUpdate(id, { price: e.target.value }, isPhoto);
                                                                 }}
-                                                                className="w-20 text-xs font-black bg-transparent outline-none text-[#1a1a2e]"
+                                                                className="w-20 text-xs font-bold bg-transparent outline-none text-[#1a1a2e]"
                                                             />
                                                         </div>
                                                     ) : (
-                                                        <div className="font-black text-[#1a1a2e] text-xs">
+                                                        <div className="font-bold text-[#1a1a2e] text-xs">
                                                             <span className="text-[#d9a88a] mr-1">₹</span>
                                                             {unitPrice.toLocaleString('en-IN')}
                                                         </div>
                                                     )}
                                                 </td>
                                                 <td className="px-3 py-3 text-right">
-                                                    <div className="flex items-center justify-end gap-3 text-sm font-black text-[#1a1a2e]">
+                                                    <div className="flex items-center justify-end gap-3 text-sm font-bold text-[#1a1a2e]">
                                                         <div>
                                                             <span className="text-[#d9a88a] mr-1 text-[10px]">₹</span>
                                                             {total.toLocaleString('en-IN')}

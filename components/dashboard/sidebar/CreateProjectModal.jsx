@@ -12,14 +12,14 @@ import { toast } from '@/components/ui/Toast';
 
 // ─── Field definitions used by the completion tracker ─────────────────────────
 const SCRATCH_FIELDS = [
-    { key: 'name',                      label: 'Name',        mandatory: true },
-    { key: 'clientName',                label: 'Client',      mandatory: true },
-    { key: 'location.city',             label: 'City',        mandatory: true },
-    { key: 'type',                      label: 'Type',        mandatory: true },
-    { key: 'phase',                     label: 'Phase',       mandatory: true },
-    { key: 'size',                      label: 'Size',        mandatory: true },
-    { key: 'budget',                    label: 'Budget',      mandatory: true },
-    { key: 'description',               label: 'Description', mandatory: true },
+    { key: 'name', label: 'Name', mandatory: true },
+    { key: 'clientName', label: 'Client', mandatory: true },
+    { key: 'location.city', label: 'City', mandatory: true },
+    { key: 'type', label: 'Type', mandatory: true },
+    { key: 'phase', label: 'Phase', mandatory: true },
+    { key: 'size', label: 'Size', mandatory: true },
+    { key: 'budget', label: 'Budget', mandatory: true },
+    { key: 'description', label: 'Description', mandatory: true },
 ];
 
 /** Resolve deeply-nested values like 'location.city' from formData */
@@ -41,8 +41,8 @@ function useFormCompletion(formData, isTemplate, activeTab) {
             filled: String(resolveField(formData, f.key)).trim().length > 0,
         }));
 
-        const filled  = fieldStates.filter(f => f.filled).length;
-        const pct     = Math.round((filled / fieldStates.length) * 100);
+        const filled = fieldStates.filter(f => f.filled).length;
+        const pct = Math.round((filled / fieldStates.length) * 100);
         const allMandatoryFilled = fieldStates.filter(f => f.mandatory).every(f => f.filled);
 
         return { pct, fields: fieldStates, allMandatoryFilled };
@@ -212,9 +212,9 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                 }
             });
         } else if (activeTab === 'template' && selectedTemplateId) {
-            useTemplateMutation.mutate({ 
-                templateId: selectedTemplateId, 
-                data: payload 
+            useTemplateMutation.mutate({
+                templateId: selectedTemplateId,
+                data: payload
             }, {
                 onSuccess: () => {
                     onClose();
@@ -279,7 +279,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                     {/* Title row */}
                     <div className="flex justify-between items-start mb-5">
                         <div>
-                            <h2 className="text-3xl font-black text-[#2d3142] tracking-tight">
+                            <h2 className="text-3xl font-bold text-[#2d3142] tracking-tight">
                                 {isTemplate ? 'Edit Template' : (isEditMode ? 'Edit Project' : 'New Project')}
                             </h2>
                             {!isTemplate && !isEditMode && activeTab === 'scratch' && (
@@ -396,7 +396,7 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                                 <div className="py-12 flex flex-col items-center justify-center bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
                                     <Briefcase className="w-10 h-10 text-gray-200 mb-4" />
                                     <p className="text-gray-400 font-bold">No templates found</p>
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={() => setActiveTab('scratch')}
                                         className="mt-4 text-[#d9a88a] font-bold text-sm hover:underline"
@@ -629,11 +629,11 @@ export default function CreateProjectModal({ isOpen, onClose, project = null, is
                         {!isTemplate && !isEditMode && activeTab === 'scratch' && pct === 100 && (
                             <CheckCircle2 className="w-5 h-5" />
                         )}
-                        {isTemplate 
+                        {isTemplate
                             ? (updateTemplateMutation.isPending ? 'Updating Template...' : 'Update Template')
                             : (isEditMode
                                 ? (updateProjectMutation.isPending ? 'Updating...' : 'Update Project')
-                                : (activeTab === 'template' 
+                                : (activeTab === 'template'
                                     ? (useTemplateMutation.isPending ? 'Creating from Template...' : 'Create Project from Template')
                                     : (createProjectMutation.isPending ? 'Creating...' : 'Create Project')))}
                     </Button>

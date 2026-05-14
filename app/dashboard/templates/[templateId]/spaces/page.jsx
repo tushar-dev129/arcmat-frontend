@@ -5,8 +5,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { useGetMoodboardTemplates, useUpdateTemplate, useUpdateMoodboardTemplate, TEMPLATE_KEYS } from '@/hooks/useTemplate';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { projectTemplateService } from '@/services/projectTemplateService';
-import { 
-    LayoutDashboard, Plus, Search, Loader2, ArrowLeft, 
+import {
+    LayoutDashboard, Plus, Search, Loader2, ArrowLeft,
     MoreHorizontal, Edit2, Trash2, ChevronRight, Briefcase, Check, X
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -45,9 +45,9 @@ export default function TemplateSpacesPage() {
 
     const handleSaveRename = () => {
         if (!renameValue.trim()) return;
-        updateSpaceMutation.mutate({ 
-            spaceId: renamingSpaceId, 
-            data: { moodboard_name: renameValue } 
+        updateSpaceMutation.mutate({
+            spaceId: renamingSpaceId,
+            data: { moodboard_name: renameValue }
         }, {
             onSuccess: () => {
                 setRenamingSpaceId(null);
@@ -88,7 +88,7 @@ export default function TemplateSpacesPage() {
                 <Container className="py-6">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                         <div className="flex items-center gap-4">
-                            <button 
+                            <button
                                 onClick={() => router.push('/dashboard/templates')}
                                 className="p-2.5 bg-gray-50 text-gray-400 hover:text-[#2d3142] hover:bg-gray-100 rounded-xl transition-all"
                             >
@@ -99,7 +99,7 @@ export default function TemplateSpacesPage() {
                                     <Briefcase className="w-4 h-4 text-gray-400" />
                                     <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Template Editor</span>
                                 </div>
-                                <h1 className="text-2xl font-black text-[#2d3142] tracking-tight">{template?.templateName}</h1>
+                                <h1 className="text-2xl font-bold text-[#2d3142] tracking-tight">{template?.templateName}</h1>
                             </div>
                         </div>
 
@@ -129,15 +129,15 @@ export default function TemplateSpacesPage() {
                 {filteredSpaces.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {filteredSpaces.map((space) => (
-                            <div 
+                            <div
                                 key={space._id}
                                 className="group bg-white rounded-[32px] border border-gray-100 overflow-hidden hover:shadow-2xl hover:border-[#d9a88a]/30 transition-all duration-500 flex flex-col h-full"
                             >
                                 {/* card image - 2x2 product grid like MoodboardCard */}
                                 <div className="aspect-square relative overflow-hidden bg-gray-50 group/preview">
                                     {getImageUrl(space.coverImage) ? (
-                                        <Image 
-                                            src={getImageUrl(space.coverImage)} 
+                                        <Image
+                                            src={getImageUrl(space.coverImage)}
                                             alt={space.moodboard_name}
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -177,10 +177,10 @@ export default function TemplateSpacesPage() {
                                         );
                                     })()}
                                     <div className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    
+
                                     {/* Quick Edit Overlay */}
                                     <div className="absolute bottom-4 left-4 right-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                                        <button 
+                                        <button
                                             onClick={() => router.push(`/dashboard/templates/${templateId}/spaces/${space._id}`)}
                                             className="w-full py-3 bg-white text-[#2d3142] rounded-2xl font-bold text-sm shadow-xl hover:bg-[#2d3142] hover:text-white transition-all flex items-center justify-center gap-2"
                                         >
@@ -191,38 +191,38 @@ export default function TemplateSpacesPage() {
 
                                 {/* content */}
                                 <div className="p-6 flex flex-col flex-1">
-                                        {renamingSpaceId === space._id ? (
-                                            <div className="flex items-center gap-2 flex-1 min-w-0">
-                                                <input 
-                                                    autoFocus
-                                                    value={renameValue}
-                                                    onChange={e => setRenameValue(e.target.value)}
-                                                    onKeyDown={e => { if (e.key === 'Enter') handleSaveRename(); if (e.key === 'Escape') setRenamingSpaceId(null); }}
-                                                    onClick={e => e.stopPropagation()}
-                                                    className="w-full font-bold text-lg text-[#2d3142] bg-gray-50 border-b-2 border-[#d9a88a] focus:outline-none"
-                                                />
-                                                <button onClick={(e) => { e.stopPropagation(); handleSaveRename(); }} className="p-1 text-green-600"><Check className="w-4 h-4" /></button>
-                                                <button onClick={(e) => { e.stopPropagation(); setRenamingSpaceId(null); }} className="p-1 text-red-400"><X className="w-4 h-4" /></button>
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center justify-between gap-4 w-full group/name">
-                                                <h3 className="font-bold text-lg text-[#2d3142] leading-tight group-hover:text-[#d9a88a] transition-colors line-clamp-1">
-                                                    {space.moodboard_name}
-                                                </h3>
-                                                <button 
-                                                    onClick={(e) => { e.stopPropagation(); handleStartRename(space); }}
-                                                    className="p-1.5 opacity-0 group-hover/name:opacity-100 bg-gray-50 text-gray-400 hover:text-[#d9a88a] rounded-lg transition-all"
-                                                >
-                                                    <Edit2 className="w-3.5 h-3.5" />
-                                                </button>
-                                            </div>
-                                        )}
-                                    
+                                    {renamingSpaceId === space._id ? (
+                                        <div className="flex items-center gap-2 flex-1 min-w-0">
+                                            <input
+                                                autoFocus
+                                                value={renameValue}
+                                                onChange={e => setRenameValue(e.target.value)}
+                                                onKeyDown={e => { if (e.key === 'Enter') handleSaveRename(); if (e.key === 'Escape') setRenamingSpaceId(null); }}
+                                                onClick={e => e.stopPropagation()}
+                                                className="w-full font-bold text-lg text-[#2d3142] bg-gray-50 border-b-2 border-[#d9a88a] focus:outline-none"
+                                            />
+                                            <button onClick={(e) => { e.stopPropagation(); handleSaveRename(); }} className="p-1 text-green-600"><Check className="w-4 h-4" /></button>
+                                            <button onClick={(e) => { e.stopPropagation(); setRenamingSpaceId(null); }} className="p-1 text-red-400"><X className="w-4 h-4" /></button>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center justify-between gap-4 w-full group/name">
+                                            <h3 className="font-bold text-lg text-[#2d3142] leading-tight group-hover:text-[#d9a88a] transition-colors line-clamp-1">
+                                                {space.moodboard_name}
+                                            </h3>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); handleStartRename(space); }}
+                                                className="p-1.5 opacity-0 group-hover/name:opacity-100 bg-gray-50 text-gray-400 hover:text-[#d9a88a] rounded-lg transition-all"
+                                            >
+                                                <Edit2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="mt-auto pt-4 flex items-center justify-between">
                                         <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                                             {space.canvasState?.length || 0} Elements
                                         </span>
-                                        <button 
+                                        <button
                                             onClick={() => router.push(`/dashboard/templates/${templateId}/spaces/${space._id}`)}
                                             className="p-2 text-gray-300 hover:text-[#d9a88a] transition-colors"
                                         >
@@ -240,8 +240,8 @@ export default function TemplateSpacesPage() {
                         </div>
                         <h2 className="text-xl font-bold text-[#2d3142] mb-2">No spaces found</h2>
                         <p className="text-gray-400 max-w-sm mx-auto">
-                            {searchTerm 
-                                ? "No template spaces match your search criteria." 
+                            {searchTerm
+                                ? "No template spaces match your search criteria."
                                 : "This template has no spaces yet."}
                         </p>
                     </div>
@@ -249,7 +249,7 @@ export default function TemplateSpacesPage() {
             </Container>
 
             {isEditModalOpen && (
-                <CreateProjectModal 
+                <CreateProjectModal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     project={template}

@@ -90,7 +90,7 @@ const ContractorCard = ({ contractor }) => {
                         </span>
                     )}
                     {primaryCategory && (
-                        <span className="px-2.5 py-0.5 bg-[hsl(24,49%,97%)] border border-[hsl(24,49%,88%)] text-[hsl(24,49%,45%)] text-[10px] font-black uppercase tracking-wide rounded-full">
+                        <span className="px-2.5 py-0.5 bg-[hsl(24,49%,97%)] border border-[hsl(24,49%,88%)] text-[hsl(24,49%,45%)] text-[10px] font-semibold rounded-full">
                             {primaryCategory}
                         </span>
                     )}
@@ -124,10 +124,10 @@ const ContractorCard = ({ contractor }) => {
             </div>
 
             {/* CTA */}
-            <div className="px-5 pb-5">
+            <div className="px-5 pb-5 mt-auto">
                 <Link
                     href={`/contractors/${slug}`}
-                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary hover:bg-[#c99775] text-white text-[11px] font-black uppercase tracking-widest rounded-xl transition-all duration-300 shadow-md shadow-primary/20 active:scale-95"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary hover:bg-[#c99775] text-white text-[11px] font-medium rounded-xl transition-all duration-300 shadow-md shadow-primary/20 active:scale-95"
                 >
                     View Profile
                     <ChevronRight className="w-3.5 h-3.5" />

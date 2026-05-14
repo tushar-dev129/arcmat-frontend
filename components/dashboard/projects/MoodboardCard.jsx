@@ -500,7 +500,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                             {itemCount} {itemCount === 1 ? 'item' : 'items'}
                             {renderCount > 0 && ` · ${renderCount} render${renderCount !== 1 ? 's' : ''}`}
                             {photoCount > 0 && ` · ${photoCount} photo${photoCount !== 1 ? 's' : ''}`}
-                            
+
                         </p>
                     </div>
                 </div>
@@ -513,7 +513,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-1">
                                     Estimated Cost
                                 </span>
-                                <div className="flex items-center gap-1 text-base font-black text-[#d9a88a]">
+                                <div className="flex items-center gap-1 text-base font-bold text-[#d9a88a]">
                                     <IndianRupee className="w-3.5 h-3.5" />
                                     {estimatedCostId?.costing?.toLocaleString('en-IN') || '0'}
                                 </div>
@@ -523,7 +523,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                                 <span className="text-[9px] text-gray-400 font-bold uppercase tracking-widest leading-none mb-1">
                                     Status
                                 </span>
-                                <div className="flex items-center gap-1 text-base font-black text-[#d9a88a]">
+                                <div className="flex items-center gap-1 text-base font-bold text-[#d9a88a]">
                                     Active Design
                                 </div>
                             </>

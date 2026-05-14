@@ -81,7 +81,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
                                         <span
                                             key={loc}
                                             className={clsx(
-                                                "px-1.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest border",
+                                                "px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-widest border",
                                                 loc === 'Header' && "bg-blue-50 text-blue-600 border-blue-100",
                                                 loc === 'Gallery' && "bg-purple-50 text-purple-600 border-purple-100",
                                                 loc === 'Carousel' && "bg-amber-50 text-amber-600 border-amber-100"

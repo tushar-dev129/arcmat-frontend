@@ -116,9 +116,9 @@ export default function MoodboardDetailPage() {
     const [isMounted, setIsMounted] = useState(false);
     const isDataLoaded = useRef(false);
 
-    const { data: moodboardData, isLoading, isError, error } = useGetMoodboard(moodboardId, { 
+    const { data: moodboardData, isLoading, isError, error } = useGetMoodboard(moodboardId, {
         includeSiblings: true,
-        includeNotifications: true 
+        includeNotifications: true
     });
     const deleteMutation = useDeleteMoodboard();
     const updateEstimationMutation = useUpdateEstimatedCost();
@@ -278,11 +278,11 @@ export default function MoodboardDetailPage() {
 
     useEffect(() => {
         if (!isDataLoaded.current) return;
-        
+
         const timer = setTimeout(() => {
             let snapshot = null;
             const now = Date.now();
-            
+
             // Auto-capture a snapshot if it has been more than 45s since the last one
             // This ensures cards have a fresh visual without hammering the DB every second.
             if (now - lastSnapshotRef.current > 45000) {
@@ -295,7 +295,7 @@ export default function MoodboardDetailPage() {
 
             saveToBackend(boardItems, canvasBg, snapshot);
         }, 1000);
-        
+
         return () => clearTimeout(timer);
     }, [boardItems, canvasBg, saveToBackend]);
 
@@ -477,7 +477,7 @@ export default function MoodboardDetailPage() {
 
     const handleDownloadZip = useCallback(() => {
         if (!moodboard) return;
-        
+
         toast.promise(
             new Promise(async (resolve, reject) => {
                 try {
@@ -485,7 +485,7 @@ export default function MoodboardDetailPage() {
                     if (canvasRef.current && canvasRef.current.getSnapshot) {
                         snapshot = canvasRef.current.getSnapshot();
                     }
-                    
+
                     // Sync the snapshot to the backend before downloading 
                     // so that future "Outside" downloads are also updated.
                     if (snapshot) saveToBackend(boardItems, canvasBg, snapshot);
@@ -746,7 +746,7 @@ export default function MoodboardDetailPage() {
                                         value={editName}
                                         onChange={e => setEditName(e.target.value)}
                                         onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); if (e.key === 'Escape') setIsEditing(false); }}
-                                        className="text-3xl font-black text-[#1a1a2e] bg-transparent border-b-2 border-[#d9a88a] focus:outline-none w-full max-w-sm pb-1"
+                                        className="text-3xl font-bold text-[#1a1a2e] bg-transparent border-b-2 border-[#d9a88a] focus:outline-none w-full max-w-sm pb-1"
                                     />
                                     <button onClick={handleSaveName} disabled={isUpdatingName} className="p-2 bg-green-50 text-green-600 rounded-xl hover:bg-green-100 transition-all">
                                         <Check className="w-4 h-4" />
@@ -757,7 +757,7 @@ export default function MoodboardDetailPage() {
                                 </div>
                             ) : (
                                 <div className="flex items-center gap-3 mb-1 group/title w-full min-w-0">
-                                    <h1 className="text-3xl font-black text-[#1a1a2e] truncate">{moodboard?.moodboard_name}</h1>
+                                    <h1 className="text-3xl font-bold text-[#1a1a2e] truncate">{moodboard?.moodboard_name}</h1>
 
                                     <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0 ml-1">
 
@@ -955,7 +955,7 @@ export default function MoodboardDetailPage() {
                     <div className="h-full overflow-y-auto p-4 md:p-8">
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
                             <div>
-                                <h2 className="text-xl md:text-2xl font-black text-[#1a1a2e] mb-0.5 md:mb-1">Drawing/Render</h2>
+                                <h2 className="text-xl md:text-2xl font-bold text-[#1a1a2e] mb-0.5 md:mb-1">Drawing/Render</h2>
                                 <p className="text-[12px] md:text-sm text-gray-500 font-medium tracking-tight">Visualizations and drawings for this space</p>
                             </div>
                             {isArchitect && (
@@ -1008,13 +1008,13 @@ export default function MoodboardDetailPage() {
 
                                     {/* Gallery Permission Badge */}
                                     {isArchitect && (
-                                        <div 
+                                        <div
                                             onClick={(e) => { e.stopPropagation(); handleToggleGalleryPermission(photo.id); }}
                                             className="absolute top-4 left-4 z-20 group/permission"
                                         >
                                             <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border backdrop-blur-md transition-all ${photo.allowInGallery ? 'bg-green-500/90 border-green-400 text-white shadow-lg' : 'bg-white/90 border-gray-200 text-gray-500 hover:bg-[#fef7f2] hover:border-[#d9a88a]/30'}`}>
                                                 <div className={`w-2.5 h-2.5 rounded-full ${photo.allowInGallery ? 'bg-white' : 'bg-gray-300'}`} />
-                                                <span className="text-[10px] font-black uppercase tracking-wider">
+                                                <span className="text-[10px] font-bold uppercase tracking-wider">
                                                     {photo.allowInGallery ? 'In Gallery' : 'Private'}
                                                 </span>
                                             </div>
@@ -1228,7 +1228,7 @@ export default function MoodboardDetailPage() {
                                 }}
                             >
                                 <div className={`w-3 h-3 rounded-full ${selectedFullScreenImage.allowInGallery ? 'bg-white animate-pulse' : 'bg-gray-300'}`} />
-                                <span className="text-xs font-black uppercase tracking-widest">
+                                <span className="text-xs font-bold uppercase tracking-widest">
                                     {selectedFullScreenImage.allowInGallery ? 'Visible in Inspiration Gallery' : 'Hidden from Inspiration Gallery'}
                                 </span>
                             </button>
@@ -1253,7 +1253,7 @@ export default function MoodboardDetailPage() {
                             {/* Overlay Metadata */}
                             <div className="absolute bottom-0 left-0 right-0 p-12 bg-linear-to-t from-black/80 to-transparent pointer-events-none">
                                 <div className="max-w-4xl mx-auto space-y-2">
-                                    <h2 className="text-4xl font-black text-white drop-shadow-lg">{selectedFullScreenImage.title.length > 10 ? selectedFullScreenImage.title.slice(0, 10) + "..." : selectedFullScreenImage.title}</h2>
+                                    <h2 className="text-4xl font-bold text-white drop-shadow-lg">{selectedFullScreenImage.title.length > 10 ? selectedFullScreenImage.title.slice(0, 10) + "..." : selectedFullScreenImage.title}</h2>
                                     {selectedFullScreenImage.description && (
                                         <p className="text-xl text-white/80 font-medium max-w-2xl drop-shadow-md">{selectedFullScreenImage.description.length > 20 ? selectedFullScreenImage.description.slice(0, 20) + "..." : selectedFullScreenImage.description}</p>
                                     )}

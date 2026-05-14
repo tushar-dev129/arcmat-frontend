@@ -69,7 +69,7 @@ export default function ReplaceMaterialModal({
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#fef7f2] rounded-t-3xl">
                     <div>
-                        <h2 className="text-xl font-black text-[#2d3142]">Replace Material</h2>
+                        <h2 className="text-xl font-bold text-[#2d3142]">Replace Material</h2>
                         <p className="text-sm font-medium text-gray-500 mt-1">
                             Replacing <span className="text-pink-500 line-through font-bold">{oldMaterialName}</span>
                         </p>

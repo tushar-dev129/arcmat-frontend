@@ -164,7 +164,7 @@ export default function BrandInventoryPage() {
                             <Button
                                 onClick={handleBulkAdd}
                                 isLoading={bulkAddMutation.isPending}
-                                className="bg-primary hover:bg-[#d08a64] text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                                className="bg-primary hover:bg-[#d08a64] text-white text-xs font-bold uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
                             >
                                 Add  ({selectedToAdd.length})
                             </Button>
@@ -173,7 +173,7 @@ export default function BrandInventoryPage() {
                             <Button
                                 onClick={handleBulkRemove}
                                 isLoading={bulkRemoveMutation.isPending}
-                                className="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
+                                className="bg-red-500 hover:bg-red-600 text-white text-xs font-bold uppercase tracking-widest !p-2.5 !rounded-full shrink-0"
                             >
                                 Remove  ({selectedToRemove.length})
                             </Button>
@@ -211,7 +211,7 @@ export default function BrandInventoryPage() {
                         <h3 className="text-[11px] font-medium text-gray-400 leading-tight mb-1 line-clamp-1 min-h-[1rem]">
                             {(typeof brandInfo === 'object' && brandInfo !== null ? brandInfo.name : brandInfo) || 'Generic'}
                         </h3>
-                        <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                             {brandInfo?.name || 'Brand'} Inventory
                         </h1>
                         <p className="text-gray-500 text-sm mt-1">
@@ -255,7 +255,7 @@ export default function BrandInventoryPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden overflow-x-auto">
                     <table className="w-full text-left border-collapse whitespace-nowrap md:whitespace-normal">
                         <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 uppercase tracking-widest font-black">
+                            <tr className="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 uppercase tracking-widest font-bold">
                                 <th className="px-6 py-4 font-bold min-w-[300px]">Product Info</th>
                                 <th className="px-6 py-4 font-bold min-w-[350px]">
                                     <div className="flex items-center justify-between">
@@ -353,7 +353,7 @@ export default function BrandInventoryPage() {
                                                             onClick={() => openModal(product, variant)}
                                                             disabled={upsertOverride.isPending || variant.isAdded}
                                                             className={clsx(
-                                                                "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider shrink-0",
+                                                                "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider shrink-0",
                                                                 variant.isAdded
                                                                     ? "bg-green-50 text-green-600 border-green-100 cursor-not-allowed"
                                                                     : "bg-white text-primary border-gray-200 shadow-sm hover:bg-primary hover:text-white hover:border-primary"
@@ -402,7 +402,7 @@ export default function BrandInventoryPage() {
                         <div className="p-8">
                             <div className="flex items-center justify-between mb-6">
                                 <div>
-                                    <h2 className="text-2xl font-black text-gray-900 tracking-tight">Add to Inventory</h2>
+                                    <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add to Inventory</h2>
                                     <p className="text-gray-500 text-sm mt-1">Set your custom pricing and stock.</p>
                                 </div>
                                 <button
@@ -433,7 +433,7 @@ export default function BrandInventoryPage() {
 
                             <form onSubmit={handleFormSubmit} className="space-y-4">
                                 <div>
-                                    <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">
+                                    <label className="block text-xs font-bold uppercase text-gray-400 tracking-widest mb-2">
                                         MRP (Maximum Retail Price)
                                     </label>
                                     <div className="relative">
@@ -450,7 +450,7 @@ export default function BrandInventoryPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">
+                                    <label className="block text-xs font-bold uppercase text-gray-400 tracking-widest mb-2">
                                         Your Selling Price
                                     </label>
                                     <div className="relative">
@@ -467,7 +467,7 @@ export default function BrandInventoryPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-xs font-black uppercase text-gray-400 tracking-widest mb-2">
+                                    <label className="block text-xs font-bold uppercase text-gray-400 tracking-widest mb-2">
                                         Initial Stock Quantity <span className="text-gray-300 normal-case font-normal">(Optional)</span>
                                     </label>
                                     <input

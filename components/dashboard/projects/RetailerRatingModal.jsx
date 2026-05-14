@@ -47,8 +47,8 @@ function StarRating({ value, onChange }) {
                 >
                     <Star
                         className={`w-8 h-8 transition-colors ${star <= (hovered || value)
-                                ? 'text-primary fill-primary'
-                                : 'text-gray-200 fill-gray-200'
+                            ? 'text-primary fill-primary'
+                            : 'text-gray-200 fill-gray-200'
                             }`}
                     />
                 </button>
@@ -126,7 +126,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                 {/* Header */}
                 <div className="p-7 pb-4 flex justify-between items-start">
                     <div>
-                        <h2 className="text-2xl font-black text-[#2d3142]">Rate Your Retailer</h2>
+                        <h2 className="text-2xl font-bold text-[#2d3142]">Rate Your Retailer</h2>
                         <p className="text-sm text-gray-400 mt-1 font-medium">
                             Project: <span className="text-[#2d3142] font-semibold">{project?.projectName}</span>
                         </p>
@@ -144,7 +144,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                         <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-5">
                             <CheckCircle2 className="w-10 h-10 text-green-500" />
                         </div>
-                        <h3 className="text-xl font-black text-[#2d3142] mb-2">Thank You!</h3>
+                        <h3 className="text-xl font-bold text-[#2d3142] mb-2">Thank You!</h3>
                         <p className="text-sm text-gray-400 font-medium">
                             Your rating helps build a trusted supplier network.
                         </p>
@@ -154,7 +154,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-5">
                             <Package className="w-10 h-10 text-gray-300" />
                         </div>
-                        <h3 className="text-xl font-black text-[#2d3142] mb-2">No Retailer Found</h3>
+                        <h3 className="text-xl font-bold text-[#2d3142] mb-2">No Retailer Found</h3>
                         <p className="text-sm text-gray-400 font-medium max-w-[280px]">
                             There are no retailers associated with this project to rate yet.
                         </p>
@@ -196,7 +196,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                                                 <Icon className={`w-4 h-4 ${criterion.color}`} />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-black text-[#2d3142]">{criterion.label}</p>
+                                                <p className="text-sm font-bold text-[#2d3142]">{criterion.label}</p>
                                                 <p className="text-xs text-gray-400">{criterion.description}</p>
                                             </div>
                                         </div>
@@ -217,7 +217,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
 
                             {/* Notes */}
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-gray-400">
+                                <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400">
                                     Additional Comments <span className="normal-case font-medium">(optional)</span>
                                 </label>
                                 <textarea
@@ -241,7 +241,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
                             <button
                                 onClick={handleSubmit}
                                 disabled={!allRated || isPending}
-                                className="flex-2 py-3.5 px-6 bg-[#d9a88a] text-white font-black rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm min-w-[140px]"
+                                className="flex-2 py-3.5 px-6 bg-[#d9a88a] text-white font-bold rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2 text-sm min-w-[140px]"
                             >
                                 {isPending ? (
                                     <Loader2 className="w-4 h-4 animate-spin" />

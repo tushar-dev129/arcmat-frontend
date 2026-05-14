@@ -51,7 +51,7 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
 
     if (!isOpen) return null;
 
-    const comments = (commentsData?.data || []).filter(c => 
+    const comments = (commentsData?.data || []).filter(c =>
         // Show all if architect/admin, or show only internal if retailer
         user.role === 'retailer' ? c.isInternal : true
     );
@@ -98,7 +98,7 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                 {/* Header */}
                 <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-white relative z-10">
                     <div>
-                        <h3 className="text-xl font-black text-[#2d3142]">Message for {materialName}</h3>
+                        <h3 className="text-xl font-bold text-[#2d3142]">Message for {materialName}</h3>
                         <p className="text-xs font-medium text-gray-400">Direct conversation with {user.role === 'architect' ? 'Retailer' : 'Architect'}</p>
                     </div>
                     <button onClick={onClose} className="p-2 hover:bg-gray-50 rounded-full transition-colors text-gray-400">
@@ -135,11 +135,11 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                                         isMe ? "bg-[#2d3142] text-white rounded-tr-none" : "bg-white text-[#2d3142] rounded-tl-none border border-gray-100"
                                     )}>
                                         {!isMe && (
-                                            <p className="text-[10px] font-black uppercase tracking-widest text-[#d9a88a] mb-2">
+                                            <p className="text-[10px] font-bold uppercase tracking-widest text-[#d9a88a] mb-2">
                                                 {c.authorId?.name} • {c.authorId?.role}
                                             </p>
                                         )}
-                                        
+
                                         {/* Attachments */}
                                         {c.attachments && c.attachments.length > 0 && (
                                             <div className="grid grid-cols-2 gap-2 mb-3">
@@ -150,10 +150,10 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                                                 ))}
                                             </div>
                                         )}
-                                        
+
                                         <p className="whitespace-pre-wrap">{c.message}</p>
                                     </div>
-                                    <p className="text-[9px] font-black text-gray-300 mt-1 uppercase tracking-tighter">
+                                    <p className="text-[9px] font-bold text-gray-300 mt-1 uppercase tracking-tighter">
                                         {format(new Date(c.createdAt), 'hh:mm a')}
                                     </p>
                                 </div>
@@ -168,7 +168,7 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                         {attachments.map((file, i) => (
                             <div key={i} className="relative w-20 h-20 bg-white rounded-2xl border border-gray-200 shrink-0 group">
                                 <img src={URL.createObjectURL(file)} className="w-full h-full object-cover rounded-2xl" />
-                                <button 
+                                <button
                                     onClick={() => removeAttachment(i)}
                                     className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity"
                                 >
@@ -182,7 +182,7 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                 {/* Input Area */}
                 <form onSubmit={handleSend} className="p-6 border-t border-gray-100 bg-white">
                     <div className="relative flex items-center gap-3">
-                        <input 
+                        <input
                             type="file"
                             multiple
                             accept="image/*"
@@ -190,22 +190,22 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                             onChange={handleFileChange}
                             className="hidden"
                         />
-                        <button 
+                        <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
                             className="w-12 h-12 bg-gray-50 text-gray-400 rounded-2xl flex items-center justify-center hover:bg-gray-100 transition-all border border-gray-100"
                         >
                             <Paperclip className="w-5 h-5" />
                         </button>
-                        
-                        <input 
+
+                        <input
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             placeholder="Type your message here..."
                             className="flex-1 bg-gray-50 border border-gray-100 rounded-2xl py-4 px-6 font-bold text-[#2d3142] focus:outline-none focus:ring-2 focus:ring-[#d9a88a]/20 transition-all"
                         />
-                        
-                        <button 
+
+                        <button
                             type="submit"
                             disabled={(!message.trim() && attachments.length === 0) || sendMutation.isPending}
                             className="w-12 h-12 bg-[#d9a88a] text-white rounded-2xl flex items-center justify-center hover:bg-[#c59678] transition-all shadow-lg shadow-orange-50 disabled:opacity-50"

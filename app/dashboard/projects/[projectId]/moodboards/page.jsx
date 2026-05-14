@@ -26,7 +26,7 @@ export default function MoodboardsPage() {
     const router = useRouter();
 
     // ── modal state ──────────────────────────────────────────────────────────
-    const [isModalOpen, setIsModalOpen]           = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
     const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -35,8 +35,8 @@ export default function MoodboardsPage() {
     const [activeTab, setActiveTab] = useState('spaces'); // 'spaces' | 'analytics' | 'discussion'
 
     // ── filter/sort state ────────────────────────────────────────────────────
-    const [searchQuery, setSearchQuery]         = useState('');
-    const [sortBy, setSortBy]                   = useState('newest');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortBy, setSortBy] = useState('newest');
     const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
 
     const { user } = useAuth();
@@ -51,11 +51,11 @@ export default function MoodboardsPage() {
     }, [isContractor, router]);
 
     const { data: projectData, isLoading: projectLoading } = useGetProject(projectId, { includeSpaces: true });
-    const deleteMutation    = useDeleteMoodboard();
-    const completeMutation  = useCompleteProject();
+    const deleteMutation = useDeleteMoodboard();
+    const completeMutation = useCompleteProject();
     const { mutate: markNotificationsRead } = useMarkNotificationsRead();
 
-    const project   = projectData?.data;
+    const project = projectData?.data;
     const moodboards = project?.moodboards || [];
 
     // Mark project-level notifications read on enter
@@ -69,7 +69,7 @@ export default function MoodboardsPage() {
     const unreadMessages = project?.unreadMessages || 0;
 
     // ── handlers ─────────────────────────────────────────────────────────────
-    const handleDeleteClick   = (id) => { setMoodboardToDelete(id); setIsDeleteModalOpen(true); };
+    const handleDeleteClick = (id) => { setMoodboardToDelete(id); setIsDeleteModalOpen(true); };
     const handleConfirmDelete = async () => {
         if (moodboardToDelete) {
             deleteMutation.mutate(moodboardToDelete);
@@ -93,7 +93,7 @@ export default function MoodboardsPage() {
         })
         .sort((a, b) => {
             if (sortBy === 'newest') return new Date(b.createdAt) - new Date(a.createdAt);
-            if (sortBy === 'name')   return a.moodboard_name.localeCompare(b.moodboard_name);
+            if (sortBy === 'name') return a.moodboard_name.localeCompare(b.moodboard_name);
             return 0;
         });
 
@@ -164,11 +164,11 @@ export default function MoodboardsPage() {
                         <div className="w-10 h-10 rounded-2xl bg-[#fef7f2] flex items-center justify-center">
                             <Layout className="w-5 h-5 text-[#d9a88a]" />
                         </div>
-                        <h1 className="text-3xl font-black text-[#2d3142] tracking-tight">
+                        <h1 className="text-3xl font-bold text-[#2d3142] tracking-tight">
                             {project?.projectName} <span className="text-[#d9a88a]">Spaces</span>
                         </h1>
                         {project?.status === 'Completed' && (
-                            <span className="text-xs font-black px-3 py-1 rounded-full bg-green-50 text-green-600 border border-green-100 flex items-center gap-1">
+                            <span className="text-xs font-bold px-3 py-1 rounded-full bg-green-50 text-green-600 border border-green-100 flex items-center gap-1">
                                 <CheckCircle className="w-3 h-3" /> Completed
                             </span>
                         )}
@@ -190,21 +190,20 @@ export default function MoodboardsPage() {
                 ].map((tab) => {
                     const isActive = activeTab === tab.id;
                     const hasUnread = tab.id === 'discussion' && unreadMessages > 0;
-                    
+
                     return (
                         <button
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
-                            className={`flex items-center gap-2 px-6 py-4 text-sm font-bold border-b-2 transition-all relative whitespace-nowrap ${
-                                isActive 
-                                    ? 'border-[#1a1a2e] text-[#1a1a2e]' 
+                            className={`flex items-center gap-2 px-6 py-4 text-sm font-bold border-b-2 transition-all relative whitespace-nowrap ${isActive
+                                    ? 'border-[#1a1a2e] text-[#1a1a2e]'
                                     : 'border-transparent text-gray-400 hover:text-gray-600'
-                            }`}
+                                }`}
                         >
                             <tab.icon className={`w-4 h-4 ${isActive ? 'text-[#d9a88a]' : ''}`} />
                             {tab.label}
                             {hasUnread && (
-                                <span className="flex items-center justify-center bg-red-500 text-white text-[10px] font-black h-4 min-w-[16px] px-1 rounded-full ml-1.5 animate-pulse">
+                                <span className="flex items-center justify-center bg-red-500 text-white text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full ml-1.5 animate-pulse">
                                     {unreadMessages}
                                 </span>
                             )}
@@ -215,13 +214,13 @@ export default function MoodboardsPage() {
 
             {/* ── Tab Content ───────────────────────────────────────────── */}
             <div className="space-y-6">
-                
+
                 {/* SPACES TAB */}
                 {activeTab === 'spaces' && (
                     <>
                         {/* Search and Sort controls moved here for clarity */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-                           <div className="flex items-center lg:w-full w-[200px] gap-3">
+                            <div className="flex items-center lg:w-full w-[200px] gap-3">
                                 <div className="relative">
                                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                                     <input
@@ -289,7 +288,7 @@ export default function MoodboardsPage() {
                                 {!searchQuery && isArchitect && (
                                     <Button
                                         onClick={() => setIsModalOpen(true)}
-                                        className="bg-[#d9a88a] text-white px-10 py-4 rounded-2xl font-black"
+                                        className="bg-[#d9a88a] text-white px-10 py-4 rounded-2xl font-bold"
                                     >
                                         Create Your First Space
                                     </Button>
@@ -313,7 +312,7 @@ export default function MoodboardsPage() {
                 {/* DISCUSSION TAB */}
                 {activeTab === 'discussion' && (
                     <div className="animate-in fade-in py-5 slide-in-from-bottom-4 duration-500">
-                        <ProjectDiscussionTab 
+                        <ProjectDiscussionTab
                             projectId={projectId}
                             projectName={project?.projectName}
                             moodboards={moodboards}

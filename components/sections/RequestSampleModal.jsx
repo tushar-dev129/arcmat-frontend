@@ -15,7 +15,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
         pincode: ''
     });
     const [notes, setNotes] = useState('');
-    
+
     const createSampleMutation = useCreateSampleRequest(projectId);
 
     if (!isOpen) return null;
@@ -51,7 +51,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
             <div className="bg-white w-full max-w-lg rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
                 <div className="p-8 pb-4 flex justify-between items-center">
                     <div>
-                        <h2 className="text-2xl font-black text-[#2d3142] flex items-center gap-2">
+                        <h2 className="text-2xl font-bold text-[#2d3142] flex items-center gap-2">
                             <Package className="w-6 h-6 text-[#d9a88a]" />
                             Request Sample
                         </h2>
@@ -81,7 +81,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
 
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-1">
+                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 Shipping Details
                             </label>
                             <input
@@ -121,7 +121,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-1">
+                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 Additional Notes (Optional)
                             </label>
                             <textarea
@@ -133,7 +133,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
                             />
                         </div>
                     </div>
-                    
+
                     <div className="mt-6 p-4 bg-orange-50 rounded-2xl border border-dashed border-orange-200">
                         <div className="flex gap-3">
                             <Truck className="w-5 h-5 text-orange-500 shrink-0" />
@@ -154,7 +154,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
                     <Button
                         onClick={handleSubmit}
                         disabled={createSampleMutation.isPending}
-                        className="flex-2 py-4 bg-[#d9a88a] text-white font-black rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                        className="flex-2 py-4 bg-[#d9a88a] text-white font-bold rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                     >
                         {createSampleMutation.isPending ? (
                             <Loader2 className="w-5 h-5 animate-spin" />

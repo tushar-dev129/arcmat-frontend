@@ -41,7 +41,7 @@ export default function StatusUpdateModal({
                             <MessageSquare className="w-6 h-6" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-gray-900 tracking-tight">Update Status</h2>
+                            <h2 className="text-xl font-bold text-gray-900 tracking-tight">Update Status</h2>
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mt-0.5">
                                 Set to <span className="text-primary">{status}</span>
                             </p>
@@ -58,12 +58,12 @@ export default function StatusUpdateModal({
                 <form onSubmit={handleSubmit} className="p-8 space-y-6">
                     <div className="space-y-3">
                         <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block mb-1">Ticket Subject</span>
+                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Ticket Subject</span>
                             <span className="font-bold text-gray-700 truncate block">{subject}</span>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Status Update Comment (Optional)</label>
+                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Status Update Comment (Optional)</label>
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
@@ -78,14 +78,14 @@ export default function StatusUpdateModal({
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex-1 h-14 rounded-2xl border-2 border-gray-100 text-gray-400 font-black text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
+                            className="flex-1 h-14 rounded-2xl border-2 border-gray-100 text-gray-400 font-bold text-xs uppercase tracking-widest hover:bg-gray-50 transition-all"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={isPending}
-                            className="flex-2 h-14 bg-[#2C2D35] hover:bg-black text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-xl shadow-gray-200 disabled:opacity-50"
+                            className="flex-2 h-14 bg-[#2C2D35] hover:bg-black text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-xl shadow-gray-200 disabled:opacity-50"
                         >
                             {isPending ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />

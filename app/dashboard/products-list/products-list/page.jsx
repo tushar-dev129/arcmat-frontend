@@ -198,9 +198,9 @@ export default function ProductsListPage() {
                                     ? 'Detailed management interface for the selected brand lifecycle.'
                                     : user?.role === 'custom_maker'
                                         ? 'Your products publish directly to users without retailer inventory.'
-                                    : isBrand
-                                        ? 'Your central command for pricing, stock, and digital assets.'
-                                        : 'Architectural collection of premium materials.'}
+                                        : isBrand
+                                            ? 'Your central command for pricing, stock, and digital assets.'
+                                            : 'Architectural collection of premium materials.'}
                         </p>
                     </div>
 
@@ -212,7 +212,7 @@ export default function ProductsListPage() {
                                 </div>
                                 <div>
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Global Assets</p>
-                                    <p className="text-2xl font-black text-gray-900">{globalStats.totalProducts}</p>
+                                    <p className="text-2xl font-bold text-gray-900">{globalStats.totalProducts}</p>
                                 </div>
                             </div>
                             <div className="bg-white/50 backdrop-blur-sm border border-gray-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 group hover:border-green-300 transition-all">
@@ -222,7 +222,7 @@ export default function ProductsListPage() {
                                 <div>
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">New Items</p>
                                     <div className="flex items-center gap-2">
-                                        <p className="text-2xl font-black text-gray-900">{globalStats.newProducts}</p>
+                                        <p className="text-2xl font-bold text-gray-900">{globalStats.newProducts}</p>
                                         <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@ export default function ProductsListPage() {
                                 <div>
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Activity</p>
                                     <div className="flex items-center gap-2">
-                                        <p className="text-2xl font-black text-gray-900">{globalStats.updatedProducts}</p>
+                                        <p className="text-2xl font-bold text-gray-900">{globalStats.updatedProducts}</p>
                                         <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
                                     </div>
                                 </div>
@@ -311,7 +311,7 @@ export default function ProductsListPage() {
                                             onError={(e) => { e.target.src = '/Images/placeholder-logo.png'; }}
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-black text-3xl">
+                                        <div className="w-full h-full bg-primary/10 flex items-center justify-center text-primary font-bold text-3xl">
                                             {brand.name?.charAt(0)}
                                         </div>
                                     )}

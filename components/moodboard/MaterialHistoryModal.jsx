@@ -30,8 +30,8 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
     if (materialId && history.length > 0) {
         // Step 1: Find the absolute head (the newest version) of the chain
         // Start by finding any entry related to this material, preferably the final/current one
-        let head = history.find(h => (h.materialId === materialId || h.previousMaterialId === materialId) && h.isFinal) 
-                   || history.find(h => h.materialId === materialId || h.previousMaterialId === materialId);
+        let head = history.find(h => (h.materialId === materialId || h.previousMaterialId === materialId) && h.isFinal)
+            || history.find(h => h.materialId === materialId || h.previousMaterialId === materialId);
 
         if (head) {
             const forwardVisited = new Set();
@@ -56,14 +56,14 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                 backwardVisited.add(cursor._id);
 
                 filteredHistory.push(cursor);
-                
+
                 if (cursor.previousMaterialId) {
                     // Look for the version that was the source of this replacement.
                     // Crucially, search for the LATEST version that exists BEFORE this one.
                     const predecessor = history
                         .filter(h => h.materialId === cursor.previousMaterialId && h.version < cursor.version)
                         .sort((a, b) => b.version - a.version)[0]; // Get the one with highest version < current
-                    
+
                     cursor = predecessor;
                 } else {
                     cursor = null;
@@ -78,7 +78,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
 
     const handleApprove = (versionId, status, materialIdForStatus) => {
         approveMutation.mutate({ versionId, data: { status } });
-        
+
         if (onStatusChange) {
             const moodboardStatus = status === 'Approved' ? 'Specified' : 'Excluded';
             onStatusChange(materialIdForStatus || materialId, moodboardStatus);
@@ -96,7 +96,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
             >
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-[#fef7f2]">
                     <div>
-                        <h2 className="text-2xl font-black text-[#2d3142]">Material History</h2>
+                        <h2 className="text-2xl font-bold text-[#2d3142]">Material History</h2>
                         <p className="text-sm font-medium text-gray-500 mt-1">
                             Tracking changes for <span className="text-[#d9a88a] font-bold">{currentMaterialName || 'this space'}</span>
                         </p>
@@ -124,22 +124,21 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                         <div className="space-y-6 relative before:absolute before:inset-0 before:ml-6 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-gray-200 before:to-transparent">
                             {filteredHistory.map((entry, index) => (
                                 <div key={entry._id} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                                    <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-white text-[#d9a88a] shadow-lg ring-1 ring-gray-100 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 font-black text-xs">
+                                    <div className="flex items-center justify-center w-12 h-12 rounded-full border-4 border-white bg-white text-[#d9a88a] shadow-lg ring-1 ring-gray-100 shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 font-bold text-xs">
                                         V{entry.version}
                                     </div>
 
                                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all">
                                         <div className="flex items-center justify-between gap-2 mb-2">
                                             <div className="flex flex-col">
-                                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md w-fit mb-1 ${
-                                                    entry.status === 'Replaced' ? 'bg-gray-100 text-gray-500' :
-                                                    entry.status === 'Approved' ? 'bg-green-100 text-green-700' :
-                                                    entry.status === 'Rejected' ? 'bg-red-100 text-red-700' :
-                                                    'bg-amber-100 text-amber-700'
-                                                }`}>
+                                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md w-fit mb-1 ${entry.status === 'Replaced' ? 'bg-gray-100 text-gray-500' :
+                                                        entry.status === 'Approved' ? 'bg-green-100 text-green-700' :
+                                                            entry.status === 'Rejected' ? 'bg-red-100 text-red-700' :
+                                                                'bg-amber-100 text-amber-700'
+                                                    }`}>
                                                     {entry.status || (entry.isFinal ? 'Current' : 'Replaced')}
                                                 </span>
-                                                <span className="text-[11px] font-black text-[#d9a88a] uppercase tracking-tighter">
+                                                <span className="text-[11px] font-bold text-[#d9a88a] uppercase tracking-tighter">
                                                     {entry.phase || 'Concept Design'}
                                                 </span>
                                             </div>
@@ -173,7 +172,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                                     </div>
                                                 )}
                                                 <div className="min-w-0">
-                                                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-0.5">Replaced</p>
+                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Replaced</p>
                                                     <p className="text-xs text-gray-500 font-bold truncate line-through decoration-gray-300">{entry.previousMaterialName}</p>
                                                 </div>
                                             </div>
@@ -188,7 +187,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                                 ) : (
                                                     <CircleDashed className="w-4 h-4 text-yellow-500" />
                                                 )}
-                                                <span className="text-[11px] font-black uppercase text-gray-500">
+                                                <span className="text-[11px] font-bold uppercase text-gray-500">
                                                     {entry.approvalStatus}
                                                 </span>
                                             </div>

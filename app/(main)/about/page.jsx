@@ -146,11 +146,11 @@ export default function AboutPage() {
 
                     <Marquee
                         items={[
-                            <span className="text-6xl font-black text-transparent stroke-text">INNOVATION</span>,
-                            <span className="text-6xl font-black text-[#d9a88a]/40">DESIGN</span>,
-                            <span className="text-6xl font-black text-transparent stroke-text">PRECISION</span>,
-                            <span className="text-6xl font-black text-[#d9a88a]/40">QUALITY</span>,
-                            <span className="text-6xl font-black text-transparent stroke-text">FUTURE</span>,
+                            <span className="text-6xl font-bold text-transparent stroke-text">INNOVATION</span>,
+                            <span className="text-6xl font-bold text-[#d9a88a]/40">DESIGN</span>,
+                            <span className="text-6xl font-bold text-transparent stroke-text">PRECISION</span>,
+                            <span className="text-6xl font-bold text-[#d9a88a]/40">QUALITY</span>,
+                            <span className="text-6xl font-bold text-transparent stroke-text">FUTURE</span>,
                         ]}
                         speed={15}
                     />

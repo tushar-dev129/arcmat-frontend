@@ -48,7 +48,7 @@ export default function RetailerRatingsPage() {
                         <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
                     </div>
                     <div>
-                        <h1 className="text-3xl font-black text-[#2d3142]">Ratings & Performance</h1>
+                        <h1 className="text-3xl font-bold text-[#2d3142]">Ratings & Performance</h1>
                         <p className="text-gray-400 font-medium">Detailed feedback and insights from your architect network.</p>
                     </div>
                 </div>
@@ -61,7 +61,7 @@ export default function RetailerRatingsPage() {
                         <div className="p-3 bg-blue-50 rounded-2xl">
                             <Star className="w-6 h-6 text-blue-500" />
                         </div>
-                        <span className="text-3xl font-black text-gray-900">{overallAverage}</span>
+                        <span className="text-3xl font-bold text-gray-900">{overallAverage}</span>
                     </div>
                     <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Overall Rating</p>
                     <p className="text-xs text-gray-400 mt-1">Weighted average score</p>
@@ -72,7 +72,7 @@ export default function RetailerRatingsPage() {
                         <div className="p-3 bg-green-50 rounded-2xl">
                             <Award className="w-6 h-6 text-green-500" />
                         </div>
-                        <span className="text-3xl font-black text-gray-900">{ratings.length}</span>
+                        <span className="text-3xl font-bold text-gray-900">{ratings.length}</span>
                     </div>
                     <p className="text-gray-500 font-bold uppercase tracking-widest text-[10px]">Total Feedbacks</p>
                     <p className="text-xs text-gray-400 mt-1">From project partners</p>
@@ -84,7 +84,7 @@ export default function RetailerRatingsPage() {
                             <div className="p-3 bg-orange-50 rounded-2xl">
                                 <Activity className="w-6 h-6 text-orange-500" />
                             </div>
-                            <span className="text-3xl font-black text-gray-900">
+                            <span className="text-3xl font-bold text-gray-900">
                                 {(stats.sum / stats.count).toFixed(1)}
                             </span>
                         </div>
@@ -96,7 +96,7 @@ export default function RetailerRatingsPage() {
 
             {/* Detailed Feedbacks */}
             <div className="space-y-8">
-                <h2 className="text-xl font-black text-[#2d3142] flex items-center gap-2">
+                <h2 className="text-xl font-bold text-[#2d3142] flex items-center gap-2">
                     <MessageSquare className="w-5 h-5 text-primary" />
                     All Performance Feedback
                 </h2>
@@ -106,7 +106,7 @@ export default function RetailerRatingsPage() {
                         <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Star className="w-10 h-10 text-gray-200" />
                         </div>
-                        <h3 className="text-xl font-black text-[#2d3142] mb-2">No Ratings Yet</h3>
+                        <h3 className="text-xl font-bold text-[#2d3142] mb-2">No Ratings Yet</h3>
                         <p className="text-gray-400 font-medium max-w-xs mx-auto">Feedback from architects will appear here once projects are completed.</p>
                     </div>
                 ) : (
@@ -128,8 +128,8 @@ export default function RetailerRatingsPage() {
                                                 </div>
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <h3 className="text-xl font-black text-[#2d3142]">{rating.who_rates?.name || 'Architect'}</h3>
-                                                        <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black tracking-widest uppercase rounded-full border border-blue-100">
+                                                        <h3 className="text-xl font-bold text-[#2d3142]">{rating.who_rates?.name || 'Architect'}</h3>
+                                                        <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold tracking-widest uppercase rounded-full border border-blue-100">
                                                             Reviewer
                                                         </span>
                                                     </div>
@@ -149,7 +149,7 @@ export default function RetailerRatingsPage() {
                                                         />
                                                     ))}
                                                 </div>
-                                                <span className="text-2xl font-black text-gray-900">{avg}</span>
+                                                <span className="text-2xl font-bold text-gray-900">{avg}</span>
                                             </div>
                                         </div>
 
@@ -158,8 +158,8 @@ export default function RetailerRatingsPage() {
                                                 <div key={idx} className="bg-white p-6 rounded-[32px] border border-gray-100 shadow-sm flex flex-col justify-between">
                                                     <div>
                                                         <div className="flex items-center justify-between mb-4">
-                                                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{r.label}</span>
-                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 rounded-lg text-primary font-black text-xs">
+                                                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{r.label}</span>
+                                                            <div className="flex items-center gap-1.5 px-2 py-1 bg-primary/10 rounded-lg text-primary font-bold text-xs">
                                                                 <Award className="w-3.5 h-3.5" />
                                                                 {r.rating}/5
                                                             </div>

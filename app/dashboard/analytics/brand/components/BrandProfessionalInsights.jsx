@@ -215,7 +215,7 @@ export default function BrandProfessionalInsights() {
         return (
             <div className="flex flex-col items-center justify-center py-40 gap-4">
                 <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading professional insights...</p>
+                <p className="text-sm font-bold text-gray-300 uppercase tracking-widest">Loading professional insights...</p>
             </div>
         );
     }
@@ -278,7 +278,7 @@ export default function BrandProfessionalInsights() {
                         </div>
                         <div>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Professionals</p>
-                            <p className="text-2xl font-black text-gray-900">{metrics.total}</p>
+                            <p className="text-2xl font-bold text-gray-900">{metrics.total}</p>
                         </div>
                     </div>
                     <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -287,7 +287,7 @@ export default function BrandProfessionalInsights() {
                         </div>
                         <div>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Architects</p>
-                            <p className="text-2xl font-black text-gray-900">{metrics.architects}</p>
+                            <p className="text-2xl font-bold text-gray-900">{metrics.architects}</p>
                         </div>
                     </div>
                     <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -296,7 +296,7 @@ export default function BrandProfessionalInsights() {
                         </div>
                         <div>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Inquiries</p>
-                            <p className="text-2xl font-black text-gray-900">{metrics.inquiries}</p>
+                            <p className="text-2xl font-bold text-gray-900">{metrics.inquiries}</p>
                         </div>
                     </div>
                     <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -305,7 +305,7 @@ export default function BrandProfessionalInsights() {
                         </div>
                         <div>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Direct Engagement</p>
-                            <p className="text-2xl font-black text-gray-900">{professionals.filter(p => p.purchased).length}</p>
+                            <p className="text-2xl font-bold text-gray-900">{professionals.filter(p => p.purchased).length}</p>
                         </div>
                     </div>
                 </div>

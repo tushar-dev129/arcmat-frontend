@@ -51,9 +51,9 @@ function getSpaceItems(mb) {
         ? estimatedProducts
         : metaKeys.map(id => ({ _id: id })); // minimal stub — enough for counting
 
-    const allPhotos  = mb?.customPhotos || [];
-    const photos     = allPhotos.filter(p => !(p.tags || []).includes('Render'));
-    const renders    = allPhotos.filter(p => (p.tags || []).includes('Render'));
+    const allPhotos = mb?.customPhotos || [];
+    const photos = allPhotos.filter(p => !(p.tags || []).includes('Render'));
+    const renders = allPhotos.filter(p => (p.tags || []).includes('Render'));
     const customRows = mb?.customRows || [];
 
     return { products, photos, renders, customRows };
@@ -65,20 +65,20 @@ function computeStats(project, moodboards) {
     // Phase index (0-4)
     const phaseIdx = Math.max(0, PHASES.indexOf(project?.phase || 'Concept Design'));
 
-    let totalProducts   = 0;
-    let totalPhotos     = 0;
+    let totalProducts = 0;
+    let totalPhotos = 0;
     let totalCustomRows = 0;
-    let totalRenders    = 0;
-    let specifiedItems  = 0;
+    let totalRenders = 0;
+    let specifiedItems = 0;
     let pendingApprovals = 0;
 
     for (const mb of moodboards) {
         const { products, photos, renders, customRows } = getSpaceItems(mb);
 
-        totalProducts   += products.length;
-        totalPhotos     += photos.length;
+        totalProducts += products.length;
+        totalPhotos += photos.length;
         totalCustomRows += customRows.length;
-        totalRenders    += renders.length;
+        totalRenders += renders.length;
 
         const statusMap = mb?.productMetadata || {};
         for (const p of products) {
@@ -124,17 +124,17 @@ function computeStats(project, moodboards) {
 
 /** Animated SVG progress ring */
 function ProgressRing({ pct, size = 88, stroke = 7 }) {
-    const r   = (size - stroke) / 2;
+    const r = (size - stroke) / 2;
     const circ = 2 * Math.PI * r;
     const offset = circ - (pct / 100) * circ;
 
     const color = pct === 100
         ? '#38a169'
         : pct >= 60
-        ? '#d9a88a'
-        : pct >= 30
-        ? '#d9a88a'
-        : '#d9a88a';
+            ? '#d9a88a'
+            : pct >= 30
+                ? '#d9a88a'
+                : '#d9a88a';
 
     return (
         <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
@@ -154,7 +154,7 @@ function ProgressRing({ pct, size = 88, stroke = 7 }) {
                 />
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-xl font-black text-[#2d3142] leading-none">{pct}%</span>
+                <span className="text-xl font-bold text-[#2d3142] leading-none">{pct}%</span>
                 <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">Done</span>
             </div>
         </div>
@@ -167,42 +167,39 @@ function PhaseSteps({ phaseIdx, isCompleted }) {
     return (
         <div className="overflow-x-auto hide-scrollbar -mx-2 px-2">
             <div className="flex items-center gap-0 min-w-[450px] py-2">
-            {PHASES.map((phase, i) => {
-                const done    = i < active;
-                const current = i === active;
-                const last    = i === PHASES.length - 1;
-                return (
-                    <div key={phase} className="flex items-center flex-1 min-w-0">
-                        {/* Node */}
-                        <div className="flex flex-col items-center gap-1 shrink-0">
-                            <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${
-                                done || (isCompleted && current)
-                                    ? 'bg-[#d9a88a] border-[#d9a88a]'
-                                    : current
-                                    ? 'bg-white border-[#d9a88a] shadow-md shadow-orange-100'
-                                    : 'bg-gray-100 border-gray-200'
-                            }`}>
-                                {done || (isCompleted && current) ? (
-                                    <CheckCircle2 className="w-3 h-3 text-white" />
-                                ) : current ? (
-                                    <div className="w-2 h-2 rounded-full bg-[#d9a88a]" />
-                                ) : null}
+                {PHASES.map((phase, i) => {
+                    const done = i < active;
+                    const current = i === active;
+                    const last = i === PHASES.length - 1;
+                    return (
+                        <div key={phase} className="flex items-center flex-1 min-w-0">
+                            {/* Node */}
+                            <div className="flex flex-col items-center gap-1 shrink-0">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${done || (isCompleted && current)
+                                        ? 'bg-[#d9a88a] border-[#d9a88a]'
+                                        : current
+                                            ? 'bg-white border-[#d9a88a] shadow-md shadow-orange-100'
+                                            : 'bg-gray-100 border-gray-200'
+                                    }`}>
+                                    {done || (isCompleted && current) ? (
+                                        <CheckCircle2 className="w-3 h-3 text-white" />
+                                    ) : current ? (
+                                        <div className="w-2 h-2 rounded-full bg-[#d9a88a]" />
+                                    ) : null}
+                                </div>
+                                <span className={`text-[8px] font-bold text-center leading-tight w-12 ${current ? 'text-[#d9a88a]' : done ? 'text-gray-500' : 'text-gray-300'
+                                    }`}>
+                                    {PHASE_LABELS[i]}
+                                </span>
                             </div>
-                            <span className={`text-[8px] font-bold text-center leading-tight w-12 ${
-                                current ? 'text-[#d9a88a]' : done ? 'text-gray-500' : 'text-gray-300'
-                            }`}>
-                                {PHASE_LABELS[i]}
-                            </span>
+                            {/* Connector */}
+                            {!last && (
+                                <div className={`h-0.5 flex-1 mx-1 rounded-full transition-all ${done ? 'bg-[#d9a88a]' : 'bg-gray-150'
+                                    }`} style={{ background: done ? '#d9a88a' : '#e5e7eb' }} />
+                            )}
                         </div>
-                        {/* Connector */}
-                        {!last && (
-                            <div className={`h-0.5 flex-1 mx-1 rounded-full transition-all ${
-                                done ? 'bg-[#d9a88a]' : 'bg-gray-150'
-                            }`} style={{ background: done ? '#d9a88a' : '#e5e7eb' }} />
-                        )}
-                    </div>
-                );
-            })}
+                    );
+                })}
             </div>
         </div>
     );
@@ -212,15 +209,14 @@ function PhaseSteps({ phaseIdx, isCompleted }) {
 function StatCard({ icon: Icon, label, value, sub, color = 'orange', warn = false }) {
     const colorMap = {
         orange: 'bg-[#fef7f2] text-[#d9a88a]',
-        green:  'bg-green-50 text-green-600',
-        red:    'bg-red-50 text-red-500',
-        blue:   'bg-blue-50 text-blue-600',
-        slate:  'bg-slate-50 text-slate-600',
+        green: 'bg-green-50 text-green-600',
+        red: 'bg-red-50 text-red-500',
+        blue: 'bg-blue-50 text-blue-600',
+        slate: 'bg-slate-50 text-slate-600',
     };
     return (
-        <div className={`flex items-center gap-3 bg-white rounded-2xl px-4 py-3 border ${
-            warn ? 'border-red-100' : 'border-gray-100'
-        } shadow-sm hover:shadow-md transition-shadow min-w-0`}>
+        <div className={`flex items-center gap-3 bg-white rounded-2xl px-4 py-3 border ${warn ? 'border-red-100' : 'border-gray-100'
+            } shadow-sm hover:shadow-md transition-shadow min-w-0`}>
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${colorMap[color]}`}>
                 <Icon className="w-4 h-4" />
             </div>
@@ -228,7 +224,7 @@ function StatCard({ icon: Icon, label, value, sub, color = 'orange', warn = fals
                 <p className="text-[9px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider leading-none mb-1 truncate">
                     {label}
                 </p>
-                <p className={`text-lg font-black leading-none ${warn ? 'text-red-500' : 'text-[#2d3142]'}`}>
+                <p className={`text-lg font-bold leading-none ${warn ? 'text-red-500' : 'text-[#2d3142]'}`}>
                     {value}
                 </p>
                 {sub && <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>}
@@ -250,16 +246,16 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
     const statusLabel = stats.isCompleted
         ? 'Completed'
         : stats.pct >= 75
-        ? 'Almost Done'
-        : stats.pct >= 40
-        ? 'In Progress'
-        : 'Getting Started';
+            ? 'Almost Done'
+            : stats.pct >= 40
+                ? 'In Progress'
+                : 'Getting Started';
 
     const statusColor = stats.isCompleted
         ? 'text-green-600 bg-green-50 border-green-100'
         : stats.pct >= 40
-        ? 'text-amber-700 bg-amber-50 border-amber-100'
-        : 'text-blue-600 bg-blue-50 border-blue-100';
+            ? 'text-amber-700 bg-amber-50 border-amber-100'
+            : 'text-blue-600 bg-blue-50 border-blue-100';
 
     return (
         <div className="bg-white rounded-[24px] sm:rounded-[28px] border border-gray-100 shadow-sm mb-10 overflow-hidden transition-all duration-300">
@@ -276,11 +272,11 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 items-start">
                         <span className="font-extrabold text-[#2d3142] text-xs sm:text-sm">Project Progress</span>
                         <div className="flex items-center gap-2">
-                            <span className={`text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded-full border uppercase tracking-wide shrink-0 ${statusColor}`}>
+                            <span className={`text-[8px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wide shrink-0 ${statusColor}`}>
                                 {statusLabel}
                             </span>
                             {stats.pendingApprovals > 0 && (
-                                <span className="text-[8px] sm:text-[10px] font-black px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1 shrink-0">
+                                <span className="text-[8px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1 shrink-0">
                                     <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                                     {stats.pendingApprovals}
                                 </span>
@@ -289,7 +285,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                     </div>
                 </div>
                 <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                    <span className="text-xs sm:text-sm font-black text-[#d9a88a]">{stats.pct}%</span>
+                    <span className="text-xs sm:text-sm font-bold text-[#d9a88a]">{stats.pct}%</span>
                     <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-300 ${collapsed ? '' : 'rotate-180'}`} />
                 </div>
             </button>
@@ -303,7 +299,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                         <div className="flex flex-col items-center gap-2 shrink-0">
                             <ProgressRing pct={stats.pct} />
                             {stats.isCompleted && (
-                                <span className="text-[9px] font-black uppercase tracking-widest text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <span className="text-[9px] font-bold uppercase tracking-widest text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
                                     ✓ Complete
                                 </span>
                             )}
@@ -311,7 +307,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
 
                         {/* Phase stepper */}
                         <div className="flex-1 min-w-0 pt-2">
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
                                 Current Phase
                             </p>
                             <PhaseSteps phaseIdx={stats.phaseIdx} isCompleted={stats.isCompleted} />
@@ -322,13 +318,12 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                     <span className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wide">
                                         Overall completion
                                     </span>
-                                    <span className="text-[9px] sm:text-[10px] font-black text-[#d9a88a]">{stats.pct}%</span>
+                                    <span className="text-[9px] sm:text-[10px] font-bold text-[#d9a88a]">{stats.pct}%</span>
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <div
-                                        className={`h-full rounded-full transition-all duration-1000 ease-out ${
-                                            stats.isCompleted ? 'bg-green-500' : 'bg-linear-to-r from-[#d9a88a] to-[#e8b898]'
-                                        }`}
+                                        className={`h-full rounded-full transition-all duration-1000 ease-out ${stats.isCompleted ? 'bg-green-500' : 'bg-linear-to-r from-[#d9a88a] to-[#e8b898]'
+                                            }`}
                                         style={{ width: `${stats.pct}%` }}
                                     />
                                 </div>
@@ -388,7 +383,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                     {/* Row 3: per-space breakdown (architect only) */}
                     {isArchitect && moodboards.length > 0 && (
                         <div>
-                            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 Space-by-Space Breakdown
                             </p>
                             <div className="space-y-2">
@@ -406,16 +401,16 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                     const specPct = products.length > 0
                                         ? Math.round((specified / products.length) * 100)
                                         : 0;
-                                    const cost    = Number(mb?.estimatedCostId?.costing) || 0;
+                                    const cost = Number(mb?.estimatedCostId?.costing) || 0;
                                     const pending = mb?.pendingApprovals || 0;
 
                                     return (
                                         <div key={mb._id} className="flex flex-col sm:flex-row sm:items-center gap-3 bg-gray-50/60 rounded-2xl px-4 py-3">
                                             <div className="flex items-center gap-3 flex-1 min-w-0">
-                                               <div className="w-2 h-2 rounded-full bg-[#d9a88a] shrink-0" />
-                                               <span className="text-sm font-bold text-[#2d3142] truncate">
-                                                   {mb.moodboard_name}
-                                               </span>
+                                                <div className="w-2 h-2 rounded-full bg-[#d9a88a] shrink-0" />
+                                                <span className="text-sm font-bold text-[#2d3142] truncate">
+                                                    {mb.moodboard_name}
+                                                </span>
                                             </div>
                                             <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
                                                 <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold sm:w-20 sm:text-right">
@@ -429,7 +424,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                                         style={{ width: `${specPct}%` }}
                                                     />
                                                 </div>
-                                                <span className="text-[10px] sm:text-[11px] font-black text-[#d9a88a] w-8">{specPct}%</span>
+                                                <span className="text-[10px] sm:text-[11px] font-bold text-[#d9a88a] w-8">{specPct}%</span>
                                                 {pending > 0 && (
                                                     <span className="text-[9px] sm:text-[10px] bg-red-50 text-red-500 font-bold px-2 py-0.5 rounded-full border border-red-100">
                                                         {pending} ⏳

@@ -24,7 +24,7 @@ export default function CategoryRequestsPage() {
         <RoleGuard allowedRoles={['admin']}>
             <Container className="py-8">
                 <div className="mb-8">
-                    <h1 className="text-3xl font-black text-gray-900">Category Requests</h1>
+                    <h1 className="text-3xl font-bold text-gray-900">Category Requests</h1>
                     <p className="text-gray-500 font-medium">New categories and specializations suggested by contractors.</p>
                 </div>
 
@@ -44,7 +44,7 @@ export default function CategoryRequestsPage() {
                                                     <Calendar className="w-4 h-4" />
                                                     {new Date(request.updatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border border-blue-100">
+                                                <div className="flex items-center gap-1.5 text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100">
                                                     <Info className="w-3 h-3" /> PENDING REVIEW
                                                 </div>
                                             </div>
@@ -55,13 +55,13 @@ export default function CategoryRequestsPage() {
                                         <div className="space-y-3">
                                             {request.requestedCategory && (
                                                 <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <span className="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">New Category Suggestion</span>
+                                                    <span className="block text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Category Suggestion</span>
                                                     <p className="text-sm font-bold text-gray-800">"{request.requestedCategory}"</p>
                                                 </div>
                                             )}
                                             {request.requestedSubcategories && (
                                                 <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <span className="block text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">New Specialization Suggestion</span>
+                                                    <span className="block text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Specialization Suggestion</span>
                                                     <p className="text-sm font-bold text-gray-800">"{request.requestedSubcategories}"</p>
                                                 </div>
                                             )}
@@ -69,9 +69,9 @@ export default function CategoryRequestsPage() {
                                     </div>
 
                                     <div>
-                                        <Link 
+                                        <Link
                                             href="/dashboard/categories"
-                                            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-xs font-black uppercase tracking-widest rounded-2xl hover:bg-zinc-800 transition-all shadow-xl shadow-primary/20 group/btn"
+                                            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white text-xs font-bold uppercase tracking-widest rounded-2xl hover:bg-zinc-800 transition-all shadow-xl shadow-primary/20 group/btn"
                                         >
                                             Add Officially
                                             <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -85,7 +85,7 @@ export default function CategoryRequestsPage() {
                             <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
                                 <CheckCircle2 className="w-10 h-10 text-gray-200" />
                             </div>
-                            <h3 className="text-2xl font-black text-gray-900 mb-2">No Pending Requests</h3>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">No Pending Requests</h3>
                             <p className="text-gray-400 max-w-sm font-medium">All contractor category suggestions have been processed or none have been submitted yet.</p>
                         </div>
                     )}

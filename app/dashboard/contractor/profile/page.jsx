@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { 
-    useGetMyContractorProfile, 
-    useCreateContractorProfile, 
+import {
+    useGetMyContractorProfile,
+    useCreateContractorProfile,
     useUpdateContractorProfile,
     useUploadContractorImage,
     useCreateContractorPortfolioItem,
@@ -15,15 +15,15 @@ import { getImageUrl } from "@/lib/productUtils";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import clsx from "clsx";
-import { 
-    User, 
-    MapPin, 
-    Phone, 
-    Mail, 
-    Globe, 
-    Briefcase, 
-    Users, 
-    Calendar, 
+import {
+    User,
+    MapPin,
+    Phone,
+    Mail,
+    Globe,
+    Briefcase,
+    Users,
+    Calendar,
     MessageSquare,
     Save,
     Edit3,
@@ -39,10 +39,115 @@ import {
     Image as ImageIcon,
     Film,
     Trash2,
-    Upload
+    Upload,
+    ChevronDown,
+    Clock
 } from "lucide-react";
 import { toast } from "@/components/ui/Toast";
 import Image from "next/image";
+
+const DAYS = [
+    { id: 'monday', label: 'Monday' },
+    { id: 'tuesday', label: 'Tuesday' },
+    { id: 'wednesday', label: 'Wednesday' },
+    { id: 'thursday', label: 'Thursday' },
+    { id: 'friday', label: 'Friday' },
+    { id: 'saturday', label: 'Saturday' },
+    { id: 'sunday', label: 'Sunday' }
+];
+
+const defaultWorkingHours = {
+    monday: { from: "10:00", to: "19:00", isClosed: false },
+    tuesday: { from: "10:00", to: "19:00", isClosed: false },
+    wednesday: { from: "10:00", to: "19:00", isClosed: false },
+    thursday: { from: "10:00", to: "19:00", isClosed: false },
+    friday: { from: "10:00", to: "19:00", isClosed: false },
+    saturday: { from: "10:00", to: "19:00", isClosed: false },
+    sunday: { from: "10:00", to: "19:00", isClosed: true }
+};
+
+const formatTime = (timeStr) => {
+    if (!timeStr || timeStr === "--:--") return "--:--";
+    try {
+        const [hours, minutes] = timeStr.split(':');
+        const h = parseInt(hours);
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const h12 = h % 12 || 12;
+        return `${h12}:${minutes} ${ampm}`;
+    } catch (e) {
+        return timeStr;
+    }
+};
+
+const ComboboxInput = ({ value, onChange, options, placeholder, disabled, restricted }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [filteredOptions, setFilteredOptions] = useState([]);
+    const wrapperRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        if (!value || restricted) {
+            setFilteredOptions(options);
+        } else {
+            setFilteredOptions(options.filter(opt => opt.toLowerCase().includes(value.toLowerCase())));
+        }
+    }, [value, options, restricted]);
+
+    const handleInput = (val) => {
+        onChange(val);
+        setIsOpen(true);
+    };
+
+    return (
+        <div ref={wrapperRef} className="relative w-full">
+            <div className="relative">
+                <input
+                    value={value}
+                    onChange={(e) => !restricted && handleInput(e.target.value)}
+                    onFocus={() => setIsOpen(true)}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    readOnly={restricted}
+                    className={clsx(
+                        "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:border-primary focus:ring-1 focus:ring-primary text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed outline-none pr-10",
+                        restricted && "cursor-pointer"
+                    )}
+                    autoComplete="off"
+                    onClick={() => restricted && setIsOpen(!isOpen)}
+                />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <ChevronDown className={clsx("w-4 h-4 transition-transform", isOpen && "rotate-180")} />
+                </div>
+            </div>
+            {isOpen && filteredOptions.length > 0 && (
+                <ul className="absolute z-50 w-full mt-1 bg-white border border-gray-100 rounded-xl shadow-xl max-h-60 overflow-auto py-1 animate-in fade-in zoom-in-95 duration-200">
+                    {filteredOptions.map((opt, i) => (
+                        <li
+                            key={i}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => {
+                                onChange(opt);
+                                setIsOpen(false);
+                            }}
+                            className="px-4 py-2.5 text-sm text-gray-700 hover:bg-orange-50 hover:text-primary cursor-pointer transition-colors border-b border-gray-50 last:border-0"
+                        >
+                            {opt}
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
+    );
+};
 
 export default function MarketplaceProfilePage() {
     const { user } = useAuth();
@@ -89,15 +194,23 @@ export default function MarketplaceProfilePage() {
             country: "India"
         },
         serviceAreas: [],
-        visibility: "public"
+        visibility: "public",
+        availability: {
+            status: "available",
+            workingHours: defaultWorkingHours
+        }
     });
 
     // Recursively search for the "Find Contractors" root in the whole tree
     const contractorGroups = useMemo(() => {
+        if (!categories || categories.length === 0) return [];
+
         const findRoot = (nodes) => {
             if (!Array.isArray(nodes)) return null;
             for (const node of nodes) {
-                if (node.slug === 'find-contractors' || node.name === 'Find Contractors') {
+                const name = node.name?.toLowerCase();
+                const slug = node.slug?.toLowerCase();
+                if (slug === 'find-contractors' || name === 'find contractors' || slug === 'contractors' || name === 'contractors') {
                     return node;
                 }
                 if (node.children?.length) {
@@ -107,8 +220,18 @@ export default function MarketplaceProfilePage() {
             }
             return null;
         };
+
         const root = findRoot(categories);
-        return root?.children || [];
+        // If we found a clear root with children, use those
+        if (root && root.children?.length > 0) return root.children;
+        
+        // If categories is a single item that contains children, it might be the root itself
+        if (categories.length === 1 && categories[0].children?.length > 0) {
+            return categories[0].children;
+        }
+
+        // Otherwise, return all categories provided by the API
+        return categories;
     }, [categories]);
 
     const selectedGroup = useMemo(() => {
@@ -116,6 +239,17 @@ export default function MarketplaceProfilePage() {
     }, [contractorGroups, formData.categoryId]);
 
     const [newArea, setNewArea] = useState("");
+    const [attributes, setAttributes] = useState([{ key: '', value: '' }]);
+
+    const handleAttributeChange = (index, field, value) => {
+        const newAttrs = [...attributes];
+        newAttrs[index][field] = value;
+        setAttributes(newAttrs);
+    };
+
+    const addAttribute = () => setAttributes([...attributes, { key: '', value: '' }]);
+    const removeAttribute = (index) => setAttributes(attributes.filter((_, i) => i !== index));
+
     const [portfolioForm, setPortfolioForm] = useState({
         title: "",
         description: "",
@@ -152,8 +286,36 @@ export default function MarketplaceProfilePage() {
                     country: profile.location?.country || "India"
                 },
                 serviceAreas: profile.serviceAreas || [],
-                visibility: profile.visibility || "public"
+                visibility: profile.visibility || "public",
+                availability: {
+                    status: profile.availability?.status || "available",
+                    workingHours: profile.availability?.workingHours || defaultWorkingHours
+                }
             });
+
+            // Hydrate attributes from existing categories
+            const mainCat = contractorGroups.find(c => c._id === (profile.categoryId?._id || profile.categoryId));
+            if (mainCat) {
+                const initialAttrs = [];
+                const subIds = profile.subcategoryIds || [];
+
+                if (subIds.length > 0) {
+                    subIds.forEach(subId => {
+                        const sub = mainCat.children?.find(s => s._id === subId);
+                        initialAttrs.push({ key: mainCat.name, value: sub ? sub.name : '' });
+                    });
+                }
+
+                if (profile.otherSubcategoryName) {
+                    initialAttrs.push({ key: mainCat.name, value: profile.otherSubcategoryName });
+                }
+
+                if (initialAttrs.length > 0) {
+                    setAttributes(initialAttrs);
+                } else if (mainCat) {
+                    setAttributes([{ key: mainCat.name, value: '' }]);
+                }
+            }
         } else if (user) {
             // Pre-fill with existing user data if profile doesn't exist
             setFormData(prev => ({
@@ -301,12 +463,37 @@ export default function MarketplaceProfilePage() {
             return;
         }
 
+        // Map attributes back to flat structure for backend compatibility
+        const finalFormData = { ...formData };
+        if (attributes.length > 0 && attributes[0].key) {
+            const firstAttr = attributes[0];
+            const category = contractorGroups.find(g => g.name === firstAttr.key);
+            if (category) {
+                finalFormData.categoryId = category._id;
+
+                const subIds = [];
+                let otherSubNames = [];
+
+                attributes.forEach(attr => {
+                    const sub = category.children?.find(s => s.name === attr.value);
+                    if (sub) {
+                        subIds.push(sub._id);
+                    } else if (attr.value) {
+                        otherSubNames.push(attr.value);
+                    }
+                });
+
+                finalFormData.subcategoryIds = subIds;
+                finalFormData.otherSubcategoryName = otherSubNames.join(", ");
+            }
+        }
+
         try {
             if (profile) {
                 // Update
-                await updateMutation.mutateAsync({ 
-                    id: profile._id, 
-                    data: formData 
+                await updateMutation.mutateAsync({
+                    id: profile._id,
+                    data: finalFormData
                 });
                 toast.success("Profile updated successfully!");
                 await refetchProfile();
@@ -314,7 +501,7 @@ export default function MarketplaceProfilePage() {
             } else {
                 // Create
                 await createMutation.mutateAsync({
-                    ...formData,
+                    ...finalFormData,
                     userId: user?._id,
                     providerType: "contractor"
                 });
@@ -348,7 +535,7 @@ export default function MarketplaceProfilePage() {
                     <p className="text-gray-500 mt-3 max-w-md mx-auto">
                         You haven't set up your professional profile yet. Create it now to start appearing in the Arcmat Marketplace and receiving leads.
                     </p>
-                    <Button 
+                    <Button
                         onClick={() => setIsEditing(true)}
                         className="mt-8 px-10 py-4 bg-[hsl(15,80%,65%)] hover:bg-[hsl(15,80%,55%)] text-white rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl flex items-center gap-2 mx-auto"
                     >
@@ -369,7 +556,7 @@ export default function MarketplaceProfilePage() {
                 </div>
                 <div className="flex items-center gap-3">
                     {!isEditing ? (
-                        <Button 
+                        <Button
                             onClick={() => setIsEditing(true)}
                             className="flex items-center gap-2 px-6 py-2.5 bg-white border border-gray-200 text-gray-700 hover:border-[hsl(15,80%,65%)] hover:text-[hsl(15,80%,65%)] rounded-xl font-bold transition-all shadow-sm"
                         >
@@ -378,7 +565,7 @@ export default function MarketplaceProfilePage() {
                         </Button>
                     ) : (
                         <>
-                            <Button 
+                            <Button
                                 type="button"
                                 onClick={() => {
                                     if (profile) setIsEditing(false);
@@ -388,7 +575,7 @@ export default function MarketplaceProfilePage() {
                             >
                                 Cancel
                             </Button>
-                            <Button 
+                            <Button
                                 onClick={() => {
                                     document.getElementById('profile-form').requestSubmit();
                                 }}
@@ -409,9 +596,9 @@ export default function MarketplaceProfilePage() {
                     {!isEditing && (
                         <div className="absolute top-4 right-4 md:top-6 md:right-8">
                             <div className={clsx(
-                                "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-                                formData.visibility === 'public' 
-                                    ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
+                                "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold  tracking-widest border",
+                                formData.visibility === 'public'
+                                    ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                                     : "bg-gray-50 text-gray-400 border-gray-100"
                             )}>
                                 {formData.visibility === 'public' ? (
@@ -434,17 +621,17 @@ export default function MarketplaceProfilePage() {
                             isEditing && !formData.profileImage ? "border-red-200 bg-red-50" : "border-gray-200"
                         )}>
                             {(getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url) ? (
-                                <img 
-                                    src={getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url} 
-                                    alt="Profile" 
+                                <img
+                                    src={getImageUrl(formData.profileImage, 'contractors') || formData.profileImage?.secure_url}
+                                    alt="Profile"
                                     className="w-full h-full object-cover block"
                                 />
                             ) : (
                                 <User className="w-10 h-10 md:w-12 md:h-12 text-gray-300" />
                             )}
-                            
+
                             {isEditing && (
-                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-[10px] font-bold uppercase tracking-widest text-center px-2">
+                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-[10px] font-bold  tracking-widest text-center px-2">
                                     <Camera className="w-5 h-5 md:w-6 md:h-6 mb-1" />
                                     Change Logo
                                     <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
@@ -461,7 +648,7 @@ export default function MarketplaceProfilePage() {
                     <div className="flex-1 text-center sm:text-left">
                         <h3 className="text-xl md:text-2xl font-bold text-gray-900">{formData.businessName || "Business Name"}</h3>
                         <p className="text-sm md:text-base text-gray-500 mb-4">{formData.tagline || "Your professional tagline will appear here"}</p>
-                        
+
                         {!isEditing && (
                             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
                                 {formData.contact?.email && (
@@ -493,8 +680,8 @@ export default function MarketplaceProfilePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Field label="Business Name" required={isEditing}>
                             {isEditing ? (
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     name="businessName"
                                     value={formData.businessName}
                                     onChange={handleChange}
@@ -509,8 +696,8 @@ export default function MarketplaceProfilePage() {
 
                         <Field label="Short Tagline" required={isEditing}>
                             {isEditing ? (
-                                <input 
-                                    type="text" 
+                                <input
+                                    type="text"
                                     name="tagline"
                                     value={formData.tagline}
                                     onChange={handleChange}
@@ -522,150 +709,52 @@ export default function MarketplaceProfilePage() {
                             )}
                         </Field>
 
-                        <Field label="Primary Category" required={isEditing}>
+                        <Field className="md:col-span-2" label="Categories & Subcategories" required={isEditing}>
                             {isEditing ? (
-                                <div className="space-y-3">
-                                    <select 
-                                        name="categoryId"
-                                        value={formData.categoryId}
-                                        onChange={(e) => {
-                                            handleChange(e);
-                                            // Reset subcategories and other names when category changes
-                                            setFormData(prev => ({
-                                                ...prev,
-                                                subcategoryIds: [],
-                                                otherCategoryName: "",
-                                                otherSubcategoryName: ""
-                                            }));
-                                        }}
-                                        required
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] focus:ring-1 focus:ring-[hsl(15,80%,65%)] outline-none transition-all bg-white font-medium"
-                                    >
-                                        <option value="">Select Category</option>
-                                        {contractorGroups.map(cat => (
-                                            <option key={cat._id} value={cat._id}>{cat.name}</option>
-                                        ))}
-                                    </select>
-                                    
-                                    {formData.categoryId === "other" && (
-                                        <div className="relative animate-in slide-in-from-top-2 duration-300">
-                                            <input 
-                                                type="text"
-                                                name="otherCategoryName"
-                                                value={formData.otherCategoryName}
-                                                onChange={handleChange}
-                                                required
-                                                placeholder="Specify your category..."
-                                                className="w-full px-4 py-3 rounded-xl border border-primary/30 bg-primary/5 focus:border-primary outline-none transition-all font-medium"
-                                            />
-                                            <p className="text-[10px] text-primary mt-1 font-bold uppercase tracking-wider px-1">Admin will review and add this category</p>
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="inline-flex items-center px-3 py-1 bg-orange-50 text-[hsl(15,80%,60%)] rounded-full text-sm font-bold border border-orange-100">
-                                    {formData.categoryId === "other" 
-                                        ? `Other: ${formData.otherCategoryName || "Not specified"}`
-                                        : (contractorGroups.find(c => c._id === formData.categoryId)?.name || profile?.categoryId?.name || "Uncategorized")}
-                                </div>
-                            )}
-                        </Field>
+                                <div className="space-y-3 mt-2">
+                                    {attributes.slice(0, 1).map((attr, idx) => {
+                                        const group = contractorGroups.find(g => g.name === attr.key);
+                                        const subOptions = group?.children?.map(s => s.name) || [];
 
-                        <Field label="Subcategories (Select multiple)" required={isEditing}>
-                            {isEditing ? (
-                                <div className="space-y-3">
-                                    {formData.categoryId ? (
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-60 overflow-y-auto p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                                            {selectedGroup?.children?.map(sub => (
-                                                <label key={sub._id} className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all group">
-                                                    <input 
-                                                        type="checkbox"
-                                                        checked={formData.subcategoryIds.includes(sub._id)}
-                                                        onChange={(e) => {
-                                                            const checked = e.target.checked;
-                                                            setFormData(prev => ({
-                                                                ...prev,
-                                                                subcategoryIds: checked 
-                                                                    ? [...prev.subcategoryIds, sub._id]
-                                                                    : prev.subcategoryIds.filter(id => id !== sub._id)
-                                                            }));
+                                        return (
+                                            <div key={idx} className="flex gap-4 animate-in fade-in duration-500">
+                                                <div className="flex-1">
+                                                    <ComboboxInput
+                                                        value={attr.key}
+                                                        onChange={(val) => {
+                                                            handleAttributeChange(0, 'key', val);
+                                                            handleAttributeChange(0, 'value', ''); // Clear subcategory on category change
                                                         }}
-                                                        className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                                        options={contractorGroups.map(g => g.name)}
+                                                        placeholder="Select Primary Category"
+                                                        restricted={true}
                                                     />
-                                                    <span className={clsx(
-                                                        "text-sm font-medium transition-colors",
-                                                        formData.subcategoryIds.includes(sub._id) ? "text-primary font-bold" : "text-gray-600"
-                                                    )}>
-                                                        {sub.name}
-                                                    </span>
-                                                </label>
-                                            ))}
-                                            
-                                            {/* "Other" subcategory option - can be handled by the user's "Others" in the list or dynamically */}
-                                            <label className="flex items-center gap-3 p-2 hover:bg-white rounded-lg cursor-pointer transition-all">
-                                                <input 
-                                                    type="checkbox"
-                                                    checked={formData.subcategoryIds.includes("other_sub")}
-                                                    onChange={(e) => {
-                                                        const checked = e.target.checked;
-                                                        setFormData(prev => ({
-                                                            ...prev,
-                                                            subcategoryIds: checked 
-                                                                ? [...prev.subcategoryIds, "other_sub"]
-                                                                : prev.subcategoryIds.filter(id => id !== "other_sub")
-                                                        }));
-                                                    }}
-                                                    className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
-                                                />
-                                                <span className={clsx(
-                                                    "text-sm font-medium",
-                                                    formData.subcategoryIds.includes("other_sub") ? "text-primary font-bold" : "text-gray-600"
-                                                )}>
-                                                    Others
-                                                </span>
-                                            </label>
-                                        </div>
-                                    ) : (
-                                        <div className="p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200 text-center text-xs text-gray-400">
-                                            Select a primary category first
-                                        </div>
-                                    )}
-
-                                    {formData.subcategoryIds.includes("other_sub") && (
-                                        <div className="relative animate-in slide-in-from-top-2 duration-300">
-                                            <input 
-                                                type="text"
-                                                name="otherSubcategoryName"
-                                                value={formData.otherSubcategoryName}
-                                                onChange={handleChange}
-                                                required
-                                                placeholder="Specify other subcategories..."
-                                                className="w-full px-4 py-3 rounded-xl border border-primary/30 bg-primary/5 focus:border-primary outline-none transition-all font-medium"
-                                            />
-                                        </div>
-                                    )}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <ComboboxInput
+                                                        value={attr.value}
+                                                        onChange={(val) => handleAttributeChange(0, 'value', val)}
+                                                        options={subOptions}
+                                                        placeholder="Select or Type Specific Service"
+                                                        disabled={!attr.key}
+                                                    />
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                  
                                 </div>
                             ) : (
-                                <div className="flex flex-wrap gap-2">
-                                    {formData.subcategoryIds.length > 0 ? (
-                                        <>
-                                            {formData.subcategoryIds.map(subId => {
-                                                if (subId === "other_sub") return null;
-                                                const subName = selectedGroup?.children?.find(s => s._id === subId)?.name;
-                                                return subName ? (
-                                                    <span key={subId} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs font-bold border border-gray-200">
-                                                        {subName}
-                                                    </span>
-                                                ) : null;
-                                            })}
-                                            {formData.subcategoryIds.includes("other_sub") && (
-                                                <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold border border-primary/20">
-                                                    Other: {formData.otherSubcategoryName}
-                                                </span>
-                                            )}
-                                        </>
+                                <div className="space-y-1 mt-1">
+                                    {attributes.length > 0 && attributes[0].key ? (
+                                        attributes.map((attr, idx) => (
+                                            <div key={idx} className=" flex-wrap grid-cols-2 grid items-baseline gap-2">
+                                                <span className="text-base font-semibold text-gray-900 ">{attr.key}</span>
+                                                <span className="text-base font-semibold text-gray-900">{attr.value}</span>
+                                            </div>
+                                        ))
                                     ) : (
-                                        <span className="text-gray-400 italic text-sm">No subcategories selected</span>
+                                        <div className="text-gray-400 italic text-sm">No specializations added</div>
                                     )}
                                 </div>
                             )}
@@ -684,8 +773,8 @@ export default function MarketplaceProfilePage() {
                                     onClick={() => setFormData(prev => ({ ...prev, visibility: 'public' }))}
                                     className={clsx(
                                         "flex-1 flex items-center justify-center gap-3 p-4 py-3 rounded-2xl border-2 transition-all",
-                                        formData.visibility === 'public' 
-                                            ? "border-primary bg-primary/5 text-primary font-bold shadow-sm" 
+                                        formData.visibility === 'public'
+                                            ? "border-primary bg-primary/5 text-primary font-bold shadow-sm"
                                             : "border-gray-100 text-gray-400 hover:border-gray-200"
                                     )}
                                 >
@@ -697,8 +786,8 @@ export default function MarketplaceProfilePage() {
                                     onClick={() => setFormData(prev => ({ ...prev, visibility: 'private' }))}
                                     className={clsx(
                                         "flex-1 flex items-center justify-center gap-3 p-4 py-3 rounded-2xl border-2 transition-all",
-                                        formData.visibility === 'private' 
-                                            ? "border-[hsl(20,10%,15%)] bg-gray-50 text-[hsl(20,10%,15%)] font-bold shadow-sm" 
+                                        formData.visibility === 'private'
+                                            ? "border-[hsl(20,10%,15%)] bg-gray-50 text-[hsl(20,10%,15%)] font-bold shadow-sm"
                                             : "border-gray-100 text-gray-400 hover:border-gray-200"
                                     )}
                                 >
@@ -707,8 +796,8 @@ export default function MarketplaceProfilePage() {
                                 </button>
                             </div>
                             <p className="text-[11px] text-gray-400 mt-3 ml-1 font-medium italic">
-                                {formData.visibility === 'public' 
-                                    ? "Anyone can see your profile and projects in the marketplace." 
+                                {formData.visibility === 'public'
+                                    ? "Anyone can see your profile and projects in the marketplace."
                                     : "Your profile will be hidden from the public marketplace listing."}
                             </p>
                         </div>
@@ -720,7 +809,7 @@ export default function MarketplaceProfilePage() {
                     <div className="space-y-6">
                         <Field label="Service Description" required={isEditing}>
                             {isEditing ? (
-                                <textarea 
+                                <textarea
                                     name="overview"
                                     value={formData.overview}
                                     onChange={handleChange}
@@ -736,8 +825,8 @@ export default function MarketplaceProfilePage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <Field label="Years of Experience" icon={Calendar} required={isEditing}>
                                 {isEditing ? (
-                                    <input 
-                                        type="number" 
+                                    <input
+                                        type="number"
                                         name="experienceYears"
                                         value={formData.experienceYears}
                                         onChange={handleChange}
@@ -747,16 +836,15 @@ export default function MarketplaceProfilePage() {
                                     />
                                 ) : (
                                     <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                        <Calendar className="w-4 h-4 text-gray-400" />
-                                        {formData.experienceYears ? `${formData.experienceYears} Years` : "Not specified"}
+                                            {formData.experienceYears ? `${formData.experienceYears} Years` : "Not specified"}
                                     </div>
                                 )}
                             </Field>
 
                             <Field label="Team Size" icon={Users} required={isEditing}>
                                 {isEditing ? (
-                                    <input 
-                                        type="number" 
+                                    <input
+                                        type="number"
                                         name="teamSize"
                                         value={formData.teamSize}
                                         onChange={handleChange}
@@ -766,11 +854,116 @@ export default function MarketplaceProfilePage() {
                                     />
                                 ) : (
                                     <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                        <Users className="w-4 h-4 text-gray-400" />
                                         {formData.teamSize ? `${formData.teamSize} Professionals` : "Not specified"}
                                     </div>
                                 )}
                             </Field>
+                        </div>
+                    </div>
+                </Section>
+
+                {/* Working Hours */}
+                <Section title="Working Hours" icon={Clock}>
+                    <div className="bg-gray-50/50 rounded-2xl border border-gray-100 overflow-hidden">
+                        <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b  border-gray-100">
+                            <div className="col-span-3 text-[10px] font-bold text-gray-400  tracking-widest">Day</div>
+                            <div className="col-span-9 text-[10px]  font-bold text-gray-400   tracking-widest">Timing</div>
+                        </div>
+                        <div className="divide-y divide-gray-50">
+                            {DAYS.map((day) => {
+                                const hours = formData.availability.workingHours[day.id];
+                                return (
+                                    <div key={day.id} className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-white transition-colors group">
+                                        <div className="col-span-3">
+                                            <span className={clsx(
+                                                "text-sm font-bold",
+                                                hours.isClosed ? "text-gray-300" : "text-gray-900"
+                                            )}>
+                                                {day.label}
+                                            </span>
+                                        </div>
+                                        <div className="col-span-6">
+                                            {isEditing ? (
+                                                !hours.isClosed ? (
+                                                    <div className="flex items-center gap-2">
+                                                        <input
+                                                            type="time"
+                                                            value={hours.from}
+                                                            onChange={(e) => {
+                                                                setFormData(prev => ({
+                                                                    ...prev,
+                                                                    availability: {
+                                                                        ...prev.availability,
+                                                                        workingHours: {
+                                                                            ...prev.availability.workingHours,
+                                                                            [day.id]: { ...hours, from: e.target.value }
+                                                                        }
+                                                                    }
+                                                                }));
+                                                            }}
+                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:border-primary transition-all shadow-sm"
+                                                        />
+                                                        <span className="text-gray-300">-</span>
+                                                        <input
+                                                            type="time"
+                                                            value={hours.to}
+                                                            onChange={(e) => {
+                                                                setFormData(prev => ({
+                                                                    ...prev,
+                                                                    availability: {
+                                                                        ...prev.availability,
+                                                                        workingHours: {
+                                                                            ...prev.availability.workingHours,
+                                                                            [day.id]: { ...hours, to: e.target.value }
+                                                                        }
+                                                                    }
+                                                                }));
+                                                            }}
+                                                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:border-primary transition-all shadow-sm"
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-xs text-gray-300 italic font-medium">Holiday / Closed</div>
+                                                )
+                                            ) : (
+                                                <div className={clsx(
+                                                    "text-sm font-medium",
+                                                    hours.isClosed ? "text-gray-300 italic" : "text-gray-900"
+                                                )}>
+                                                    {hours.isClosed ? "Closed" : `${formatTime(hours.from)} - ${formatTime(hours.to)}`}
+                                                </div>
+                                            )}
+                                        </div>
+                                        <div className="col-span-3 flex justify-end">
+                                            {isEditing && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setFormData(prev => ({
+                                                            ...prev,
+                                                            availability: {
+                                                                ...prev.availability,
+                                                                workingHours: {
+                                                                    ...prev.availability.workingHours,
+                                                                    [day.id]: { ...hours, isClosed: !hours.isClosed }
+                                                                }
+                                                            }
+                                                        }));
+                                                    }}
+                                                    className={clsx(
+                                                        "px-3 py-1.5 rounded-lg text-[10px] font-bold  tracking-wider border transition-all",
+                                                        hours.isClosed 
+                                                            ? "bg-red-50 text-red-500 border-red-100 hover:bg-red-100" 
+                                                            : "bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100"
+                                                    )}
+                                                >
+                                                    {hours.isClosed ? "Closed" : "Open"}
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </Section>
@@ -780,8 +973,8 @@ export default function MarketplaceProfilePage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Field label="Phone Number" icon={Phone} required={isEditing}>
                             {isEditing ? (
-                                <input 
-                                    type="tel" 
+                                <input
+                                    type="tel"
                                     name="contact.phone"
                                     value={formData.contact.phone}
                                     onChange={handleChange}
@@ -791,7 +984,6 @@ export default function MarketplaceProfilePage() {
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                    <Phone className="w-4 h-4" />
                                     {formData.contact.phone || "Not added"}
                                 </div>
                             )}
@@ -799,8 +991,8 @@ export default function MarketplaceProfilePage() {
 
                         <Field label="WhatsApp Number" icon={MessageCircle}>
                             {isEditing ? (
-                                <input 
-                                    type="tel" 
+                                <input
+                                    type="tel"
                                     name="contact.whatsapp"
                                     value={formData.contact.whatsapp}
                                     onChange={handleChange}
@@ -810,7 +1002,6 @@ export default function MarketplaceProfilePage() {
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                    <MessageCircle className="w-4 h-4" />
                                     {formData.contact.whatsapp || "Not added"}
                                 </div>
                             )}
@@ -818,8 +1009,8 @@ export default function MarketplaceProfilePage() {
 
                         <Field label="Email Address" icon={Mail} required={isEditing}>
                             {isEditing ? (
-                                <input 
-                                    type="email" 
+                                <input
+                                    type="email"
                                     name="contact.email"
                                     value={formData.contact.email}
                                     onChange={handleChange}
@@ -828,7 +1019,6 @@ export default function MarketplaceProfilePage() {
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                    <Mail className="w-4 h-4" />
                                     {formData.contact.email || "Not added"}
                                 </div>
                             )}
@@ -836,8 +1026,8 @@ export default function MarketplaceProfilePage() {
 
                         <Field label="Website" icon={Globe}>
                             {isEditing ? (
-                                <input 
-                                    type="url" 
+                                <input
+                                    type="url"
                                     name="contact.website"
                                     value={formData.contact.website}
                                     onChange={handleChange}
@@ -846,7 +1036,6 @@ export default function MarketplaceProfilePage() {
                                 />
                             ) : (
                                 <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                    <Globe className="w-4 h-4" />
                                     {formData.contact.website || "Not added"}
                                 </div>
                             )}
@@ -858,10 +1047,10 @@ export default function MarketplaceProfilePage() {
                 <Section title="Location & Service Areas" icon={MapPin}>
                     <div className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Field label="City" required={isEditing}>
+                            <Field label="City" icon={MapPin} required={isEditing}>
                                 {isEditing ? (
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         name="location.city"
                                         value={formData.location.city}
                                         onChange={handleChange}
@@ -873,10 +1062,10 @@ export default function MarketplaceProfilePage() {
                                 )}
                             </Field>
 
-                            <Field label="State" required={isEditing}>
+                            <Field label="State" icon={MapPin} required={isEditing}>
                                 {isEditing ? (
-                                    <input 
-                                        type="text" 
+                                    <input
+                                        type="text"
                                         name="location.state"
                                         value={formData.location.state}
                                         onChange={handleChange}
@@ -909,10 +1098,10 @@ function Section({ title, icon: Icon, children }) {
     );
 }
 
-function Field({ label, icon: Icon, required, children }) {
+function Field({ label, icon: Icon, required, children, className }) {
     return (
-        <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-widest text-gray-400 flex items-center gap-2">
+        <div className={clsx("space-y-2", className)}>
+            <label className="text-xs font-bold  tracking-widest text-gray-400 flex items-center gap-2">
                 {Icon && <Icon className="w-3 h-3" />}
                 {label}
                 {required && <span className="text-primary">*</span>}

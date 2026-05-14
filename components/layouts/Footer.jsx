@@ -35,7 +35,7 @@ const Footer = () => {
                     <div className="col-span-2 md:col-span-1 lg:col-span-2 lg:pl-12">
                         <h4 className="font-medium text-lg mb-4 text-gray-900">Manufacturer? Let's Talk!</h4>
                         <p className="text-[#707075] mb-6 leading-relaxed max-w-sm">
-                            Get your products in front of 100,000+ design professionals who are actively sourcing materials for their projects
+                            Get your products in front of 100,000+ designers who are actively sourcing materials for their projects
                         </p>
                         <Button
                             text="Join Us"

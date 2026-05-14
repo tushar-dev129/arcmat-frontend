@@ -94,7 +94,7 @@ export default function DiscussionTab({ projectId, spaceId }) {
                             return (
                                 <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
                                         <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-indigo-50 text-indigo-600' : 'bg-green-50 text-green-600'}`}>
                                             {authorRole}
                                         </span>

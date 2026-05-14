@@ -145,7 +145,7 @@ export default function VendorProductTable({ products = [] }) {
                 </div>
               ))}
             </div>
-            <div className="text-sm font-black text-indigo-900 leading-none">
+            <div className="text-sm font-bold text-indigo-900 leading-none">
               {selectedProducts.length} <span className="text-indigo-600/70 font-bold uppercase tracking-widest text-[10px] ml-1">Products Selected</span>
             </div>
           </div>
@@ -167,7 +167,7 @@ export default function VendorProductTable({ products = [] }) {
                 setProductToDelete(null);
                 setIsDeleteModalOpen(true);
               }}
-              className="bg-red-500 text-white border-transparent hover:bg-red-600 font-black rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-red-200 transition-all active:scale-95"
+              className="bg-red-500 text-white border-transparent hover:bg-red-600 font-bold rounded-xl px-4 py-2 flex items-center gap-2 shadow-lg shadow-red-200 transition-all active:scale-95"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Delete Selected</span>

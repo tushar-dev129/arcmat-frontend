@@ -39,7 +39,7 @@ export default function RetailerContactModal({ isOpen, onClose, projectId, mater
                             <Users2 className="w-5 h-5" />
                         </div>
                         <div>
-                            <h2 className="text-xl font-black text-[#2d3142]">Request Retailer Contact</h2>
+                            <h2 className="text-xl font-bold text-[#2d3142]">Request Retailer Contact</h2>
                             <p className="text-sm font-bold text-gray-500 mt-0.5">{materialName}</p>
                         </div>
                     </div>

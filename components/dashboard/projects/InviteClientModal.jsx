@@ -52,7 +52,7 @@ export default function InviteClientModal({ isOpen, onClose, projectId, projectN
                         <div className="w-16 h-16 bg-[#fef7f2] rounded-2xl flex items-center justify-center mb-6">
                             <Mail className="w-8 h-8 text-[#d9a88a]" />
                         </div>
-                        <h2 className="text-2xl font-black text-[#2d3142] mb-2">Invite Client</h2>
+                        <h2 className="text-2xl font-bold text-[#2d3142] mb-2">Invite Client</h2>
                         <p className="text-gray-500 font-medium">
                             Invite your client to view <span className="text-[#d9a88a] font-bold">"{projectName}"</span>
                         </p>
@@ -99,7 +99,7 @@ export default function InviteClientModal({ isOpen, onClose, projectId, projectN
                             <Button
                                 type="submit"
                                 disabled={isLoading || !email || !name}
-                                className="w-full bg-[#d9a88a] text-white py-4 rounded-2xl font-black flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-orange-100 disabled:opacity-50 disabled:hover:scale-100"
+                                className="w-full bg-[#d9a88a] text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all hover:scale-[1.02] active:scale-95 shadow-lg shadow-orange-100 disabled:opacity-50 disabled:hover:scale-100"
                             >
                                 {isLoading ? (
                                     <>

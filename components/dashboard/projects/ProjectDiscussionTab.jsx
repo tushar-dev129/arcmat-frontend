@@ -141,7 +141,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <button
                                 key={mb._id}
                                 onClick={() => setFilterSpaceId(mb._id)}
-                                className={`px-4 py-2 rounded-xl text-[11px] font-black  tracking-wider transition-all whitespace-nowrap ${filterSpaceId === mb._id
+                                className={`px-4 py-2 rounded-xl text-[11px] font-bold  tracking-wider transition-all whitespace-nowrap ${filterSpaceId === mb._id
                                     ? 'bg-[#d9a88a] text-white '
                                     : 'bg-white text-gray-400 hover:bg-gray-100'
                                     }`}
@@ -168,7 +168,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         <div className="w-20 h-20 bg-white rounded-[32px] shadow-sm flex items-center justify-center mb-6">
                             <UserCircle2 className="w-10 h-10 text-gray-200" />
                         </div>
-                        <h3 className="text-xl font-black text-[#2d3142] mb-2">No messages here</h3>
+                        <h3 className="text-xl font-bold text-[#2d3142] mb-2">No messages here</h3>
                         <p className="text-gray-400 font-medium max-w-xs mx-auto text-sm">
                             {filterSpaceId === 'all'
                                 ? "Nobody has started a conversation in this project yet."
@@ -186,7 +186,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                             <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                 <div className="flex items-center gap-2 mb-2">
                                     {/* Space/Context Label */}
-                                    {/* <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-md ${!spaceName
+                                    {/* <span className={`text-[9px] font-bold uppercase tracking-tighter px-2 py-0.5 rounded-md ${!spaceName
                                         ? 'bg-blue-50 text-blue-600'
                                         : 'bg-orange-50 text-orange-600'
                                         }`}>
@@ -253,7 +253,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         onChange={(e) => setIsInternal(e.target.checked)}
                                         className="w-4 h-4 rounded-lg border-gray-200 text-[#d9a88a] focus:ring-[#d9a88a] transition-all cursor-pointer"
                                     />
-                                    <span className={`text-[10px] font-black uppercase tracking-widest transition-colors ${isInternal ? 'text-amber-600' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                                    <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${isInternal ? 'text-amber-600' : 'text-gray-400 group-hover:text-gray-600'}`}>
                                         Private Internal Note
                                     </span>
                                 </label>
@@ -261,7 +261,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         </div>
 
                         {/* Status Label for input context */}
-                        <div className="text-[10px] font-black uppercase tracking-widest text-[#d9a88a] truncate">
+                        <div className="text-[10px] font-bold uppercase tracking-widest text-[#d9a88a] truncate">
                             To: {filterSpaceId === 'all' || filterSpaceId === 'general' ? 'General' : getSpaceName(filterSpaceId)}
                         </div>
                     </div>

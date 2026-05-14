@@ -39,7 +39,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full ">
 
       <div className="flex justify-between items-center w-full h-[76px] mb-[60px]">
         <BackLink href="/" />
@@ -48,7 +48,7 @@ export default function LoginForm() {
         </Button>
       </div>
 
-      <div className="w-full max-w-[519px] mx-auto flex flex-col flex-1 px-0 sm:px-10 pb-8">
+      <div className="w-full  mx-auto flex flex-col flex-1 px-0 sm:px-10 pb-8">
 
         <div className="mb-8">
           <h2 className="text-[36px] font-semibold text-[#4D4E58] leading-[40px] mb-2">
@@ -56,13 +56,13 @@ export default function LoginForm() {
           </h2>
           <div className="flex items-center gap-1 text-[15.6px] text-[#4D4E58]">
             <span>Not a registered user?</span>
-            <Link href="/auth/register" className="underline decoration-1 underline-offset-2 hover:text-black">
+            <Link href="/auth/register" className="underline decoration-1 text-primary/80 underline-offset-2 hover:text-primary">
               Register
             </Link>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex-col flex gap-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 flex-col w-full flex gap-3">
 
           <div className="relative">
             <input

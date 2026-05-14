@@ -65,7 +65,7 @@ export default function SampleRequestsPage() {
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
             <header className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-black text-[#2d3142] mb-2 flex items-center gap-3">
+                    <h1 className="text-3xl font-bold text-[#2d3142] mb-2 flex items-center gap-3">
                         <Package className="w-8 h-8 text-[#d9a88a]" />
                         Sample Requests
                     </h1>
@@ -86,7 +86,7 @@ export default function SampleRequestsPage() {
                         <Package className="w-10 h-10 text-gray-300" />
                     </div>
 
-                    <h3 className="text-xl font-black text-[#2d3142] mb-2">No Requests Yet</h3>
+                    <h3 className="text-xl font-bold text-[#2d3142] mb-2">No Requests Yet</h3>
 
                     <p className="text-gray-400 font-medium mb-8">
                         Start adding materials to your projects to request samples.
@@ -116,7 +116,7 @@ export default function SampleRequestsPage() {
                                         </div>
 
                                         <div className="flex flex-col justify-center min-w-0">
-                                            <h4 className="font-black text-lg text-[#2d3142] truncate">
+                                            <h4 className="font-bold text-lg text-[#2d3142] truncate">
                                                 {request.productName || request.productId?.product_name || 'Material'}
                                             </h4>
 
@@ -141,7 +141,7 @@ export default function SampleRequestsPage() {
                                             </div>
 
                                             <div>
-                                                <div className={`text-sm font-black ${config.color} uppercase tracking-tight`}>
+                                                <div className={`text-sm font-bold ${config.color} uppercase tracking-tight`}>
                                                     {request.status}
                                                 </div>
 
@@ -245,7 +245,7 @@ function EditSampleModal({ request, onClose, onSave, isLoading }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div className="bg-white rounded-[40px] w-full max-w-md p-8 shadow-2xl">
 
-                <h3 className="text-2xl font-black text-[#2d3142] mb-6">
+                <h3 className="text-2xl font-bold text-[#2d3142] mb-6">
                     Edit Sample Request
                 </h3>
 

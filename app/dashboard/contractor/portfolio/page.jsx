@@ -2,16 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { 
-    useGetMyContractorProfile, 
+import {
+    useGetMyContractorProfile,
     useCreateContractorPortfolioItem,
-    useDeleteContractorPortfolioItem 
+    useDeleteContractorPortfolioItem
 } from '@/hooks/useContractor';
-import { 
-    Plus, 
-    Image as ImageIcon, 
-    Trash2, 
-    ExternalLink, 
+import {
+    Plus,
+    Image as ImageIcon,
+    Trash2,
+    ExternalLink,
     Search,
     Filter,
     MoreVertical,
@@ -33,7 +33,7 @@ export default function PortfolioPage() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
-    
+
     const createPortfolioMutation = useCreateContractorPortfolioItem();
     const deletePortfolioMutation = useDeleteContractorPortfolioItem();
 
@@ -60,7 +60,7 @@ export default function PortfolioPage() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (!profile?._id) {
             toast.error("Please complete your profile first.");
             return;
@@ -100,7 +100,7 @@ export default function PortfolioPage() {
 
     const handleDelete = async (itemId) => {
         if (!window.confirm("Are you sure you want to remove this project?")) return;
-        
+
         try {
             await deletePortfolioMutation.mutateAsync(itemId);
             toast.success("Project removed");
@@ -126,7 +126,7 @@ export default function PortfolioPage() {
                     <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Project Portfolio</h1>
                     <p className="text-gray-500 mt-1">Manage and showcase your best professional work.</p>
                 </div>
-                <button 
+                <button
                     onClick={() => setIsModalOpen(true)}
                     className="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3.5 rounded-2xl font-bold transition-all shadow-lg hover:shadow-primary/20 active:scale-95"
                 >
@@ -139,7 +139,7 @@ export default function PortfolioPage() {
             <div className="bg-white p-3 md:p-2 rounded-2xl md:rounded-3xl border border-gray-100 shadow-sm flex flex-col md:flex-row gap-2 md:gap-3 items-center">
                 <div className="relative flex-1 w-full">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input 
+                    <input
                         type="text"
                         placeholder="Search projects..."
                         className="w-full pl-12 pr-4 py-3.5 rounded-2xl border-none focus:ring-0 outline-none transition-all text-gray-700 font-medium"
@@ -157,17 +157,17 @@ export default function PortfolioPage() {
             {/* Portfolio Grid */}
             {portfolioItems.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {portfolioItems.filter(item => 
-                        item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                    {portfolioItems.filter(item =>
+                        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                         item.location?.toLowerCase().includes(searchQuery.toLowerCase())
                     ).map((item) => (
                         <div key={item._id} className="bg-white rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden group hover:shadow-2xl hover:shadow-gray-200 transition-all duration-500 flex flex-col">
                             <div className="aspect-[4/3] relative overflow-hidden bg-gray-50">
                                 {item.images?.[0] ? (
-                                    <img 
-                                        src={getImageUrl(item.images[0], "contractor-portfolio")} 
-                                        alt={item.title} 
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                                    <img
+                                        src={getImageUrl(item.images[0], "contractor-portfolio")}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-gray-200">
@@ -175,7 +175,7 @@ export default function PortfolioPage() {
                                     </div>
                                 )}
                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                                    <button 
+                                    <button
                                         onClick={() => handleDelete(item._id)}
                                         className="p-3 bg-white/10 backdrop-blur-md rounded-2xl text-white hover:bg-red-500 transition-all border border-white/20"
                                     >
@@ -183,7 +183,7 @@ export default function PortfolioPage() {
                                     </button>
                                 </div>
                                 {item.location && (
-                                    <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur rounded-full flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-gray-700 shadow-sm">
+                                    <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur rounded-full flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-700 shadow-sm">
                                         <MapPin className="w-3 h-3 text-primary" />
                                         {item.location}
                                     </div>
@@ -205,7 +205,7 @@ export default function PortfolioPage() {
                                             </div>
                                         )}
                                     </div>
-                                    <Link href={`/projects/${item._id}`} className="text-primary font-black text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
+                                    <Link href={`/projects/${item._id}`} className="text-primary font-bold text-xs uppercase tracking-widest flex items-center gap-2 hover:gap-3 transition-all">
                                         View Project <ExternalLink className="w-4 h-4" />
                                     </Link>
                                 </div>
@@ -222,7 +222,7 @@ export default function PortfolioPage() {
                     <p className="text-gray-500 max-w-sm mb-10 leading-relaxed">
                         Ready to shine? Upload your best projects to attract more clients and show off your expertise.
                     </p>
-                    <button 
+                    <button
                         onClick={() => setIsModalOpen(true)}
                         className="bg-primary hover:bg-primary/90 text-white px-10 py-4 rounded-2xl font-bold transition-all shadow-xl shadow-primary/20 flex items-center gap-3 active:scale-95"
                     >
@@ -235,8 +235,8 @@ export default function PortfolioPage() {
             {/* Add Project Modal */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-                    <div 
-                        className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300" 
+                    <div
+                        className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm animate-in fade-in duration-300"
                         onClick={() => setIsModalOpen(false)}
                     />
                     <div className="relative bg-white w-full max-w-2xl max-h-[90vh] rounded-[2rem] md:rounded-[2.5rem] shadow-2xl overflow-y-auto animate-in zoom-in-95 fade-in duration-300">
@@ -246,7 +246,7 @@ export default function PortfolioPage() {
                                     <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Add Portfolio Project</h2>
                                     <p className="text-sm text-gray-500 mt-1">Upload high-quality images of your work.</p>
                                 </div>
-                                <button 
+                                <button
                                     onClick={() => setIsModalOpen(false)}
                                     className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400"
                                 >
@@ -257,10 +257,10 @@ export default function PortfolioPage() {
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Project Title *</label>
-                                        <input 
+                                        <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Project Title *</label>
+                                        <input
                                             required
-                                            type="text" 
+                                            type="text"
                                             value={form.title}
                                             onChange={(e) => setForm(prev => ({ ...prev, title: e.target.value }))}
                                             className="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-medium"
@@ -268,9 +268,9 @@ export default function PortfolioPage() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Location</label>
-                                        <input 
-                                            type="text" 
+                                        <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Location</label>
+                                        <input
+                                            type="text"
                                             value={form.location}
                                             onChange={(e) => setForm(prev => ({ ...prev, location: e.target.value }))}
                                             className="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all font-medium"
@@ -280,8 +280,8 @@ export default function PortfolioPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Description</label>
-                                    <textarea 
+                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Description</label>
+                                    <textarea
                                         value={form.description}
                                         onChange={(e) => setForm(prev => ({ ...prev, description: e.target.value }))}
                                         className="w-full px-5 py-4 rounded-2xl border border-gray-100 bg-gray-50 focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all min-h-[120px] resize-none font-medium"
@@ -290,8 +290,8 @@ export default function PortfolioPage() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Upload Work</label>
-                                    <div 
+                                    <label className="text-xs font-bold uppercase tracking-widest text-gray-400 ml-1">Upload Work</label>
+                                    <div
                                         onClick={() => fileInputRef.current?.click()}
                                         className="w-full min-h-[160px] rounded-3xl border-2 border-dashed border-gray-200 bg-gray-50 hover:bg-white hover:border-primary transition-all cursor-pointer flex flex-col items-center justify-center p-6 text-center group"
                                     >
@@ -300,11 +300,11 @@ export default function PortfolioPage() {
                                         </div>
                                         <p className="text-sm font-bold text-gray-900">Click to upload images</p>
                                         <p className="text-xs text-gray-400 mt-1">Select one or more project photos</p>
-                                        <input 
-                                            type="file" 
+                                        <input
+                                            type="file"
                                             ref={fileInputRef}
-                                            multiple 
-                                            className="hidden" 
+                                            multiple
+                                            className="hidden"
                                             accept="image/*"
                                             onChange={handleFileChange}
                                         />
@@ -314,11 +314,11 @@ export default function PortfolioPage() {
                                         <div className="grid grid-cols-4 md:grid-cols-6 gap-3 mt-4">
                                             {form.files.map((file, idx) => (
                                                 <div key={idx} className="relative aspect-square rounded-xl overflow-hidden group">
-                                                    <img 
-                                                        src={URL.createObjectURL(file)} 
+                                                    <img
+                                                        src={URL.createObjectURL(file)}
                                                         className="w-full h-full object-cover"
                                                     />
-                                                    <button 
+                                                    <button
                                                         type="button"
                                                         onClick={() => removeFile(idx)}
                                                         className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
@@ -332,14 +332,14 @@ export default function PortfolioPage() {
                                 </div>
 
                                 <div className="pt-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
-                                    <button 
+                                    <button
                                         type="button"
                                         onClick={() => setIsModalOpen(false)}
                                         className="flex-1 px-8 py-4 rounded-2xl font-bold text-gray-500 hover:bg-gray-50 transition-all border border-gray-100"
                                     >
                                         Cancel
                                     </button>
-                                    <button 
+                                    <button
                                         disabled={createPortfolioMutation.isPending}
                                         type="submit"
                                         className="flex-[2] bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-bold transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-2"

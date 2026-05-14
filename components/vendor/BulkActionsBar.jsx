@@ -99,7 +99,7 @@ export default function BulkActionsBar({ products = [] }) {
             </div>
 
             <div className="flex flex-col">
-              <span className="text-sm font-black leading-none flex items-center gap-1.5 uppercase tracking-wider">
+              <span className="text-sm font-bold leading-none flex items-center gap-1.5 uppercase tracking-wider">
                 <span className="text-primary">{selectedProducts.length}</span> Products Selected
               </span>
               <button
@@ -118,7 +118,7 @@ export default function BulkActionsBar({ products = [] }) {
               <select
                 value={selectedAction}
                 onChange={(e) => setSelectedAction(e.target.value)}
-                className="appearance-none bg-white border border-primary/20 text-[#2d3142] text-[10px] font-black rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-4 focus:ring-orange-100 cursor-pointer transition-all shadow-sm group-hover:shadow-md uppercase tracking-widest"
+                className="appearance-none bg-white border border-primary/20 text-[#2d3142] text-[10px] font-bold rounded-xl px-5 py-3 pr-10 focus:outline-none focus:ring-4 focus:ring-orange-100 cursor-pointer transition-all shadow-sm group-hover:shadow-md uppercase tracking-widest"
               >
                 <option value="">CHOOSE ACTION...</option>
                 {selectedProducts.length === 1 && (
@@ -134,7 +134,7 @@ export default function BulkActionsBar({ products = [] }) {
             <button
               onClick={handleApply}
               disabled={!selectedAction || isPending}
-              className="px-6 py-3 bg-primary text-white text-[10px] font-black rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-lg shadow-orange-200 flex items-center gap-2 uppercase tracking-widest"
+              className="px-6 py-3 bg-primary text-white text-[10px] font-bold rounded-xl hover:bg-[#c2896a] disabled:opacity-40 disabled:cursor-not-allowed transition-all active:scale-95 shadow-lg shadow-orange-200 flex items-center gap-2 uppercase tracking-widest"
             >
               {isPending ? (
                 <>

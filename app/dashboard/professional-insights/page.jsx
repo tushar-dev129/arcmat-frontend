@@ -209,7 +209,7 @@ const ProfessionalRow = ({ professional }) => {
 
                             <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                    <Star className="w-3.5 h-3.5" /> Professional Reviews
+                                    <Star className="w-3.5 h-3.5" /> Designer Reviews
                                 </h3>
                                 {professional.reviews.length > 0 ? (
                                     professional.reviews.map((rev, idx) => (
@@ -303,8 +303,8 @@ export default function ProfessionalInsightsPage() {
                                     <Briefcase className="w-6 h-6 text-primary" />
                                 </div>
                                 <div>
-                                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Professional Insights</h1>
-                                    <p className="text-sm text-gray-500 font-medium">Comprehensive view of professionals interacting with your brand</p>
+                                    <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">Designer Insights</h1>
+                                    <p className="text-sm text-gray-500 font-medium">Comprehensive view of designers and experts interacting with your brand</p>
                                 </div>
                             </div>
                         </div>
@@ -331,8 +331,8 @@ export default function ProfessionalInsightsPage() {
                                 <User className="w-6 h-6" />
                             </div>
                             <div>
-                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Pros</p>
-                                <p className="text-2xl font-black text-gray-900">{metrics.total}</p>
+                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Designers</p>
+                                <p className="text-2xl font-bold text-gray-900">{metrics.total}</p>
                             </div>
                         </div>
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -341,7 +341,7 @@ export default function ProfessionalInsightsPage() {
                             </div>
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Architects</p>
-                                <p className="text-2xl font-black text-gray-900">{metrics.architects}</p>
+                                <p className="text-2xl font-bold text-gray-900">{metrics.architects}</p>
                             </div>
                         </div>
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -350,7 +350,7 @@ export default function ProfessionalInsightsPage() {
                             </div>
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Inquiries</p>
-                                <p className="text-2xl font-black text-gray-900">18</p>
+                                <p className="text-2xl font-bold text-gray-900">18</p>
                             </div>
                         </div>
                         <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
@@ -359,7 +359,7 @@ export default function ProfessionalInsightsPage() {
                             </div>
                             <div>
                                 <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Orders</p>
-                                <p className="text-2xl font-black text-gray-900">{metrics.orders}</p>
+                                <p className="text-2xl font-bold text-gray-900">{metrics.orders}</p>
                             </div>
                         </div>
                     </div>
@@ -369,7 +369,7 @@ export default function ProfessionalInsightsPage() {
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Search by professional name, type, location..."
+                        placeholder="Search by designer name, type, location..."
                         value={search}
                         onChange={e => setSearch(e.target.value)}
                         className="w-full pl-12 pr-6 py-4 rounded-2xl border border-gray-100 bg-white text-sm shadow-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
@@ -384,7 +384,7 @@ export default function ProfessionalInsightsPage() {
                     ) : (
                         <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
                             <Briefcase className="w-16 h-16 mx-auto mb-4 text-gray-200" />
-                            <p className="font-bold text-gray-900">No professionals found</p>
+                            <p className="font-bold text-gray-900">No designers found</p>
                             <p className="text-sm text-gray-500 mt-1">Try expanding your search or filter</p>
                         </div>
                     )}

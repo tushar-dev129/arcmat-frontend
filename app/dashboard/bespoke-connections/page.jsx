@@ -44,7 +44,7 @@ const Pagination = ({ total, pageSize, current, onChange }) => {
 
     return (
         <div className="flex items-center justify-center gap-2 mt-6">
-            <button 
+            <button
                 onClick={() => onChange(Math.max(1, current - 1))}
                 disabled={current === 1}
                 className="p-2 rounded-xl bg-white border border-gray-100 text-gray-400 disabled:opacity-50 hover:bg-primary/5 hover:text-primary transition-all active:scale-90"
@@ -52,15 +52,15 @@ const Pagination = ({ total, pageSize, current, onChange }) => {
                 <ChevronLeft className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-1">
-                <span className="text-[10px] font-black text-primary bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
+                <span className="text-[10px] font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
                     {current}
                 </span>
-                <span className="text-[10px] font-black text-gray-400 px-1">OF</span>
-                <span className="text-[10px] font-black text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                <span className="text-[10px] font-bold text-gray-400 px-1">OF</span>
+                <span className="text-[10px] font-bold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
                     {totalPages}
                 </span>
             </div>
-            <button 
+            <button
                 onClick={() => onChange(Math.min(totalPages, current + 1))}
                 disabled={current === totalPages}
                 className="p-2 rounded-xl bg-white border border-gray-100 text-gray-400 disabled:opacity-50 hover:bg-primary/5 hover:text-primary transition-all active:scale-90"
@@ -81,7 +81,7 @@ const InquiryRow = ({ lead }) => {
             )}>
                 <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-xl bg-primary/5 flex items-center justify-center text-primary font-black text-sm shrink-0 border border-primary/10">
+                        <div className="w-9 h-9 rounded-xl bg-primary/5 flex items-center justify-center text-primary font-bold text-sm shrink-0 border border-primary/10">
                             {lead.name?.charAt(0) || '?'}
                         </div>
                         <span className="text-sm font-bold text-[#2d3142]">{lead.name || 'Anonymous'}</span>
@@ -96,15 +96,15 @@ const InquiryRow = ({ lead }) => {
                 <td className="px-6 py-4">
                     <div className="flex items-center gap-2.5">
                         <div className="relative w-7 h-7 bg-white rounded-lg border border-gray-100 p-1 shrink-0 overflow-hidden flex items-center justify-center shadow-sm">
-                             {lead.brandId?.logo ? (
-                                <Image 
-                                    src={typeof lead.brandId.logo === 'string' ? lead.brandId.logo : (lead.brandId.logo.secure_url || lead.brandId.logo.url)} 
-                                    alt={lead.brandId.name} 
-                                    fill 
+                            {lead.brandId?.logo ? (
+                                <Image
+                                    src={typeof lead.brandId.logo === 'string' ? lead.brandId.logo : (lead.brandId.logo.secure_url || lead.brandId.logo.url)}
+                                    alt={lead.brandId.name}
+                                    fill
                                     className="object-contain"
                                 />
                             ) : (
-                                <span className="text-primary font-black text-[9px]">{lead.brandId?.name?.charAt(0)}</span>
+                                <span className="text-primary font-bold text-[9px]">{lead.brandId?.name?.charAt(0)}</span>
                             )}
                         </div>
                         <span className="text-xs font-bold text-gray-600 truncate max-w-[130px]">{lead.brandId?.name || 'Bespoke Provider'}</span>
@@ -112,7 +112,7 @@ const InquiryRow = ({ lead }) => {
                 </td>
                 <td className="px-6 py-4">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-black text-gray-500 uppercase tracking-tighter">
+                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
                             {lead.createdAt ? format(new Date(lead.createdAt), 'dd MMM yyyy') : '—'}
                         </span>
                         <span className="text-[9px] text-gray-400 font-bold">{lead.createdAt ? format(new Date(lead.createdAt), 'HH:mm') : ''}</span>
@@ -120,7 +120,7 @@ const InquiryRow = ({ lead }) => {
                 </td>
                 <td className="px-6 py-4">
                     <span className={clsx(
-                        "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border shadow-sm",
+                        "px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest border shadow-sm",
                         statusColor(lead.status || 'Pending')
                     )}>
                         {lead.status || 'Pending'}
@@ -128,7 +128,7 @@ const InquiryRow = ({ lead }) => {
                 </td>
                 <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2.5">
-                        <button 
+                        <button
                             onClick={() => setIsExpanded(!isExpanded)}
                             title="View Message"
                             className={clsx(
@@ -138,7 +138,7 @@ const InquiryRow = ({ lead }) => {
                         >
                             <MessageSquare className="w-4 h-4" />
                         </button>
-                        <button 
+                        <button
                             onClick={() => window.location.href = `mailto:${lead.email}`}
                             title="Reply via Email"
                             className="p-2 bg-white border border-gray-100 text-primary rounded-xl hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm group/reply"
@@ -152,7 +152,7 @@ const InquiryRow = ({ lead }) => {
                 {isExpanded && (
                     <tr>
                         <td colSpan="6" className="px-6 py-0 border-b border-gray-100 bg-gray-50/30">
-                            <motion.div 
+                            <motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
@@ -163,10 +163,10 @@ const InquiryRow = ({ lead }) => {
                                         <div className="absolute top-0 right-0 p-8 opacity-[0.03] pointer-events-none">
                                             <Sparkles className="w-32 h-32 text-primary" />
                                         </div>
-                                        
+
                                         <div className="flex items-start justify-between mb-6">
                                             <div>
-                                                <p className="text-[9px] text-gray-400 uppercase tracking-[0.3em] font-black mb-1">Inquiry Details</p>
+                                                <p className="text-[9px] text-gray-400 uppercase tracking-[0.3em] font-bold mb-1">Inquiry Details</p>
                                                 <h5 className="text-sm font-bold text-[#2d3142]">Message from {lead.name}</h5>
                                             </div>
                                             {lead.location && (
@@ -184,9 +184,9 @@ const InquiryRow = ({ lead }) => {
                                         </div>
 
                                         <div className="mt-6 flex justify-end">
-                                            <button 
+                                            <button
                                                 onClick={() => window.location.href = `mailto:${lead.email}`}
-                                                className="px-6 py-2.5 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                                                className="px-6 py-2.5 bg-primary text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all active:scale-95"
                                             >
                                                 Reply to Inquiry
                                             </button>
@@ -204,9 +204,9 @@ const InquiryRow = ({ lead }) => {
 
 const LeadCard = ({ lead, index }) => {
     const [isCardExpanded, setIsCardExpanded] = useState(false);
-    
+
     return (
-        <motion.div 
+        <motion.div
             layout
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -218,7 +218,7 @@ const LeadCard = ({ lead, index }) => {
                 <div className="flex-1 p-8 sm:p-10">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
                         <div className="flex items-center gap-5">
-                            <div className="w-14 h-14 rounded-2xl bg-[#fafafa] border border-gray-100 flex items-center justify-center text-primary font-black text-xl">
+                            <div className="w-14 h-14 rounded-2xl bg-[#fafafa] border border-gray-100 flex items-center justify-center text-primary font-bold text-xl">
                                 {lead.name?.charAt(0) || '?'}
                             </div>
                             <div>
@@ -232,12 +232,12 @@ const LeadCard = ({ lead, index }) => {
 
                         <div className="flex items-center gap-3">
                             <span className={clsx(
-                                "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border",
                                 statusColor(lead.status || 'Pending')
                             )}>
                                 {lead.status || 'Pending'}
                             </span>
-                            <button 
+                            <button
                                 onClick={() => setIsCardExpanded(!isCardExpanded)}
                                 className={clsx(
                                     "p-2 rounded-xl transition-all",
@@ -257,7 +257,7 @@ const LeadCard = ({ lead, index }) => {
 
                     <AnimatePresence>
                         {isCardExpanded && (
-                            <motion.div 
+                            <motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
@@ -277,18 +277,18 @@ const LeadCard = ({ lead, index }) => {
                 {/* Brand Panel */}
                 <div className="xl:w-80 bg-[#fafafa] border-l border-gray-100 p-8 sm:p-10 flex flex-col">
                     <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-bold mb-6 text-center">Connected Brand</p>
-                    
+
                     <div className="flex-1 flex flex-col items-center justify-center">
                         <div className="relative w-24 h-24 bg-white rounded-3xl shadow-sm border border-gray-100 p-4 mb-4 overflow-hidden flex items-center justify-center transition-transform hover:scale-105 duration-300">
                             {lead.brandId?.logo ? (
-                                <Image 
-                                    src={typeof lead.brandId.logo === 'string' ? lead.brandId.logo : (lead.brandId.logo.secure_url || lead.brandId.logo.url)} 
-                                    alt={lead.brandId.name} 
-                                    fill 
+                                <Image
+                                    src={typeof lead.brandId.logo === 'string' ? lead.brandId.logo : (lead.brandId.logo.secure_url || lead.brandId.logo.url)}
+                                    alt={lead.brandId.name}
+                                    fill
                                     className="object-contain p-3"
                                 />
                             ) : (
-                                <div className="w-full h-full bg-primary/5 flex items-center justify-center text-primary font-black text-3xl">
+                                <div className="w-full h-full bg-primary/5 flex items-center justify-center text-primary font-bold text-3xl">
                                     {lead.brandId?.name?.charAt(0) || 'B'}
                                 </div>
                             )}
@@ -297,9 +297,9 @@ const LeadCard = ({ lead, index }) => {
                     </div>
 
                     <div className="mt-8">
-                        <button 
+                        <button
                             onClick={() => window.location.href = `mailto:${lead.email}`}
-                            className="w-full py-4 bg-primary/80 hover:bg-primary text-white rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all shadow-lg shadow-[#2d3142]/10 active:scale-95 flex items-center justify-center gap-2"
+                            className="w-full py-4 bg-primary/80 hover:bg-primary text-white rounded-2xl text-[11px] font-bold uppercase tracking-widest transition-all shadow-lg shadow-[#2d3142]/10 active:scale-95 flex items-center justify-center gap-2"
                         >
                             Reply via Email
                             <ChevronRight className="w-4 h-4" />
@@ -320,7 +320,7 @@ export default function BespokeConnectionsPage() {
     const [inquiryViewMode, setInquiryViewMode] = useState('table'); // 'table' or 'cards' for inquiries
     const [brandSearch, setBrandSearch] = useState("");
     const [isSummaryOpen, setIsSummaryOpen] = useState(true);
-    
+
     // Pagination State
     const [brandPage, setBrandPage] = useState(1);
     const [inquiryPage, setInquiryPage] = useState(1);
@@ -359,7 +359,7 @@ export default function BespokeConnectionsPage() {
             }
             stats[brandId].count++;
         });
-        
+
         return Object.values(stats)
             .filter(b => b.name.toLowerCase().includes(brandSearch.toLowerCase()))
             .sort((a, b) => b.count - a.count);
@@ -370,9 +370,9 @@ export default function BespokeConnectionsPage() {
             const matchesSearch = lead.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 lead.brandId?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 lead.email?.toLowerCase().includes(searchTerm.toLowerCase());
-            
+
             const matchesBrand = selectedBrand ? (lead.brandId?._id === selectedBrand) : true;
-            
+
             return matchesSearch && matchesBrand;
         });
     }, [leads, searchTerm, selectedBrand]);
@@ -408,12 +408,12 @@ export default function BespokeConnectionsPage() {
                     </h1>
                     <p className="text-sm text-gray-400 mt-1">Manage architectural inquiries from your bespoke collection pages.</p>
                 </div>
-                
+
                 <div className="relative group min-w-[300px]">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
-                    <input 
-                        type="text" 
-                        placeholder="Search leads..." 
+                    <input
+                        type="text"
+                        placeholder="Search leads..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-100 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all shadow-sm"
@@ -426,11 +426,11 @@ export default function BespokeConnectionsPage() {
                 <section className="bg-white/50 p-6 rounded-[2rem] border border-gray-100/50 backdrop-blur-sm">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
                         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                            <button 
+                            <button
                                 onClick={() => setIsSummaryOpen(!isSummaryOpen)}
                                 className="flex items-center gap-3 group/header"
                             >
-                                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 ml-1 group-hover/header:text-primary transition-colors">Brand Performance</h2>
+                                <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 ml-1 group-hover/header:text-primary transition-colors">Brand Performance</h2>
                                 <div className={clsx(
                                     "p-1 rounded-md transition-all",
                                     isSummaryOpen ? "bg-primary/5 text-primary rotate-180" : "bg-gray-50 text-gray-400"
@@ -438,10 +438,10 @@ export default function BespokeConnectionsPage() {
                                     <ChevronRight className="w-3 h-3" />
                                 </div>
                             </button>
-                            
+
                             <AnimatePresence>
                                 {isSummaryOpen && (
-                                    <motion.div 
+                                    <motion.div
                                         initial={{ opacity: 0, x: -10 }}
                                         animate={{ opacity: 1, x: 0 }}
                                         exit={{ opacity: 0, x: -10 }}
@@ -449,9 +449,9 @@ export default function BespokeConnectionsPage() {
                                     >
                                         <div className="relative group">
                                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3 h-3 text-gray-400 group-focus-within:text-primary transition-colors" />
-                                            <input 
-                                                type="text" 
-                                                placeholder="Search brands..." 
+                                            <input
+                                                type="text"
+                                                placeholder="Search brands..."
                                                 value={brandSearch}
                                                 onChange={(e) => setBrandSearch(e.target.value)}
                                                 className="pl-9 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-all w-full sm:w-48"
@@ -459,7 +459,7 @@ export default function BespokeConnectionsPage() {
                                         </div>
 
                                         <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
-                                            <button 
+                                            <button
                                                 onClick={() => setViewMode('summary')}
                                                 className={clsx(
                                                     "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all",
@@ -468,7 +468,7 @@ export default function BespokeConnectionsPage() {
                                             >
                                                 Quick Grid
                                             </button>
-                                            <button 
+                                            <button
                                                 onClick={() => setViewMode('table')}
                                                 className={clsx(
                                                     "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all",
@@ -483,9 +483,9 @@ export default function BespokeConnectionsPage() {
                             </AnimatePresence>
                         </div>
                         {selectedBrand && (
-                            <button 
+                            <button
                                 onClick={() => setSelectedBrand(null)}
-                                className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline bg-primary/5 px-3 py-1.5 rounded-lg"
+                                className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline bg-primary/5 px-3 py-1.5 rounded-lg"
                             >
                                 Show All Inquiries
                             </button>
@@ -509,36 +509,36 @@ export default function BespokeConnectionsPage() {
                                                     onClick={() => setSelectedBrand(selectedBrand === stat.id ? null : stat.id)}
                                                     className={clsx(
                                                         "flex flex-col items-center p-4 rounded-3xl border transition-all min-w-[140px] group",
-                                                        selectedBrand === stat.id 
-                                                            ? "bg-primary/5 border-primary shadow-lg shadow-primary/10" 
+                                                        selectedBrand === stat.id
+                                                            ? "bg-primary/5 border-primary shadow-lg shadow-primary/10"
                                                             : "bg-white border-gray-100 hover:border-primary/30"
                                                     )}
                                                 >
                                                     <div className="relative w-12 h-12 mb-3 bg-white rounded-2xl border border-gray-50 p-2 shadow-sm overflow-hidden flex items-center justify-center transition-transform group-hover:scale-110">
                                                         {stat.logo ? (
-                                                            <Image 
-                                                                src={typeof stat.logo === 'string' ? stat.logo : (stat.logo.secure_url || stat.logo.url)} 
-                                                                alt={stat.name} 
-                                                                fill 
+                                                            <Image
+                                                                src={typeof stat.logo === 'string' ? stat.logo : (stat.logo.secure_url || stat.logo.url)}
+                                                                alt={stat.name}
+                                                                fill
                                                                 className="object-contain p-1"
                                                             />
                                                         ) : (
-                                                            <span className="text-primary font-black">{stat.name.charAt(0)}</span>
+                                                            <span className="text-primary font-bold">{stat.name.charAt(0)}</span>
                                                         )}
                                                     </div>
                                                     <span className="text-xs font-bold text-[#2d3142] mb-1 line-clamp-1">{stat.name}</span>
                                                     <div className="flex items-center gap-1">
-                                                        <span className="text-lg font-black text-primary">{stat.count}</span>
+                                                        <span className="text-lg font-bold text-primary">{stat.count}</span>
                                                         <span className="text-[8px] font-bold text-gray-400 uppercase tracking-tighter">Leads</span>
                                                     </div>
                                                 </button>
                                             ))}
                                         </div>
-                                        <Pagination 
-                                            total={brandStats.length} 
-                                            pageSize={BRAND_PAGE_SIZE} 
-                                            current={brandPage} 
-                                            onChange={setBrandPage} 
+                                        <Pagination
+                                            total={brandStats.length}
+                                            pageSize={BRAND_PAGE_SIZE}
+                                            current={brandPage}
+                                            onChange={setBrandPage}
                                         />
                                     </>
                                 ) : (
@@ -547,9 +547,9 @@ export default function BespokeConnectionsPage() {
                                             <table className="w-full text-left">
                                                 <thead>
                                                     <tr className="bg-gray-50/50 border-b border-gray-100">
-                                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Brand Provider</th>
-                                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-center">Total Connections</th>
-                                                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Brand Provider</th>
+                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Total Connections</th>
+                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-50">
@@ -562,14 +562,14 @@ export default function BespokeConnectionsPage() {
                                                                 <div className="flex items-center gap-4">
                                                                     <div className="relative w-10 h-10 bg-white rounded-xl border border-gray-100 p-1.5 shrink-0 overflow-hidden flex items-center justify-center">
                                                                         {stat.logo ? (
-                                                                            <Image 
-                                                                                src={typeof stat.logo === 'string' ? stat.logo : (stat.logo.secure_url || stat.logo.url)} 
-                                                                                alt={stat.name} 
-                                                                                fill 
+                                                                            <Image
+                                                                                src={typeof stat.logo === 'string' ? stat.logo : (stat.logo.secure_url || stat.logo.url)}
+                                                                                alt={stat.name}
+                                                                                fill
                                                                                 className="object-contain p-1"
                                                                             />
                                                                         ) : (
-                                                                            <span className="text-primary font-black text-sm">{stat.name.charAt(0)}</span>
+                                                                            <span className="text-primary font-bold text-sm">{stat.name.charAt(0)}</span>
                                                                         )}
                                                                     </div>
                                                                     <span className="text-sm font-bold text-[#2d3142]">{stat.name}</span>
@@ -577,18 +577,18 @@ export default function BespokeConnectionsPage() {
                                                             </td>
                                                             <td className="px-6 py-4">
                                                                 <div className="flex items-center justify-center">
-                                                                    <span className="px-4 py-1 bg-primary/10 text-primary rounded-full text-xs font-black tracking-widest">
+                                                                    <span className="px-4 py-1 bg-primary/10 text-primary rounded-full text-xs font-bold tracking-widest">
                                                                         {stat.count} INQUIRIES
                                                                     </span>
                                                                 </div>
                                                             </td>
                                                             <td className="px-6 py-4 text-right">
-                                                                <button 
+                                                                <button
                                                                     onClick={() => setSelectedBrand(selectedBrand === stat.id ? null : stat.id)}
                                                                     className={clsx(
-                                                                        "px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all",
-                                                                        selectedBrand === stat.id 
-                                                                            ? "bg-primary text-white shadow-lg shadow-primary/20" 
+                                                                        "px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all",
+                                                                        selectedBrand === stat.id
+                                                                            ? "bg-primary text-white shadow-lg shadow-primary/20"
                                                                             : "bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary"
                                                                     )}
                                                                 >
@@ -601,11 +601,11 @@ export default function BespokeConnectionsPage() {
                                             </table>
                                         </div>
                                         <div className="pb-4">
-                                            <Pagination 
-                                                total={brandStats.length} 
-                                                pageSize={BRAND_PAGE_SIZE} 
-                                                current={brandPage} 
-                                                onChange={setBrandPage} 
+                                            <Pagination
+                                                total={brandStats.length}
+                                                pageSize={BRAND_PAGE_SIZE}
+                                                current={brandPage}
+                                                onChange={setBrandPage}
                                             />
                                         </div>
                                     </div>
@@ -619,12 +619,12 @@ export default function BespokeConnectionsPage() {
             {/* CONTENT AREA */}
             <section className="space-y-6">
                 <div className="flex items-center justify-between px-2">
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">
+                    <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
                         {selectedBrand ? "Filtered Inquiries" : "Recent Connections"}
                     </h2>
-                    
+
                     <div className="flex bg-gray-100 p-1 rounded-xl w-fit">
-                        <button 
+                        <button
                             onClick={() => setInquiryViewMode('table')}
                             className={clsx(
                                 "p-2 rounded-lg transition-all",
@@ -634,7 +634,7 @@ export default function BespokeConnectionsPage() {
                         >
                             <List className="w-4 h-4" />
                         </button>
-                        <button 
+                        <button
                             onClick={() => setInquiryViewMode('cards')}
                             className={clsx(
                                 "p-2 rounded-lg transition-all",
@@ -667,12 +667,12 @@ export default function BespokeConnectionsPage() {
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="bg-gray-50/50 border-b border-gray-100">
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Potential Client</th>
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Contact Details</th>
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Brand Context</th>
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Date/Time</th>
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400">Status</th>
-                                        <th className="px-6 py-5 text-[10px] font-black uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Potential Client</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Contact Details</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Brand Context</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Date/Time</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Status</th>
+                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -683,11 +683,11 @@ export default function BespokeConnectionsPage() {
                             </table>
                         </div>
                         <div className="pb-6">
-                            <Pagination 
-                                total={filteredLeads.length} 
-                                pageSize={INQUIRY_PAGE_SIZE} 
-                                current={inquiryPage} 
-                                onChange={setInquiryPage} 
+                            <Pagination
+                                total={filteredLeads.length}
+                                pageSize={INQUIRY_PAGE_SIZE}
+                                current={inquiryPage}
+                                onChange={setInquiryPage}
                             />
                         </div>
                     </div>
@@ -699,11 +699,11 @@ export default function BespokeConnectionsPage() {
                             ))}
                         </AnimatePresence>
 
-                        <Pagination 
-                            total={filteredLeads.length} 
-                            pageSize={INQUIRY_PAGE_SIZE} 
-                            current={inquiryPage} 
-                            onChange={setInquiryPage} 
+                        <Pagination
+                            total={filteredLeads.length}
+                            pageSize={INQUIRY_PAGE_SIZE}
+                            current={inquiryPage}
+                            onChange={setInquiryPage}
                         />
                     </div>
                 )}

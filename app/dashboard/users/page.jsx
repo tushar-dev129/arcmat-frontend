@@ -53,7 +53,7 @@ const UserDetailTooltip = ({ user, index, total }) => {
                         <UserIcon className="w-5 h-5" />
                     </div>
                     <div>
-                        <p className="text-sm font-black text-gray-900 leading-tight">{user.name}</p>
+                        <p className="text-sm font-bold text-gray-900 leading-tight">{user.name}</p>
                         <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">{user.role}</p>
                     </div>
                 </div>
@@ -80,7 +80,7 @@ const UserDetailTooltip = ({ user, index, total }) => {
                         <div className="pt-3 border-t border-gray-50 space-y-2">
                             <div className="flex items-start gap-2.5 text-[11px] text-gray-600 font-semibold">
                                 <Briefcase className="w-3.5 h-3.5 text-primary/70 mt-0.5" />
-                                <span className="italic">{user.profession || user.profile || 'Professional profile'}</span>
+                                <span className="italic">{user.profession || user.profile || 'Designer profile'}</span>
                             </div>
                         </div>
                     )}
@@ -303,7 +303,7 @@ export default function UsersPage() {
                                                             u.role === 'retailer' ? "bg-amber-50 text-amber-700 border border-amber-100" :
                                                                 "bg-gray-50 text-gray-700 border border-gray-100"
                                             )}>
-                                                {u.role === 'customer' ? 'Professional' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))}
+                                                {u.role === 'customer' ? 'Designer' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">

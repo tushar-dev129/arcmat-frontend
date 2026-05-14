@@ -24,7 +24,7 @@ export default function DeleteConfirmationModal({ isOpen, onClose, onConfirm, ti
                         <Trash2 className="w-8 h-8 text-red-500" />
                     </div>
 
-                    <h3 className="text-xl font-black text-[#1a1a2e] px-6 text-center">
+                    <h3 className="text-xl font-bold text-[#1a1a2e] px-6 text-center">
                         {title || 'Delete D/Render?'}
                     </h3>
                 </div>

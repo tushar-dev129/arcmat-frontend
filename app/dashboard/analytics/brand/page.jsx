@@ -34,7 +34,7 @@ export default function UnifiedBrandAnalytics() {
 
     const tabs = [
         { id: 'products', label: 'Product Analytics', icon: BarChart3 },
-        { id: 'professionals', label: 'Professional Insights', icon: Briefcase },
+        { id: 'professionals', label: 'Designer Insights', icon: Briefcase },
         ...(!isCustomMaker ? [{ id: 'retailers', label: 'Retailer Network', icon: Store }] : []),
     ];
 
@@ -44,14 +44,14 @@ export default function UnifiedBrandAnalytics() {
                 <Container>
                     {/* Header */}
                     <div className="mb-12">
-                        <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
                             <TrendingUp className="w-8 h-8 text-primary" />
                             {isCustomMaker ? 'Custom Maker Analytics' : 'Brand Analytics'}
                         </h1>
                         <p className="text-gray-500 font-medium mt-1">
                             {isCustomMaker
-                                ? 'Insights into your direct product performance and professional reach.'
-                                : 'Comprehensive insights into your brand performance, professional reach, and retail network.'}
+                                ? 'Insights into your direct product performance and designer reach.'
+                                : 'Comprehensive insights into your brand performance, designer reach, and retail network.'}
                         </p>
                     </div>
 
@@ -64,7 +64,7 @@ export default function UnifiedBrandAnalytics() {
                                     key={tab.id}
                                     onClick={() => setActiveTab(tab.id)}
                                     className={clsx(
-                                        "flex items-center gap-2 px-8 py-4 rounded-2xl text-sm font-black transition-all",
+                                        "flex items-center gap-2 px-8 py-4 rounded-2xl text-sm font-bold transition-all",
                                         activeTab === tab.id
                                             ? "bg-[#2C2D35] text-white shadow-xl"
                                             : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"

@@ -4,8 +4,8 @@ import material from '../../../public/login-register/Material-Box.png';
 import RegisterForm from '@/components/auth/RegisterForm';
 
 export const metadata = {
-  title: 'Join arcmat - Professional Registration',
-  description: 'Create your free arcmat professional account',
+  title: 'Join arcmat - Designer Registration',
+  description: 'Create your free arcmat designer account',
 };
 
 export default function RegisterPage() {
@@ -17,9 +17,9 @@ export default function RegisterPage() {
           <Logo href="/" />
         </div>
 
-        <div className="flex flex-col items-center justify-start flex-1 mt-10 py-8 px-8">
+        <div className="flex flex-col items-center justify-start flex-1 mt-10 py-8 px-15">
 
-          <h1 className="text-4xl xl:text-5xl font-semibold text-[#4a5568] text-center leading-tight mb-6">
+          <h1 className="text-4xl font-semibold text-[#4D4E58] text-center leading-[50px]  mb-2">
             The marketplace where architects and brands build the future together.
           </h1>
 
@@ -40,7 +40,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      <div className="h-screen overflow-y-auto flex w-full lg:w-1/2 bg-white px-8 sm:px-8 justify-center">
+      <div className="h-screen overflow-y-auto flex w-full lg:w-1/2 bg-white px-8 sm:px-8 justify-center no-scrollbar">
         <RegisterForm />
       </div>
     </div>

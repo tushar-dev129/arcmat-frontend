@@ -6,10 +6,10 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { 
-    useGetMoodboardTemplateById, 
-    useUpdateMoodboardTemplate, 
-    useUpdateEstimatedCostTemplate 
+import {
+    useGetMoodboardTemplateById,
+    useUpdateMoodboardTemplate,
+    useUpdateEstimatedCostTemplate
 } from '@/hooks/useTemplate';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/hooks/useAuth';
@@ -61,12 +61,12 @@ export default function TemplateSpaceDetailPage() {
     useEffect(() => {
         if (moodboard) {
             if (moodboard.moodboard_name) setEditName(moodboard.moodboard_name);
-            
+
             // Set as active so Add to Moodboard flow works
             setActiveMoodboard(
-                spaceId, 
-                moodboard.moodboard_name, 
-                templateId, 
+                spaceId,
+                moodboard.moodboard_name,
+                templateId,
                 templateId, // We don't have template name here easily, templateId is fine
                 true // isActiveTemplate
             );
@@ -201,19 +201,19 @@ export default function TemplateSpaceDetailPage() {
                             <div>
                                 {isEditing ? (
                                     <div className="flex items-center gap-2">
-                                        <input 
+                                        <input
                                             autoFocus
                                             value={editName}
                                             onChange={e => setEditName(e.target.value)}
                                             onKeyDown={e => { if (e.key === 'Enter') handleSaveName(); if (e.key === 'Escape') setIsEditing(false); }}
-                                            className="text-2xl font-black text-[#1a1a2e] bg-transparent border-b-2 border-[#d9a88a] focus:outline-none"
+                                            className="text-2xl font-bold text-[#1a1a2e] bg-transparent border-b-2 border-[#d9a88a] focus:outline-none"
                                         />
                                         <button onClick={handleSaveName} className="p-1 text-green-600"><Check className="w-5 h-5" /></button>
                                         <button onClick={() => setIsEditing(false)} className="p-1 text-red-400"><X className="w-5 h-5" /></button>
                                     </div>
                                 ) : (
                                     <div className="flex items-center gap-2 group/title">
-                                        <h1 className="text-2xl font-black text-[#1a1a2e]">{moodboard?.moodboard_name}</h1>
+                                        <h1 className="text-2xl font-bold text-[#1a1a2e]">{moodboard?.moodboard_name}</h1>
                                         <button onClick={() => setIsEditing(true)} className="p-1 opacity-0 group-hover/title:opacity-100 transition-opacity"><Edit2 className="w-4 h-4 text-gray-300" /></button>
                                     </div>
                                 )}
@@ -255,7 +255,7 @@ export default function TemplateSpaceDetailPage() {
             </div>
 
             {/* Support Modals */}
-            <PhotoUploadModal 
+            <PhotoUploadModal
                 onUpload={handlePhotoAdd}
             />
         </div>

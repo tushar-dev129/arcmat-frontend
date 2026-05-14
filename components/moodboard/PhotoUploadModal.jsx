@@ -101,7 +101,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onAdd, tags = [] }) 
             <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md mx-4 overflow-hidden">
                 {/* Header */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-                    <h2 className="text-lg font-black text-[#1a1a2e]">Add an image or video</h2>
+                    <h2 className="text-lg font-bold text-[#1a1a2e]">Add an image or video</h2>
                     <button onClick={handleClose} className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-gray-400">
                         <X className="w-5 h-5" />
                     </button>
@@ -170,7 +170,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onAdd, tags = [] }) 
                     {/* Gallery Permission */}
                     {tags.includes('Render') && (
                         <div className="flex items-center gap-3 p-3 bg-[#fef7f2] rounded-2xl border border-[#fef7f2] hover:border-[#d9a88a]/30 transition-all cursor-pointer select-none"
-                             onClick={() => setAllowInGallery(!allowInGallery)}>
+                            onClick={() => setAllowInGallery(!allowInGallery)}>
                             <div className={`w-5 h-5 rounded-md border flex items-center justify-center transition-all ${allowInGallery ? 'bg-[#d9a88a] border-[#d9a88a]' : 'bg-white border-gray-300'}`}>
                                 {allowInGallery && <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="4"><path d="M5 13l4 4L19 7" /></svg>}
                             </div>

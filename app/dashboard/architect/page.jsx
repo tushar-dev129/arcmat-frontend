@@ -25,19 +25,19 @@ import { getImageUrl } from '@/lib/productUtils';
 
 // ─── Phase Config ──────────────────────────────────────────────────────────────
 const PHASES = [
-    { label: 'Concept Design',       index: 0, color: '#a78bfa', bg: '#f5f3ff' },
-    { label: 'Design Development',   index: 1, color: '#60a5fa', bg: '#eff6ff' },
+    { label: 'Concept Design', index: 0, color: '#a78bfa', bg: '#f5f3ff' },
+    { label: 'Design Development', index: 1, color: '#60a5fa', bg: '#eff6ff' },
     { label: 'Material Specification', index: 2, color: '#f59e0b', bg: '#fffbeb' },
-    { label: 'Construction',         index: 3, color: '#f97316', bg: '#fff7ed' },
-    { label: 'Completed',            index: 4, color: '#10b981', bg: '#f0fdf4' },
+    { label: 'Construction', index: 3, color: '#f97316', bg: '#fff7ed' },
+    { label: 'Completed', index: 4, color: '#10b981', bg: '#f0fdf4' },
 ];
 
 const STATUS_COLORS = {
-    'Active':    { dot: '#10b981', badge: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
-    'On hold':   { dot: '#f59e0b', badge: 'bg-amber-50 text-amber-700 border-amber-100' },
+    'Active': { dot: '#10b981', badge: 'bg-emerald-50 text-emerald-700 border-emerald-100' },
+    'On hold': { dot: '#f59e0b', badge: 'bg-amber-50 text-amber-700 border-amber-100' },
     'Completed': { dot: '#10b981', badge: 'bg-blue-50 text-blue-700 border-blue-100' },
-    'Canceled':  { dot: '#ef4444', badge: 'bg-red-50 text-red-700 border-red-100' },
-    'Archived':  { dot: '#9ca3af', badge: 'bg-gray-100 text-gray-500 border-gray-200' },
+    'Canceled': { dot: '#ef4444', badge: 'bg-red-50 text-red-700 border-red-100' },
+    'Archived': { dot: '#9ca3af', badge: 'bg-gray-100 text-gray-500 border-gray-200' },
 };
 
 // ─── Phase Progress Bar ────────────────────────────────────────────────────────
@@ -49,7 +49,7 @@ function PhaseProgressBar({ phase }) {
         <div className="w-full">
             <div className="flex justify-between items-center mb-1.5">
                 <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400">Phase Progress</span>
-                <span className="text-[10px] font-black" style={{ color: current.color }}>{pct}%</span>
+                <span className="text-[10px] font-bold" style={{ color: current.color }}>{pct}%</span>
             </div>
             <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                 <motion.div
@@ -126,8 +126,8 @@ function StatCard({ icon: Icon, label, value, sub, color, bg, href }) {
                 {href && <ChevronRight className="w-4 h-4 text-gray-300" />}
             </div>
             <div>
-                <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest">{label}</p>
-                <h3 className="text-3xl font-black text-gray-900 leading-none mt-0.5">{value}</h3>
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">{label}</p>
+                <h3 className="text-3xl font-bold text-gray-900 leading-none mt-0.5">{value}</h3>
                 {sub && <p className="text-xs text-gray-400 mt-1 font-medium">{sub}</p>}
             </div>
         </motion.div>
@@ -174,7 +174,7 @@ function ProjectRowCard({ project, allBoards }) {
                     <div className="flex items-center gap-2 mb-0.5">
                         <h4 className="text-sm font-bold text-gray-900 truncate">{project.projectName}</h4>
                         {unread > 0 && (
-                            <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center shrink-0">
+                            <span className="w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center shrink-0">
                                 {unread > 9 ? '9+' : unread}
                             </span>
                         )}
@@ -209,7 +209,7 @@ function ProjectRowCard({ project, allBoards }) {
 
                 {/* Spaces count */}
                 <div className="hidden md:flex flex-col items-center shrink-0 ml-2">
-                    <span className="text-lg font-black text-gray-800">{projectBoards.length}</span>
+                    <span className="text-lg font-bold text-gray-800">{projectBoards.length}</span>
                     <span className="text-[9px] font-bold text-gray-400 tracking-wide uppercase">Spaces</span>
                 </div>
 
@@ -337,7 +337,7 @@ export default function ArchitectDashboard() {
                 >
                     <div>
                         <p className="text-sm font-bold text-[#d9a88a] uppercase tracking-widest mb-1">{greeting} 👋</p>
-                        <h1 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">{firstName}</h1>
+                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">{firstName}</h1>
                         <p className="text-gray-400 text-sm font-medium mt-1">
                             {activeProjects.length} active project{activeProjects.length !== 1 ? 's' : ''} · {totalBoards} design spaces
                         </p>
@@ -358,10 +358,10 @@ export default function ArchitectDashboard() {
                     transition={{ delay: 0.1 }}
                     className="grid grid-cols-2 lg:grid-cols-4 gap-4"
                 >
-                    <StatCard icon={FolderOpen}  label="Total Projects"  value={projects.length}         sub={`${activeProjects.length} active`}         color="#6366f1" bg="#eef2ff" href="/dashboard/projects" />
-                    <StatCard icon={Layers}       label="Design Spaces"   value={totalBoards}             sub="Across all projects"                       color="#d9a88a" bg="#fef7f2" href="/dashboard/boards" />
-                    <StatCard icon={Package}      label="Sample Requests" value={samples.length}          sub={`${pendingSamples.length} pending`}        color="#f59e0b" bg="#fffbeb" href="/dashboard/sample-requests" />
-                    <StatCard icon={Bell}         label="Notifications"   value={unreadNotifications.length} sub="Unread alerts"                         color="#ef4444" bg="#fef2f2" />
+                    <StatCard icon={FolderOpen} label="Total Projects" value={projects.length} sub={`${activeProjects.length} active`} color="#6366f1" bg="#eef2ff" href="/dashboard/projects" />
+                    <StatCard icon={Layers} label="Design Spaces" value={totalBoards} sub="Across all projects" color="#d9a88a" bg="#fef7f2" href="/dashboard/boards" />
+                    <StatCard icon={Package} label="Sample Requests" value={samples.length} sub={`${pendingSamples.length} pending`} color="#f59e0b" bg="#fffbeb" href="/dashboard/sample-requests" />
+                    <StatCard icon={Bell} label="Notifications" value={unreadNotifications.length} sub="Unread alerts" color="#ef4444" bg="#fef2f2" />
                 </motion.div>
 
                 {/* ── Main 2-column grid ── */}
@@ -380,7 +380,7 @@ export default function ArchitectDashboard() {
                             <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-50">
                                 <div className="flex items-center gap-2">
                                     <FolderOpen className="w-5 h-5 text-[#d9a88a]" />
-                                    <h2 className="text-lg font-black text-gray-900">Your Projects</h2>
+                                    <h2 className="text-lg font-bold text-gray-900">Your Projects</h2>
                                 </div>
                                 <Link href="/dashboard/projects" className="text-xs font-bold text-[#d9a88a] hover:text-[#c89675] flex items-center gap-1 transition-colors">
                                     View All <ArrowRight className="w-3 h-3" />
@@ -426,7 +426,7 @@ export default function ArchitectDashboard() {
                             >
                                 <div className="flex items-center gap-2 mb-6">
                                     <Activity className="w-5 h-5 text-[#d9a88a]" />
-                                    <h2 className="text-lg font-black text-gray-900">Phase Distribution</h2>
+                                    <h2 className="text-lg font-bold text-gray-900">Phase Distribution</h2>
                                     <span className="text-xs text-gray-400 font-medium ml-1">(across {projects.length} project{projects.length !== 1 ? 's' : ''})</span>
                                 </div>
 
@@ -435,8 +435,8 @@ export default function ArchitectDashboard() {
                                     <div className="relative shrink-0">
                                         <DonutChart data={phaseDistribution.filter(d => d.value > 0)} size={140} strokeWidth={16} />
                                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                            <span className="text-3xl font-black text-gray-900">{completionRate}%</span>
-                                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">Complete</span>
+                                            <span className="text-3xl font-bold text-gray-900">{completionRate}%</span>
+                                            <span className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Complete</span>
                                         </div>
                                     </div>
 
@@ -450,7 +450,7 @@ export default function ArchitectDashboard() {
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex justify-between items-center mb-1">
                                                             <span className="text-xs font-bold text-gray-700 truncate">{p.label}</span>
-                                                            <span className="text-xs font-black ml-2 shrink-0" style={{ color: p.color }}>{p.value}</span>
+                                                            <span className="text-xs font-bold ml-2 shrink-0" style={{ color: p.color }}>{p.value}</span>
                                                         </div>
                                                         <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                                                             <motion.div
@@ -483,8 +483,8 @@ export default function ArchitectDashboard() {
                                         key={s.label}
                                         className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col items-center gap-1 shadow-sm"
                                     >
-                                        <span className="text-2xl font-black text-gray-900">{s.value}</span>
-                                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-center">{s.label}</span>
+                                        <span className="text-2xl font-bold text-gray-900">{s.value}</span>
+                                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center">{s.label}</span>
                                         <div className="w-6 h-1 rounded-full mt-1" style={{ backgroundColor: s.color }} />
                                     </div>
                                 ))}
@@ -502,7 +502,7 @@ export default function ArchitectDashboard() {
                                 <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-gray-50">
                                     <div className="flex items-center gap-2">
                                         <Package className="w-5 h-5 text-amber-500" />
-                                        <h2 className="text-lg font-black text-gray-900">Sample Requests</h2>
+                                        <h2 className="text-lg font-bold text-gray-900">Sample Requests</h2>
                                     </div>
                                     <Link href="/dashboard/sample-requests" className="text-xs font-bold text-[#d9a88a] hover:text-[#c89675] flex items-center gap-1 transition-colors">
                                         View All <ArrowRight className="w-3 h-3" />
@@ -525,7 +525,7 @@ export default function ArchitectDashboard() {
                                                         {req.projectId?.projectName || 'Project'}
                                                     </p>
                                                 </div>
-                                                <span className={clsx('text-[10px] font-black px-2.5 py-1 rounded-full', sColor)}>
+                                                <span className={clsx('text-[10px] font-bold px-2.5 py-1 rounded-full', sColor)}>
                                                     {sStatus}
                                                 </span>
                                             </div>
@@ -551,7 +551,7 @@ export default function ArchitectDashboard() {
                             <div className="relative z-10">
                                 <div className="flex items-center gap-2 mb-5">
                                     <Zap className="w-4 h-4 text-[#d9a88a]" />
-                                    <h2 className="text-sm font-black uppercase tracking-widest text-[#d9a88a]">Quick Actions</h2>
+                                    <h2 className="text-sm font-bold uppercase tracking-widest text-[#d9a88a]">Quick Actions</h2>
                                 </div>
                                 <div className="space-y-2">
                                     {[
@@ -597,9 +597,9 @@ export default function ArchitectDashboard() {
                             <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-gray-50">
                                 <div className="flex items-center gap-2">
                                     <Bell className="w-4 h-4 text-gray-600" />
-                                    <h2 className="text-sm font-black text-gray-900">Notifications</h2>
+                                    <h2 className="text-sm font-bold text-gray-900">Notifications</h2>
                                     {unreadNotifications.length > 0 && (
-                                        <span className="w-5 h-5 rounded-full bg-red-500 text-white text-[9px] font-black flex items-center justify-center">
+                                        <span className="w-5 h-5 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">
                                             {unreadNotifications.length}
                                         </span>
                                     )}
@@ -643,7 +643,7 @@ export default function ArchitectDashboard() {
                                         <MessageCircle className="w-5 h-5 text-orange-500" />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-black text-gray-900">Retailer Contacts</p>
+                                        <p className="text-sm font-bold text-gray-900">Retailer Contacts</p>
                                         <p className="text-xs text-orange-500 font-bold">{pendingRetailerReqs} pending response{pendingRetailerReqs !== 1 ? 's' : ''}</p>
                                     </div>
                                     <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-500 group-hover:translate-x-0.5 transition-all" />
@@ -660,19 +660,19 @@ export default function ArchitectDashboard() {
                         >
                             <div className="flex items-center gap-2 mb-4">
                                 <TrendingUp className="w-4 h-4 text-gray-500" />
-                                <h2 className="text-sm font-black text-gray-900">Portfolio Summary</h2>
+                                <h2 className="text-sm font-bold text-gray-900">Portfolio Summary</h2>
                             </div>
                             <div className="space-y-3">
                                 {[
-                                    { label: 'Active Projects',     value: activeProjects.length,      color: '#10b981' },
-                                    { label: 'Total Spaces',        value: totalBoards,                 color: '#d9a88a' },
-                                    { label: 'Unread Messages',     value: totalUnreadMsg,              color: totalUnreadMsg > 0 ? '#ef4444' : '#9ca3af' },
-                                    { label: 'Pending Samples',     value: pendingSamples.length,       color: pendingSamples.length > 0 ? '#f59e0b' : '#9ca3af' },
-                                    { label: 'Completion Rate',     value: `${completionRate}%`,        color: '#6366f1' },
+                                    { label: 'Active Projects', value: activeProjects.length, color: '#10b981' },
+                                    { label: 'Total Spaces', value: totalBoards, color: '#d9a88a' },
+                                    { label: 'Unread Messages', value: totalUnreadMsg, color: totalUnreadMsg > 0 ? '#ef4444' : '#9ca3af' },
+                                    { label: 'Pending Samples', value: pendingSamples.length, color: pendingSamples.length > 0 ? '#f59e0b' : '#9ca3af' },
+                                    { label: 'Completion Rate', value: `${completionRate}%`, color: '#6366f1' },
                                 ].map(item => (
                                     <div key={item.label} className="flex items-center justify-between">
                                         <span className="text-xs font-medium text-gray-500">{item.label}</span>
-                                        <span className="text-sm font-black" style={{ color: item.color }}>{item.value}</span>
+                                        <span className="text-sm font-bold" style={{ color: item.color }}>{item.value}</span>
                                     </div>
                                 ))}
                             </div>

@@ -58,7 +58,7 @@ export default function RetailerContactsPage() {
     return (
         <div className="p-4 md:p-8 max-w-7xl mx-auto w-full">
             <header className="mb-8">
-                <h1 className="text-3xl font-black text-[#2d3142] mb-2 flex items-center gap-3">
+                <h1 className="text-3xl font-bold text-[#2d3142] mb-2 flex items-center gap-3">
                     <MessageSquare className="w-8 h-8 text-primary" />
                     Retailer Contacts
                 </h1>
@@ -70,7 +70,7 @@ export default function RetailerContactsPage() {
                     <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                         <User className="w-10 h-10 text-gray-300" />
                     </div>
-                    <h3 className="text-xl font-black text-[#2d3142] mb-2">No Contact Requests</h3>
+                    <h3 className="text-xl font-bold text-[#2d3142] mb-2">No Contact Requests</h3>
                     <p className="text-gray-400 font-medium mb-8">When you request a retailer's contact for a material, it will appear here.</p>
                 </div>
             ) : (
@@ -93,7 +93,7 @@ export default function RetailerContactsPage() {
                                                 />
                                             </div>
                                             <div>
-                                                <h3 className="text-xl font-black text-[#2d3142] mb-1">{request.materialName}</h3>
+                                                <h3 className="text-xl font-bold text-[#2d3142] mb-1">{request.materialName}</h3>
                                                 <div className="flex flex-wrap gap-4 text-sm text-gray-400 font-medium">
                                                     <div className="flex items-center gap-1.5">
                                                         <Package className="w-4 h-4 text-primary" />
@@ -107,7 +107,7 @@ export default function RetailerContactsPage() {
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-end gap-2">
-                                            <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl ${config.bg} ${config.color} border ${config.border} font-black text-xs uppercase tracking-wider`}>
+                                            <div className={`flex items-center gap-2 px-4 py-2 rounded-2xl ${config.bg} ${config.color} border ${config.border} font-bold text-xs uppercase tracking-wider`}>
                                                 <StatusIcon className="w-4 h-4" />
                                                 {request.status}
                                             </div>
@@ -126,7 +126,7 @@ export default function RetailerContactsPage() {
                                                         <User className="w-6 h-6" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Assigned Retailer</p>
+                                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Assigned Retailer</p>
                                                         <p className="font-bold text-[#2d3142]">{retailer.name}</p>
                                                     </div>
                                                 </div>
@@ -151,7 +151,7 @@ export default function RetailerContactsPage() {
                                                 {/* BUG FIX 4: Use handleOpenChat instead of direct setMessagingRequest */}
                                                 {/* <Button
                                                     onClick={() => handleOpenChat(request)}
-                                                    className="relative bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-black rounded-2xl py-3 px-6 flex items-center gap-2 transition-all shadow-sm"
+                                                    className="relative bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-2xl py-3 px-6 flex items-center gap-2 transition-all shadow-sm"
                                                 >
                                                     <MessageSquare className="w-4 h-4" />
                                                     Chat with Retailer
@@ -172,7 +172,7 @@ export default function RetailerContactsPage() {
 
                                     {request.notes && (
                                         <div className="mt-6 flex gap-3 p-4 bg-orange-50/30 rounded-2xl border border-orange-50/50 text-sm text-gray-600">
-                                            <div className="font-black text-[10px] uppercase tracking-widest text-primary mt-0.5 shrink-0">Your Note:</div>
+                                            <div className="font-bold text-[10px] uppercase tracking-widest text-primary mt-0.5 shrink-0">Your Note:</div>
                                             <p className="font-medium italic leading-relaxed">"{request.notes}"</p>
                                         </div>
                                     )}

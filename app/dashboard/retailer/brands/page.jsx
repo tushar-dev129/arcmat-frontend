@@ -80,7 +80,7 @@ export default function RetailerBrandsPage() {
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-black text-gray-900 tracking-tight">
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">
                         {retailerId ? 'Manage Retailer Partnerships' : 'Brand Partnerships'}
                     </h1>
                     <p className="text-gray-500 text-sm mt-1">
@@ -133,7 +133,7 @@ export default function RetailerBrandsPage() {
                             <MapPin className="w-6 h-6" />
                         </div>
                         <div>
-                            <h4 className="text-sm font-black text-amber-900 leading-tight">Address Required</h4>
+                            <h4 className="text-sm font-bold text-amber-900 leading-tight">Address Required</h4>
                             <p className="text-xs text-amber-700 mt-1 font-medium italic opacity-70">
                                 You must register at least one address before you can partner with brands.
                             </p>
@@ -141,7 +141,7 @@ export default function RetailerBrandsPage() {
                     </div>
                     <button
                         onClick={() => router.push('/profile')}
-                        className="px-6 py-2.5 bg-amber-500 text-white rounded-xl text-xs font-black hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 active:scale-95"
+                        className="px-6 py-2.5 bg-amber-500 text-white rounded-xl text-xs font-bold hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/20 active:scale-95"
                     >
                         Go to Profile
                     </button>
@@ -183,7 +183,7 @@ export default function RetailerBrandsPage() {
                                 {/* Status badge (Left) */}
                                 <div className="absolute top-4 left-4">
                                     <span className={clsx(
-                                        "px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-wider border",
+                                        "px-2 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider border",
                                         brand.isActive == 1 ? "bg-green-50 text-green-700 border-green-100" : "bg-gray-50 text-gray-500 border-gray-200"
                                     )}>
                                         {brand.isActive == 1 ? 'Live' : 'Inactive'}

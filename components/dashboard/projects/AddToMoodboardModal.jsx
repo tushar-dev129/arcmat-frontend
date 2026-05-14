@@ -112,7 +112,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             // Force invalidate query keys to update UI immediately
             queryClient.invalidateQueries({ queryKey: ['moodboards'] });
             queryClient.invalidateQueries({ queryKey: ['project-templates'] });
-            
+
             triggerFolderAnimation();
             onClose();
         };
@@ -246,7 +246,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
             <div className="bg-white w-full max-w-lg rounded-[40px] shadow-2xl overflow-hidden border border-gray-100 animate-in zoom-in-95 duration-200">
                 <div className="p-8 pb-4 flex justify-between items-center">
                     <div>
-                        <h2 className="text-2xl font-black text-[#2d3142]">
+                        <h2 className="text-2xl font-bold text-[#2d3142]">
                             Add to Spaces
                         </h2>
                     </div>
@@ -262,7 +262,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                     {products && products.length > 0 ? (
                         <div className="bg-gray-50 rounded-3xl p-4 flex items-center gap-4 mb-2 border border-gray-100">
                             <div className="w-16 h-16 bg-[#2d3142] text-[#d9a88a] rounded-2xl flex items-center justify-center shadow-sm shrink-0 border border-gray-50">
-                                <span className="text-xl font-black">{products.length}</span>
+                                <span className="text-xl font-bold">{products.length}</span>
                             </div>
                             <div className="flex-1 min-w-0">
                                 <h4 className="font-bold text-[#2d3142] truncate">Adding Multiple Items</h4>
@@ -296,13 +296,13 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                         <div className="flex bg-gray-100 p-1 rounded-2xl mb-4">
                             <button
                                 onClick={() => { setTargetType('project'); setSelectedProjectId(''); setSelectedMoodboardId(''); }}
-                                className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${targetType === 'project' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
+                                className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'project' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
                             >
                                 Projects
                             </button>
                             <button
                                 onClick={() => { setTargetType('template'); setSelectedProjectId(''); setSelectedMoodboardId(''); }}
-                                className={`flex-1 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${targetType === 'template' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
+                                className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'template' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
                             >
                                 Templates
                             </button>
@@ -310,7 +310,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
 
                         {/* Project/Template Selection */}
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-1">
+                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 1. Select {targetType === 'project' ? 'Project' : 'Template'}
                             </label>
                             {projectsLoading || templatesLoading ? (
@@ -336,7 +336,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                         {/* Space Selection */}
                         {selectedProjectId && (
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-black tracking-widest text-gray-400 ml-1">
+                                <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                     2. Choose Space
                                 </label>
 
@@ -390,7 +390,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                     <Button
                         onClick={handleAdd}
                         disabled={!selectedMoodboardId || createEstimateMutation.isPending || updateEstimateMutation.isPending || updateTemplateEstimateMutation.isPending || createTemplateEstimateMutation.isPending}
-                        className="flex-2 py-4 bg-[#d9a88a] text-white font-black rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                        className="flex-2 py-4 bg-[#d9a88a] text-white font-bold rounded-2xl hover:bg-[#c59678] shadow-lg shadow-orange-100 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                     >
                         {createEstimateMutation.isPending || updateEstimateMutation.isPending || updateTemplateEstimateMutation.isPending || createTemplateEstimateMutation.isPending ? (
                             <Loader2 className="w-5 h-5 animate-spin" />

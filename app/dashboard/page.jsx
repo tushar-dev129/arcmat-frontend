@@ -49,7 +49,7 @@ const RolePieChart = ({ data }) => {
         { id: 'architects', label: 'Architects', value: data?.architects || 0, color: '#10b981', icon: FolderOpen, trend: '+5%' },
         { id: 'brands', label: 'Brands', value: data?.brands || 0, color: '#3b82f6', icon: Store, trend: '+12%' },
         { id: 'retailers', label: 'Retailers', value: data?.retailers || 0, color: '#f59e0b', icon: Package, trend: '+8%' },
-        { id: 'professionals', label: 'Professionals', value: data?.professionals || 0, color: '#8b5cf6', icon: Briefcase, trend: '+3%' },
+        { id: 'professionals', label: 'Designers', value: data?.professionals || 0, color: '#8b5cf6', icon: Briefcase, trend: '+3%' },
     ];
 
     const total = roles.reduce((acc, curr) => acc + curr.value, 0);
@@ -108,8 +108,8 @@ const RolePieChart = ({ data }) => {
                 {/* Center Content */}
                 <div className="absolute inset-0 bg-linear-to-r from-purple-600/20 to-transparent pointer-events-none" />
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
-                    <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest text-center mb-0.5">Total User</p>
-                    <h4 className="text-3xl font-black text-gray-900 leading-none">{total}</h4>
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center mb-0.5">Total User</p>
+                    <h4 className="text-3xl font-bold text-gray-900 leading-none">{total}</h4>
                     <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded-full mt-2 border border-emerald-100/50">ACTIVE</span>
                 </div>
             </div>
@@ -321,7 +321,7 @@ export default function DashboardPage() {
                             <div className="flex-1 text-center md:text-left">
                                 <h3 className="text-lg font-bold text-amber-900">Complete Your Business Profile</h3>
                                 <p className="text-amber-800 text-sm mt-1">
-                                    To start listing products and reach more professionals, please complete your business profile.
+                                    To start listing products and reach more designers, please complete your business profile.
                                     <span className="font-semibold block mt-1">Missing: {missingFields.join(', ')}</span>
                                 </p>
                             </div>
@@ -365,7 +365,7 @@ export default function DashboardPage() {
                             <div className="bg-green-50 p-6 rounded-2xl border border-green-100 shadow-sm">
                                 <p className="text-sm font-medium text-green-600 mb-1">Active Products</p>
                                 <h3 className="text-3xl font-bold text-green-700">{activeProductsCount}</h3>
-                                <div className="mt-2 text-xs text-green-600/70">Currently visible to professionals</div>
+                                <div className="mt-2 text-xs text-green-600/70">Currently visible to designers</div>
                             </div>
                             <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100 shadow-sm">
                                 <p className="text-sm font-medium text-orange-600 mb-1">Inactive Products</p>
@@ -404,9 +404,9 @@ export default function DashboardPage() {
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-[#d9a88a]"></span>
-                                                    <p className="text-[10px] font-black text-[#d9a88a] uppercase tracking-[0.2em]">Live Analytics</p>
+                                                    <p className="text-[10px] font-bold text-[#d9a88a] uppercase tracking-[0.2em]">Live Analytics</p>
                                                 </div>
-                                                <h3 className="text-xl font-black text-gray-800 tracking-tight">Active Pulse</h3>
+                                                <h3 className="text-xl font-bold text-gray-800 tracking-tight">Active Pulse</h3>
                                             </div>
                                             <div className="relative flex items-center justify-center p-2 bg-emerald-50 rounded-full border border-emerald-100">
                                                 <div className="absolute w-4 h-4 rounded-full bg-emerald-500/20 animate-ping"></div>
@@ -441,7 +441,7 @@ export default function DashboardPage() {
                                                             key={stat.value}
                                                             initial={{ scale: 0.8, opacity: 0 }}
                                                             animate={{ scale: 1, opacity: 1 }}
-                                                            className="text-2xl font-black tabular-nums text-gray-800 leading-none"
+                                                            className="text-2xl font-bold tabular-nums text-gray-800 leading-none"
                                                         >
                                                             {stat.value}
                                                         </motion.div>
@@ -452,8 +452,8 @@ export default function DashboardPage() {
 
                                         <div className="mt-6 pt-5 border-t border-gray-100">
                                             <div className="flex items-center justify-between mb-2">
-                                                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">System Integrity</p>
-                                                <span className="text-[10px] font-black text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">98% SECURE</span>
+                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">System Integrity</p>
+                                                <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">98% SECURE</span>
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <div className="h-1.5 flex-1 bg-gray-100 rounded-full overflow-hidden">
@@ -708,24 +708,24 @@ export default function DashboardPage() {
             {/* Dashboard Stats for Architect */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                 <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Projects</p>
-                    <h3 className="text-2xl font-black text-gray-900">{projects.length}</h3>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Projects</p>
+                    <h3 className="text-2xl font-bold text-gray-900">{projects.length}</h3>
                 </div>
                 <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                    <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Spaces</p>
-                    <h3 className="text-2xl font-black text-gray-900">{boards.length}</h3>
+                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Spaces</p>
+                    <h3 className="text-2xl font-bold text-gray-900">{boards.length}</h3>
                 </div>
                 <Link href="/dashboard/sample-requests" className="bg-orange-50 p-5 rounded-3xl border border-orange-100 shadow-sm hover:shadow-md transition-all group">
-                    <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-1">Sample Requests</p>
+                    <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Sample Requests</p>
                     <div className="flex items-center justify-between">
-                        <h3 className="text-2xl font-black text-orange-700">{samplesData?.data?.length || 0}</h3>
+                        <h3 className="text-2xl font-bold text-orange-700">{samplesData?.data?.length || 0}</h3>
                         <ArrowRight className="w-5 h-5 text-orange-400 group-hover:translate-x-1 transition-transform" />
                     </div>
                 </Link>
                 <Link href="/dashboard/notifications" className="bg-purple-50 p-5 rounded-3xl border border-purple-100 shadow-sm hover:shadow-md transition-all group">
-                    <p className="text-[10px] font-black text-purple-600 uppercase tracking-widest mb-1">New Messages</p>
+                    <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-1">New Messages</p>
                     <div className="flex items-center justify-between">
-                        <h3 className="text-2xl font-black text-purple-700">{notificationsData?.data?.filter(n => !n.isRead)?.length || 0}</h3>
+                        <h3 className="text-2xl font-bold text-purple-700">{notificationsData?.data?.filter(n => !n.isRead)?.length || 0}</h3>
                         <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
                     </div>
                 </Link>

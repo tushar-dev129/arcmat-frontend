@@ -62,7 +62,7 @@ export default function AllBoardsPage() {
             {/* Header Area */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6 mb-8 md:mb-10 text-center md:text-left">
                 <div>
-                    <h1 className="text-2xl md:text-3xl font-black text-[#2d3142] tracking-tight">All Spaces</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold text-[#2d3142] tracking-tight">All Spaces</h1>
                     <p className="text-sm md:text-base text-gray-500 mt-1 font-medium">Manage and view your visual inspirations across all projects.</p>
                 </div>
 

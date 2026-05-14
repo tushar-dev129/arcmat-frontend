@@ -75,7 +75,7 @@ export default function AdminHelp({ isAdmin }) {
             <Container>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                     <div>
-                        <h1 className="text-3xl font-black text-gray-900 tracking-tight flex items-center gap-3">
+                        <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
                             <MessageSquare className="w-8 h-8 text-primary" />
                             Support Tickets
                         </h1>
@@ -101,7 +101,7 @@ export default function AdminHelp({ isAdmin }) {
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-40 gap-4">
                         <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                        <p className="text-sm font-black text-gray-300 uppercase tracking-widest">Loading queries...</p>
+                        <p className="text-sm font-bold text-gray-300 uppercase tracking-widest">Loading queries...</p>
                     </div>
                 ) : filteredQueries.length === 0 ? (
                     <div className="bg-white rounded-[40px] p-20 text-center border border-dashed border-gray-200">
@@ -135,14 +135,14 @@ export default function AdminHelp({ isAdmin }) {
                                             </div>
 
                                             <div className="min-w-0">
-                                                <h3 className="text-lg font-black text-gray-900 truncate">{query.subject}</h3>
+                                                <h3 className="text-lg font-bold text-gray-900 truncate">{query.subject}</h3>
                                                 <div className="flex items-center gap-3 mt-1">
-                                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
                                                         <User className="w-3 h-3" />
                                                         {query.userId?.name || 'Unknown User'}
                                                     </span>
                                                     <span className="w-1 h-1 bg-gray-200 rounded-full"></span>
-                                                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
                                                         {new Date(query.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                                                     </span>
                                                 </div>
@@ -151,7 +151,7 @@ export default function AdminHelp({ isAdmin }) {
 
                                         <div className="flex items-center gap-4">
                                             <span className={clsx(
-                                                "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                                "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border",
                                                 STATUS_CONFIG[query.status]?.color
                                             )}>
                                                 {STATUS_CONFIG[query.status]?.label}
@@ -208,7 +208,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-gray-300"></div>
                                                                         </div>
                                                                         <div className="pb-4">
-                                                                            <span className="text-[10px] font-black text-gray-300 uppercase block mb-1">
+                                                                            <span className="text-[10px] font-bold text-gray-300 uppercase block mb-1">
                                                                                 {new Date(step.updatedAt).toLocaleString()}
                                                                             </span>
                                                                             <p className="text-sm font-bold text-gray-700">
@@ -235,7 +235,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                     key={key}
                                                                     onClick={() => handleUpdateStatus(query._id, key, query.subject)}
                                                                     className={clsx(
-                                                                        "h-12 rounded-2xl text-[10px] font-black uppercase tracking-widest border transition-all",
+                                                                        "h-12 rounded-2xl text-[10px] font-bold uppercase tracking-widest border transition-all",
                                                                         query.status === key
                                                                             ? "bg-[#2C2D35] text-white border-transparent"
                                                                             : "bg-white text-gray-600 border-gray-100 hover:border-gray-300"
@@ -254,7 +254,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                     deleteMutation.mutate(query._id);
                                                                 }
                                                             }}
-                                                            className="w-full h-14 rounded-2xl border-2 border-red-50 text-red-500 hover:bg-red-500 hover:text-white font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all"
+                                                            className="w-full h-14 rounded-2xl border-2 border-red-50 text-red-500 hover:bg-red-500 hover:text-white font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-3 transition-all"
                                                         >
                                                             <Trash2 className="w-4 h-4" />
                                                             Delete Ticket

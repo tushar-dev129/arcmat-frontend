@@ -2,11 +2,11 @@
 
 import { use, useState } from 'react';
 import { useGetPortfolioItemById } from '@/hooks/useContractor';
-import { 
-    MapPin, 
-    Calendar, 
-    ChevronLeft, 
-    ChevronRight, 
+import {
+    MapPin,
+    Calendar,
+    ChevronLeft,
+    ChevronRight,
     ArrowLeft,
     Phone,
     MessageCircle,
@@ -82,8 +82,8 @@ export default function ProjectDetailsPage({ params }) {
                     <div className="lg:col-span-7 xl:col-span-8 space-y-6">
                         <div className="relative aspect-[16/10] bg-gray-100 rounded-[2.5rem] overflow-hidden shadow-2xl group">
                             {project.images?.length > 0 ? (
-                                <img 
-                                    src={getImageUrl(project.images[activeImageIndex], "contractor-portfolio")} 
+                                <img
+                                    src={getImageUrl(project.images[activeImageIndex], "contractor-portfolio")}
                                     alt={project.title}
                                     className="w-full h-full object-cover"
                                 />
@@ -95,24 +95,24 @@ export default function ProjectDetailsPage({ params }) {
 
                             {project.images?.length > 1 && (
                                 <>
-                                    <button 
+                                    <button
                                         onClick={prevImage}
                                         className="absolute left-6 top-1/2 -translate-y-1/2 p-3 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/40"
                                     >
                                         <ChevronLeft className="w-6 h-6" />
                                     </button>
-                                    <button 
+                                    <button
                                         onClick={nextImage}
                                         className="absolute right-6 top-1/2 -translate-y-1/2 p-3 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/40"
                                     >
                                         <ChevronRight className="w-6 h-6" />
                                     </button>
-                                    
+
                                     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 bg-black/20 backdrop-blur-md rounded-full border border-white/10">
                                         {project.images.map((_, idx) => (
-                                            <div 
-                                                key={idx} 
-                                                className={`w-1.5 h-1.5 rounded-full transition-all ${idx === activeImageIndex ? 'bg-white w-4' : 'bg-white/40'}`} 
+                                            <div
+                                                key={idx}
+                                                className={`w-1.5 h-1.5 rounded-full transition-all ${idx === activeImageIndex ? 'bg-white w-4' : 'bg-white/40'}`}
                                             />
                                         ))}
                                     </div>
@@ -124,7 +124,7 @@ export default function ProjectDetailsPage({ params }) {
                         {project.images?.length > 1 && (
                             <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                                 {project.images.map((img, idx) => (
-                                    <button 
+                                    <button
                                         key={idx}
                                         onClick={() => setActiveImageIndex(idx)}
                                         className={`relative w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0 transition-all border-2 ${idx === activeImageIndex ? 'border-primary ring-4 ring-primary/10' : 'border-transparent opacity-60 hover:opacity-100'}`}
@@ -140,7 +140,7 @@ export default function ProjectDetailsPage({ params }) {
                     <div className="lg:col-span-5 xl:col-span-4 space-y-8">
                         <div>
                             <div className="flex items-center gap-2 mb-4">
-                                <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full border border-primary/20">
+                                <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full border border-primary/20">
                                     {project.projectType || 'Portfolio Project'}
                                 </div>
                                 {project.location && (
@@ -150,7 +150,7 @@ export default function ProjectDetailsPage({ params }) {
                                     </div>
                                 )}
                             </div>
-                            <h1 className="text-3xl md:text-4xl font-black text-gray-900 leading-tight mb-6">
+                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight mb-6">
                                 {project.title}
                             </h1>
                             <p className="text-gray-600 text-lg leading-relaxed">
@@ -162,31 +162,31 @@ export default function ProjectDetailsPage({ params }) {
                         <div className="grid grid-cols-2 gap-4">
                             <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
                                 <Calendar className="w-5 h-5 text-primary mb-3" />
-                                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Completed</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Completed</div>
                                 <div className="text-sm font-bold text-gray-900">
                                     {project.createdAt ? new Date(project.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'Recently'}
                                 </div>
                             </div>
                             <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
                                 <Clock className="w-5 h-5 text-primary mb-3" />
-                                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">Duration</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Duration</div>
                                 <div className="text-sm font-bold text-gray-900">{project.duration || 'N/A'}</div>
                             </div>
                         </div>
 
                         {/* Contractor Card */}
                         <div className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-xl shadow-gray-200/50">
-                            <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-6">Built By</div>
+                            <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Built By</div>
                             <div className="flex items-center gap-4 mb-8">
                                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-50 border border-gray-100">
-                                    <img 
-                                        src={getImageUrl(project.contractorId?.profileImage, 'contractors')} 
+                                    <img
+                                        src={getImageUrl(project.contractorId?.profileImage, 'contractors')}
                                         alt={project.contractorId?.businessName}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div>
-                                    <h3 className="font-black text-lg text-gray-900 leading-tight mb-1">
+                                    <h3 className="font-bold text-lg text-gray-900 leading-tight mb-1">
                                         {project.contractorId?.businessName}
                                     </h3>
                                     <Link href={`/contractors/${project.contractorId?.slug}`} className="text-sm font-bold text-primary hover:underline">
@@ -194,15 +194,15 @@ export default function ProjectDetailsPage({ params }) {
                                     </Link>
                                 </div>
                             </div>
-                            
+
                             <div className="space-y-3">
                                 <a href={`tel:${project.contractorId?.contact?.phone}`} className="w-full flex items-center justify-center gap-2 py-4 bg-gray-900 text-white rounded-2xl font-bold transition-all hover:bg-gray-800 active:scale-95">
                                     <Phone className="w-4 h-4" />
                                     Call Professional
                                 </a>
-                                <a 
-                                    href={`https://wa.me/${project.contractorId?.contact?.whatsapp?.replace(/[^0-9]/g, '')}`} 
-                                    target="_blank" 
+                                <a
+                                    href={`https://wa.me/${project.contractorId?.contact?.whatsapp?.replace(/[^0-9]/g, '')}`}
+                                    target="_blank"
                                     className="w-full flex items-center justify-center gap-2 py-4 bg-[#25D366] text-white rounded-2xl font-bold transition-all hover:opacity-90 active:scale-95"
                                 >
                                     <MessageCircle className="w-4 h-4" />
@@ -214,7 +214,7 @@ export default function ProjectDetailsPage({ params }) {
                         {/* Materials/Tags if any */}
                         {project.materials?.length > 0 && (
                             <div>
-                                <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Materials & Services</div>
+                                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Materials & Services</div>
                                 <div className="flex flex-wrap gap-2">
                                     {project.materials.map((m, i) => (
                                         <div key={i} className="px-3 py-1.5 bg-white border border-gray-100 rounded-xl text-xs font-bold text-gray-600 shadow-sm">
