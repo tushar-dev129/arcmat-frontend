@@ -84,13 +84,13 @@ const ContractorCard = ({ contractor }) => {
                 {/* Badges row */}
                 <div className="flex items-center gap-2 mt-3">
                     {isTopRated && (
-                        <span className="flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 text-[10px] font-bold rounded-full">
+                        <span className="flex items-center gap-1 px-2.5 py-0.5 bg-amber-50 border border-amber-200 text-amber-600 text-[13px] font-bold rounded-full">
                             <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
                             TOP RATED
                         </span>
                     )}
                     {primaryCategory && (
-                        <span className="px-2.5 py-0.5 bg-[hsl(24,49%,97%)] border border-[hsl(24,49%,88%)] text-[hsl(24,49%,45%)] text-[10px] font-semibold rounded-full">
+                        <span className="px-2.5 py-0.5 bg-[hsl(24,49%,97%)] border border-[hsl(24,49%,88%)] text-[hsl(24,49%,45%)] text-[13px] font-semibold rounded-full">
                             {primaryCategory}
                         </span>
                     )}

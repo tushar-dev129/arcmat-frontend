@@ -217,7 +217,7 @@ export default function RetailerRatingModal({ isOpen, onClose, project, retailer
 
                             {/* Notes */}
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400">
+                                <label className="text-[13px] uppercase font-bold tracking-widest text-gray-400">
                                     Additional Comments <span className="normal-case font-medium">(optional)</span>
                                 </label>
                                 <textarea

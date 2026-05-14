@@ -103,13 +103,13 @@ export default function HelpSupportPage() {
                                 {/* Auto-filled User Info */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8 border-b border-gray-100">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Your Name</label>
+                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest pl-1">Your Name</label>
                                         <div className="h-14 bg-gray-50 border border-gray-100 rounded-2xl flex items-center px-5 text-gray-900 font-bold opacity-70">
                                             {user?.name || 'Guest User'}
                                         </div>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Email Address</label>
+                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest pl-1">Email Address</label>
                                         <div className="h-14 bg-gray-50 border border-gray-100 rounded-2xl flex items-center px-5 text-gray-900 font-bold opacity-70">
                                             {user?.email || 'N/A'}
                                         </div>
@@ -119,7 +119,7 @@ export default function HelpSupportPage() {
                                 {/* Form Fields */}
                                 <div className="space-y-6">
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Subject</label>
+                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest pl-1">Subject</label>
                                         <input
                                             type="text"
                                             name="subject"
@@ -132,7 +132,7 @@ export default function HelpSupportPage() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Query Details</label>
+                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest pl-1">Query Details</label>
                                         <textarea
                                             name="query"
                                             required
@@ -147,8 +147,8 @@ export default function HelpSupportPage() {
                                     {/* File Upload */}
                                     <div className="space-y-4">
                                         <div className="flex items-center justify-between pl-1">
-                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Attachments (Images)</label>
-                                            <span className="text-[10px] font-bold text-primary">{formData.attachments.length} files selected</span>
+                                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Attachments (Images)</label>
+                                            <span className="text-[13px] font-bold text-primary">{formData.attachments.length} files selected</span>
                                         </div>
 
                                         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4">

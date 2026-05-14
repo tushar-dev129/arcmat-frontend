@@ -18,7 +18,7 @@ const INQUIRY_PAGE_SIZE = 10;
 // Reusable Components
 const Field = ({ label, value, icon: Icon, href }) => (
     <div>
-        <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-bold mb-1.5 ml-1">{label}</p>
+        <p className="text-[13px] text-gray-400 uppercase tracking-[0.2em] font-bold mb-1.5 ml-1">{label}</p>
         <div className="flex items-center gap-2.5 bg-gray-50 border border-gray-100 rounded-2xl px-4 py-3 text-sm text-[#2d3142] group/field hover:border-primary/30 transition-colors">
             {Icon && <Icon className="w-3.5 h-3.5 text-gray-300 group-hover/field:text-primary transition-colors shrink-0" />}
             {href ? (
@@ -52,11 +52,11 @@ const Pagination = ({ total, pageSize, current, onChange }) => {
                 <ChevronLeft className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-1">
-                <span className="text-[10px] font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
+                <span className="text-[13px] font-bold text-primary bg-primary/5 px-3 py-1.5 rounded-lg border border-primary/10">
                     {current}
                 </span>
-                <span className="text-[10px] font-bold text-gray-400 px-1">OF</span>
-                <span className="text-[10px] font-bold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
+                <span className="text-[13px] font-bold text-gray-400 px-1">OF</span>
+                <span className="text-[13px] font-bold text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100">
                     {totalPages}
                 </span>
             </div>
@@ -90,7 +90,7 @@ const InquiryRow = ({ lead }) => {
                 <td className="px-6 py-4">
                     <div className="flex flex-col gap-0.5">
                         <a href={`mailto:${lead.email}`} className="text-xs text-gray-500 hover:text-primary transition-colors font-semibold truncate max-w-[180px]">{lead.email}</a>
-                        <span className="text-[10px] text-gray-400 font-bold tracking-tight">{lead.phone || '—'}</span>
+                        <span className="text-[13px] text-gray-400 font-bold tracking-tight">{lead.phone || '—'}</span>
                     </div>
                 </td>
                 <td className="px-6 py-4">
@@ -112,7 +112,7 @@ const InquiryRow = ({ lead }) => {
                 </td>
                 <td className="px-6 py-4">
                     <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-gray-500 uppercase tracking-tighter">
+                        <span className="text-[13px] font-bold text-gray-500 uppercase tracking-tighter">
                             {lead.createdAt ? format(new Date(lead.createdAt), 'dd MMM yyyy') : '—'}
                         </span>
                         <span className="text-[9px] text-gray-400 font-bold">{lead.createdAt ? format(new Date(lead.createdAt), 'HH:mm') : ''}</span>
@@ -170,7 +170,7 @@ const InquiryRow = ({ lead }) => {
                                                 <h5 className="text-sm font-bold text-[#2d3142]">Message from {lead.name}</h5>
                                             </div>
                                             {lead.location && (
-                                                <div className="flex items-center gap-2 text-[10px] text-gray-500 font-bold uppercase tracking-wider bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+                                                <div className="flex items-center gap-2 text-[13px] text-gray-500 font-bold uppercase tracking-wider bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
                                                     <MapPin className="w-3.5 h-3.5 text-primary" />
                                                     {lead.location}
                                                 </div>
@@ -186,7 +186,7 @@ const InquiryRow = ({ lead }) => {
                                         <div className="mt-6 flex justify-end">
                                             <button
                                                 onClick={() => window.location.href = `mailto:${lead.email}`}
-                                                className="px-6 py-2.5 bg-primary text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all active:scale-95"
+                                                className="px-6 py-2.5 bg-primary text-white rounded-xl text-[13px] font-bold uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-105 transition-all active:scale-95"
                                             >
                                                 Reply to Inquiry
                                             </button>
@@ -232,7 +232,7 @@ const LeadCard = ({ lead, index }) => {
 
                         <div className="flex items-center gap-3">
                             <span className={clsx(
-                                "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                "px-4 py-1.5 rounded-full text-[13px] font-bold uppercase tracking-widest border",
                                 statusColor(lead.status || 'Pending')
                             )}>
                                 {lead.status || 'Pending'}
@@ -264,7 +264,7 @@ const LeadCard = ({ lead, index }) => {
                                 className="overflow-hidden"
                             >
                                 <div className="pt-4 border-t border-gray-50 space-y-2">
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-[0.2em] font-bold ml-1">Inquiry Message</p>
+                                    <p className="text-[13px] text-gray-400 uppercase tracking-[0.2em] font-bold ml-1">Inquiry Message</p>
                                     <div className="bg-gray-50/50 border border-gray-100 rounded-[1.5rem] p-6 text-sm text-[#2d3142] leading-relaxed italic font-serif">
                                         "{lead.query || 'No message provided'}"
                                     </div>
@@ -276,7 +276,7 @@ const LeadCard = ({ lead, index }) => {
 
                 {/* Brand Panel */}
                 <div className="xl:w-80 bg-[#fafafa] border-l border-gray-100 p-8 sm:p-10 flex flex-col">
-                    <p className="text-[10px] text-gray-400 uppercase tracking-[0.3em] font-bold mb-6 text-center">Connected Brand</p>
+                    <p className="text-[13px] text-gray-400 uppercase tracking-[0.3em] font-bold mb-6 text-center">Connected Brand</p>
 
                     <div className="flex-1 flex flex-col items-center justify-center">
                         <div className="relative w-24 h-24 bg-white rounded-3xl shadow-sm border border-gray-100 p-4 mb-4 overflow-hidden flex items-center justify-center transition-transform hover:scale-105 duration-300">
@@ -430,7 +430,7 @@ export default function BespokeConnectionsPage() {
                                 onClick={() => setIsSummaryOpen(!isSummaryOpen)}
                                 className="flex items-center gap-3 group/header"
                             >
-                                <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400 ml-1 group-hover/header:text-primary transition-colors">Brand Performance</h2>
+                                <h2 className="text-[13px] font-bold uppercase tracking-[0.3em] text-gray-400 ml-1 group-hover/header:text-primary transition-colors">Brand Performance</h2>
                                 <div className={clsx(
                                     "p-1 rounded-md transition-all",
                                     isSummaryOpen ? "bg-primary/5 text-primary rotate-180" : "bg-gray-50 text-gray-400"
@@ -462,7 +462,7 @@ export default function BespokeConnectionsPage() {
                                             <button
                                                 onClick={() => setViewMode('summary')}
                                                 className={clsx(
-                                                    "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all",
+                                                    "px-4 py-1.5 rounded-lg text-[13px] font-bold transition-all",
                                                     viewMode === 'summary' ? "bg-white text-primary shadow-sm" : "text-gray-400 hover:text-gray-600"
                                                 )}
                                             >
@@ -471,7 +471,7 @@ export default function BespokeConnectionsPage() {
                                             <button
                                                 onClick={() => setViewMode('table')}
                                                 className={clsx(
-                                                    "px-4 py-1.5 rounded-lg text-[10px] font-bold transition-all",
+                                                    "px-4 py-1.5 rounded-lg text-[13px] font-bold transition-all",
                                                     viewMode === 'table' ? "bg-white text-primary shadow-sm" : "text-gray-400 hover:text-gray-600"
                                                 )}
                                             >
@@ -485,7 +485,7 @@ export default function BespokeConnectionsPage() {
                         {selectedBrand && (
                             <button
                                 onClick={() => setSelectedBrand(null)}
-                                className="text-[10px] font-bold uppercase tracking-widest text-primary hover:underline bg-primary/5 px-3 py-1.5 rounded-lg"
+                                className="text-[13px] font-bold uppercase tracking-widest text-primary hover:underline bg-primary/5 px-3 py-1.5 rounded-lg"
                             >
                                 Show All Inquiries
                             </button>
@@ -547,9 +547,9 @@ export default function BespokeConnectionsPage() {
                                             <table className="w-full text-left">
                                                 <thead>
                                                     <tr className="bg-gray-50/50 border-b border-gray-100">
-                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400">Brand Provider</th>
-                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-center">Total Connections</th>
-                                                        <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                                        <th className="px-6 py-4 text-[13px] font-bold uppercase tracking-widest text-gray-400">Brand Provider</th>
+                                                        <th className="px-6 py-4 text-[13px] font-bold uppercase tracking-widest text-gray-400 text-center">Total Connections</th>
+                                                        <th className="px-6 py-4 text-[13px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-50">
@@ -586,7 +586,7 @@ export default function BespokeConnectionsPage() {
                                                                 <button
                                                                     onClick={() => setSelectedBrand(selectedBrand === stat.id ? null : stat.id)}
                                                                     className={clsx(
-                                                                        "px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all",
+                                                                        "px-4 py-2 rounded-xl text-[13px] font-bold uppercase tracking-widest transition-all",
                                                                         selectedBrand === stat.id
                                                                             ? "bg-primary text-white shadow-lg shadow-primary/20"
                                                                             : "bg-gray-100 text-gray-500 hover:bg-primary/10 hover:text-primary"
@@ -619,7 +619,7 @@ export default function BespokeConnectionsPage() {
             {/* CONTENT AREA */}
             <section className="space-y-6">
                 <div className="flex items-center justify-between px-2">
-                    <h2 className="text-[10px] font-bold uppercase tracking-[0.3em] text-gray-400">
+                    <h2 className="text-[13px] font-bold uppercase tracking-[0.3em] text-gray-400">
                         {selectedBrand ? "Filtered Inquiries" : "Recent Connections"}
                     </h2>
 
@@ -667,12 +667,12 @@ export default function BespokeConnectionsPage() {
                             <table className="w-full text-left">
                                 <thead>
                                     <tr className="bg-gray-50/50 border-b border-gray-100">
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Potential Client</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Contact Details</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Brand Context</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Date/Time</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Status</th>
-                                        <th className="px-6 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Potential Client</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Contact Details</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Brand Context</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Date/Time</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Status</th>
+                                        <th className="px-6 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>

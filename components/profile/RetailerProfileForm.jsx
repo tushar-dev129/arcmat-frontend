@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/ui/Button';
-import { Loader2, Plus, X } from 'lucide-react';
+import { Loader2, Plus, X, Building2, User, Mail, Phone, MapPin, Store, Clock } from 'lucide-react';
+import clsx from 'clsx';
 
-const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting }) => {
+const RetailerProfileForm = ({ user, brands, onSubmit, isSubmitting }) => {
     const {
         register,
         handleSubmit,
@@ -28,7 +29,6 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
 
     const [cityInput, setCityInput] = useState('');
     const cities = watch('cities');
-
     const currentSelectedBrands = watch('selectedBrands');
 
     useEffect(() => {
@@ -100,181 +100,222 @@ const RetailerProfileForm = ({ user, brands, onSubmit, onCancel, isSubmitting })
     };
 
     return (
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-10 animate-in fade-in duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Company Details */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Building2 size={16} />
+                        Company Name
+                    </label>
                     <input
                         {...register('companyName', { required: 'Company name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className={clsx(
+                            "w-full px-5 py-4 rounded-2xl border transition-all outline-none text-sm font-medium",
+                            errors.companyName ? "border-red-200 bg-red-50/30 focus:border-red-400" : "border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm"
+                        )}
                         placeholder="e.g. Acme Supplies"
                     />
-                    {errors.companyName && <p className="text-red-500 text-xs mt-1">{errors.companyName.message}</p>}
+                    {errors.companyName && <p className="text-red-500 text-[13px] font-bold mt-1  tracking-wider">{errors.companyName.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <User size={16} />
+                        Contact Person
+                    </label>
                     <input
                         {...register('contactPerson', { required: 'Contact person is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className={clsx(
+                            "w-full px-5 py-4 rounded-2xl border transition-all outline-none text-sm font-medium",
+                            errors.contactPerson ? "border-red-200 bg-red-50/30 focus:border-red-400" : "border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm"
+                        )}
                         placeholder="e.g. John Doe"
                     />
-                    {errors.contactPerson && <p className="text-red-500 text-xs mt-1">{errors.contactPerson.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact Email</label>
-                    <input
-                        {...register('email', {
-                            required: 'Email is required',
-                            pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
-                        })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="e.g. contact@company.com"
-                    />
-                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                {/* Contact Email (Read Only) */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Mail size={16} />
+                        Contact Email
+                    </label>
+                    <div className="relative group">
+                        <input
+                            {...register('email')}
+                            readOnly
+                            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 text-gray-400 text-sm font-medium cursor-not-allowed outline-none"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-[9px] font-black text-gray-300  tracking-tighter">Read Only</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                {/* Phone Number */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Phone size={16} />
+                        Phone Number
+                    </label>
                     <input
                         {...register('mobile', { required: 'Phone number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className={clsx(
+                            "w-full px-5 py-4 rounded-2xl border transition-all outline-none text-sm font-medium",
+                            errors.mobile ? "border-red-200 bg-red-50/30 focus:border-red-400" : "border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm"
+                        )}
                         placeholder="e.g. +91 9876543210"
                     />
-                    {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Base City / Region</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <MapPin size={16} />
+                        Base City / Region
+                    </label>
                     <input
                         {...register('cityRegion', { required: 'City / Region is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                         placeholder="e.g. Delhi"
                     />
-                    {errors.cityRegion && <p className="text-red-500 text-xs mt-1">{errors.cityRegion.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Contact Method</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Phone size={16} />
+                        Preferred Contact Method
+                    </label>
                     <select
-                        {...register('preferredContactMethod', { required: 'Please select a contact method' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all bg-white"
+                        {...register('preferredContactMethod')}
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                     >
                         <option value="Phone">Phone</option>
                         <option value="Email">Email</option>
                         <option value="WhatsApp">WhatsApp</option>
                     </select>
-                    {errors.preferredContactMethod && <p className="text-red-500 text-xs mt-1">{errors.preferredContactMethod.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Calling Hours</label>
+                <div className="md:col-span-2 space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Clock size={16} />
+                        Calling Hours
+                    </label>
                     <input
                         {...register('callingHours')}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                         placeholder="e.g. Mon – Sat, 9:00 AM – 5:00 PM"
                     />
-                    <p className="mt-1 text-[10px] text-gray-400">Architects will see this before calling.</p>
+                    <p className="text-[13px] text-gray-400 ml-1 italic font-medium  tracking-tight mt-1">Visible to architects before calling</p>
                 </div>
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cities Served (Service Areas)</label>
-                <div className="flex gap-2 mb-3">
-                    <input
-                        value={cityInput}
-                        onChange={(e) => setCityInput(e.target.value)}
-                        onKeyDown={handleCityKeyDown}
-                        className="flex-1 px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="Type a city and press Enter (e.g. Noida)"
-                    />
-                    <button
-                        type="button"
-                        onClick={handleAddCity}
-                        className="px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-all font-medium"
-                    >
-                        Add
-                    </button>
+            {/* Cities Served Section */}
+            <div className="space-y-6 pt-10 border-t border-gray-50">
+                <div className="flex items-center gap-3 ml-1">
+                    <div className="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center text-primary">
+                        <MapPin size={16} />
+                    </div>
+                    <h3 className="text-sm font-bold text-gray-900  tracking-[0.15em]">Cities Served (Service Areas)</h3>
                 </div>
 
-                <div className="flex flex-wrap gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 min-h-[50px]">
-                    {cities.length > 0 ? (
-                        cities.map((city, index) => (
-                            <span
-                                key={index}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-primary/30 text-primary text-sm font-semibold rounded-lg shadow-sm animate-in fade-in zoom-in duration-200"
-                            >
-                                {city}
-                                <button
-                                    type="button"
-                                    onClick={() => handleRemoveCity(city)}
-                                    className="hover:bg-red-50 hover:text-red-500 rounded-full p-0.5 transition-colors"
+                <div className="space-y-4">
+                    <div className="flex gap-3">
+                        <input
+                            value={cityInput}
+                            onChange={(e) => setCityInput(e.target.value)}
+                            onKeyDown={handleCityKeyDown}
+                            className="flex-1 px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                            placeholder="Add a city (e.g. Noida)"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAddCity}
+                            className="px-8 bg-primary text-white rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95"
+                        >
+                            Add
+                        </button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 p-4 bg-gray-50/50 rounded-[2rem] border border-gray-50 min-h-[64px]">
+                        {cities.length > 0 ? (
+                            cities.map((city, index) => (
+                                <span
+                                    key={index}
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-primary/20 text-primary text-xs font-bold rounded-xl shadow-sm animate-in zoom-in duration-300"
                                 >
-                                    <X size={14} />
-                                </button>
-                            </span>
-                        ))
-                    ) : (
-                        <p className="text-gray-400 text-sm italic py-1">No cities added yet. Retailers must define service areas.</p>
-                    )}
+                                    {city}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveCity(city)}
+                                        className="hover:bg-red-50 hover:text-red-500 rounded-full p-0.5 transition-colors"
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </span>
+                            ))
+                        ) : (
+                            <p className="text-gray-400 text-xs italic py-2 px-2">No cities added yet. Define your service areas.</p>
+                        )}
+                    </div>
                 </div>
-                <p className="mt-2 text-[11px] text-gray-500 font-medium uppercase tracking-wider">Example: Delhi, Gurgaon, Noida</p>
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Business Address</label>
+            {/* Business Address */}
+            <div className="space-y-2 pt-6">
+                <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                    <MapPin size={16} />
+                    Full Business Address
+                </label>
                 <textarea
                     {...register('businessAddress', { required: 'Business address is required' })}
                     rows={3}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
-                    placeholder="Enter full business address"
+                    className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium resize-none"
+                    placeholder="Enter full physical address..."
                 />
-                {errors.businessAddress && <p className="text-red-500 text-xs mt-1">{errors.businessAddress.message}</p>}
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Brands Supplied</label>
-                <div className="mt-2 bg-gray-50 rounded-xl p-4 border border-gray-100 max-h-60 overflow-y-auto">
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {/* Brands Selection */}
+            <div className="space-y-6 pt-10 border-t border-gray-50">
+                <div className="flex items-center gap-3 ml-1">
+                    <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-blue-500">
+                        <Store size={16} />
+                    </div>
+                    <h3 className="text-sm font-bold text-gray-900  tracking-[0.15em]">Authorized Brands Supplied</h3>
+                </div>
+
+                <div className="bg-gray-50/30 rounded-[2.5rem] p-8 border border-gray-50">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                         {brands?.map((brand) => (
                             <button
                                 key={brand._id}
                                 type="button"
                                 onClick={() => handleToggleBrand(brand._id)}
-                                className={`
-                                    flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all
-                                    ${currentSelectedBrands.includes(brand._id)
-                                        ? 'bg-primary text-white shadow-sm'
-                                        : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'}
-                                `}
+                                className={clsx(
+                                    "flex items-center justify-between gap-3 px-5 py-3 rounded-2xl text-xs font-bold transition-all border shadow-sm",
+                                    currentSelectedBrands.includes(brand._id)
+                                        ? "bg-primary text-white border-primary shadow-primary/20 scale-105"
+                                        : "bg-white text-gray-500 border-gray-200 hover:border-primary/50 hover:text-primary"
+                                )}
                             >
                                 <span className="truncate">{brand.name}</span>
-                                {currentSelectedBrands.includes(brand._id) ? <X size={12} /> : <Plus size={12} />}
+                                {currentSelectedBrands.includes(brand._id) ? <X size={14} strokeWidth={3} /> : <Plus size={14} strokeWidth={3} />}
                             </button>
                         ))}
                     </div>
                 </div>
-                <p className="mt-2 text-xs text-gray-500">Select the brands you are authorized to supply.</p>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <Button
-                    type="button"
-                    onClick={onCancel}
-                    className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary px-3 cursor-pointer"
-                    text="Cancel"
-                />
+            <div className="flex justify-end pt-10 border-t border-gray-50">
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-primary text-white cursor-pointer hover:opacity-90 min-w-[120px] py-2 px-4 border border-primary"
+                    className="bg-primary text-white font-bold rounded-2xl px-12 py-4 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-70"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
-                            <Loader2 className="animate-spin" size={16} />
-                            <span>Saving...</span>
+                            <Loader2 className="animate-spin" size={18} />
+                            <span>Saving Changes...</span>
                         </div>
-                    ) : 'Save Profile'}
+                    ) : 'Save Retailer Profile'}
                 />
             </div>
         </form>

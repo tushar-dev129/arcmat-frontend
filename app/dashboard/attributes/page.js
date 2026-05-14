@@ -171,7 +171,7 @@ export default function AttributesPage() {
                                         rows={4}
                                         className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all resize-none"
                                     />
-                                    <p className="text-[10px] text-gray-400 mt-2 italic">Values will be automatically cleaned and categorized.</p>
+                                    <p className="text-[13px] text-gray-400 mt-2 italic">Values will be automatically cleaned and categorized.</p>
                                 </div>
 
                                 <div>
@@ -255,7 +255,7 @@ export default function AttributesPage() {
                                                 <tr key={attr._id || attr.id} className="hover:bg-gray-50/50 transition-colors group">
                                                     <td className="px-6 py-5">
                                                         <div className="font-bold text-gray-900">{attr.attributeName}</div>
-                                                        <div className="text-[10px] text-gray-400 font-mono mt-0.5">{attr._id || attr.id}</div>
+                                                        <div className="text-[13px] text-gray-400 font-mono mt-0.5">{attr._id || attr.id}</div>
                                                     </td>
                                                     <td className="px-6 py-5">
                                                         <div className="flex flex-wrap gap-1.5 max-w-sm">

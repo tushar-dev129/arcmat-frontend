@@ -172,7 +172,7 @@ const CompareSidebar = () => {
                                                 )}
                                             </div>
                                             {mrp > price && (
-                                                <span className="text-[10px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full mt-1">
+                                                <span className="text-[13px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full mt-1">
                                                     {Math.round(((mrp - price) / mrp) * 100)}% OFF
                                                 </span>
                                             )}

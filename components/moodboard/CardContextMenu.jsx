@@ -62,8 +62,8 @@ export default function CardContextMenu({
                             onClose();
                         }}
                         className={`w-full flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors ${currentStatus === 'Specified'
-                                ? 'bg-green-50 text-green-700 hover:bg-green-100'
-                                : 'text-gray-700 hover:bg-gray-50'
+                            ? 'bg-green-50 text-green-700 hover:bg-green-100'
+                            : 'text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <CheckCircle className={`w-4 h-4 ${currentStatus === 'Specified' ? 'text-green-600' : 'text-gray-400'}`} />
@@ -77,8 +77,8 @@ export default function CardContextMenu({
                             onClose();
                         }}
                         className={`w-full flex items-center gap-3 px-4 py-2 text-sm font-medium transition-colors ${currentStatus === 'Excluded'
-                                ? 'bg-red-50 text-red-700 hover:bg-red-100'
-                                : 'text-gray-700 hover:bg-gray-50'
+                            ? 'bg-red-50 text-red-700 hover:bg-red-100'
+                            : 'text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <XCircle className={`w-4 h-4 ${currentStatus === 'Excluded' ? 'text-red-600' : 'text-gray-400'}`} />
@@ -109,7 +109,7 @@ export default function CardContextMenu({
                 >
                     <span>Discuss Material</span>
                     {unreadMessages > 0 && (
-                        <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                        <span className="bg-red-500 text-white text-[13px] font-bold px-1.5 py-0.5 rounded-full leading-none">
                             {unreadMessages}
                         </span>
                     )}
@@ -132,7 +132,7 @@ export default function CardContextMenu({
                     >
                         <span>Material History</span>
                         {pendingApprovals > 0 && (
-                            <span className="bg-amber-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                            <span className="bg-amber-500 text-white text-[13px] font-bold px-1.5 py-0.5 rounded-full leading-none">
                                 {pendingApprovals}
                             </span>
                         )}

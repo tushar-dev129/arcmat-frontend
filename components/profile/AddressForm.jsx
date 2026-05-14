@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/ui/Button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, MapPin, User, Mail, Phone, Globe, Navigation } from 'lucide-react';
+import clsx from 'clsx';
 
 const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
     const {
@@ -55,147 +56,169 @@ const AddressForm = ({ address, user, onSubmit, onCancel, isSubmitting }) => {
     }, [address, user, reset]);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-800 mb-4">
-                {address ? 'Edit Address' : 'Add New Address'}
-            </h3>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 bg-white p-10 rounded-[2.5rem] border border-gray-200 shadow-sm animate-in fade-in duration-500">
+            <div className="flex items-center gap-4 mb-8">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-500 shadow-sm">
+                    <Navigation size={15} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">
+                    {address ? 'Edit Address Details' : 'New Delivery Address'}
+                </h3>
+            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <User size={16} />
+                        First Name
+                    </label>
                     <input
                         {...register('first_name', { required: 'First name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                         placeholder="First Name"
                     />
-                    {errors.first_name && <p className="text-red-500 text-xs mt-1">{errors.first_name.message}</p>}
+                    {errors.first_name && <p className="text-red-500 text-xs mt-1 ml-1">{errors.first_name.message}</p>}
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <User size={16} />
+                        Last Name
+                    </label>
                     <input
                         {...register('last_name', { required: 'Last name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                         placeholder="Last Name"
                     />
-                    {errors.last_name && <p className="text-red-500 text-xs mt-1">{errors.last_name.message}</p>}
+                    {errors.last_name && <p className="text-red-500 text-xs mt-1 ml-1">{errors.last_name.message}</p>}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Mail size={16} />
+                        Email Address
+                    </label>
                     <input
                         {...register('email', {
                             required: 'Email is required',
                             pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
                         })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="Email"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                        placeholder="contact@example.com"
                     />
-                    {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
+                    {errors.email && <p className="text-red-500 text-xs mt-1 ml-1">{errors.email.message}</p>}
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Phone size={16} />
+                        Mobile Number
+                    </label>
                     <input
                         {...register('mobile', { required: 'Mobile number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="Mobile Number"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                        placeholder="+91 98765 43210"
                     />
-                    {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
+                    {errors.mobile && <p className="text-red-500 text-xs mt-1 ml-1">{errors.mobile.message}</p>}
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pincode</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  ml-1">Pincode</label>
                     <input
                         {...register('pincode', { required: 'Pincode is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="Pincode"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                        placeholder="400001"
                     />
-                    {errors.pincode && <p className="text-red-500 text-xs mt-1">{errors.pincode.message}</p>}
+                    {errors.pincode && <p className="text-red-500 text-xs mt-1 ml-1">{errors.pincode.message}</p>}
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  ml-1">City</label>
                     <input
                         {...register('city', { required: 'City is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="City"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                        placeholder="Mumbai"
                     />
-                    {errors.city && <p className="text-red-500 text-xs mt-1">{errors.city.message}</p>}
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  ml-1">State</label>
                     <input
                         {...register('state', { required: 'State is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="State"
+                        className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
+                        placeholder="Maharashtra"
                     />
-                    {errors.state && <p className="text-red-500 text-xs mt-1">{errors.state.message}</p>}
                 </div>
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+            <div className="space-y-2">
+                <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                    <Globe size={16} />
+                    Country
+                </label>
                 <input
                     {...register('country', { required: 'Country is required' })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                    placeholder="Country"
+                    className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium"
                 />
-                {errors.country && <p className="text-red-500 text-xs mt-1">{errors.country.message}</p>}
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
+            <div className="space-y-2">
+                <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  ml-1">Address Line 1</label>
                 <textarea
                     {...register('address1', { required: 'Address is required' })}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                    className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium resize-none"
                     placeholder="House No, Building Name, Street"
                 />
-                {errors.address1 && <p className="text-red-500 text-xs mt-1">{errors.address1.message}</p>}
+                {errors.address1 && <p className="text-red-500 text-xs mt-1 ml-1">{errors.address1.message}</p>}
             </div>
 
-            <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Address Line 2 (Optional)</label>
+            <div className="space-y-2">
+                <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  ml-1">Address Line 2 (Optional)</label>
                 <textarea
                     {...register('address2')}
                     rows={2}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+                    className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm transition-all outline-none text-sm font-medium resize-none"
                     placeholder="Area, Landmark"
                 />
             </div>
 
-            <div className="flex items-center gap-2 py-2">
-                <input
-                    type="checkbox"
-                    id="default_check"
-                    checked={watch('defaultaddress') === 1}
-                    onChange={(e) => {
-                        reset({ ...watch(), defaultaddress: e.target.checked ? 1 : 0 });
-                    }}
-                    className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary cursor-pointer"
-                />
-                <label htmlFor="default_check" className="text-sm text-gray-600 cursor-pointer">Set as default address</label>
+            <div className="flex items-center gap-3 py-2 ml-1">
+                <div className="relative flex items-center">
+                    <input
+                        type="checkbox"
+                        id="default_check"
+                        checked={watch('defaultaddress') === 1}
+                        onChange={(e) => {
+                            reset({ ...watch(), defaultaddress: e.target.checked ? 1 : 0 });
+                        }}
+                        className="peer w-6 h-6 opacity-0 absolute cursor-pointer"
+                    />
+                    <div className="w-6 h-6 border-2 border-gray-200 rounded-lg flex items-center justify-center transition-all peer-checked:border-primary peer-checked:bg-primary">
+                        <div className="w-2.5 h-2.5 bg-white rounded-sm opacity-0 peer-checked:opacity-100 transition-opacity" />
+                    </div>
+                    <label htmlFor="default_check" className="ml-3 text-sm font-bold text-gray-600 cursor-pointer select-none">Set as default address</label>
+                </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <Button
+            <div className="flex justify-end gap-4  border-t border-gray-50">
+                <button
                     type="button"
                     onClick={onCancel}
-                    className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-3 cursor-pointer"
-                    text="Cancel"
-                />
+                    className="px-8 py-4 text-sm font-bold text-gray-500 hover:text-gray-900 transition-colors"
+                >
+                    Cancel
+                </button>
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-primary text-white cursor-pointer hover:bg-white hover:text-primary border border-primary min-w-[120px] px-2"
+                    className="bg-primary text-white font-bold rounded-2xl px-10 py-4 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-70"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
-                            <Loader2 className="animate-spin" size={16} />
+                            <Loader2 className="animate-spin" size={18} />
                             <span>Saving...</span>
                         </div>
-                    ) : (address ? 'Update Address' : 'Add Address')}
+                    ) : (address ? 'Update Address' : 'Save Address')}
                 />
             </div>
         </form>

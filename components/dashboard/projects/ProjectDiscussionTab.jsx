@@ -199,7 +199,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         </span>
                                     )}
 
-                                    <span className="text-[10px] font-bold  tracking-widest text-[#2d3142] ml-1">
+                                    <span className="text-[13px] font-bold  tracking-widest text-[#2d3142] ml-1">
                                         {isMe ? 'You' : authorName}
                                     </span>
 
@@ -221,7 +221,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                                 className="w-full h-full object-cover transition-transform duration-500 group-hover/thumb:scale-110"
                                             />
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-3">
-                                                <span className="text-white text-[10px] font-bold  tracking-widest truncate">
+                                                <span className="text-white text-[13px] font-bold  tracking-widest truncate">
                                                     {comment.referencedMaterialName}
                                                 </span>
                                             </div>
@@ -231,7 +231,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         <p className="whitespace-pre-wrap">{comment.message}</p>
                                     </div>
                                 </div>
-                                <span className="text-[10px] text-gray-400 mt-1 font-bold uppercase tracking-widest">
+                                <span className="text-[13px] text-gray-400 mt-1 font-bold uppercase tracking-widest">
                                     {new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </span>
                             </div>
@@ -253,7 +253,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                                         onChange={(e) => setIsInternal(e.target.checked)}
                                         className="w-4 h-4 rounded-lg border-gray-200 text-[#d9a88a] focus:ring-[#d9a88a] transition-all cursor-pointer"
                                     />
-                                    <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${isInternal ? 'text-amber-600' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                                    <span className={`text-[13px] font-bold uppercase tracking-widest transition-colors ${isInternal ? 'text-amber-600' : 'text-gray-400 group-hover:text-gray-600'}`}>
                                         Private Internal Note
                                     </span>
                                 </label>
@@ -261,7 +261,7 @@ export default function ProjectDiscussionTab({ projectId, projectName, moodboard
                         </div>
 
                         {/* Status Label for input context */}
-                        <div className="text-[10px] font-bold uppercase tracking-widest text-[#d9a88a] truncate">
+                        <div className="text-[13px] font-bold uppercase tracking-widest text-[#d9a88a] truncate">
                             To: {filterSpaceId === 'all' || filterSpaceId === 'general' ? 'General' : getSpaceName(filterSpaceId)}
                         </div>
                     </div>

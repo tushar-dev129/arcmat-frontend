@@ -58,12 +58,12 @@ export default function StatusUpdateModal({
                 <form onSubmit={handleSubmit} className="p-8 space-y-6">
                     <div className="space-y-3">
                         <div className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Ticket Subject</span>
+                            <span className="text-[13px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Ticket Subject</span>
                             <span className="font-bold text-gray-700 truncate block">{subject}</span>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest pl-1">Status Update Comment (Optional)</label>
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest pl-1">Status Update Comment (Optional)</label>
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}

@@ -58,7 +58,7 @@ const ProfessionalRow = ({ professional }) => {
                     <div className="text-left flex-1">
                         <div className="flex items-center gap-2">
                             <p className="font-bold text-gray-900 text-base">{professional.name}</p>
-                            <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[10px] font-bold uppercase tracking-wider">
+                            <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-600 text-[13px] font-bold uppercase tracking-wider">
                                 {professional.type}
                             </span>
                         </div>
@@ -75,17 +75,17 @@ const ProfessionalRow = ({ professional }) => {
 
                 <div className="flex items-center gap-4 md:gap-8 mt-5 md:mt-0 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 pt-4 md:pt-0">
                     <div className="flex flex-col items-center md:items-end">
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Project Stage</span>
+                        <span className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Project Stage</span>
                         <span className={`mt-1 px-3 py-1 rounded-full text-xs font-bold border ${STAGE_COLORS[professional.projectStage] || "bg-gray-50 text-gray-600 border-gray-100"}`}>
                             {professional.projectStage}
                         </span>
                     </div>
 
                     <div className="hidden sm:flex flex-col items-end">
-                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Engagement</span>
+                        <span className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Engagement</span>
                         <div className="flex items-center gap-3 mt-1">
                             <div className="flex flex-col items-center md:items-end">
-                                <span className="text-sm font-bold text-gray-800">{professional.totalOrders} <span className="text-[10px] text-gray-400 font-medium lowercase">orders</span></span>
+                                <span className="text-sm font-bold text-gray-800">{professional.totalOrders} <span className="text-[13px] text-gray-400 font-medium lowercase">orders</span></span>
                             </div>
                             <div className="w-px h-6 bg-gray-100"></div>
                             <div className="flex flex-col items-center md:items-end">
@@ -121,9 +121,9 @@ const ProfessionalRow = ({ professional }) => {
                                     <div className="flex justify-between items-center text-sm">
                                         <span className="text-gray-500">Purchase Status</span>
                                         {professional.purchased ? (
-                                            <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded text-[10px] font-bold">PURCHASED</span>
+                                            <span className="px-2 py-0.5 bg-green-50 text-green-600 rounded text-[13px] font-bold">PURCHASED</span>
                                         ) : (
-                                            <span className="px-2 py-0.5 bg-gray-100 text-gray-400 rounded text-[10px] font-bold">NO PURCHASE</span>
+                                            <span className="px-2 py-0.5 bg-gray-100 text-gray-400 rounded text-[13px] font-bold">NO PURCHASE</span>
                                         )}
                                     </div>
                                     <div className="pt-2 border-t border-gray-50 flex flex-col gap-1">
@@ -170,7 +170,7 @@ const ProfessionalRow = ({ professional }) => {
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-sm">
                                         <thead>
-                                            <tr className="text-left text-[10px] text-gray-400 font-bold uppercase border-b border-gray-100">
+                                            <tr className="text-left text-[13px] text-gray-400 font-bold uppercase border-b border-gray-100">
                                                 <th className="pb-3 pr-4">Order ID</th>
                                                 <th className="pb-3 pr-4">Product</th>
                                                 <th className="pb-3 pr-4">Date</th>
@@ -181,7 +181,7 @@ const ProfessionalRow = ({ professional }) => {
                                         <tbody className="divide-y divide-gray-50">
                                             {professional.orders?.map(order => (
                                                 <tr key={order.id} className="hover:bg-gray-50 transition-colors group">
-                                                    <td className="py-3.5 pr-4 font-mono text-[10px] text-gray-400">{order.id}</td>
+                                                    <td className="py-3.5 pr-4 font-mono text-[13px] text-gray-400">{order.id}</td>
                                                     <td className="py-3.5 pr-4 text-gray-800 font-semibold max-w-[180px] truncate">{order.product}</td>
                                                     <td className="py-3.5 pr-4 text-gray-500 whitespace-nowrap text-xs">{order.date}</td>
                                                     <td className="py-3.5 pr-4"><StatusBadge status={order.status} /></td>
@@ -277,7 +277,7 @@ export default function BrandProfessionalInsights() {
                             <User className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Total Professionals</p>
+                            <p className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Total Professionals</p>
                             <p className="text-2xl font-bold text-gray-900">{metrics.total}</p>
                         </div>
                     </div>
@@ -286,7 +286,7 @@ export default function BrandProfessionalInsights() {
                             <Briefcase className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Architects</p>
+                            <p className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Architects</p>
                             <p className="text-2xl font-bold text-gray-900">{metrics.architects}</p>
                         </div>
                     </div>
@@ -295,7 +295,7 @@ export default function BrandProfessionalInsights() {
                             <MessageSquare className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Inquiries</p>
+                            <p className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Inquiries</p>
                             <p className="text-2xl font-bold text-gray-900">{metrics.inquiries}</p>
                         </div>
                     </div>
@@ -304,7 +304,7 @@ export default function BrandProfessionalInsights() {
                             <ShoppingBag className="w-6 h-6" />
                         </div>
                         <div>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Direct Engagement</p>
+                            <p className="text-[13px] text-gray-400 font-bold uppercase tracking-wider">Direct Engagement</p>
                             <p className="text-2xl font-bold text-gray-900">{professionals.filter(p => p.purchased).length}</p>
                         </div>
                     </div>

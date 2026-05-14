@@ -431,7 +431,7 @@ export default function AddVariantModal({ isOpen, onClose, productId, parentProd
                                         >
                                             <X className="w-3 h-3" />
                                         </button>
-                                        <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-[10px] text-white py-1 px-2 backdrop-blur-sm">
+                                        <div className="absolute bottom-0 left-0 right-0 bg-black/40 text-[13px] text-white py-1 px-2 backdrop-blur-sm">
                                             Image {idx + 1}
                                         </div>
                                     </div>

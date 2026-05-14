@@ -296,13 +296,13 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                         <div className="flex bg-gray-100 p-1 rounded-2xl mb-4">
                             <button
                                 onClick={() => { setTargetType('project'); setSelectedProjectId(''); setSelectedMoodboardId(''); }}
-                                className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'project' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
+                                className={`flex-1 py-2 text-[13px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'project' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
                             >
                                 Projects
                             </button>
                             <button
                                 onClick={() => { setTargetType('template'); setSelectedProjectId(''); setSelectedMoodboardId(''); }}
-                                className={`flex-1 py-2 text-[10px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'template' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
+                                className={`flex-1 py-2 text-[13px] font-bold uppercase tracking-widest rounded-xl transition-all ${targetType === 'template' ? 'bg-white text-[#d9a88a] shadow-sm' : 'text-gray-400'}`}
                             >
                                 Templates
                             </button>
@@ -310,7 +310,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
 
                         {/* Project/Template Selection */}
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
+                            <label className="text-[13px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 1. Select {targetType === 'project' ? 'Project' : 'Template'}
                             </label>
                             {projectsLoading || templatesLoading ? (
@@ -336,7 +336,7 @@ export default function AddToMoodboardModal({ isOpen, onClose, product, products
                         {/* Space Selection */}
                         {selectedProjectId && (
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
+                                <label className="text-[13px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                     2. Choose Space
                                 </label>
 

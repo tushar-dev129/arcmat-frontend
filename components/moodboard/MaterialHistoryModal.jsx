@@ -131,10 +131,10 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                     <div className="w-[calc(100%-4rem)] md:w-[calc(50%-3rem)] p-4 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all">
                                         <div className="flex items-center justify-between gap-2 mb-2">
                                             <div className="flex flex-col">
-                                                <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md w-fit mb-1 ${entry.status === 'Replaced' ? 'bg-gray-100 text-gray-500' :
-                                                        entry.status === 'Approved' ? 'bg-green-100 text-green-700' :
-                                                            entry.status === 'Rejected' ? 'bg-red-100 text-red-700' :
-                                                                'bg-amber-100 text-amber-700'
+                                                <span className={`text-[13px] font-bold uppercase tracking-wider px-2 py-1 rounded-md w-fit mb-1 ${entry.status === 'Replaced' ? 'bg-gray-100 text-gray-500' :
+                                                    entry.status === 'Approved' ? 'bg-green-100 text-green-700' :
+                                                        entry.status === 'Rejected' ? 'bg-red-100 text-red-700' :
+                                                            'bg-amber-100 text-amber-700'
                                                     }`}>
                                                     {entry.status || (entry.isFinal ? 'Current' : 'Replaced')}
                                                 </span>
@@ -157,7 +157,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                                 <h4 className="font-bold text-[#2d3142] truncate">{entry.materialName || 'Unknown Material'}</h4>
                                                 <div className="flex items-center gap-1.5">
                                                     <div className="w-1 h-1 rounded-full bg-gray-300" />
-                                                    <p className="text-[10px] text-gray-400 font-medium tracking-tight">
+                                                    <p className="text-[13px] text-gray-400 font-medium tracking-tight">
                                                         By: <span className="font-bold text-gray-500">{entry.changedBy?.name || 'Unknown'}</span>
                                                     </p>
                                                 </div>
@@ -172,7 +172,7 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                                     </div>
                                                 )}
                                                 <div className="min-w-0">
-                                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Replaced</p>
+                                                    <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-0.5">Replaced</p>
                                                     <p className="text-xs text-gray-500 font-bold truncate line-through decoration-gray-300">{entry.previousMaterialName}</p>
                                                 </div>
                                             </div>
@@ -196,13 +196,13 @@ export default function MaterialHistoryModal({ isOpen, onClose, projectId, space
                                                 <div className="flex gap-2">
                                                     <button
                                                         onClick={() => handleApprove(entry._id, 'Approved', entry.materialId)}
-                                                        className="text-[10px] font-bold bg-green-50 text-green-600 hover:bg-green-100 px-2 py-1 rounded transition-colors"
+                                                        className="text-[13px] font-bold bg-green-50 text-green-600 hover:bg-green-100 px-2 py-1 rounded transition-colors"
                                                     >
                                                         Approve
                                                     </button>
                                                     <button
                                                         onClick={() => handleApprove(entry._id, 'Rejected', entry.materialId)}
-                                                        className="text-[10px] font-bold bg-red-50 text-red-600 hover:bg-red-100 px-2 py-1 rounded transition-colors"
+                                                        className="text-[13px] font-bold bg-red-50 text-red-600 hover:bg-red-100 px-2 py-1 rounded transition-colors"
                                                     >
                                                         Reject
                                                     </button>

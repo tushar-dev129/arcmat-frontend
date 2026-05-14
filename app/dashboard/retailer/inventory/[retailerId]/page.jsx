@@ -147,7 +147,7 @@ export default function RetailerAdminInventoryPage() {
                                     )}
                                     <div className="absolute top-2 right-2">
                                         <span className={clsx(
-                                            "px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest rounded-lg border shadow-sm",
+                                            "px-2 py-0.5 text-[13px] font-bold uppercase tracking-widest rounded-lg border shadow-sm",
                                             item.isActive ? "bg-green-50 text-green-600 border-green-100" : "bg-gray-100 text-gray-400 border-gray-200"
                                         )}>
                                             {item.isActive ? 'Live' : 'Hidden'}
@@ -158,7 +158,7 @@ export default function RetailerAdminInventoryPage() {
                                     <h3 className="text-sm font-bold text-gray-900 line-clamp-1">
                                         {product.product_name}
                                     </h3>
-                                    <p className="text-[10px] text-gray-400 mt-1 uppercase font-bold tracking-tight">
+                                    <p className="text-[13px] text-gray-400 mt-1 uppercase font-bold tracking-tight">
                                         {variant.variant_name || 'Standard Variant'}
                                     </p>
 
@@ -183,7 +183,7 @@ export default function RetailerAdminInventoryPage() {
                                     <div className="mt-auto pt-4 border-t border-gray-50 flex items-center gap-2">
                                         <button
                                             onClick={() => setEditingItem(item)}
-                                            className="flex-1 py-2 bg-gray-50 text-gray-600 text-[10px] font-bold uppercase tracking-widest rounded-xl hover:bg-gray-900 hover:text-white transition-all flex items-center justify-center gap-2"
+                                            className="flex-1 py-2 bg-gray-50 text-gray-600 text-[13px] font-bold uppercase tracking-widest rounded-xl hover:bg-gray-900 hover:text-white transition-all flex items-center justify-center gap-2"
                                         >
                                             <Edit2 className="w-3 h-3" />
                                             Manage
@@ -245,7 +245,7 @@ export default function RetailerAdminInventoryPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">MRP Price (₹)</label>
+                                    <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">MRP Price (₹)</label>
                                     <input
                                         type="number"
                                         name="mrp_price"
@@ -255,7 +255,7 @@ export default function RetailerAdminInventoryPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Selling Price (₹)</label>
+                                    <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">Selling Price (₹)</label>
                                     <input
                                         type="number"
                                         name="selling_price"
@@ -267,7 +267,7 @@ export default function RetailerAdminInventoryPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Stock</label>
+                                <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">Stock</label>
                                 <input
                                     type="number"
                                     name="stock"

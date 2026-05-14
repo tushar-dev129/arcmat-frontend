@@ -185,7 +185,7 @@ export default function Sidebar() {
                     {safeCollapsed ? (
                       <div className="w-8 h-px bg-gray-200" />
                     ) : (
-                      <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">
+                      <span className="text-[13px] font-bold text-gray-400 uppercase tracking-[0.2em]">
                         {item.label}
                       </span>
                     )}

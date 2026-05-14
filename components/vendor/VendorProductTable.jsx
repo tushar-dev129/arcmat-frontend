@@ -146,7 +146,7 @@ export default function VendorProductTable({ products = [] }) {
               ))}
             </div>
             <div className="text-sm font-bold text-indigo-900 leading-none">
-              {selectedProducts.length} <span className="text-indigo-600/70 font-bold uppercase tracking-widest text-[10px] ml-1">Products Selected</span>
+              {selectedProducts.length} <span className="text-indigo-600/70 font-bold uppercase tracking-widest text-[13px] ml-1">Products Selected</span>
             </div>
           </div>
           <div className="flex items-center gap-3">

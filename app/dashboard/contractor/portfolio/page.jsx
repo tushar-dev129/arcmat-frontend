@@ -183,7 +183,7 @@ export default function PortfolioPage() {
                                     </button>
                                 </div>
                                 {item.location && (
-                                    <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur rounded-full flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gray-700 shadow-sm">
+                                    <div className="absolute bottom-4 left-4 px-3 py-1.5 bg-white/90 backdrop-blur rounded-full flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider text-gray-700 shadow-sm">
                                         <MapPin className="w-3 h-3 text-primary" />
                                         {item.location}
                                     </div>
@@ -200,7 +200,7 @@ export default function PortfolioPage() {
                                             </div>
                                         ))}
                                         {item.images?.length > 3 && (
-                                            <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center text-[10px] font-bold text-gray-400">
+                                            <div className="w-8 h-8 rounded-full border-2 border-white bg-gray-50 flex items-center justify-center text-[13px] font-bold text-gray-400">
                                                 +{item.images.length - 3}
                                             </div>
                                         )}

@@ -63,7 +63,7 @@ export default function NotificationCenter() {
                         <h3 className="font-bold text-gray-900 flex items-center gap-2">
                             Notifications
                             {unreadCount > 0 && (
-                                <span className="text-[10px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">
+                                <span className="text-[13px] bg-primary text-white px-2 py-0.5 rounded-full uppercase tracking-tighter">
                                     {unreadCount} NEW
                                 </span>
                             )}
@@ -95,10 +95,10 @@ export default function NotificationCenter() {
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <div className="flex items-center justify-between gap-2 mb-1">
-                                                    <span className="text-[10px] font-bold text-primary uppercase tracking-widest truncate">
+                                                    <span className="text-[13px] font-bold text-primary uppercase tracking-widest truncate">
                                                         {n.type.replace(/_/g, ' ')}
                                                     </span>
-                                                    <span className="text-[10px] text-gray-400 flex items-center gap-1 shrink-0">
+                                                    <span className="text-[13px] text-gray-400 flex items-center gap-1 shrink-0">
                                                         <Clock className="w-3 h-3" />
                                                         {mounted ? formatDistanceToNow(new Date(n.createdAt), { addSuffix: true }) : '...'}
                                                     </span>
@@ -108,7 +108,7 @@ export default function NotificationCenter() {
                                                 </p>
 
                                                 {n.relatedData?.city && (
-                                                    <div className="flex items-center gap-1 mt-2 text-[10px] text-gray-500 font-medium">
+                                                    <div className="flex items-center gap-1 mt-2 text-[13px] text-gray-500 font-medium">
                                                         <MapPin className="w-3 h-3" />
                                                         Project Location: {n.relatedData.city}
                                                     </div>
@@ -116,7 +116,7 @@ export default function NotificationCenter() {
 
                                                 {n.type === 'CONTACT_SHARE_CONFIRMED' && n.sender && (
                                                     <div className="mt-3 p-3 bg-white rounded-xl border border-gray-100 shadow-sm space-y-2">
-                                                        <div className="grid grid-cols-2 gap-2 text-[10px]">
+                                                        <div className="grid grid-cols-2 gap-2 text-[13px]">
                                                             <div className="flex flex-col">
                                                                 <span className="text-gray-400 uppercase font-bold">Email</span>
                                                                 <span className="text-gray-700 truncate">{n.sender.retailerProfile?.email || n.sender.email || 'N/A'}</span>
@@ -139,7 +139,7 @@ export default function NotificationCenter() {
                                                                 <a
                                                                     href={`tel:${n.sender.retailerProfile?.mobile || n.sender.mobile}`}
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="flex-1 text-center py-1.5 bg-gray-900 text-white rounded-lg text-[10px] font-bold hover:bg-gray-800 transition-all"
+                                                                    className="flex-1 text-center py-1.5 bg-gray-900 text-white rounded-lg text-[13px] font-bold hover:bg-gray-800 transition-all"
                                                                 >
                                                                     Call Now
                                                                 </a>
@@ -150,7 +150,7 @@ export default function NotificationCenter() {
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     onClick={(e) => e.stopPropagation()}
-                                                                    className="flex-1 text-center py-1.5 bg-green-500 text-white rounded-lg text-[10px] font-bold hover:bg-green-600 transition-all"
+                                                                    className="flex-1 text-center py-1.5 bg-green-500 text-white rounded-lg text-[13px] font-bold hover:bg-green-600 transition-all"
                                                                 >
                                                                     WhatsApp
                                                                 </a>
@@ -184,7 +184,7 @@ export default function NotificationCenter() {
                                                 )}
 
                                                 {n.actionStatus !== 'pending' && n.actionStatus !== 'none' && (
-                                                    <div className={`mt-3 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider text-center border-dashed border ${n.actionStatus === 'confirmed' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
+                                                    <div className={`mt-3 px-3 py-1.5 rounded-lg text-[13px] font-bold uppercase tracking-wider text-center border-dashed border ${n.actionStatus === 'confirmed' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
                                                         Request {n.actionStatus}
                                                     </div>
                                                 )}

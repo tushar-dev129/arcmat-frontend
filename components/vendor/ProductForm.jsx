@@ -302,7 +302,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
               </div>
               <div className="col-span-1">
                 <label className="block text-sm font-semibold text-gray-700 mb-1">Product Unique ID</label>
-                <p className="text-[10px] text-gray-400 mb-2 font-medium italic">Auto-generated to connect variants. Non-editable.</p>
+                <p className="text-[13px] text-gray-400 mb-2 font-medium italic">Auto-generated to connect variants. Non-editable.</p>
                 <input
                   name="product_unique_id"
                   value={formData.product_unique_id}
@@ -383,7 +383,7 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
               ))}
             </div>
             {errors.images && (
-              <p className="text-red-500 text-[10px] mt-2 font-bold animate-pulse">! Please upload a representative image to continue.</p>
+              <p className="text-red-500 text-[13px] mt-2 font-bold animate-pulse">! Please upload a representative image to continue.</p>
             )}
           </div>
 
@@ -407,11 +407,11 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead>
                       <tr>
-                        <th className="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase">Variant</th>
-                        <th className="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase">Attributes</th>
-                        <th className="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase">Price</th>
-                        <th className="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase">Stock</th>
-                        <th className="px-4 py-3 text-right text-[10px] font-bold text-gray-400 uppercase">Actions</th>
+                        <th className="px-4 py-3 text-left text-[13px] font-bold text-gray-400 uppercase">Variant</th>
+                        <th className="px-4 py-3 text-left text-[13px] font-bold text-gray-400 uppercase">Attributes</th>
+                        <th className="px-4 py-3 text-left text-[13px] font-bold text-gray-400 uppercase">Price</th>
+                        <th className="px-4 py-3 text-left text-[13px] font-bold text-gray-400 uppercase">Stock</th>
+                        <th className="px-4 py-3 text-right text-[13px] font-bold text-gray-400 uppercase">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -442,14 +442,14 @@ const ProductForm = ({ initialData = null, onSubmit, onCancel, isSubmitting, ven
                             <div className="flex flex-wrap gap-1">
                               {v.dynamicAttributes && v.dynamicAttributes.length > 0 ? (
                                 v.dynamicAttributes.map((attr, idx) => (
-                                  <span key={idx} className="px-2 py-0.5 bg-gray-100 text-gray-700 text-[10px] rounded-full">
+                                  <span key={idx} className="px-2 py-0.5 bg-gray-100 text-gray-700 text-[13px] rounded-full">
                                     {attr.key}: {attr.value}
                                   </span>
                                 ))
                               ) : (
                                 <>
-                                  {v.size && <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[10px] rounded-full">Size: {v.size}</span>}
-                                  {v.color && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 text-[10px] rounded-full">Color: {v.color}</span>}
+                                  {v.size && <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-[13px] rounded-full">Size: {v.size}</span>}
+                                  {v.color && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 text-[13px] rounded-full">Color: {v.color}</span>}
                                 </>
                               )}
                             </div>

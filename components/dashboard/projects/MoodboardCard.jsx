@@ -249,7 +249,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     <p className="text-xs font-bold text-[#2d3142] animate-pulse text-center px-4">
                         {exportStageLabel}
                     </p>
-                    <p className="text-[10px] text-gray-400">Please don't close this window</p>
+                    <p className="text-[13px] text-gray-400">Please don't close this window</p>
                 </div>
             )}
 
@@ -383,7 +383,7 @@ export default function MoodboardCard({ moodboard, projectId, onDelete, isArchit
                     ) : (
                         <div className="h-full w-full flex flex-col items-center justify-center gap-3 text-gray-200">
                             <Layout className="w-10 h-10" />
-                            <span className="text-[10px] font-bold uppercase tracking-widest">No Items Added</span>
+                            <span className="text-[13px] font-bold uppercase tracking-widest">No Items Added</span>
                         </div>
                     )}
                 </Link>

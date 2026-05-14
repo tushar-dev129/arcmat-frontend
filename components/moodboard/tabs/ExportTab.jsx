@@ -147,7 +147,7 @@ export default function ExportTab({
                     <p className="text-[12px] md:text-sm text-gray-500 font-medium tracking-tight">Manage and export your project materials</p>
                 </div>
                 <div className="text-left md:text-right">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Estimation</p>
+                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Estimation</p>
                     <div className="flex items-baseline gap-2 justify-start md:justify-end">
                         {showPrice ? (
                             <>
@@ -189,7 +189,7 @@ export default function ExportTab({
                         <Filter className="w-4 h-4" />
                         Filters
                         {(selectedBrands.length + selectedTags.length + selectedSpecStatuses.length) > 0 && (
-                            <span className="ml-1 bg-[#d9a88a] text-white text-[10px] px-1.5 py-0.5 rounded-full">
+                            <span className="ml-1 bg-[#d9a88a] text-white text-[13px] px-1.5 py-0.5 rounded-full">
                                 {selectedBrands.length + selectedTags.length + selectedSpecStatuses.length}
                             </span>
                         )}
@@ -560,7 +560,7 @@ export default function ExportTab({
                                                 <td className="px-3 py-3 text-gray-700 font-medium">
                                                     {(isPhoto || isRow) ? (
                                                         <div className={`flex items-center gap-1 bg-gray-50/50 border border-gray-100 rounded-lg px-2 py-1.5 focus-within:border-[#d9a88a] focus-within:bg-white transition-all group-hover:bg-white ${!isArchitect && 'pointer-events-none'}`}>
-                                                            <span className="text-[10px] text-[#d9a88a] font-bold">₹</span>
+                                                            <span className="text-[13px] text-[#d9a88a] font-bold">₹</span>
                                                             <input
                                                                 type="number"
                                                                 min="0"
@@ -584,7 +584,7 @@ export default function ExportTab({
                                                 <td className="px-3 py-3 text-right">
                                                     <div className="flex items-center justify-end gap-3 text-sm font-bold text-[#1a1a2e]">
                                                         <div>
-                                                            <span className="text-[#d9a88a] mr-1 text-[10px]">₹</span>
+                                                            <span className="text-[#d9a88a] mr-1 text-[13px]">₹</span>
                                                             {total.toLocaleString('en-IN')}
                                                         </div>
                                                         {isArchitect && isRow && (
@@ -609,7 +609,7 @@ export default function ExportTab({
             </div>
 
             <div className="mt-6 shrink-0">
-                <p className="text-[10px] text-gray-400 italic">
+                <p className="text-[13px] text-gray-400 italic">
                     * Prices shown are indicative and subject to final quotation by the vendor.
                 </p>
             </div>

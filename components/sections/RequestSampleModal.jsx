@@ -81,7 +81,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
 
                     <div className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
+                            <label className="text-[13px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 Shipping Details
                             </label>
                             <input
@@ -121,7 +121,7 @@ export default function RequestSampleModal({ isOpen, onClose, product, projectId
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase font-bold tracking-widest text-gray-400 ml-1">
+                            <label className="text-[13px] uppercase font-bold tracking-widest text-gray-400 ml-1">
                                 Additional Notes (Optional)
                             </label>
                             <textarea

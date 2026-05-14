@@ -176,7 +176,7 @@ export default function PhotoUploadModal({ isOpen, onClose, onAdd, tags = [] }) 
                             </div>
                             <div>
                                 <p className="text-xs font-bold text-gray-900">Allow visibility in Inspiration Gallery</p>
-                                <p className="text-[10px] text-gray-500 mt-0.5 leading-tight">If checked, this render can be featured by admins.</p>
+                                <p className="text-[13px] text-gray-500 mt-0.5 leading-tight">If checked, this render can be featured by admins.</p>
                             </div>
                         </div>
                     )}

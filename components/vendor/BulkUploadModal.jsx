@@ -275,7 +275,7 @@ export default function BulkUploadModal() {
                 <p className="text-xs font-bold text-orange-600">Skip Report ({result.details.skipped.length} items)</p>
                 <button
                   onClick={handleDownloadSkipReport}
-                  className="text-[10px] font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 bg-orange-50 px-2 py-1 rounded-md transition-colors"
+                  className="text-[13px] font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 bg-orange-50 px-2 py-1 rounded-md transition-colors"
                 >
                   <Download className="w-3 h-3" />Download
                 </button>
@@ -292,7 +292,7 @@ export default function BulkUploadModal() {
                   </div>
                 ))}
                 {result.details.skipped.length > 5 && (
-                  <p className="text-[10px] text-gray-500 text-center pt-1">
+                  <p className="text-[13px] text-gray-500 text-center pt-1">
                     +{result.details.skipped.length - 5} more (download full report)
                   </p>
                 )}

@@ -255,7 +255,7 @@ export default function BrandInventoryPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden overflow-x-auto">
                     <table className="w-full text-left border-collapse whitespace-nowrap md:whitespace-normal">
                         <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+                            <tr className="bg-gray-50 border-b border-gray-100 text-[13px] text-gray-400 uppercase tracking-widest font-bold">
                                 <th className="px-6 py-4 font-bold min-w-[300px]">Product Info</th>
                                 <th className="px-6 py-4 font-bold min-w-[350px]">
                                     <div className="flex items-center justify-between">
@@ -342,7 +342,7 @@ export default function BrandInventoryPage() {
                                                                         </div>
                                                                     );
                                                                 })()}
-                                                                <div className="text-[10px] text-gray-400 font-mono mt-0.5 flex items-center gap-2">
+                                                                <div className="text-[13px] text-gray-400 font-mono mt-0.5 flex items-center gap-2">
                                                                     <span>SKU: {variant.skucode || 'N/A'}</span>
                                                                     <span className="text-gray-200">•</span>
                                                                     <span className="text-gray-900 font-bold">₹{variant.selling_price?.toLocaleString() || '0'}</span>
@@ -353,7 +353,7 @@ export default function BrandInventoryPage() {
                                                             onClick={() => openModal(product, variant)}
                                                             disabled={upsertOverride.isPending || variant.isAdded}
                                                             className={clsx(
-                                                                "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider shrink-0",
+                                                                "px-3 py-1.5 rounded-lg border transition-all disabled:opacity-50 flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider shrink-0",
                                                                 variant.isAdded
                                                                     ? "bg-green-50 text-green-600 border-green-100 cursor-not-allowed"
                                                                     : "bg-white text-primary border-gray-200 shadow-sm hover:bg-primary hover:text-white hover:border-primary"
@@ -425,7 +425,7 @@ export default function BrandInventoryPage() {
                                     <p className="font-bold text-gray-900 text-sm truncate">
                                         {selectedItem?.product?.product_name}
                                     </p>
-                                    <p className="text-[10px] text-gray-400 font-mono">
+                                    <p className="text-[13px] text-gray-400 font-mono">
                                         {selectedItem?.variant?.variant_name || 'Standard Variant'}
                                     </p>
                                 </div>

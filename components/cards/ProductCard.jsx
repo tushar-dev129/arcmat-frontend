@@ -335,19 +335,19 @@ const ProductCard = ({ product, isAlreadyAdded: isAlreadyAddedProp, moodboard: m
                         )}
 
                         {(rootProduct.isNew || rootProduct.newarrivedproduct === "Active" || rootProduct.newarrivedproduct === 1) && (
-                            <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
+                            <div className="absolute top-2 left-2 bg-primary text-white text-[13px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
                                 New
                             </div>
                         )}
                         {(typeof brand === 'object' && (brand?.ownerType === 'custom_maker' || brand?.bespokePage?.isPublished)) && (
-                            <div 
-                                className={`absolute ${rootProduct.isNew || rootProduct.newarrivedproduct === "Active" || rootProduct.newarrivedproduct === 1 ? 'top-8' : 'top-2'} left-2 bg-[#E6AE90] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10`}
+                            <div
+                                className={`absolute ${rootProduct.isNew || rootProduct.newarrivedproduct === "Active" || rootProduct.newarrivedproduct === 1 ? 'top-8' : 'top-2'} left-2 bg-[#E6AE90] text-white text-[13px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10`}
                             >
                                 Bespoke
                             </div>
                         )}
                         {(rootProduct.trendingproduct === "Active" || rootProduct.trendingproduct === 1) && (
-                            <div className="absolute top-2 right-2 bg-orange-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
+                            <div className="absolute top-2 right-2 bg-orange-500 text-white text-[13px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase z-10">
                                 Trending
                             </div>
                         )}

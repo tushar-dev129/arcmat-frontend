@@ -48,7 +48,7 @@ export default function ContractorListingPage() {
                                 onChange={(e) => setCity(e.target.value)}
                             />
                         </div>
-                        <button className="w-full md:w-auto px-10 py-4 bg-primary text-white font-bold uppercase tracking-widest text-[10px] rounded-[1.25rem] transition-all duration-300 shadow-lg shadow-primary/20 active:scale-95">
+                        <button className="w-full md:w-auto px-10 py-4 bg-primary text-white font-bold uppercase tracking-widest text-[13px] rounded-[1.25rem] transition-all duration-300 shadow-lg shadow-primary/20 active:scale-95">
                             Search
                         </button>
                     </div>
@@ -63,12 +63,12 @@ export default function ContractorListingPage() {
                                 className="flex items-center gap-2 mt-4"
                             >
                                 {search && (
-                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-bold text-gray-500">
+                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[13px] font-bold text-gray-500">
                                         "{search}" <X className="w-3 h-3 cursor-pointer hover:text-primary" onClick={() => setSearch("")} />
                                     </span>
                                 )}
                                 {city && (
-                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[10px] font-bold text-gray-500">
+                                    <span className="inline-flex items-center gap-2 px-3 py-1 bg-white border border-gray-100 rounded-full text-[13px] font-bold text-gray-500">
                                         {city} <X className="w-3 h-3 cursor-pointer hover:text-primary" onClick={() => setCity("")} />
                                     </span>
                                 )}

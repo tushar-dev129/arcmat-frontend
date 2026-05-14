@@ -283,8 +283,8 @@ export default function ProductsListPage() {
               {user?.role === 'custom_maker'
                 ? 'Manage products that publish directly to users.'
                 : isBrand
-                ? 'Manage your prices, stock, and listings.'
-                : 'Browse our latest collection.'}
+                  ? 'Manage your prices, stock, and listings.'
+                  : 'Browse our latest collection.'}
             </p>
           </div>
 
@@ -365,7 +365,7 @@ export default function ProductsListPage() {
 
                 {categoryOptions.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Category</span>
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider ml-1">Category</span>
                     <select
                       value={categoryFilter}
                       onChange={(e) => { setCategoryFilter(e.target.value); setCurrentPage(1); }}
@@ -383,7 +383,7 @@ export default function ProductsListPage() {
 
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Status</span>
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider ml-1">Status</span>
                     <select
                       value={statusFilter}
                       onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1); }}
@@ -396,7 +396,7 @@ export default function ProductsListPage() {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Sort</span>
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider">Sort</span>
                     <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl overflow-hidden">
                       <select
                         value={orderBy}

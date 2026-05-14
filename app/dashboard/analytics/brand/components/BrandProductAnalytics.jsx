@@ -47,7 +47,7 @@ export default function BrandProductAnalytics() {
                         <div className={`w-12 h-12 rounded-2xl ${stat.bg} flex items-center justify-center mb-6 transition-transform group-hover:scale-110`}>
                             <stat.icon className={`w-6 h-6 ${stat.color}`} />
                         </div>
-                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
+                        <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">{stat.label}</p>
                         <h3 className="text-4xl font-bold text-gray-900 mt-2">{stat.value || 0}</h3>
                     </div>
                 ))}
@@ -78,12 +78,12 @@ export default function BrandProductAnalytics() {
                                     </div>
                                     <div>
                                         <h4 className="text-sm font-bold text-gray-900">{product.product_name}</h4>
-                                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">ID: {product.product_unique_id}</p>
+                                        <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mt-1">ID: {product.product_unique_id}</p>
                                     </div>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-xl font-bold text-primary">{product.views || 0}</p>
-                                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Unique Views</p>
+                                    <p className="text-[13px] text-gray-400 font-bold uppercase tracking-widest mt-1">Unique Views</p>
                                 </div>
                             </div>
                         ))}

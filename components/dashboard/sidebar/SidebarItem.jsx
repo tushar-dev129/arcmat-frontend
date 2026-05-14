@@ -13,8 +13,8 @@ const SidebarItem = memo(({ item, isCollapsed }) => {
     const pathname = usePathname();
     const isFolderAnimating = useSidebarStore(state => state.isFolderAnimating);
     const isDashboardRoot = item.href === '/dashboard' || item.href === '/dashboard/retailer' || item.href === '/dashboard/contractor' || item.href === '/dashboard/architect';
-    const isActive = isDashboardRoot 
-        ? pathname === item.href 
+    const isActive = isDashboardRoot
+        ? pathname === item.href
         : (pathname === item.href || pathname.startsWith(item.href + '/'));
     const Icon = item.icon;
     const MotionIcon = motion(Icon);
@@ -34,7 +34,7 @@ const SidebarItem = memo(({ item, isCollapsed }) => {
         >
             <div className="flex items-center gap-3">
                 <div className="relative">
-                    <MotionIcon 
+                    <MotionIcon
                         className={clsx("w-5 h-5 shrink-0", isActive ? "text-[#d9a88a]" : "text-gray-400 group-hover:text-[#d9a88a]")}
                         animate={(isFolderIcon && isFolderAnimating) ? "animating" : (isActive ? "active" : "default")}
                         variants={{
@@ -72,7 +72,7 @@ const SidebarItem = memo(({ item, isCollapsed }) => {
                 >
                     {item.label}
                     {!isCollapsed && item.badge > 0 && (
-                        <span className="bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] flex items-center justify-center">
+                        <span className="bg-red-500 text-white text-[13px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] flex items-center justify-center">
                             {item.badge}
                         </span>
                     )}

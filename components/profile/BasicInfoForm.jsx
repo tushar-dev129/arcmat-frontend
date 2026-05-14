@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/ui/Button';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, Mail, Phone, Shield } from 'lucide-react';
+import clsx from 'clsx';
 
-const BasicInfoForm = ({ user, onSubmit, onCancel, isSubmitting }) => {
+const BasicInfoForm = ({ user, onSubmit, isSubmitting }) => {
     const {
         register,
         handleSubmit,
@@ -26,46 +27,100 @@ const BasicInfoForm = ({ user, onSubmit, onCancel, isSubmitting }) => {
     }, [user, reset]);
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 animate-in fade-in duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Full Name */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <User size={16} />
+                        Full Name
+                    </label>
                     <input
                         {...register('name', { required: 'Name is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
-                        placeholder="John Doe"
+                        className={clsx(
+                            "w-full px-5 py-4 rounded-2xl border transition-all outline-none text-sm font-medium",
+                            errors.name
+                                ? "border-red-200 bg-red-50/30 focus:border-red-400"
+                                : "border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm"
+                        )}
+                        placeholder="e.g. John Doe"
                     />
-                    {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+                    {errors.name && <p className="text-red-500 text-[13px] font-bold mt-1 ml-1  tracking-wider">{errors.name.message}</p>}
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                {/* Email (Read Only) */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Mail size={16} />
+                        Email Address
+                    </label>
+                    <div className="relative group">
+                        <input
+                            type="email"
+                            value={user?.email || ''}
+                            readOnly
+                            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 text-gray-400 text-sm font-medium cursor-not-allowed outline-none"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-[9px] font-black text-gray-300  tracking-tighter">Read Only</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Phone Number */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Phone size={16} />
+                        Phone Number
+                    </label>
                     <input
                         {...register('mobile', { required: 'Phone number is required' })}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                        className={clsx(
+                            "w-full px-5 py-4 rounded-2xl border transition-all outline-none text-sm font-medium",
+                            errors.mobile
+                                ? "border-red-200 bg-red-50/30 focus:border-red-400"
+                                : "border-gray-200 bg-gray-50/30 focus:border-primary focus:bg-white focus:shadow-sm"
+                        )}
                         placeholder="+91 9876543210"
                     />
-                    {errors.mobile && <p className="text-red-500 text-xs mt-1">{errors.mobile.message}</p>}
+                    {errors.mobile && <p className="text-red-500 text-[13px] font-bold mt-1 ml-1  tracking-wider">{errors.mobile.message}</p>}
+                </div>
+
+                {/* Account Role (Read Only) */}
+                <div className="space-y-2">
+                    <label className="text-[13px] font-bold tracking-[0.2em] text-gray-400  flex items-center gap-2 ml-1">
+                        <Shield size={16} />
+                        Account Role
+                    </label>
+                    <div className="relative group">
+                        <input
+                            type="text"
+                            value={user?.role || 'User'}
+                            readOnly
+                            className="w-full px-5 py-4 rounded-2xl border border-gray-200 bg-gray-50/50 text-gray-400 text-sm font-medium capitalize cursor-not-allowed outline-none"
+                        />
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-[9px] font-black text-gray-300  tracking-tighter">System Only</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                <Button
-                    type="button"
-                    onClick={onCancel}
-                    className="bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-3 cursor-pointer"
-                    text="Cancel"
-                />
+            <div className="flex justify-end pt-6 border-t border-gray-50">
                 <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="bg-primary text-white cursor-pointer hover:opacity-90 min-w-[100px] py-1.5 px-4 border border-primary"
+                    className="bg-primary text-white font-bold rounded-2xl px-10 py-4 shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:-translate-y-0.5 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                     text={isSubmitting ? (
                         <div className="flex items-center gap-2">
-                            <Loader2 className="animate-spin" size={14} />
-                            <span>Saving...</span>
+                            <Loader2 className="animate-spin" size={18} />
+                            <span>Updating...</span>
                         </div>
-                    ) : 'Save Changes'}
+                    ) : (
+                        <span className="flex items-center gap-2">
+                            Save Changes
+                        </span>
+                    )}
                 />
             </div>
         </form>

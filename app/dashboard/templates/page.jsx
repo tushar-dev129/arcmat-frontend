@@ -42,9 +42,9 @@ export default function TemplatesPage() {
         }
 
         useTemplateMutation.mutate(
-            { 
-                templateId: selectedTemplate._id, 
-                data: { projectName: newProjectName, clientName } 
+            {
+                templateId: selectedTemplate._id,
+                data: { projectName: newProjectName, clientName }
             },
             {
                 onSuccess: (response) => {
@@ -55,7 +55,7 @@ export default function TemplatesPage() {
         );
     };
 
-    const filteredTemplates = templates.filter(template => 
+    const filteredTemplates = templates.filter(template =>
         template.templateName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         template.description?.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -121,16 +121,16 @@ export default function TemplatesPage() {
                                 <X className="w-5 h-5 text-gray-400" />
                             </button>
                         </div>
-                        
+
                         <form onSubmit={handleConfirmUse} className="px-8 pb-8 space-y-6">
                             <p className="text-gray-500 text-sm">
-                                Create a new project based on <strong>{selectedTemplate?.templateName}</strong>. 
+                                Create a new project based on <strong>{selectedTemplate?.templateName}</strong>.
                                 Spaces and estimations will be copied exactly.
                             </p>
 
                             <div className="space-y-4">
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">New Project Name</label>
+                                    <label className="block text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-2">New Project Name</label>
                                     <input
                                         type="text"
                                         required
@@ -141,7 +141,7 @@ export default function TemplatesPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Client Name (Optional)</label>
+                                    <label className="block text-[13px] font-bold text-gray-400 uppercase tracking-wider mb-2">Client Name (Optional)</label>
                                     <input
                                         type="text"
                                         value={clientName}

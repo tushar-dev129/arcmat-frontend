@@ -4,12 +4,12 @@ import { useState } from "react";
 import Container from "@/components/ui/Container";
 import { useAuth } from "@/hooks/useAuth";
 import { useGetMyContractorProfile, useGetContractorLeads, useGetContractorStats } from "@/hooks/useContractor";
-import { 
-    Users, 
-    MessageSquare, 
-    TrendingUp, 
-    Star, 
-    ChevronRight, 
+import {
+    Users,
+    MessageSquare,
+    TrendingUp,
+    Star,
+    ChevronRight,
     AlertCircle,
     CheckCircle2,
     Briefcase,
@@ -22,19 +22,19 @@ export default function ContractorDashboard() {
     const { user } = useAuth();
     const { data: profileResponse } = useGetMyContractorProfile(user?._id);
     const contractor = profileResponse?.data?.profile || profileResponse?.profile;
-    
+
     const { data: leadsResponse, isLoading: leadsLoading } = useGetContractorLeads(contractor?._id);
     const leads = leadsResponse?.data || leadsResponse || [];
 
     const { data: statsResponse } = useGetContractorStats(user?._id);
     const dynamicStats = statsResponse?.data || statsResponse;
-    
+
     // Dynamic Profile Completion Calculation
     const calculateCompletion = () => {
         if (!contractor) return 0;
         let score = 0;
         const total = 8;
-        
+
         if (contractor.businessName) score++;
         if (contractor.tagline) score++;
         if (contractor.overview) score++;
@@ -43,7 +43,7 @@ export default function ContractorDashboard() {
         if (contractor.location?.city) score++;
         if (contractor.contact?.phone) score++;
         if (profileResponse?.data?.portfolio?.length > 0) score++;
-        
+
         return Math.round((score / total) * 100);
     };
 
@@ -64,7 +64,7 @@ export default function ContractorDashboard() {
                     <h1 className="text-3xl font-bold text-[hsl(20,10%,15%)]">Contractor Dashboard</h1>
                     <p className="text-gray-500 mt-1">Welcome  {user?.name || "Professional"}. Here's what's happening with your business.</p>
                 </div>
-                
+
                 <div className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 min-w-[280px]">
                     <div className="relative w-14 h-14 flex items-center justify-center">
                         <svg className="w-full h-full -rotate-90">
@@ -91,7 +91,7 @@ export default function ContractorDashboard() {
                             <div className={`p-3 rounded-xl ${stat.bg} ${stat.color}`}>
                                 <stat.icon className="w-5 h-5" />
                             </div>
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Live</span>
+                            <span className="text-[13px] font-bold text-gray-400 uppercase tracking-wider">Live</span>
                         </div>
                         <h4 className="text-3xl font-bold text-gray-900">{stat.value}</h4>
                         <p className="text-sm font-medium text-gray-500 mt-1">{stat.label}</p>
@@ -160,12 +160,12 @@ export default function ContractorDashboard() {
                                 </div>
                                 <div>
                                     <h5 className="text-sm font-bold text-gray-900">
-                                        {(profileResponse?.data?.portfolio?.length || 0) < 5 
-                                            ? `Add ${5 - (profileResponse?.data?.portfolio?.length || 0)} more projects` 
+                                        {(profileResponse?.data?.portfolio?.length || 0) < 5
+                                            ? `Add ${5 - (profileResponse?.data?.portfolio?.length || 0)} more projects`
                                             : "Keep updating your portfolio"}
                                     </h5>
                                     <p className="text-xs text-gray-500 mt-1">
-                                        {(profileResponse?.data?.portfolio?.length || 0) < 5 
+                                        {(profileResponse?.data?.portfolio?.length || 0) < 5
                                             ? "Contractors with 5+ projects get 40% more visibility."
                                             : "Regularly adding new work keeps you at the top of search results."}
                                     </p>

@@ -96,7 +96,7 @@ export default function RetailerSampleRequestsPage() {
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <h3 className="text-xl font-bold text-[#2d3142]">{request.professionalId?.name}</h3>
-                                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold tracking-widest uppercase rounded-full border border-indigo-100">
+                                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[13px] font-bold tracking-widest uppercase rounded-full border border-indigo-100">
                                                         Architect
                                                     </span>
                                                 </div>
@@ -137,16 +137,16 @@ export default function RetailerSampleRequestsPage() {
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Product</p>
+                                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Product</p>
                                                 <p className="font-bold text-[#2d3142]">{request.productName}</p>
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Project</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Project</p>
                                             <p className="font-bold text-[#2d3142]">{request.projectId?.projectName}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Shipping Address</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Shipping Address</p>
                                             <div className="flex items-start gap-1.5 font-bold text-[#2d3142] text-xs">
                                                 <MapPin className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
                                                 <div>
@@ -157,7 +157,7 @@ export default function RetailerSampleRequestsPage() {
                                             </div>
                                         </div>
                                         <div className="lg:col-span-1 space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Notes</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Notes</p>
                                             <p className="text-sm text-gray-500 font-medium italic line-clamp-2">
                                                 "{request.notes || 'No additional notes provided.'}"
                                             </p>

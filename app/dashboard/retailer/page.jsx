@@ -122,7 +122,7 @@ export default function RetailerDashboardPage() {
                             <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-gray-400 group-hover:translate-x-1 transition-all" />
                         </div>
                         <div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1.5">{stat.label}</p>
+                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest leading-none mb-1.5">{stat.label}</p>
                             {stat.loading ? (
                                 <div className="h-6 w-12 bg-gray-100 animate-pulse rounded mt-1" />
                             ) : (
@@ -163,9 +163,9 @@ export default function RetailerDashboardPage() {
                                     <div className="min-w-0">
                                         <div className="flex items-center gap-2 mb-1">
                                             <h3 className="font-bold text-gray-900">{req.professionalId?.name || 'Architect'}</h3>
-                                            <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[10px] font-bold uppercase rounded-full">Architect</span>
+                                            <span className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[13px] font-bold uppercase rounded-full">Architect</span>
                                             <span className={clsx(
-                                                "px-2 py-0.5 text-[10px] font-bold uppercase rounded-full",
+                                                "px-2 py-0.5 text-[13px] font-bold uppercase rounded-full",
                                                 req.status === 'Confirmed' ? "bg-green-50 text-green-600" :
                                                     req.status === 'Pending' ? "bg-amber-50 text-amber-600" : "bg-gray-100 text-gray-400"
                                             )}>
@@ -183,7 +183,7 @@ export default function RetailerDashboardPage() {
                                             </div>
                                             <div className="flex items-center gap-1.5 text-xs text-gray-500">
                                                 <Activity className="w-3.5 h-3.5 text-gray-400" />
-                                                <span className="px-2 py-0.5 bg-orange-50 text-orange-600 rounded text-[10px] font-bold">
+                                                <span className="px-2 py-0.5 bg-orange-50 text-orange-600 rounded text-[13px] font-bold">
                                                     {req.projectId?.projectName || 'No Project'}
                                                 </span>
                                             </div>
@@ -287,7 +287,7 @@ export default function RetailerDashboardPage() {
                                             </div>
                                             <div>
                                                 <p className="font-bold text-gray-900 text-sm">{rating.who_rates?.name || 'Architect'}</p>
-                                                <p className="text-[10px] text-gray-400 font-medium uppercase tracking-tighter">
+                                                <p className="text-[13px] text-gray-400 font-medium uppercase tracking-tighter">
                                                     {formatDistanceToNow(new Date(rating.createdAt), { addSuffix: true })}
                                                 </p>
                                             </div>

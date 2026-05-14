@@ -48,8 +48,8 @@ function PhaseProgressBar({ phase }) {
     return (
         <div className="w-full">
             <div className="flex justify-between items-center mb-1.5">
-                <span className="text-[10px] font-bold uppercase tracking-wide text-gray-400">Phase Progress</span>
-                <span className="text-[10px] font-bold" style={{ color: current.color }}>{pct}%</span>
+                <span className="text-[13px] font-bold uppercase tracking-wide text-gray-400">Phase Progress</span>
+                <span className="text-[13px] font-bold" style={{ color: current.color }}>{pct}%</span>
             </div>
             <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
                 <motion.div
@@ -181,12 +181,12 @@ function ProjectRowCard({ project, allBoards }) {
                     </div>
                     <div className="flex items-center gap-1.5 flex-wrap">
                         {project.clientName && (
-                            <span className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5">
+                            <span className="text-[13px] text-gray-400 font-medium flex items-center gap-0.5">
                                 <User className="w-2.5 h-2.5" /> {project.clientName}
                             </span>
                         )}
                         {project.location?.city && (
-                            <span className="text-[10px] text-gray-400 font-medium flex items-center gap-0.5">
+                            <span className="text-[13px] text-gray-400 font-medium flex items-center gap-0.5">
                                 <span className="text-gray-200">·</span>
                                 <MapPin className="w-2.5 h-2.5" /> {project.location.city}
                             </span>
@@ -197,7 +197,7 @@ function ProjectRowCard({ project, allBoards }) {
                 {/* Phase badge */}
                 <div className="hidden sm:flex flex-col items-end gap-1.5 shrink-0">
                     <span
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                        className="text-[13px] font-bold px-2 py-0.5 rounded-full border"
                         style={{ backgroundColor: phaseConfig.bg, color: phaseConfig.color, borderColor: `${phaseConfig.color}30` }}
                     >
                         {phase}
@@ -237,7 +237,7 @@ function NotificationItem({ notification, onMarkRead }) {
             <div className={clsx('w-2 h-2 rounded-full mt-1.5 shrink-0', isUnread ? 'bg-amber-500' : 'bg-gray-200')} />
             <div className="flex-1 min-w-0">
                 <p className="text-xs font-semibold text-gray-800 leading-snug">{notification.message || notification.title}</p>
-                <p className="text-[10px] text-gray-400 mt-0.5">
+                <p className="text-[13px] text-gray-400 mt-0.5">
                     {notification.createdAt ? new Date(notification.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : ''}
                 </p>
             </div>
@@ -521,11 +521,11 @@ export default function ArchitectDashboard() {
                                                     <p className="text-sm font-bold text-gray-800 truncate">
                                                         {req.productId?.product_name || 'Product Sample'}
                                                     </p>
-                                                    <p className="text-[10px] text-gray-400 font-medium">
+                                                    <p className="text-[13px] text-gray-400 font-medium">
                                                         {req.projectId?.projectName || 'Project'}
                                                     </p>
                                                 </div>
-                                                <span className={clsx('text-[10px] font-bold px-2.5 py-1 rounded-full', sColor)}>
+                                                <span className={clsx('text-[13px] font-bold px-2.5 py-1 rounded-full', sColor)}>
                                                     {sStatus}
                                                 </span>
                                             </div>
@@ -604,7 +604,7 @@ export default function ArchitectDashboard() {
                                         </span>
                                     )}
                                 </div>
-                                <Link href="/dashboard/notifications" className="text-[10px] font-bold text-[#d9a88a] hover:text-[#c89675] transition-colors">
+                                <Link href="/dashboard/notifications" className="text-[13px] font-bold text-[#d9a88a] hover:text-[#c89675] transition-colors">
                                     View All
                                 </Link>
                             </div>

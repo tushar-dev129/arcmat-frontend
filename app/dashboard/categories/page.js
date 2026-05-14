@@ -191,7 +191,7 @@ export default function CategoriesPage() {
                 </div>
 
                 <div className="mb-6 flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">
+                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-[0.2em]">
                         {activeTab === 'all' ? 'FULL STRUCTURE' : `${activeTab.replace('_', ' ')} STRUCTURE`} & HIERARCHY ({filteredCategories.length} ITEMS)
                     </span>
                 </div>

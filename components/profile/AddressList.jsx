@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { MapPin, Edit2, Trash2, Plus, CheckCircle2, Loader2 } from 'lucide-react';
+import { MapPin, Edit2, Trash2, Plus, CheckCircle2, Loader2, Navigation, Mail, Phone } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import AddressForm from './AddressForm';
 import { useGetAddresses, useCreateAddress, useUpdateAddress, useDeleteAddress } from '@/hooks/useAddress';
 import { useAuth } from '@/hooks/useAuth';
 import { toast } from '@/components/ui/Toast';
+import clsx from 'clsx';
 
 const AddressList = () => {
     const { user } = useAuth();
@@ -51,119 +52,135 @@ const AddressList = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center p-12 bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <Loader2 className="w-8 h-8 text-primary animate-spin mb-4" />
-                <p className="text-gray-500">Loading your addresses...</p>
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border border-gray-200 shadow-sm animate-pulse">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <p className="text-sm font-bold text-gray-400 ">Fetching Addresses...</p>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="p-8 bg-red-50 text-red-600 rounded-2xl border border-red-100">
-                <p>Error loading addresses. Please try again later.</p>
+            <div className="p-10 bg-red-50 text-red-600 rounded-[2.5rem] border border-red-100 flex flex-col items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center">
+                    <X size={24} />
+                </div>
+                <p className="font-bold  tracking-tight text-sm text-center">Error loading addresses.<br />Please try again later.</p>
             </div>
         );
     }
 
     if (isAdding || editingAddress) {
         return (
-            <AddressForm
-                address={editingAddress}
-                user={user}
-                onSubmit={editingAddress ? handleUpdate : handleCreate}
-                onCancel={() => {
-                    setIsAdding(false);
-                    setEditingAddress(null);
-                }}
-                isSubmitting={createMutation.isPending || updateMutation.isPending}
-            />
+            <div className="animate-in slide-in-from-right duration-500">
+                <AddressForm
+                    address={editingAddress}
+                    user={user}
+                    onSubmit={editingAddress ? handleUpdate : handleCreate}
+                    onCancel={() => {
+                        setIsAdding(false);
+                        setEditingAddress(null);
+                    }}
+                    isSubmitting={createMutation.isPending || updateMutation.isPending}
+                />
+            </div>
         );
     }
 
     return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                <div>
-                    <h2 className="text-xl font-bold text-gray-800">My Addresses</h2>
-                    <p className="text-sm text-gray-500">Manage your shipping and billing addresses</p>
+        <div className="space-y-8 animate-in fade-in duration-700">
+            <div className="flex justify-between items-center bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-200">
+                <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 shadow-sm">
+                        <MapPin size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900">Manage Addresses</h2>
+                        <p className="text-sm text-gray-500 font-medium">Your saved shipping and billing locations</p>
+                    </div>
                 </div>
-                <Button
+                <button
                     onClick={() => setIsAdding(true)}
-                    className="bg-primary text-white flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-white hover:text-primary border border-primary"
-                    text={
-                        <div className="flex items-center gap-2">
-                            <Plus size={18} />
-                            <span>Add New</span>
-                        </div>
-                    }
-                />
+                    className="bg-primary text-white flex items-center gap-2 px-8 py-4 rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95"
+                >
+                    <Plus size={20} strokeWidth={3} />
+                    Add New
+                </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                 {addresses?.length === 0 ? (
-                    <div className="col-span-full py-12 flex flex-col items-center justify-center bg-white rounded-2xl border border-dashed border-gray-200">
-                        <MapPin size={48} className="text-gray-300 mb-4" />
-                        <p className="text-gray-500 font-medium">No addresses found</p>
-                        <p className="text-gray-400 text-sm">Add an address to speed up your checkout process</p>
+                    <div className="col-span-full py-24 flex flex-col items-center justify-center bg-white rounded-[3rem] border border-dashed border-gray-200">
+                        <div className="w-20 h-20 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 mb-6">
+                            <MapPin size={40} />
+                        </div>
+                        <p className="text-lg font-bold text-gray-400 ">No addresses found</p>
+                        <p className="text-gray-400 text-sm mt-2">Add an address to expedite your checkout process.</p>
                     </div>
                 ) : (
                     addresses?.map((address) => (
                         <div
                             key={address._id}
-                            className={`
-                                relative p-6 rounded-2xl border transition-all duration-200 bg-white
-                                ${address.defaultaddress === 1 ? 'border-primary ring-1 ring-primary/10' : 'border-gray-100 hover:border-gray-300'}
-                            `}
+                            className={clsx(
+                                "relative p-8 rounded-[2.5rem] border transition-all duration-300 bg-white group hover:shadow-xl hover:shadow-gray-100",
+                                address.defaultaddress === 1 ? 'border-primary shadow-lg shadow-primary/5' : 'border-gray-200 hover:border-primary/30'
+                            )}
                         >
                             {address.defaultaddress === 1 && (
-                                <div className="absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-wider">
-                                    <CheckCircle2 size={12} />
-                                    Default
+                                <div className="absolute top-6 right-6 flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-[13px] font-black ">
+                                    <CheckCircle2 size={16} strokeWidth={3} />
+                                    Primary Address
                                 </div>
                             )}
 
-                            <div className="flex items-start gap-4 mb-4">
-                                <div className={`
-                                    w-10 h-10 rounded-full flex items-center justify-center shrink-0
-                                    ${address.defaultaddress === 1 ? 'bg-primary/10 text-primary' : 'bg-gray-50 text-gray-400'}
-                                `}>
-                                    <MapPin size={20} />
+                            <div className="flex items-start gap-5 mb-6">
+                                <div className={clsx(
+                                    "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 shadow-sm transition-colors",
+                                    address.defaultaddress === 1 ? 'bg-primary text-white' : 'bg-gray-50 text-gray-400 group-hover:bg-blue-50 group-hover:text-blue-500'
+                                )}>
+                                    <Navigation size={24} />
                                 </div>
-                                <div>
-                                    <h4 className="font-bold text-gray-900">
+                                <div className="pt-1">
+                                    <h4 className="text-lg font-black text-gray-900 tracking-tight">
                                         {address.first_name} {address.last_name}
                                     </h4>
-                                    <p className="text-sm text-gray-500">{address.email}</p>
-                                    <p className="text-sm text-gray-500">{address.mobile}</p>
+                                    <div className="flex flex-col gap-1 mt-2">
+                                        <div className="flex items-center gap-2 text-gray-400">
+                                            <Mail size={16} />
+                                            <span className="text-xs font-bold  tracking-tight">{address.email}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-gray-400">
+                                            <Phone size={16} />
+                                            <span className="text-xs font-bold  tracking-tight">{address.mobile}</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-1 ml-14 mb-6">
-                                <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                            <div className="space-y-1 ml-1 pt-4 border-t border-gray-50 mb-8">
+                                <p className="text-sm text-gray-800 font-bold leading-relaxed">
                                     {address.address1}
                                     {address.address2 ? `, ${address.address2}` : ''}
                                 </p>
-                                <p className="text-sm text-gray-600">
-                                    {address.city}, {address.state} - {address.pincode}
+                                <p className="text-sm text-gray-500 font-medium">
+                                    {address.city}, {address.state} — {address.pincode}
                                 </p>
-                                <p className="text-sm text-gray-600">{address.country}</p>
+                                <p className="text-[13px] font-black text-gray-400  mt-2">{address.country}</p>
                             </div>
 
-                            <div className="flex items-center gap-2 ml-14 pt-4 border-t border-gray-50">
+                            <div className="flex items-center gap-3 pt-4">
                                 <button
                                     onClick={() => setEditingAddress(address)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all border border-gray-100 cursor-pointer"
+                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl text-sm font-bold text-gray-700 bg-gray-50 hover:bg-gray-100 transition-all border border-transparent cursor-pointer"
                                 >
-                                    <Edit2 size={14} />
-                                    Edit
+                                    <Edit2 size={16} />
+                                    Update
                                 </button>
                                 <button
                                     onClick={() => handleDelete(address._id)}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium text-red-500 hover:bg-red-50 hover:text-red-600 transition-all border border-transparent cursor-pointer"
+                                    className="flex items-center justify-center w-12 h-12 rounded-xl text-red-400 hover:bg-red-50 hover:text-red-500 transition-all border border-transparent cursor-pointer"
                                 >
-                                    <Trash2 size={14} />
-                                    Delete
+                                    <Trash2 size={20} />
                                 </button>
                             </div>
                         </div>

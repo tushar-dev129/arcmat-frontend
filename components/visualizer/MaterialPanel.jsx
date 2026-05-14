@@ -152,18 +152,18 @@ export default function MaterialPanel({ materials, selectedMaterial, stagedMater
                                                     }
                                                 }}
                                             />
-                                            <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/60 text-white text-[10px] font-medium rounded backdrop-blur-sm">
+                                            <span className="absolute bottom-1.5 left-1.5 px-1.5 py-0.5 bg-black/60 text-white text-[13px] font-medium rounded backdrop-blur-sm">
                                                 {badge}
                                             </span>
                                             {isStaged && (
                                                 <div className="absolute inset-0 bg-orange-400/10 flex items-center justify-center">
-                                                    <span className="px-2 py-1 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow">Staged</span>
+                                                    <span className="px-2 py-1 bg-orange-500 text-white text-[13px] font-bold rounded-full shadow">Staged</span>
                                                 </div>
                                             )}
                                         </div>
                                         <div className="p-2">
                                             <p className="text-xs font-semibold text-gray-800 truncate leading-tight">{productName}</p>
-                                            {brandName && <p className="text-[10px] text-gray-500 truncate mt-0.5">{brandName}</p>}
+                                            {brandName && <p className="text-[13px] text-gray-500 truncate mt-0.5">{brandName}</p>}
                                         </div>
                                     </button>
                                 );

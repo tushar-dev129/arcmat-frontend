@@ -8,7 +8,7 @@ import { getProductThumbnail } from '@/lib/productUtils';
 
 const Field = ({ label, value, icon: Icon, href }) => (
     <div>
-        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">{label}</p>
+        <p className="text-[13px] text-gray-400 uppercase tracking-widest mb-1">{label}</p>
         <div className="flex items-center gap-2.5 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-[#2d3142]">
             {Icon && <Icon className="w-3.5 h-3.5 text-gray-300 shrink-0" />}
             {href ? (
@@ -91,16 +91,16 @@ export default function ProductLeadsPage() {
 
                                 <div className="col-span-1 lg:border-l border-gray-100 lg:pl-5">
                                     <div className="flex flex-wrap gap-1 mb-1">
-                                        {lead.catalogue && <span className="px-2 py-0.5 bg-blue-50 text-blue-400 text-[10px] rounded-full border border-blue-100">Catalogue</span>}
-                                        {lead.priceList && <span className="px-2 py-0.5 bg-green-50 text-green-400 text-[10px] rounded-full border border-green-100">Price List</span>}
-                                        {lead.bimCad && <span className="px-2 py-0.5 bg-purple-50 text-purple-400 text-[10px] rounded-full border border-purple-100">BIM/CAD</span>}
-                                        {(!lead.catalogue && !lead.priceList && !lead.bimCad) && <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[10px] rounded-full">General</span>}
+                                        {lead.catalogue && <span className="px-2 py-0.5 bg-blue-50 text-blue-400 text-[13px] rounded-full border border-blue-100">Catalogue</span>}
+                                        {lead.priceList && <span className="px-2 py-0.5 bg-green-50 text-green-400 text-[13px] rounded-full border border-green-100">Price List</span>}
+                                        {lead.bimCad && <span className="px-2 py-0.5 bg-purple-50 text-purple-400 text-[13px] rounded-full border border-purple-100">BIM/CAD</span>}
+                                        {(!lead.catalogue && !lead.priceList && !lead.bimCad) && <span className="px-2 py-0.5 bg-gray-50 text-gray-400 text-[13px] rounded-full">General</span>}
                                     </div>
                                     <p className="text-[11px] text-gray-400">{format(new Date(lead.createdAt), 'dd MMM, yyyy')}</p>
                                 </div>
 
                                 <div className="col-span-1 flex justify-end">
-                                    <span className={`px-3 py-1 rounded-full text-[10px] border ${statusColor(lead.status)}`}>
+                                    <span className={`px-3 py-1 rounded-full text-[13px] border ${statusColor(lead.status)}`}>
                                         {lead.status}
                                     </span>
                                 </div>
@@ -122,7 +122,7 @@ export default function ProductLeadsPage() {
                                 <p className="text-[11px] text-gray-400 mt-0.5">{format(new Date(selectedLead.createdAt), 'PPPP')}</p>
                             </div>
                             <div className="flex items-center gap-3">
-                                <span className={`px-3 py-1 rounded-full text-[10px] border ${statusColor(selectedLead.status)}`}>
+                                <span className={`px-3 py-1 rounded-full text-[13px] border ${statusColor(selectedLead.status)}`}>
                                     {selectedLead.status}
                                 </span>
                                 <button onClick={() => setSelectedLead(null)} className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
@@ -136,7 +136,7 @@ export default function ProductLeadsPage() {
 
                             {/* Customer */}
                             <div>
-                                <p className="text-[10px] text-gray-300 uppercase tracking-widest mb-3">Customer</p>
+                                <p className="text-[13px] text-gray-300 uppercase tracking-widest mb-3">Customer</p>
                                 <div className="grid grid-cols-2 gap-3">
                                     <Field label="Full Name" icon={User} value={`${selectedLead.firstName} ${selectedLead.lastName}`} />
                                     <Field label="Profession" value={`${selectedLead.profession || ''}${selectedLead.company ? ` @ ${selectedLead.company}` : ''}`} />
@@ -147,10 +147,10 @@ export default function ProductLeadsPage() {
 
                             {/* Product & Location */}
                             <div>
-                                <p className="text-[10px] text-gray-300 uppercase tracking-widest mb-3">Product & Location</p>
+                                <p className="text-[13px] text-gray-300 uppercase tracking-widest mb-3">Product & Location</p>
                                 <div className="grid grid-cols-2 gap-3">
                                     <div className="col-span-2">
-                                        <p className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Product</p>
+                                        <p className="text-[13px] text-gray-400 uppercase tracking-widest mb-1">Product</p>
                                         <div className="flex items-center gap-3 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3">
                                             <div className="w-8 h-8 rounded-lg overflow-hidden border border-gray-100 shrink-0">
                                                 <img src={getProductThumbnail(selectedLead.productId)} alt="" className="w-full h-full object-cover" />
@@ -165,13 +165,13 @@ export default function ProductLeadsPage() {
 
                             {/* Requested Items */}
                             <div>
-                                <p className="text-[10px] text-gray-300 uppercase tracking-widest mb-3">Requested Items</p>
+                                <p className="text-[13px] text-gray-300 uppercase tracking-widest mb-3">Requested Items</p>
                                 <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 flex flex-wrap gap-2 min-h-[44px] items-center">
-                                    {selectedLead.catalogue && <span className="px-2.5 py-1 bg-blue-50 text-blue-400 text-[10px] rounded-full border border-blue-100">Catalogue</span>}
-                                    {selectedLead.priceList && <span className="px-2.5 py-1 bg-green-50 text-green-400 text-[10px] rounded-full border border-green-100">Price List</span>}
-                                    {selectedLead.bimCad && <span className="px-2.5 py-1 bg-purple-50 text-purple-400 text-[10px] rounded-full border border-purple-100">BIM/CAD</span>}
-                                    {selectedLead.retailersList && <span className="px-2.5 py-1 bg-amber-50 text-amber-400 text-[10px] rounded-full border border-amber-100">Retailers List</span>}
-                                    {selectedLead.contactRepresentative && <span className="px-2.5 py-1 bg-red-50 text-red-400 text-[10px] rounded-full border border-red-100">Representative</span>}
+                                    {selectedLead.catalogue && <span className="px-2.5 py-1 bg-blue-50 text-blue-400 text-[13px] rounded-full border border-blue-100">Catalogue</span>}
+                                    {selectedLead.priceList && <span className="px-2.5 py-1 bg-green-50 text-green-400 text-[13px] rounded-full border border-green-100">Price List</span>}
+                                    {selectedLead.bimCad && <span className="px-2.5 py-1 bg-purple-50 text-purple-400 text-[13px] rounded-full border border-purple-100">BIM/CAD</span>}
+                                    {selectedLead.retailersList && <span className="px-2.5 py-1 bg-amber-50 text-amber-400 text-[13px] rounded-full border border-amber-100">Retailers List</span>}
+                                    {selectedLead.contactRepresentative && <span className="px-2.5 py-1 bg-red-50 text-red-400 text-[13px] rounded-full border border-red-100">Representative</span>}
                                     {!selectedLead.catalogue && !selectedLead.priceList && !selectedLead.bimCad && !selectedLead.retailersList && !selectedLead.contactRepresentative && (
                                         <span className="text-xs text-gray-300 italic">No specific items requested</span>
                                     )}
@@ -180,7 +180,7 @@ export default function ProductLeadsPage() {
 
                             {/* Message */}
                             <div>
-                                <p className="text-[10px] text-gray-300 uppercase tracking-widest mb-3">Message</p>
+                                <p className="text-[13px] text-gray-300 uppercase tracking-widest mb-3">Message</p>
                                 <div className="bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-sm text-[#2d3142] leading-relaxed min-h-[80px]">
                                     {selectedLead.message || <span className="text-gray-300 italic">No message provided.</span>}
                                 </div>
@@ -188,7 +188,7 @@ export default function ProductLeadsPage() {
 
                             {/* Status */}
                             <div>
-                                <p className="text-[10px] text-gray-300 uppercase tracking-widest mb-1">Status</p>
+                                <p className="text-[13px] text-gray-300 uppercase tracking-widest mb-1">Status</p>
                                 <select
                                     value={pendingStatus}
                                     onChange={(e) => setPendingStatus(e.target.value)}

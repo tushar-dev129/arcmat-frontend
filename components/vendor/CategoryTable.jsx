@@ -66,7 +66,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
 
                             {/* Status Badge */}
                             <span className={clsx(
-                                "px-1.5 py-0.5 rounded-full text-[9px] md:text-[10px] font-bold uppercase tracking-wider border whitespace-nowrap",
+                                "px-1.5 py-0.5 rounded-full text-[9px] md:text-[13px] font-bold uppercase tracking-wider border whitespace-nowrap",
                                 (category.isActive === 0 || category.isActive === false)
                                     ? "bg-red-50 text-red-600 border-red-100"
                                     : "bg-green-50 text-green-600 border-green-100"
@@ -96,7 +96,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
 
                         {/* Meta info */}
                         <div className="flex items-center gap-2 mt-0.5 overflow-hidden">
-                            <span className="text-[9px] md:text-[10px] font-mono text-gray-400 bg-gray-50 px-1 rounded truncate">{category.slug}</span>
+                            <span className="text-[9px] md:text-[13px] font-mono text-gray-400 bg-gray-50 px-1 rounded truncate">{category.slug}</span>
                         </div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
                     {category.categoryType === 'contractor_service' && isL1 && (
                         <button
                             onClick={() => onAddChild?.(category, 2)}
-                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-[#d9a88a] border border-[#d9a88a]/40 hover:bg-orange-50 rounded-lg transition-all mr-1"
+                            className="flex items-center gap-1 px-2 py-1 text-[13px] font-bold text-[#d9a88a] border border-[#d9a88a]/40 hover:bg-orange-50 rounded-lg transition-all mr-1"
                             title="Add Sub-Category"
                         >
                             <Plus className="w-3 h-3" /> Sub-Category
@@ -116,7 +116,7 @@ const CategoryItem = ({ category, level, onEdit, onDelete, onAddChild }) => {
                     {category.categoryType === 'contractor_service' && isL2 && (
                         <button
                             onClick={() => onAddChild?.(category, 3)}
-                            className="flex items-center gap-1 px-2 py-1 text-[10px] font-bold text-purple-500 border border-purple-300/50 hover:bg-purple-50 rounded-lg transition-all mr-1"
+                            className="flex items-center gap-1 px-2 py-1 text-[13px] font-bold text-purple-500 border border-purple-300/50 hover:bg-purple-50 rounded-lg transition-all mr-1"
                             title="Add Item"
                         >
                             <Plus className="w-3 h-3" /> Add Item

@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth, useUpdateUser } from '@/hooks/useAuth';
 import { useGetVendors } from '@/hooks/useVendor';
-import RetailerProfileDetails from '@/components/profile/RetailerProfileDetails';
 import RetailerProfileForm from '@/components/profile/RetailerProfileForm';
 import { toast } from '@/components/ui/Toast';
 import { useLoader } from '@/context/LoaderContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Store } from 'lucide-react';
 
 const RetailerProfileTab = () => {
     const { user, queryClient } = useAuth();
@@ -18,8 +17,6 @@ const RetailerProfileTab = () => {
 
     const { mutate: updateProfile, isPending: isUpdating } = useUpdateUser();
 
-    const [isEditing, setIsEditing] = useState(false);
-
     const handleUpdate = async (payload) => {
         if (!userId) {
             toast.error("User ID not found", "Error");
@@ -29,7 +26,6 @@ const RetailerProfileTab = () => {
         updateProfile({ id: userId, data: payload }, {
             onSuccess: () => {
                 toast.success('Retailer profile updated successfully', 'Success');
-                setIsEditing(false);
                 // Invalidate user info to refresh the profile view
                 queryClient.invalidateQueries({ queryKey: ['user-info'] });
             },
@@ -42,36 +38,32 @@ const RetailerProfileTab = () => {
 
     if (isBrandsLoading) {
         return (
-            <div className="flex justify-center items-center py-12 bg-white rounded-2xl shadow-sm border border-gray-100">
-                <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border border-gray-200 shadow-sm animate-pulse">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <p className="text-sm font-bold text-gray-400  tracking-widest">Loading Brands...</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
-                <h2 className="text-xl font-bold text-gray-800">
-                    Retailer Profile
-                </h2>
+        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-200 overflow-hidden mb-8 transition-all hover:shadow-md">
+            <div className="px-10 py-8 border-b border-gray-200 bg-white flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 shadow-sm">
+                    <Store size={24} />
+                </div>
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">Retailer Profile</h2>
+                    <p className="text-sm text-gray-500 font-medium">Manage your retail presence and service areas</p>
+                </div>
             </div>
 
-            <div className="p-8">
-                {isEditing ? (
-                    <RetailerProfileForm
-                        user={user}
-                        brands={brands}
-                        onSubmit={handleUpdate}
-                        onCancel={() => setIsEditing(false)}
-                        isSubmitting={isUpdating}
-                    />
-                ) : (
-                    <RetailerProfileDetails
-                        user={user}
-                        brands={brands}
-                        onEdit={() => setIsEditing(true)}
-                    />
-                )}
+            <div className="p-10">
+                <RetailerProfileForm
+                    user={user}
+                    brands={brands}
+                    onSubmit={handleUpdate}
+                    isSubmitting={isUpdating}
+                />
             </div>
         </div>
     );

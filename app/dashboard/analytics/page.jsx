@@ -90,7 +90,7 @@ export default function AnalyticsDashboard() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Filter by Brand</label>
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Filter by Brand</label>
                             <select
                                 value={filters.brandId}
                                 onChange={(e) => setFilters(prev => ({ ...prev, brandId: e.target.value }))}
@@ -104,7 +104,7 @@ export default function AnalyticsDashboard() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">City</label>
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">City</label>
                             <input
                                 type="text"
                                 placeholder="Enter city name..."
@@ -115,7 +115,7 @@ export default function AnalyticsDashboard() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">From Date</label>
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">From Date</label>
                             <input
                                 type="date"
                                 value={filters.startDate}
@@ -125,7 +125,7 @@ export default function AnalyticsDashboard() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">To Date</label>
+                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">To Date</label>
                             <input
                                 type="date"
                                 value={filters.endDate}
@@ -149,7 +149,7 @@ export default function AnalyticsDashboard() {
                                 <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
                                     <Users className="w-6 h-6 text-primary" />
                                 </div>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Total Brand Selections</p>
+                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Total Brand Selections</p>
                                 <h3 className="text-4xl font-bold text-gray-900 mt-2">{brandWiseStats.reduce((acc, curr) => acc + curr.count, 0)}</h3>
                             </div>
 
@@ -158,7 +158,7 @@ export default function AnalyticsDashboard() {
                                 <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
                                     <Building2 className="w-6 h-6 text-white" />
                                 </div>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Most Popular Brand</p>
+                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Most Popular Brand</p>
                                 <h3 className="text-4xl font-bold text-white mt-2">{brandWiseStats[0]?.brandName || 'N/A'}</h3>
                             </div>
 
@@ -166,7 +166,7 @@ export default function AnalyticsDashboard() {
                                 <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6">
                                     <MapPin className="w-6 h-6 text-blue-600" />
                                 </div>
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Top Performing City</p>
+                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Top Performing City</p>
                                 <h3 className="text-4xl font-bold text-gray-900 mt-2">{topCities[0]?._id || 'N/A'}</h3>
                             </div>
                         </div>
@@ -257,10 +257,10 @@ export default function AnalyticsDashboard() {
                                 <table className="w-full text-left">
                                     <thead>
                                         <tr className="bg-gray-50">
-                                            <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Brand</th>
-                                            <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">City</th>
-                                            <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Retailers</th>
-                                            <th className="px-10 py-6 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Market Share</th>
+                                            <th className="px-10 py-6 text-[13px] font-bold text-gray-400 uppercase tracking-widest">Brand</th>
+                                            <th className="px-10 py-6 text-[13px] font-bold text-gray-400 uppercase tracking-widest">City</th>
+                                            <th className="px-10 py-6 text-[13px] font-bold text-gray-400 uppercase tracking-widest">Retailers</th>
+                                            <th className="px-10 py-6 text-[13px] font-bold text-gray-400 uppercase tracking-widest">Market Share</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-50">
@@ -274,7 +274,7 @@ export default function AnalyticsDashboard() {
                                                     </div>
                                                 </td>
                                                 <td className="px-10 py-6">
-                                                    <span className="px-3 py-1 bg-gray-100 rounded-full text-[10px] font-bold text-gray-600">
+                                                    <span className="px-3 py-1 bg-gray-100 rounded-full text-[13px] font-bold text-gray-600">
                                                         {stat.count} Retailers
                                                     </span>
                                                 </td>

@@ -115,7 +115,7 @@ export default function RetailerRequestsPage() {
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <h3 className="text-xl font-bold text-[#2d3142]">{request.professionalId?.name}</h3>
-                                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[10px] font-bold tracking-widest uppercase rounded-full border border-indigo-100">
+                                                    <span className="px-3 py-1 bg-indigo-50 text-indigo-600 text-[13px] font-bold tracking-widest uppercase rounded-full border border-indigo-100">
                                                         Architect
                                                     </span>
                                                 </div>
@@ -155,23 +155,23 @@ export default function RetailerRequestsPage() {
                                                 />
                                             </div>
                                             <div className="space-y-1">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Interested In</p>
+                                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Interested In</p>
                                                 <p className="font-bold text-[#2d3142]">{request.materialName}</p>
                                             </div>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Project</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Project</p>
                                             <p className="font-bold text-[#2d3142]">{request.projectId?.projectName}</p>
                                         </div>
                                         <div className="space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Location</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Location</p>
                                             <div className="flex items-center gap-1.5 font-bold text-[#2d3142]">
                                                 <MapPin className="w-3.5 h-3.5 text-gray-400" />
                                                 {request.city}
                                             </div>
                                         </div>
                                         <div className="lg:col-span-1 space-y-1">
-                                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Professional Notes</p>
+                                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Professional Notes</p>
                                             <p className="text-sm text-gray-500 font-medium italic line-clamp-2">
                                                 "{request.notes || 'No additional notes provided.'}"
                                             </p>
@@ -193,7 +193,7 @@ export default function RetailerRequestsPage() {
                                             <MessageSquare className="w-4 h-4" />
                                             Send Message
                                             {request.unreadMessages > 0 && (
-                                                <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white animate-bounce-subtle">
+                                                <span className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white text-[13px] flex items-center justify-center rounded-full border-2 border-white animate-bounce-subtle">
                                                     {request.unreadMessages}
                                                 </span>
                                             )}

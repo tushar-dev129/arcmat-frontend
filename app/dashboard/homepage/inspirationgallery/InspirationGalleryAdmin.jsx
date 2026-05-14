@@ -15,8 +15,8 @@ const ArchitectList = ({ onSelectArchitect }) => {
     return (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {architects.map((arch) => (
-                <div 
-                    key={arch._id} 
+                <div
+                    key={arch._id}
                     onClick={() => onSelectArchitect(arch)}
                     className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col items-center cursor-pointer hover:border-[#d9a88a] hover:shadow-md transition-all text-center"
                 >
@@ -31,7 +31,7 @@ const ArchitectList = ({ onSelectArchitect }) => {
                     </div>
                     <h3 className="font-semibold text-gray-900 text-lg line-clamp-1">{arch.name}</h3>
                     <p className="text-sm text-gray-500 mb-4">{arch.professionalType || 'Architect'}</p>
-                    
+
                     <div className="mt-auto px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-100">
                         {arch.renderCount} {arch.renderCount === 1 ? 'Render' : 'Renders'} Available
                     </div>
@@ -65,7 +65,7 @@ const ArchitectRenders = ({ architect, onBack }) => {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
-                <button 
+                <button
                     onClick={onBack}
                     className="p-2 hover:bg-gray-100 rounded-lg text-gray-600 transition-colors"
                 >
@@ -102,28 +102,27 @@ const ArchitectRenders = ({ architect, onBack }) => {
                                         <ImageIcon className="w-8 h-8 text-gray-300" />
                                     </div>
                                 )}
-                                
+
                                 <div className="absolute top-2 right-2 flex gap-2">
                                     {render.isFeatured && (
-                                        <span className="px-2.5 py-1 bg-green-500 text-white text-[10px] font-bold tracking-wider uppercase rounded-md shadow-sm">
+                                        <span className="px-2.5 py-1 bg-green-500 text-white text-[13px] font-bold tracking-wider uppercase rounded-md shadow-sm">
                                             Featured
                                         </span>
                                     )}
                                 </div>
                             </div>
-                            
+
                             <div className="p-4">
                                 <h4 className="font-semibold text-gray-900 line-clamp-1">{render.title}</h4>
                                 <p className="text-xs text-gray-500 mt-1 line-clamp-1">Project: {render.projectName}</p>
-                                
+
                                 <button
                                     onClick={() => handleToggleFeatured(render)}
                                     disabled={isAdding || isRemoving}
-                                    className={`mt-4 w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${
-                                        render.isFeatured 
-                                            ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100' 
+                                    className={`mt-4 w-full py-2 px-4 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 ${render.isFeatured
+                                            ? 'bg-red-50 text-red-600 border border-red-200 hover:bg-red-100'
                                             : 'bg-[#faf0ea] text-[#d9a88a] border border-[#d9a88a]/30 hover:bg-[#d9a88a] hover:text-white'
-                                    } disabled:opacity-50`}
+                                        } disabled:opacity-50`}
                                 >
                                     {render.isFeatured ? (
                                         <>
@@ -150,9 +149,9 @@ export default function InspirationGalleryAdmin() {
     return (
         <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 overflow-hidden min-h-[500px]">
             {selectedArchitect ? (
-                <ArchitectRenders 
-                    architect={selectedArchitect} 
-                    onBack={() => setSelectedArchitect(null)} 
+                <ArchitectRenders
+                    architect={selectedArchitect}
+                    onBack={() => setSelectedArchitect(null)}
                 />
             ) : (
                 <div className="flex flex-col gap-6">
@@ -160,7 +159,7 @@ export default function InspirationGalleryAdmin() {
                         <h2 className="font-bold text-gray-900 text-lg">Architect Renders</h2>
                         <p className="text-sm text-gray-500">Select an architect to view and feature their project renders.</p>
                     </div>
-                    
+
                     <ArchitectList onSelectArchitect={setSelectedArchitect} />
                 </div>
             )}

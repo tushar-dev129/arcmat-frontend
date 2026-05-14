@@ -140,11 +140,11 @@ export default function ProjectDetailsPage({ params }) {
                     <div className="lg:col-span-5 xl:col-span-4 space-y-8">
                         <div>
                             <div className="flex items-center gap-2 mb-4">
-                                <div className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest rounded-full border border-primary/20">
+                                <div className="px-3 py-1 bg-primary/10 text-primary text-[13px] font-bold uppercase tracking-widest rounded-full border border-primary/20">
                                     {project.projectType || 'Portfolio Project'}
                                 </div>
                                 {project.location && (
-                                    <div className="flex items-center gap-1 text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+                                    <div className="flex items-center gap-1 text-[13px] font-bold text-gray-500 uppercase tracking-widest">
                                         <MapPin className="w-3 h-3" />
                                         {project.location}
                                     </div>

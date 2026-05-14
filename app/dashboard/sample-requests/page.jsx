@@ -191,7 +191,7 @@ export default function SampleRequestsPage() {
                                         </div>
 
                                         <Link href={`/dashboard/projects/${request.projectId?._id}/moodboards`} className="w-full">
-                                            <Button className="w-full bg-white border border-gray-100 text-gray-400 hover:text-[#d9a88a] font-bold rounded-xl py-2 px-3 text-[10px] flex items-center justify-center gap-1 transition-all">
+                                            <Button className="w-full bg-white border border-gray-100 text-gray-400 hover:text-[#d9a88a] font-bold rounded-xl py-2 px-3 text-[13px] flex items-center justify-center gap-1 transition-all">
                                                 View Project
                                                 <ChevronRight className="w-3 h-3" />
                                             </Button>

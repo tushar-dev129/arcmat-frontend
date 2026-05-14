@@ -119,7 +119,7 @@ export default function NotificationsPage() {
                                 <div className="flex-1 min-w-0">
                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                                         <div className="flex items-center gap-3">
-                                            <span className="text-[10px] font-bold text-primary uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded">
+                                            <span className="text-[13px] font-bold text-primary uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded">
                                                 {n.type.replace(/_/g, ' ')}
                                             </span>
                                             {!n.isRead && (
@@ -176,7 +176,7 @@ export default function NotificationsPage() {
                                                         rel="noopener noreferrer"
                                                         className="flex-1 text-center py-2 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 transition-all flex items-center justify-center gap-2 shadow-sm"
                                                     >
-                                                        <MessageSquare size={12} /> WhatsApp
+                                                        <MessageSquare size={16} /> WhatsApp
                                                     </a>
                                                 )}
                                             </div>

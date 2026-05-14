@@ -184,20 +184,20 @@ export default function ContractorProfilePage({ params }) {
                             </div>
                             <h1 className="text-2xl font-semibold text-gray-900 mb-1">{contractor.businessName}</h1>
                             {contractor.isVerified && (
-                                <div className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[10px] font-medium border border-blue-100 mb-4">
+                                <div className="inline-flex items-center gap-1 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-[13px] font-medium border border-blue-100 mb-4">
                                     <CheckCircle2 className="w-3 h-3" /> VERIFIED
                                 </div>
                             )}
                             <p className="text-gray-500 font-medium text-sm italic px-4">"{contractor.tagline || "Providing premium bespoke services."}"</p>
 
                             <div className="mt-8 pt-8 border-t border-gray-50 space-y-4 text-left">
-                                
+
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center border border-orange-100">
                                         <Briefcase className="w-5 h-5 text-primary" />
                                     </div>
                                     <div>
-                                        <span className="block text-[10px] text-gray-400 font-medium">Experience</span>
+                                        <span className="block text-[13px] text-gray-400 font-medium">Experience</span>
                                         <span className="text-sm font-semibold text-gray-800">{contractor.experienceYears || "5+"} Years</span>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@ export default function ContractorProfilePage({ params }) {
                                         <Star className="w-5 h-5 text-yellow-500 fill-yellow-500" />
                                     </div>
                                     <div>
-                                        <span className="block text-[10px] text-gray-400 font-medium">Rating</span>
+                                        <span className="block text-[13px] text-gray-400 font-medium">Rating</span>
                                         <span className="text-sm font-semibold text-gray-800">4.8 / 5.0</span>
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@ export default function ContractorProfilePage({ params }) {
                         {/* Expertise Card */}
                         <div className="bg-white rounded-3xl p-6 border border-[hsl(30,15%,90%)] shadow-sm space-y-6">
                             <div className="space-y-2">
-                                <span className="block text-[10px] text-gray-400 font-medium">Primary Category</span>
+                                <span className="block text-[13px] text-gray-400 font-medium">Primary Category</span>
                                 <div className="inline-flex items-center px-4 py-2 bg-primary/5 text-primary rounded-xl text-sm font-semibold border border-primary/10">
                                     {contractor.categoryId === 'other'
                                         ? contractor.otherCategoryName
@@ -282,7 +282,7 @@ export default function ContractorProfilePage({ params }) {
 
                             {(contractor.subcategoryIds?.length > 0 || contractor.subcategoryId) && (
                                 <div className="space-y-2">
-                                    <span className="block text-[10px] text-gray-400 font-medium">Specializations</span>
+                                    <span className="block text-[13px] text-gray-400 font-medium">Specializations</span>
                                     <div className="flex flex-wrap gap-2">
                                         {contractor.subcategoryId && !contractor.subcategoryIds?.includes(contractor.subcategoryId) && (
                                             <span className="px-3 py-1.5 bg-gray-50 text-gray-600 rounded-lg text-xs font-semibold border border-gray-100">
@@ -345,7 +345,7 @@ export default function ContractorProfilePage({ params }) {
                                                 <span className="text-sm font-medium text-gray-500">{day.label}</span>
                                                 <div className="flex items-center gap-2">
                                                     {hours.isClosed ? (
-                                                        <span className="px-2.5 py-0.5 bg-red-50 text-red-500 rounded-full text-[10px] font-bold tracking-wider border border-red-100">CLOSED</span>
+                                                        <span className="px-2.5 py-0.5 bg-red-50 text-red-500 rounded-full text-[13px] font-bold tracking-wider border border-red-100">CLOSED</span>
                                                     ) : (
                                                         <span className="text-sm font-bold text-gray-800">
                                                             {formatTime(hours.from)} - {formatTime(hours.to)}
@@ -366,7 +366,7 @@ export default function ContractorProfilePage({ params }) {
                                     <div className="w-1.5 h-6 bg-primary rounded-full" />
                                     Portfolio & Projects
                                 </h2>
-                                <span className="px-3 py-1 bg-orange-50 text-primary rounded-full text-[10px] font-semibold border border-orange-100">
+                                <span className="px-3 py-1 bg-orange-50 text-primary rounded-full text-[13px] font-semibold border border-orange-100">
                                     {contractor.portfolio?.length || 0} PROJECTS
                                 </span>
                             </div>
@@ -389,7 +389,7 @@ export default function ContractorProfilePage({ params }) {
                                             )}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 translate-y-2 group-hover:translate-y-0">
                                                 <h4 className="text-white font-semibold text-lg">{item.title}</h4>
-                                                <p className="text-orange-200 text-[10px] font-medium mt-1 uppercase tracking-wider">{item.location || item.projectType || "Project"}</p>
+                                                <p className="text-orange-200 text-[13px] font-medium mt-1 uppercase tracking-wider">{item.location || item.projectType || "Project"}</p>
                                             </div>
                                         </Link>
                                     ))}
@@ -414,7 +414,7 @@ export default function ContractorProfilePage({ params }) {
 
                                 <form onSubmit={handleSubmitLead} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label className="block text-[10px] font-medium text-gray-400">Full Name</label>
+                                        <label className="block text-[13px] font-medium text-gray-400">Full Name</label>
                                         <input
                                             type="text"
                                             required
@@ -425,7 +425,7 @@ export default function ContractorProfilePage({ params }) {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="block text-[10px] font-medium text-gray-400">Mobile Number</label>
+                                        <label className="block text-[13px] font-medium text-gray-400">Mobile Number</label>
                                         <input
                                             type="tel"
                                             required
@@ -437,7 +437,7 @@ export default function ContractorProfilePage({ params }) {
                                         />
                                     </div>
                                     <div className="md:col-span-2 space-y-2">
-                                        <label className="block text-[10px] font-medium text-gray-400">Your Location</label>
+                                        <label className="block text-[13px] font-medium text-gray-400">Your Location</label>
                                         <input
                                             type="text"
                                             required
@@ -448,7 +448,7 @@ export default function ContractorProfilePage({ params }) {
                                         />
                                     </div>
                                     <div className="md:col-span-2 space-y-2">
-                                        <label className="block text-[10px] font-medium text-gray-400">Requirement Details</label>
+                                        <label className="block text-[13px] font-medium text-gray-400">Requirement Details</label>
                                         <textarea
                                             rows="4"
                                             required

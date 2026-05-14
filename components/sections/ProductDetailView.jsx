@@ -401,16 +401,16 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                     {/* BADGES SECTION */}
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {isPremium && (
-                                            <span className="px-3 py-1 bg-[#fff2ed] text-primary text-[10px] font-bold tracking-wider uppercase rounded-md">
+                                            <span className="px-3 py-1 bg-[#fff2ed] text-primary text-[13px] font-bold tracking-wider uppercase rounded-md">
                                                 PREMIUM
                                             </span>
                                         )}
                                         {vendorName && (
-                                            <span className="px-3 py-1 bg-[#f3f4f6] text-[#6b7280] text-[10px] font-bold tracking-wider uppercase rounded-md">
+                                            <span className="px-3 py-1 bg-[#f3f4f6] text-[#6b7280] text-[13px] font-bold tracking-wider uppercase rounded-md">
                                                 BY {vendorName}
                                             </span>
                                         )}
-                                        <span className={`px-3 py-1 ${inStock ? 'bg-[#ecfdf5] text-[#059669]' : 'bg-[#fbfafa] text-[#00ff04]'} text-[10px] font-bold tracking-wider uppercase rounded-md`}>
+                                        <span className={`px-3 py-1 ${inStock ? 'bg-[#ecfdf5] text-[#059669]' : 'bg-[#fbfafa] text-[#00ff04]'} text-[13px] font-bold tracking-wider uppercase rounded-md`}>
                                             {inStock ? 'IN STOCK' : 'LISTED'}
                                         </span>
                                     </div>
@@ -478,7 +478,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                                     {variantLabel}
                                                                 </p>
                                                                 {variantMeta && (
-                                                                    <p className="text-[10px] text-gray-400 leading-tight line-clamp-2 mt-0.5">
+                                                                    <p className="text-[13px] text-gray-400 leading-tight line-clamp-2 mt-0.5">
                                                                         {variantMeta}
                                                                     </p>
                                                                 )}
@@ -610,7 +610,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
                                                 )}
                                             </div>
                                             {discountPercentage > 0 && (
-                                                <p className="text-[10px] text-green-600 font-medium mt-1 uppercase tracking-tight">
+                                                <p className="text-[13px] text-green-600 font-medium mt-1 uppercase tracking-tight">
                                                     You save {formatCurrency(Number(mrp) - Number(price))}
                                                 </p>
                                             )}
@@ -664,7 +664,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
 
                                             {showSampleProjectSelector && (
                                                 <div className="mt-1 p-3 bg-gray-50 rounded-xl border border-gray-100 animate-in fade-in slide-in-from-top-2 shadow-inner">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">Select project to request sample for</p>
+                                                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">Select project to request sample for</p>
                                                     <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
                                                         {projects.map(p => (
                                                             <button
@@ -693,7 +693,7 @@ const ProductDetailView = ({ product, initialVariantId, categories = [], childCa
 
                                             {showProjectSelector && projects.length > 0 && (
                                                 <div className="mt-1 p-3 bg-gray-50 rounded-xl border border-gray-100 animate-in fade-in slide-in-from-top-2 shadow-inner">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Select Project for Context</p>
+                                                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-2">Select Project for Context</p>
                                                     <div className="flex flex-col gap-1 max-h-32 overflow-y-auto no-scrollbar">
                                                         {projects.map(p => (
                                                             <button

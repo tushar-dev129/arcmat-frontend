@@ -83,7 +83,7 @@ export default function QuickAddCategoryModal({ isOpen, onClose, onAdd, parentCa
                             className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#d9a88a] text-gray-900"
                         />
                         {name && (
-                            <p className="text-[10px] text-gray-400 mt-1 font-mono">slug: {slug}</p>
+                            <p className="text-[13px] text-gray-400 mt-1 font-mono">slug: {slug}</p>
                         )}
                     </div>
 

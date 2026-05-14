@@ -135,7 +135,7 @@ export default function MessageModal({ isOpen, onClose, projectId, materialName,
                                         isMe ? "bg-[#2d3142] text-white rounded-tr-none" : "bg-white text-[#2d3142] rounded-tl-none border border-gray-100"
                                     )}>
                                         {!isMe && (
-                                            <p className="text-[10px] font-bold uppercase tracking-widest text-[#d9a88a] mb-2">
+                                            <p className="text-[13px] font-bold uppercase tracking-widest text-[#d9a88a] mb-2">
                                                 {c.authorId?.name} • {c.authorId?.role}
                                             </p>
                                         )}

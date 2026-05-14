@@ -123,7 +123,7 @@ export default function RetailerProductsPage() {
                 <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden overflow-x-auto">
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead>
-                            <tr className="bg-gray-50 border-b border-gray-100 text-[10px] text-gray-400 uppercase tracking-widest font-bold">
+                            <tr className="bg-gray-50 border-b border-gray-100 text-[13px] text-gray-400 uppercase tracking-widest font-bold">
                                 <th className="px-6 py-4 font-bold">Product</th>
                                 <th className="px-6 py-4 font-bold">Variant</th>
                                 <th className="px-6 py-4 font-bold">Price</th>
@@ -178,7 +178,7 @@ export default function RetailerProductsPage() {
                                         <td className="px-6 py-4 align-middle">
                                             <div className="flex flex-col gap-0.5">
                                                 <span className="text-sm font-bold text-gray-900">₹{item.selling_price?.toLocaleString() || '0'}</span>
-                                                <span className="text-[10px] font-bold text-gray-400 tracking-wider">MRP: <span className="line-through">₹{item.mrp_price?.toLocaleString() || '0'}</span></span>
+                                                <span className="text-[13px] font-bold text-gray-400 tracking-wider">MRP: <span className="line-through">₹{item.mrp_price?.toLocaleString() || '0'}</span></span>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 align-middle">
@@ -187,7 +187,7 @@ export default function RetailerProductsPage() {
                                                 (item.stock !== undefined && item.stock !== null && item.stock !== '' && item.stock <= 5) ? "text-red-500" : "text-gray-900"
                                             )}>
                                                 {(item.stock !== undefined && item.stock !== null && item.stock !== '') ? (
-                                                    <>{item.stock} <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">in stock</span></>
+                                                    <>{item.stock} <span className="text-[13px] font-bold uppercase tracking-widest text-gray-400 ml-1">in stock</span></>
                                                 ) : (
                                                     <span className="text-blue-600 font-bold">Available</span>
                                                 )}
@@ -204,7 +204,7 @@ export default function RetailerProductsPage() {
                                         </td>
                                         <td className="px-6 py-4 align-middle">
                                             <span className={clsx(
-                                                "inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-widest border",
+                                                "inline-flex items-center px-2 py-1 rounded-md text-[13px] font-bold uppercase tracking-widest border",
                                                 item.isActive ? "bg-green-50 text-green-600 border-green-100" : "bg-gray-100 text-gray-400 border-gray-200"
                                             )}>
                                                 {item.isActive ? 'Live' : 'Hidden'}
@@ -282,7 +282,7 @@ export default function RetailerProductsPage() {
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">MRP Price (₹)</label>
+                                    <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">MRP Price (₹)</label>
                                     <input
                                         type="number"
                                         name="mrp_price"
@@ -292,7 +292,7 @@ export default function RetailerProductsPage() {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Your Selling Price (₹)</label>
+                                    <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">Your Selling Price (₹)</label>
                                     <input
                                         type="number"
                                         name="selling_price"
@@ -304,7 +304,7 @@ export default function RetailerProductsPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">Available Stock</label>
+                                <label className="text-[13px] font-bold uppercase text-gray-400 tracking-widest">Available Stock</label>
                                 <input
                                     type="number"
                                     name="stock"
@@ -321,7 +321,7 @@ export default function RetailerProductsPage() {
                             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
                                 <div>
                                     <p className="text-sm font-bold text-gray-900">Make product live</p>
-                                    <p className="text-[10px] text-gray-400 uppercase tracking-tighter">Visibility on your storefront</p>
+                                    <p className="text-[13px] text-gray-400 uppercase tracking-tighter">Visibility on your storefront</p>
                                 </div>
                                 <label className="relative inline-flex items-center cursor-pointer">
                                     <input type="checkbox" name="isActive" defaultChecked={editingItem.isActive} className="sr-only peer" />

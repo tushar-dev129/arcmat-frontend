@@ -54,7 +54,7 @@ const UserDetailTooltip = ({ user, index, total }) => {
                     </div>
                     <div>
                         <p className="text-sm font-bold text-gray-900 leading-tight">{user.name}</p>
-                        <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-widest font-bold">{user.role}</p>
+                        <p className="text-[13px] text-gray-400 mt-1 uppercase tracking-widest font-bold">{user.role}</p>
                     </div>
                 </div>
 
@@ -92,8 +92,8 @@ const UserDetailTooltip = ({ user, index, total }) => {
                                 <div>
                                     <p>{address.address1}</p>
                                     {address.address2 && <p>{address.address2}</p>}
-                                    <p className="text-primary text-[10px] mt-0.5">{address.city}, {address.state} {address.pincode}</p>
-                                    <p className="text-[10px]">{address.country}</p>
+                                    <p className="text-primary text-[13px] mt-0.5">{address.city}, {address.state} {address.pincode}</p>
+                                    <p className="text-[13px]">{address.country}</p>
                                 </div>
                             </div>
                         </div>
@@ -258,11 +258,11 @@ export default function UsersPage() {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50/50">
                             <tr>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">User</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Contact</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Role</th>
-                                <th className="px-6 py-4 text-left text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-4 text-right text-[10px] font-bold text-gray-400 uppercase tracking-wider">Actions</th>
+                                <th className="px-6 py-4 text-left text-[13px] font-bold text-gray-400 uppercase tracking-wider">User</th>
+                                <th className="px-6 py-4 text-left text-[13px] font-bold text-gray-400 uppercase tracking-wider">Contact</th>
+                                <th className="px-6 py-4 text-left text-[13px] font-bold text-gray-400 uppercase tracking-wider">Role</th>
+                                <th className="px-6 py-4 text-left text-[13px] font-bold text-gray-400 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-4 text-right text-[13px] font-bold text-gray-400 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
@@ -286,7 +286,7 @@ export default function UsersPage() {
                                                 </div>
                                                 <div className="flex flex-col">
                                                     <p className="text-sm font-extrabold text-gray-900">{u.name}</p>
-                                                    <p className="text-[10px] text-gray-400 font-medium tracking-tight mt-0.5">ID: {u._id.slice(-6)}</p>
+                                                    <p className="text-[13px] text-gray-400 font-medium tracking-tight mt-0.5">ID: {u._id.slice(-6)}</p>
                                                 </div>
                                             </div>
                                         </td>
@@ -296,7 +296,7 @@ export default function UsersPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={clsx(
-                                                "px-2.5 py-1 text-[10px] font-bold rounded-full uppercase",
+                                                "px-2.5 py-1 text-[13px] font-bold rounded-full uppercase",
                                                 u.role === 'admin' ? "bg-purple-50 text-purple-700 border border-purple-100" :
                                                     (u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') ? "bg-blue-50 text-blue-700 border border-blue-100" :
                                                         u.role === 'architect' ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
@@ -318,15 +318,15 @@ export default function UsersPage() {
                                                 <div className="flex items-center gap-1.5 font-medium">
                                                     {u.role === 'architect' ? (
                                                         u.isVerified ? (
-                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[10px] text-emerald-600">Admin Verified</span></>
+                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[13px] text-emerald-600">Admin Verified</span></>
                                                         ) : (
-                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[10px] text-amber-600">Admin Unverified</span></>
+                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[13px] text-amber-600">Admin Unverified</span></>
                                                         )
                                                     ) : (
                                                         u.isEmailVerified === 1 ? (
-                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[10px] text-emerald-600">Email Verified</span></>
+                                                            <><ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> <span className="text-[13px] text-emerald-600">Email Verified</span></>
                                                         ) : (
-                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[10px] text-amber-600">Email Unverified</span></>
+                                                            <><ShieldAlert className="w-3.5 h-3.5 text-amber-500" /> <span className="text-[13px] text-amber-600">Email Unverified</span></>
                                                         )
                                                     )}
                                                 </div>

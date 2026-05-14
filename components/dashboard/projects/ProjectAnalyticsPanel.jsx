@@ -176,10 +176,10 @@ function PhaseSteps({ phaseIdx, isCompleted }) {
                             {/* Node */}
                             <div className="flex flex-col items-center gap-1 shrink-0">
                                 <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${done || (isCompleted && current)
-                                        ? 'bg-[#d9a88a] border-[#d9a88a]'
-                                        : current
-                                            ? 'bg-white border-[#d9a88a] shadow-md shadow-orange-100'
-                                            : 'bg-gray-100 border-gray-200'
+                                    ? 'bg-[#d9a88a] border-[#d9a88a]'
+                                    : current
+                                        ? 'bg-white border-[#d9a88a] shadow-md shadow-orange-100'
+                                        : 'bg-gray-100 border-gray-200'
                                     }`}>
                                     {done || (isCompleted && current) ? (
                                         <CheckCircle2 className="w-3 h-3 text-white" />
@@ -227,7 +227,7 @@ function StatCard({ icon: Icon, label, value, sub, color = 'orange', warn = fals
                 <p className={`text-lg font-bold leading-none ${warn ? 'text-red-500' : 'text-[#2d3142]'}`}>
                     {value}
                 </p>
-                {sub && <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>}
+                {sub && <p className="text-[13px] text-gray-400 mt-0.5">{sub}</p>}
             </div>
         </div>
     );
@@ -272,11 +272,11 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 items-start">
                         <span className="font-extrabold text-[#2d3142] text-xs sm:text-sm">Project Progress</span>
                         <div className="flex items-center gap-2">
-                            <span className={`text-[8px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wide shrink-0 ${statusColor}`}>
+                            <span className={`text-[8px] sm:text-[13px] font-bold px-2 py-0.5 rounded-full border uppercase tracking-wide shrink-0 ${statusColor}`}>
                                 {statusLabel}
                             </span>
                             {stats.pendingApprovals > 0 && (
-                                <span className="text-[8px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1 shrink-0">
+                                <span className="text-[8px] sm:text-[13px] font-bold px-2 py-0.5 rounded-full border bg-red-50 border-red-100 text-red-500 flex items-center gap-1 shrink-0">
                                     <AlertTriangle className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                                     {stats.pendingApprovals}
                                 </span>
@@ -307,7 +307,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
 
                         {/* Phase stepper */}
                         <div className="flex-1 min-w-0 pt-2">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">
+                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-4">
                                 Current Phase
                             </p>
                             <PhaseSteps phaseIdx={stats.phaseIdx} isCompleted={stats.isCompleted} />
@@ -315,10 +315,10 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                             {/* Progress bar */}
                             <div className="mt-6">
                                 <div className="flex items-center justify-between mb-1.5">
-                                    <span className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-wide">
+                                    <span className="text-[9px] sm:text-[13px] font-bold text-gray-400 uppercase tracking-wide">
                                         Overall completion
                                     </span>
-                                    <span className="text-[9px] sm:text-[10px] font-bold text-[#d9a88a]">{stats.pct}%</span>
+                                    <span className="text-[9px] sm:text-[13px] font-bold text-[#d9a88a]">{stats.pct}%</span>
                                 </div>
                                 <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                     <div
@@ -328,7 +328,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                     />
                                 </div>
                                 {!stats.isCompleted && isArchitect && (
-                                    <p className="text-[10px] text-gray-400 mt-1.5">
+                                    <p className="text-[13px] text-gray-400 mt-1.5">
                                         Mark project as <span className="font-bold text-green-600">Completed</span> to reach 100%
                                     </p>
                                 )}
@@ -383,7 +383,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                     {/* Row 3: per-space breakdown (architect only) */}
                     {isArchitect && moodboards.length > 0 && (
                         <div>
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">
+                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-3">
                                 Space-by-Space Breakdown
                             </p>
                             <div className="space-y-2">
@@ -413,7 +413,7 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                                 </span>
                                             </div>
                                             <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 w-full sm:w-auto">
-                                                <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold sm:w-20 sm:text-right">
+                                                <span className="text-[13px] sm:text-[11px] text-gray-400 font-bold sm:w-20 sm:text-right">
                                                     {products.length}p
                                                     {photos.length > 0 ? ` · ${photos.length}ph` : ''}
                                                     {customRows.length > 0 ? ` · ${customRows.length}r` : ''}
@@ -424,13 +424,13 @@ export default function ProjectAnalyticsPanel({ project, moodboards = [], isArch
                                                         style={{ width: `${specPct}%` }}
                                                     />
                                                 </div>
-                                                <span className="text-[10px] sm:text-[11px] font-bold text-[#d9a88a] w-8">{specPct}%</span>
+                                                <span className="text-[13px] sm:text-[11px] font-bold text-[#d9a88a] w-8">{specPct}%</span>
                                                 {pending > 0 && (
-                                                    <span className="text-[9px] sm:text-[10px] bg-red-50 text-red-500 font-bold px-2 py-0.5 rounded-full border border-red-100">
+                                                    <span className="text-[9px] sm:text-[13px] bg-red-50 text-red-500 font-bold px-2 py-0.5 rounded-full border border-red-100">
                                                         {pending} ⏳
                                                     </span>
                                                 )}
-                                                <span className="text-[10px] sm:text-[11px] text-gray-400 font-bold sm:w-20 text-right">
+                                                <span className="text-[13px] sm:text-[11px] text-gray-400 font-bold sm:w-20 text-right">
                                                     ₹{cost.toLocaleString('en-IN')}
                                                 </span>
                                             </div>

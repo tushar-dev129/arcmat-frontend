@@ -7,9 +7,10 @@ import BasicInfoCard from '@/components/profile/BasicInfoCard';
 import ChangePasswordCard from '@/components/profile/ChangePasswordCard';
 import BusinessProfileTab from '@/components/profile/BusinessProfileTab';
 import RetailerProfileTab from '@/components/profile/RetailerProfileTab';
-import { User, Building2, Lock, MapPin, Store } from 'lucide-react';
+import { User, Building2, Lock, MapPin, Store, Settings2, ShieldCheck } from 'lucide-react';
 import AddressList from '@/components/profile/AddressList';
 import Footer from '@/components/layouts/Footer';
+import clsx from 'clsx';
 
 const ProfilePage = () => {
     const { user } = useAuth();
@@ -19,24 +20,33 @@ const ProfilePage = () => {
     const isRetailerRole = user?.role === 'retailer';
 
     const tabs = [
-        { id: 'basic', label: 'Basic Information', icon: User },
-        { id: 'address', label: 'Manage Addresses', icon: MapPin },
-        ...(isBrandRole ? [{ id: 'business', label: 'Business Profile', icon: Building2 }] : []),
-        ...(isRetailerRole ? [{ id: 'retailer', label: 'Retailer Profile', icon: Store }] : []),
-        { id: 'password', label: 'Change Password', icon: Lock },
+        { id: 'basic', label: 'Identity', icon: User, color: 'text-orange-500', bg: 'bg-orange-50' },
+        { id: 'address', label: 'Addresses', icon: MapPin, color: 'text-blue-500', bg: 'bg-blue-50' },
+        ...(isBrandRole ? [{ id: 'business', label: 'Business', icon: Building2, color: 'text-purple-500', bg: 'bg-purple-50' }] : []),
+        ...(isRetailerRole ? [{ id: 'retailer', label: 'Retailer', icon: Store, color: 'text-indigo-500', bg: 'bg-indigo-50' }] : []),
+        { id: 'password', label: 'Security', icon: Lock, color: 'text-red-500', bg: 'bg-red-50' },
     ];
 
     return (
-        <div className="flex flex-col min-h-screen bg-white">
+        <div className="flex flex-col min-h-screen bg-[#fafafa]">
             <div className="flex flex-1">
                 <Sidebar />
-                <main className="flex-1 overflow-y-auto bg-gray-50 py-10">
+                <main className="flex-1 overflow-y-auto py-12 px-4 sm:px-8">
                     <Container>
-                        <div className="max-w-4xl mx-auto">
-                            <h1 className="text-2xl font-bold text-gray-800 mb-6">My Profile</h1>
+                        <div className="max-w-5xl mx-auto">
+                            {/* Header Section */}
+                            <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+                                <div className="space-y-2">
+                                 
+                                    <h1 className="text-4xl font-bold text-gray-700 tracking-tight">Account Dashboard</h1>
+                                    <p className="text-gray-500 font-medium max-w-md">Manage your personal profile, delivery addresses, and security preferences.</p>
+                                </div>
 
-                            {/* Tab Navigation */}
-                            <div className="flex justify-start sm:justify-around space-x-1 bg-gray-100 p-1 rounded-xl mb-8 overflow-x-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                               
+                            </div>
+
+                            {/* Premium Tab Navigation */}
+                            <div className="flex flex-wrap justify-start gap-2 bg-gray-100/50 p-2 rounded-2xl mb-12 border border-gray-100/50 ">
                                 {tabs.map((tab) => {
                                     const Icon = tab.icon;
                                     const isActive = activeTab === tab.id;
@@ -44,22 +54,27 @@ const ProfilePage = () => {
                                         <button
                                             key={tab.id}
                                             onClick={() => setActiveTab(tab.id)}
-                                            className={`
-                                                flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap
-                                                ${isActive
-                                                    ? 'bg-white text-gray-900 shadow-sm'
-                                                    : 'text-gray-500 hover:text-gray-700 hover:bg-gray-200/50'}
-                                            `}
+                                            className={clsx(
+                                                "flex items-center gap-3 px-6 py-2 rounded-2xl text-sm font-semibold transition-all duration-300 group whitespace-nowrap",
+                                                isActive
+                                                    ? 'bg-white text-gray-900 shadow-lg shadow-gray-200/50 ring-1 ring-gray-100'
+                                                    : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'
+                                            )}
                                         >
-                                            <Icon size={16} className={isActive ? 'text-primary' : 'text-gray-400'} />
+                                            <div className={clsx(
+                                                "w-8 h-8 rounded-xl flex items-center justify-center transition-all",
+                                                isActive ? tab.bg + ' ' + tab.color : ''
+                                            )}>
+                                                <Icon size={16} strokeWidth={2.5} />
+                                            </div>
                                             {tab.label}
                                         </button>
                                     );
                                 })}
                             </div>
 
-                            {/* Tab Content */}
-                            <div className="transition-all duration-300 animate-in fade-in slide-in-from-bottom-2">
+                            {/* Tab Content with Animation */}
+                            <div className="transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
                                 {activeTab === 'basic' && <BasicInfoCard user={user} />}
                                 {activeTab === 'address' && <AddressList />}
                                 {activeTab === 'business' && isBrandRole && <BusinessProfileTab />}

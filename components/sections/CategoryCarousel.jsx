@@ -49,7 +49,7 @@ const CategoryCarousel = () => {
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center py-10">
                         <div className="w-10 h-10 border-4 border-gray-200 border-t-primary rounded-full animate-spin"></div>
-                        <p className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-4">Loading Categories...</p>
+                        <p className="text-[13px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest mt-4">Loading Categories...</p>
                     </div>
                 ) : (
                     <>

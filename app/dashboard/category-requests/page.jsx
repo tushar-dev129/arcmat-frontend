@@ -44,7 +44,7 @@ export default function CategoryRequestsPage() {
                                                     <Calendar className="w-4 h-4" />
                                                     {new Date(request.updatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                                                 </div>
-                                                <div className="flex items-center gap-1.5 text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border border-blue-100">
+                                                <div className="flex items-center gap-1.5 text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full text-[13px] font-bold uppercase tracking-wider border border-blue-100">
                                                     <Info className="w-3 h-3" /> PENDING REVIEW
                                                 </div>
                                             </div>
@@ -55,13 +55,13 @@ export default function CategoryRequestsPage() {
                                         <div className="space-y-3">
                                             {request.requestedCategory && (
                                                 <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <span className="block text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Category Suggestion</span>
+                                                    <span className="block text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Category Suggestion</span>
                                                     <p className="text-sm font-bold text-gray-800">"{request.requestedCategory}"</p>
                                                 </div>
                                             )}
                                             {request.requestedSubcategories && (
                                                 <div className="p-3 bg-gray-50 rounded-2xl border border-gray-100">
-                                                    <span className="block text-[10px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Specialization Suggestion</span>
+                                                    <span className="block text-[13px] text-gray-400 font-bold uppercase tracking-widest mb-1">New Specialization Suggestion</span>
                                                     <p className="text-sm font-bold text-gray-800">"{request.requestedSubcategories}"</p>
                                                 </div>
                                             )}

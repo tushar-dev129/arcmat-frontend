@@ -264,7 +264,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                     <p className="text-xs font-bold text-[#2d3142] animate-pulse text-center px-6">
                         Exporting project…
                     </p>
-                    <p className="text-[10px] text-gray-400">Please don't close this window</p>
+                    <p className="text-[13px] text-gray-400">Please don't close this window</p>
                 </div>
             )}
             {/* Absolute Action Buttons (Hover) */}
@@ -365,7 +365,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
                                     title={`${pendingApprovals} pending approval${pendingApprovals > 1 ? 's' : ''}`}
                                 >
                                     <AlertCircle className="w-3 h-3 mr-1" />
-                                    <span className="text-[10px] font-bold leading-none">{pendingApprovals}</span>
+                                    <span className="text-[13px] font-bold leading-none">{pendingApprovals}</span>
                                 </div>
                             )}
                         </div>
@@ -379,7 +379,7 @@ export default function ProjectCard({ project, onEdit, onDelete, href, onOpenDis
 
                 <div>
                     <div className="mb-auto relative" ref={phaseDropdownRef}>
-                        <span className="text-[10px] text-gray-400 font-bold mb-2 block tracking-wide">Project Phase</span>
+                        <span className="text-[13px] text-gray-400 font-bold mb-2 block tracking-wide">Project Phase</span>
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();

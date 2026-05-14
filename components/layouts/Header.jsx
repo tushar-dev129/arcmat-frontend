@@ -299,7 +299,7 @@ const Header = ({ variant = 'default' }) => {
                                                             <span className="text-sm font-semibold text-[#4D4E58] group-hover:text-primary transition-colors">
                                                                 {projectName}
                                                             </span>
-                                                            <span className="text-[10px] text-gray-400 uppercase tracking-tight">View Moodboards</span>
+                                                            <span className="text-[13px] text-gray-400 uppercase tracking-tight">View Moodboards</span>
                                                         </Link>
                                                     );
                                                 })}
@@ -356,7 +356,7 @@ const Header = ({ variant = 'default' }) => {
                                 <button className='p-2 hover:bg-gray-50 rounded-full transition-colors relative group/wishlist'>
                                     <Heart size={22} className="text-gray-600 group-hover/wishlist:text-primary transition-colors" />
                                     {wishlistCount > 0 && (
-                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
+                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[13px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
                                             {wishlistCount > 99 ? '99+' : wishlistCount}
                                         </span>
                                     )}
@@ -366,7 +366,7 @@ const Header = ({ variant = 'default' }) => {
                                 <button className='p-2 hover:bg-gray-50 rounded-full transition-colors relative group/cart'>
                                     <ShoppingCart size={22} className="text-gray-600 group-hover/cart:text-primary transition-colors" />
                                     {cartCount > 0 && (
-                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
+                                        <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[13px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm transition-transform duration-300 scale-110">
                                             {cartCount > 99 ? '99+' : cartCount}
                                         </span>
                                     )}
@@ -405,7 +405,7 @@ const Header = ({ variant = 'default' }) => {
                                             <p className="text-sm font-semibold text-[#4D4E58] truncate">{user.name || user.fullName}</p>
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                             {user.role && (
-                                                <p className="text-[10px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
                                             )}
                                         </div>
 
@@ -478,7 +478,7 @@ const Header = ({ variant = 'default' }) => {
                                                 {user.name || user.fullName}
                                             </p>
                                             {user.role && (
-                                                <p className="text-[10px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
                                             )}
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                         </div>

@@ -68,12 +68,12 @@ export default function ContractorLeadsPage() {
                     <table className="w-full text-left border-collapse whitespace-nowrap">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Date</th>
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Requester</th>
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Location</th>
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Requirement</th>
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400">Status</th>
-                                <th className="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Date</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Requester</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Location</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Requirement</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400">Status</th>
+                                <th className="px-8 py-5 text-[13px] font-bold uppercase tracking-widest text-gray-400 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -83,7 +83,7 @@ export default function ContractorLeadsPage() {
                                         <td className="px-8 py-6">
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-bold text-gray-900">{format(new Date(lead.createdAt), 'dd MMM yyyy')}</span>
-                                                <span className="text-[10px] text-gray-400 font-bold uppercase">{format(new Date(lead.createdAt), 'hh:mm a')}</span>
+                                                <span className="text-[13px] text-gray-400 font-bold uppercase">{format(new Date(lead.createdAt), 'hh:mm a')}</span>
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">

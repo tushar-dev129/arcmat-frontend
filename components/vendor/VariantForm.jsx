@@ -401,7 +401,7 @@ export default function VariantForm({ productId, vendorId, onComplete, editingVa
                     <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                         <label className="aspect-square border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-all group">
                             <Upload className="w-6 h-6 text-gray-300 group-hover:text-primary transition-colors" />
-                            <span className="text-[10px] font-bold text-gray-400 mt-2">Upload</span>
+                            <span className="text-[13px] font-bold text-gray-400 mt-2">Upload</span>
                             <input type="file" multiple onChange={handleImageChange} className="hidden" accept="image/*" />
                         </label>
                         {previewImages.map((src, idx) => (

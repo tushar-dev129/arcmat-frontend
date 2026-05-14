@@ -145,7 +145,7 @@ export default function OverviewTab({
                             : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
                             }`}
                     >
-                        Brands {selectedBrands.length > 0 && <span className="bg-white/20 text-white text-[10px] font-bold rounded-full px-1.5">{selectedBrands.length}</span>}
+                        Brands {selectedBrands.length > 0 && <span className="bg-white/20 text-white text-[13px] font-bold rounded-full px-1.5">{selectedBrands.length}</span>}
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${brandFilterOpen ? 'rotate-180' : ''}`} />
                     </button>
                     {brandFilterOpen && (
@@ -377,14 +377,14 @@ export default function OverviewTab({
                                             title={`${productNotifications[photo.id].unreadMessages} new message${productNotifications[photo.id].unreadMessages > 1 ? 's' : ''}`}
                                         >
                                             <MessageCircle className="w-3 h-3 mr-0.5" />
-                                            <span className="text-[10px] font-bold leading-none">{productNotifications[photo.id].unreadMessages}</span>
+                                            <span className="text-[13px] font-bold leading-none">{productNotifications[photo.id].unreadMessages}</span>
                                         </div>
                                     )}
                                 </div>
                             </div>
                             <div className="p-3 flex flex-col gap-2 flex-1">
                                 <div>
-                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Uploaded Image</p>
+                                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Uploaded Image</p>
                                     <p className="text-sm font-bold text-[#1a1a2e] leading-snug line-clamp-1">{photo.title}</p>
                                 </div>
 
@@ -439,7 +439,7 @@ export default function OverviewTab({
                                                     title={`${productNotifications[productId].unreadMessages} new message${productNotifications[productId].unreadMessages > 1 ? 's' : ''}`}
                                                 >
                                                     <MessageCircle className="w-3 h-3 mr-0.5" />
-                                                    <span className="text-[10px] font-bold leading-none">{productNotifications[productId].unreadMessages}</span>
+                                                    <span className="text-[13px] font-bold leading-none">{productNotifications[productId].unreadMessages}</span>
                                                 </div>
                                             )}
                                             {productNotifications[productId]?.pendingApprovals > 0 && (
@@ -448,7 +448,7 @@ export default function OverviewTab({
                                                     title={`${productNotifications[productId].pendingApprovals} pending approval${productNotifications[productId].pendingApprovals > 1 ? 's' : ''}`}
                                                 >
                                                     <AlertCircle className="w-3 h-3 mr-0.5" />
-                                                    <span className="text-[10px] font-bold leading-none">{productNotifications[productId].pendingApprovals}</span>
+                                                    <span className="text-[13px] font-bold leading-none">{productNotifications[productId].pendingApprovals}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -459,11 +459,11 @@ export default function OverviewTab({
                                     >
                                         <div>
                                             <div className="flex items-center justify-between gap-2">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">{getProductCategory(product)}</p>
-                                                {getProductSize(product) && <p className="text-[10px] text-gray-400 font-medium whitespace-nowrap">{getProductSize(product)}</p>}
+                                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest truncate">{getProductCategory(product)}</p>
+                                                {getProductSize(product) && <p className="text-[13px] text-gray-400 font-medium whitespace-nowrap">{getProductSize(product)}</p>}
                                             </div>
                                             <p className="text-sm font-bold text-[#1a1a2e] leading-snug line-clamp-1 hover:text-[#d9a88a] transition-colors">{brand}</p>
-                                            <p className="text-[10px] text-gray-400 truncate">{name}</p>
+                                            <p className="text-[13px] text-gray-400 truncate">{name}</p>
                                         </div>
 
                                         <div>
@@ -481,7 +481,7 @@ export default function OverviewTab({
             )}
 
             <div className="mt-8 pt-8 border-t border-gray-50">
-                <p className="text-[10px] text-gray-400 italic">
+                <p className="text-[13px] text-gray-400 italic">
                     * Prices shown are indicative and subject to final quotation by the vendor.
                 </p>
             </div>

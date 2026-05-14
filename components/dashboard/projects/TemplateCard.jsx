@@ -163,10 +163,10 @@ export default function TemplateCard({ template, onUse }) {
                         <Briefcase className="w-16 h-16 opacity-10" />
                     </div>
                 )}
-                
+
                 <div className="z-10 p-4 w-full h-full flex flex-col justify-between">
                     <div className="flex items-center justify-between">
-                        <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+                        <span className="bg-white/20 backdrop-blur-md text-white text-[13px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
                             Template
                         </span>
                     </div>

@@ -98,7 +98,7 @@ export default function RetailerBrandsPage() {
                     >
                         <Check className={clsx("w-4 h-4", view === 'my-brands' ? "text-green-500" : "hidden")} />
                         Partnered Brands
-                        <span className="ml-1 px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded-md text-[10px]">{myBrands.length}</span>
+                        <span className="ml-1 px-1.5 py-0.5 bg-gray-200 text-gray-600 rounded-md text-[13px]">{myBrands.length}</span>
                     </button>
                     <button
                         onClick={() => { setView('explore'); setSearchTerm(''); }}

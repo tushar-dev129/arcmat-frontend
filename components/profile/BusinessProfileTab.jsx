@@ -3,11 +3,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 import { useGetVendor, useCreateVendor, useUpdateVendor } from '@/hooks/useVendor';
-import ProfileDetails from '@/components/profile/ProfileDetails';
 import ProfileForm from '@/components/profile/ProfileForm';
 import { toast } from '@/components/ui/Toast';
 import { useLoader } from '@/context/LoaderContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Building2 } from 'lucide-react';
 
 const BusinessProfileTab = () => {
     const { user } = useAuth();
@@ -22,7 +21,6 @@ const BusinessProfileTab = () => {
     const { mutate: createVendor, isPending: isCreating } = useCreateVendor();
     const { mutate: updateVendor, isPending: isUpdating } = useUpdateVendor();
 
-    const [isEditing, setIsEditing] = useState(false);
     const [currentBrand, setCurrentBrand] = useState(null);
 
     // Process brand data
@@ -74,18 +72,8 @@ const BusinessProfileTab = () => {
                 updateVendor({ id: currentBrand._id || currentBrand.id, data: payload }, {
                     onSuccess: async (response) => {
                         toast.success('Profile updated successfully', 'Success');
-                        setIsEditing(false);
                         // Refresh user data to update selectedBrands in store
                         await fetchUser();
-                        
-                        // Redirect to create product page with a reload to ensure all data is fresh
-                        const brand = response?.data || response;
-                        const brandId = brand?._id || brand?.id || currentBrand?._id || currentBrand?.id;
-                        if (brandId) {
-                            window.location.href = `/dashboard/products-list/${brandId}/add`;
-                        } else {
-                            router.push(`/dashboard`);
-                        }
                     },
                     onError: (error) => {
                         toast.error(error.message || 'Failed to update profile', 'Error');
@@ -95,18 +83,8 @@ const BusinessProfileTab = () => {
                 createVendor(payload, {
                     onSuccess: async (response) => {
                         toast.success(`${isCustomMaker ? 'Custom maker' : 'Brand'} profile created successfully`, 'Success');
-                        setIsEditing(false);
                         // Re-fetch auth session so selectedBrands/activeBrand updates immediately
                         await fetchUser();
-                        
-                        // Redirect to create product page with a reload to ensure all data is fresh
-                        const brand = response?.data || response;
-                        const brandId = brand?._id || brand?.id;
-                        if (brandId) {
-                            window.location.href = `/dashboard/products-list/${brandId}/add`;
-                        } else {
-                            router.push(`/dashboard`);
-                        }
                     },
                     onError: (error) => {
                         toast.error(error.message || 'Failed to create profile', 'Error');
@@ -120,36 +98,35 @@ const BusinessProfileTab = () => {
 
     if (isBrandLoading) {
         return (
-            <div className="flex justify-center items-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2.5rem] border border-gray-200 shadow-sm animate-pulse">
+                <Loader2 className="w-10 h-10 text-primary animate-spin mb-4" />
+                <p className="text-sm font-bold text-gray-400 ">Loading Business Data...</p>
             </div>
         );
     }
 
     return (
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
-                <h2 className="text-xl font-bold text-gray-800">
-                    {currentBrand
-                        ? `${isCustomMaker ? 'Custom Maker' : 'Brand'} Profile`
-                        : `Create ${isCustomMaker ? 'Custom Maker' : 'Brand'} Profile`}
-                </h2>
+        <div className="bg-white rounded-[2.5rem] shadow-sm border border-gray-200 overflow-hidden mb-8 transition-all hover:shadow-md">
+            <div className="px-10 py-8 border-b border-gray-200 bg-white flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 shadow-sm">
+                    <Building2 size={24} />
+                </div>
+                <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                        {currentBrand
+                            ? `${isCustomMaker ? 'Custom Maker' : 'Brand'} Profile`
+                            : `Setup ${isCustomMaker ? 'Custom Maker' : 'Brand'} Profile`}
+                    </h2>
+                    <p className="text-sm text-gray-500 font-medium">Manage your brand presence and official details</p>
+                </div>
             </div>
 
-            <div className="p-8">
-                {!currentBrand || isEditing ? (
-                    <ProfileForm
-                        brand={currentBrand}
-                        onSubmit={handleCreateOrUpdate}
-                        onCancel={currentBrand ? () => setIsEditing(false) : null}
-                        isSubmitting={isCreating || isUpdating}
-                    />
-                ) : (
-                    <ProfileDetails
-                        brand={currentBrand}
-                        onEdit={() => setIsEditing(true)}
-                    />
-                )}
+            <div className="p-10">
+                <ProfileForm
+                    brand={currentBrand}
+                    onSubmit={handleCreateOrUpdate}
+                    isSubmitting={isCreating || isUpdating}
+                />
             </div>
         </div>
     );

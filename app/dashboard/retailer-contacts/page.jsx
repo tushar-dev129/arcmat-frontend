@@ -126,7 +126,7 @@ export default function RetailerContactsPage() {
                                                         <User className="w-6 h-6" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Assigned Retailer</p>
+                                                        <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">Assigned Retailer</p>
                                                         <p className="font-bold text-[#2d3142]">{retailer.name}</p>
                                                     </div>
                                                 </div>
@@ -156,7 +156,7 @@ export default function RetailerContactsPage() {
                                                     <MessageSquare className="w-4 h-4" />
                                                     Chat with Retailer
                                                     {request.unreadMessages > 0 && (
-                                                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] flex items-center justify-center rounded-full border-2 border-white animate-bounce-subtle">
+                                                        <span className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[13px] flex items-center justify-center rounded-full border-2 border-white animate-bounce-subtle">
                                                             {request.unreadMessages}
                                                         </span>
                                                     )}
@@ -172,7 +172,7 @@ export default function RetailerContactsPage() {
 
                                     {request.notes && (
                                         <div className="mt-6 flex gap-3 p-4 bg-orange-50/30 rounded-2xl border border-orange-50/50 text-sm text-gray-600">
-                                            <div className="font-bold text-[10px] uppercase tracking-widest text-primary mt-0.5 shrink-0">Your Note:</div>
+                                            <div className="font-bold text-[13px] uppercase tracking-widest text-primary mt-0.5 shrink-0">Your Note:</div>
                                             <p className="font-medium italic leading-relaxed">"{request.notes}"</p>
                                         </div>
                                     )}

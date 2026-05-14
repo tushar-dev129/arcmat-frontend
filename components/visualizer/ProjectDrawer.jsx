@@ -71,7 +71,7 @@ export default function ProjectDrawer({ isOpen, onClose, savedMaterials, onAdd, 
                                                 <X className="w-2.5 h-2.5 text-gray-700" />
                                             </button>
                                         </div>
-                                        <span className="text-[10px] text-gray-500 max-w-[64px] truncate text-center">{name}</span>
+                                        <span className="text-[13px] text-gray-500 max-w-[64px] truncate text-center">{name}</span>
                                     </div>
                                 );
                             })}

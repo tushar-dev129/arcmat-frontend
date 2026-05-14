@@ -224,7 +224,7 @@ export default function MarketplaceProfilePage() {
         const root = findRoot(categories);
         // If we found a clear root with children, use those
         if (root && root.children?.length > 0) return root.children;
-        
+
         // If categories is a single item that contains children, it might be the root itself
         if (categories.length === 1 && categories[0].children?.length > 0) {
             return categories[0].children;
@@ -596,7 +596,7 @@ export default function MarketplaceProfilePage() {
                     {!isEditing && (
                         <div className="absolute top-4 right-4 md:top-6 md:right-8">
                             <div className={clsx(
-                                "flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold  tracking-widest border",
+                                "flex items-center gap-1.5 px-3 py-1 rounded-full text-[13px] font-bold  tracking-widest border",
                                 formData.visibility === 'public'
                                     ? "bg-emerald-50 text-emerald-600 border-emerald-100"
                                     : "bg-gray-50 text-gray-400 border-gray-100"
@@ -631,7 +631,7 @@ export default function MarketplaceProfilePage() {
                             )}
 
                             {isEditing && (
-                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-[10px] font-bold  tracking-widest text-center px-2">
+                                <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center cursor-pointer text-white text-[13px] font-bold  tracking-widest text-center px-2">
                                     <Camera className="w-5 h-5 md:w-6 md:h-6 mb-1" />
                                     Change Logo
                                     <input type="file" className="hidden" onChange={handleImageUpload} accept="image/*" />
@@ -667,7 +667,7 @@ export default function MarketplaceProfilePage() {
                         )}
 
                         {isEditing && (
-                            <p className="text-[10px] md:text-xs text-gray-400 mt-2 flex items-center justify-center sm:justify-start gap-1">
+                            <p className="text-[13px] md:text-xs text-gray-400 mt-2 flex items-center justify-center sm:justify-start gap-1">
                                 <Info className="w-3 h-3" />
                                 Recommended: Square image, 512x512px
                             </p>
@@ -742,7 +742,7 @@ export default function MarketplaceProfilePage() {
                                             </div>
                                         );
                                     })}
-                                  
+
                                 </div>
                             ) : (
                                 <div className="space-y-1 mt-1">
@@ -836,7 +836,7 @@ export default function MarketplaceProfilePage() {
                                     />
                                 ) : (
                                     <div className="flex items-center gap-2 text-gray-900 font-medium">
-                                            {formData.experienceYears ? `${formData.experienceYears} Years` : "Not specified"}
+                                        {formData.experienceYears ? `${formData.experienceYears} Years` : "Not specified"}
                                     </div>
                                 )}
                             </Field>
@@ -866,8 +866,8 @@ export default function MarketplaceProfilePage() {
                 <Section title="Working Hours" icon={Clock}>
                     <div className="bg-gray-50/50 rounded-2xl border border-gray-100 overflow-hidden">
                         <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b  border-gray-100">
-                            <div className="col-span-3 text-[10px] font-bold text-gray-400  tracking-widest">Day</div>
-                            <div className="col-span-9 text-[10px]  font-bold text-gray-400   tracking-widest">Timing</div>
+                            <div className="col-span-3 text-[13px] font-bold text-gray-400  tracking-widest">Day</div>
+                            <div className="col-span-9 text-[13px]  font-bold text-gray-400   tracking-widest">Timing</div>
                         </div>
                         <div className="divide-y divide-gray-50">
                             {DAYS.map((day) => {
@@ -951,9 +951,9 @@ export default function MarketplaceProfilePage() {
                                                         }));
                                                     }}
                                                     className={clsx(
-                                                        "px-3 py-1.5 rounded-lg text-[10px] font-bold  tracking-wider border transition-all",
-                                                        hours.isClosed 
-                                                            ? "bg-red-50 text-red-500 border-red-100 hover:bg-red-100" 
+                                                        "px-3 py-1.5 rounded-lg text-[13px] font-bold  tracking-wider border transition-all",
+                                                        hours.isClosed
+                                                            ? "bg-red-50 text-red-500 border-red-100 hover:bg-red-100"
                                                             : "bg-emerald-50 text-emerald-600 border-emerald-100 hover:bg-emerald-100"
                                                     )}
                                                 >

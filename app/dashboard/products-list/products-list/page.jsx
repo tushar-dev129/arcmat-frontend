@@ -223,7 +223,7 @@ export default function ProductsListPage() {
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">New Items</p>
                                     <div className="flex items-center gap-2">
                                         <p className="text-2xl font-bold text-gray-900">{globalStats.newProducts}</p>
-                                        <span className="text-[10px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
+                                        <span className="text-[13px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
                                     </div>
                                 </div>
                             </div>
@@ -235,7 +235,7 @@ export default function ProductsListPage() {
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Activity</p>
                                     <div className="flex items-center gap-2">
                                         <p className="text-2xl font-bold text-gray-900">{globalStats.updatedProducts}</p>
-                                        <span className="text-[10px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
+                                        <span className="text-[13px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded-full font-bold">7d</span>
                                     </div>
                                 </div>
                             </div>
@@ -320,31 +320,31 @@ export default function ProductsListPage() {
                                 <div className="space-y-4 w-full">
                                     <div>
                                         <h3 className="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-1">{brand.name}</h3>
-                                        <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">Certified Provider</p>
+                                        <p className="text-[13px] uppercase tracking-[0.2em] font-bold text-gray-400 mt-1">Certified Provider</p>
                                     </div>
 
                                     <div className="flex flex-col gap-2">
                                         <div className="flex items-center justify-center gap-2 py-2 px-4 bg-gray-50 rounded-2xl border border-gray-100 group-hover:bg-primary/5 group-hover:border-primary/10 transition-colors">
                                             <Package className="w-4 h-4 text-primary" />
                                             <span className="text-sm font-bold text-gray-700">{brand.productCount || 0}</span>
-                                            <span className="text-[10px] text-gray-400 font-medium">Collections</span>
+                                            <span className="text-[13px] text-gray-400 font-medium">Collections</span>
                                         </div>
 
                                         <div className="flex items-center gap-2 justify-center">
                                             {brand.newCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 text-[10px] font-bold rounded-full border border-green-100">
+                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-green-50 text-green-700 text-[13px] font-bold rounded-full border border-green-100">
                                                     <Plus className="w-3 h-3" />
                                                     {brand.newCount} New
                                                 </div>
                                             )}
                                             {brand.updatedCount > 0 && (
-                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 text-orange-700 text-[10px] font-bold rounded-full border border-orange-100">
+                                                <div className="flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 text-orange-700 text-[13px] font-bold rounded-full border border-orange-100">
                                                     <Clock className="w-3 h-3" />
                                                     {brand.updatedCount} Repriced
                                                 </div>
                                             )}
                                             {!(brand.newCount > 0 || brand.updatedCount > 0) && (
-                                                <div className="px-2.5 py-1 text-gray-400 text-[10px] font-semibold italic">
+                                                <div className="px-2.5 py-1 text-gray-400 text-[13px] font-semibold italic">
                                                     No recent updates
                                                 </div>
                                             )}

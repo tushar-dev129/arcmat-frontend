@@ -137,12 +137,12 @@ export default function AdminHelp({ isAdmin }) {
                                             <div className="min-w-0">
                                                 <h3 className="text-lg font-bold text-gray-900 truncate">{query.subject}</h3>
                                                 <div className="flex items-center gap-3 mt-1">
-                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
+                                                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-widest flex items-center gap-1.5">
                                                         <User className="w-3 h-3" />
                                                         {query.userId?.name || 'Unknown User'}
                                                     </span>
                                                     <span className="w-1 h-1 bg-gray-200 rounded-full"></span>
-                                                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                                                    <span className="text-[13px] font-bold text-gray-400 uppercase tracking-widest">
                                                         {new Date(query.createdAt).toLocaleDateString('en-US', { day: 'numeric', month: 'short' })}
                                                     </span>
                                                 </div>
@@ -151,7 +151,7 @@ export default function AdminHelp({ isAdmin }) {
 
                                         <div className="flex items-center gap-4">
                                             <span className={clsx(
-                                                "px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest border",
+                                                "px-4 py-1.5 rounded-full text-[13px] font-bold uppercase tracking-widest border",
                                                 STATUS_CONFIG[query.status]?.color
                                             )}>
                                                 {STATUS_CONFIG[query.status]?.label}
@@ -169,7 +169,7 @@ export default function AdminHelp({ isAdmin }) {
                                                 {/* Left: Query Content */}
                                                 <div className="lg:col-span-2 space-y-8">
                                                     <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Original Message</label>
+                                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Original Message</label>
                                                         <div className="bg-white p-8 rounded-[32px] border border-gray-100 text-gray-700 leading-relaxed font-medium">
                                                             {query.query}
                                                         </div>
@@ -177,7 +177,7 @@ export default function AdminHelp({ isAdmin }) {
 
                                                     {query.attachments?.length > 0 && (
                                                         <div>
-                                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Attachments</label>
+                                                            <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Attachments</label>
                                                             <div className="flex flex-wrap gap-4">
                                                                 {query.attachments.map((src, i) => (
                                                                     <a
@@ -199,7 +199,7 @@ export default function AdminHelp({ isAdmin }) {
 
                                                     {/* Timeline */}
                                                     <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Activity Timeline</label>
+                                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Activity Timeline</label>
                                                         <div className="space-y-4">
                                                             {query.timeline?.length > 0 ? (
                                                                 query.timeline.map((step, i) => (
@@ -208,7 +208,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-gray-300"></div>
                                                                         </div>
                                                                         <div className="pb-4">
-                                                                            <span className="text-[10px] font-bold text-gray-300 uppercase block mb-1">
+                                                                            <span className="text-[13px] font-bold text-gray-300 uppercase block mb-1">
                                                                                 {new Date(step.updatedAt).toLocaleString()}
                                                                             </span>
                                                                             <p className="text-sm font-bold text-gray-700">
@@ -219,7 +219,7 @@ export default function AdminHelp({ isAdmin }) {
                                                                     </div>
                                                                 ))
                                                             ) : (
-                                                                <p className="text-[10px] italic text-gray-300 font-bold uppercase tracking-widest">No activity recorded yet</p>
+                                                                <p className="text-[13px] italic text-gray-300 font-bold uppercase tracking-widest">No activity recorded yet</p>
                                                             )}
                                                         </div>
                                                     </div>
@@ -228,14 +228,14 @@ export default function AdminHelp({ isAdmin }) {
                                                 {/* Right: Actions */}
                                                 <div className="space-y-6">
                                                     <div>
-                                                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Update Status</label>
+                                                        <label className="text-[13px] font-bold text-gray-400 uppercase tracking-widest block mb-4">Update Status</label>
                                                         <div className="grid grid-cols-2 gap-3">
                                                             {Object.entries(STATUS_CONFIG).map(([key, cfg]) => (
                                                                 <button
                                                                     key={key}
                                                                     onClick={() => handleUpdateStatus(query._id, key, query.subject)}
                                                                     className={clsx(
-                                                                        "h-12 rounded-2xl text-[10px] font-bold uppercase tracking-widest border transition-all",
+                                                                        "h-12 rounded-2xl text-[13px] font-bold uppercase tracking-widest border transition-all",
                                                                         query.status === key
                                                                             ? "bg-[#2C2D35] text-white border-transparent"
                                                                             : "bg-white text-gray-600 border-gray-100 hover:border-gray-300"

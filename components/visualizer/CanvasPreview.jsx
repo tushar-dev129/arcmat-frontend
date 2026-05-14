@@ -200,13 +200,13 @@ const CanvasPreview = forwardRef((props, ref) => {
                     <span className="text-gray-400">/</span>
                     <span className="truncate max-w-[80px] md:max-w-none">{roomName}</span>
                     {autoSaving && (
-                        <div className="flex items-center gap-1.5 ml-2 text-[10px] font-bold text-[#d9a88a] animate-pulse">
+                        <div className="flex items-center gap-1.5 ml-2 text-[13px] font-bold text-[#d9a88a] animate-pulse">
                             <div className="w-1.5 h-1.5 rounded-full bg-[#d9a88a]" />
                             SYNCING...
                         </div>
                     )}
                     {filledCount > 0 && (
-                        <span className="ml-1 px-2 py-0.5 text-[10px] md:text-xs font-semibold rounded-full bg-primary/10 text-primary whitespace-nowrap">
+                        <span className="ml-1 px-2 py-0.5 text-[13px] md:text-xs font-semibold rounded-full bg-primary/10 text-primary whitespace-nowrap">
                             {filledCount} <span className="hidden md:inline">item{filledCount !== 1 ? 's' : ''}</span>
                         </span>
                     )}

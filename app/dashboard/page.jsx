@@ -110,7 +110,7 @@ const RolePieChart = ({ data }) => {
                 <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
                     <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest text-center mb-0.5">Total User</p>
                     <h4 className="text-3xl font-bold text-gray-900 leading-none">{total}</h4>
-                    <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded-full mt-2 border border-emerald-100/50">ACTIVE</span>
+                    <span className="text-[13px] font-bold text-emerald-500 bg-emerald-50 px-1.5 py-0.5 rounded-full mt-2 border border-emerald-100/50">ACTIVE</span>
                 </div>
             </div>
 
@@ -130,16 +130,16 @@ const RolePieChart = ({ data }) => {
                             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 shadow-sm" style={{ backgroundColor: `${role.color}15`, color: role.color }}>
                                 <role.icon className="w-4.5 h-4.5" />
                             </div>
-                            <span className="text-[10px] font-bold text-emerald-500 bg-white px-2 py-0.5 rounded-full shadow-sm">
+                            <span className="text-[13px] font-bold text-emerald-500 bg-white px-2 py-0.5 rounded-full shadow-sm">
                                 {role.trend}
                             </span>
                         </div>
                         <div className="min-w-0">
-                            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tight truncate">{role.label}</p>
+                            <p className="text-[13px] font-bold text-gray-400 uppercase tracking-tight truncate">{role.label}</p>
                             <div className="flex items-end justify-between mt-1">
                                 <h5 className="text-xl font-bold text-gray-900 leading-none">{role.value}</h5>
                                 {role.percent > 0 && (
-                                    <span className="text-[10px] font-bold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">
+                                    <span className="text-[13px] font-bold text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded-md">
                                         {Math.round(role.percent)}%
                                     </span>
                                 )}
@@ -404,7 +404,7 @@ export default function DashboardPage() {
                                             <div>
                                                 <div className="flex items-center gap-2 mb-1">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-[#d9a88a]"></span>
-                                                    <p className="text-[10px] font-bold text-[#d9a88a] uppercase tracking-[0.2em]">Live Analytics</p>
+                                                    <p className="text-[13px] font-bold text-[#d9a88a] uppercase tracking-[0.2em]">Live Analytics</p>
                                                 </div>
                                                 <h3 className="text-xl font-bold text-gray-800 tracking-tight">Active Pulse</h3>
                                             </div>
@@ -452,8 +452,8 @@ export default function DashboardPage() {
 
                                         <div className="mt-6 pt-5 border-t border-gray-100">
                                             <div className="flex items-center justify-between mb-2">
-                                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">System Integrity</p>
-                                                <span className="text-[10px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">98% SECURE</span>
+                                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">System Integrity</p>
+                                                <span className="text-[13px] font-bold text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-full">98% SECURE</span>
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <div className="h-1.5 flex-1 bg-gray-100 rounded-full overflow-hidden">
@@ -464,7 +464,7 @@ export default function DashboardPage() {
                                                         className="h-full bg-gradient-to-r from-[#d9a88a] to-emerald-500"
                                                     ></motion.div>
                                                 </div>
-                                                <span className="text-[10px] font-bold text-gray-400">OPTIMAL</span>
+                                                <span className="text-[13px] font-bold text-gray-400">OPTIMAL</span>
                                             </div>
                                             <p className="text-[9px] text-gray-400 mt-3 font-medium text-center italic">Last sync: Just now</p>
                                         </div>
@@ -509,7 +509,7 @@ export default function DashboardPage() {
                                         </Link>
                                         <div className="text-right flex items-center gap-2">
                                             <span className={clsx(
-                                                "px-2 py-0.5 rounded-full text-[10px] font-bold uppercase",
+                                                "px-2 py-0.5 rounded-full text-[13px] font-bold uppercase",
                                                 product.status === 1 || product.status === '1' ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"
                                             )}>
                                                 {product.status === 1 || product.status === '1' ? 'Active' : 'Inactive'}
@@ -557,7 +557,7 @@ export default function DashboardPage() {
                                         </div>
                                         <div className="text-right">
                                             <p className="text-sm font-bold text-gray-900">₹{order.total_amount || 0}</p>
-                                            <span className="text-[10px] text-gray-400 capitalize">{order.order_status || 'Pending'}</span>
+                                            <span className="text-[13px] text-gray-400 capitalize">{order.order_status || 'Pending'}</span>
                                         </div>
                                     </div>
                                 ))
@@ -708,22 +708,22 @@ export default function DashboardPage() {
             {/* Dashboard Stats for Architect */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
                 <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Projects</p>
+                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Projects</p>
                     <h3 className="text-2xl font-bold text-gray-900">{projects.length}</h3>
                 </div>
                 <div className="bg-white p-5 rounded-3xl border border-gray-100 shadow-sm">
-                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Spaces</p>
+                    <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-1">Total Spaces</p>
                     <h3 className="text-2xl font-bold text-gray-900">{boards.length}</h3>
                 </div>
                 <Link href="/dashboard/sample-requests" className="bg-orange-50 p-5 rounded-3xl border border-orange-100 shadow-sm hover:shadow-md transition-all group">
-                    <p className="text-[10px] font-bold text-orange-600 uppercase tracking-widest mb-1">Sample Requests</p>
+                    <p className="text-[13px] font-bold text-orange-600 uppercase tracking-widest mb-1">Sample Requests</p>
                     <div className="flex items-center justify-between">
                         <h3 className="text-2xl font-bold text-orange-700">{samplesData?.data?.length || 0}</h3>
                         <ArrowRight className="w-5 h-5 text-orange-400 group-hover:translate-x-1 transition-transform" />
                     </div>
                 </Link>
                 <Link href="/dashboard/notifications" className="bg-purple-50 p-5 rounded-3xl border border-purple-100 shadow-sm hover:shadow-md transition-all group">
-                    <p className="text-[10px] font-bold text-purple-600 uppercase tracking-widest mb-1">New Messages</p>
+                    <p className="text-[13px] font-bold text-purple-600 uppercase tracking-widest mb-1">New Messages</p>
                     <div className="flex items-center justify-between">
                         <h3 className="text-2xl font-bold text-purple-700">{notificationsData?.data?.filter(n => !n.isRead)?.length || 0}</h3>
                         <ArrowRight className="w-5 h-5 text-purple-400 group-hover:translate-x-1 transition-transform" />
@@ -852,7 +852,7 @@ export default function DashboardPage() {
                                             ) : (
                                                 <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                                                     <Layout className="w-8 h-8 text-gray-200" />
-                                                    <span className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">No Preview</span>
+                                                    <span className="text-[13px] text-gray-300 font-bold uppercase tracking-widest">No Preview</span>
                                                 </div>
                                             )}
                                         </div>
@@ -863,11 +863,11 @@ export default function DashboardPage() {
                                                 {board.moodboard_name}
                                             </h3>
                                             <div className="flex items-center justify-between gap-2 mt-1">
-                                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight flex items-center gap-1 truncate max-w-[100px]">
+                                                <p className="text-[13px] text-gray-400 font-bold uppercase tracking-tight flex items-center gap-1 truncate max-w-[100px]">
                                                     <Layout className="w-2.5 h-2.5" />
                                                     {board.projectId?.projectName || 'No Project'}
                                                 </p>
-                                                <p className="text-[10px] text-gray-400 font-bold uppercase tracking-tight flex items-center gap-1">
+                                                <p className="text-[13px] text-gray-400 font-bold uppercase tracking-tight flex items-center gap-1">
                                                     <User className="w-2.5 h-2.5" />
                                                     {user?.fullName?.split(' ')[0] || 'Architect'}
                                                 </p>

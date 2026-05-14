@@ -798,7 +798,7 @@ export default function MoodboardDetailPage() {
                                                     {siblingBoards.length > 0 && (
                                                         <>
                                                             <div className="border-t border-gray-100 my-1" />
-                                                            <p className="px-4 py-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-widest">Other Spaces</p>
+                                                            <p className="px-4 py-1.5 text-[13px] font-bold text-gray-400 uppercase tracking-widest">Other Spaces</p>
                                                             {siblingBoards.map(b => (
                                                                 <button
                                                                     key={b._id}
@@ -846,7 +846,7 @@ export default function MoodboardDetailPage() {
                                 >
                                     {tab.label}
                                     {hasGeneralMessages && (
-                                        <span className="flex items-center justify-center bg-red-500 text-white text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full ml-1 animate-pulse">
+                                        <span className="flex items-center justify-center bg-red-500 text-white text-[13px] font-bold h-4 min-w-[16px] px-1 rounded-full ml-1 animate-pulse">
                                             {notificationsData.data.generalDiscussions}
                                         </span>
                                     )}
@@ -1014,7 +1014,7 @@ export default function MoodboardDetailPage() {
                                         >
                                             <div className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border backdrop-blur-md transition-all ${photo.allowInGallery ? 'bg-green-500/90 border-green-400 text-white shadow-lg' : 'bg-white/90 border-gray-200 text-gray-500 hover:bg-[#fef7f2] hover:border-[#d9a88a]/30'}`}>
                                                 <div className={`w-2.5 h-2.5 rounded-full ${photo.allowInGallery ? 'bg-white' : 'bg-gray-300'}`} />
-                                                <span className="text-[10px] font-bold uppercase tracking-wider">
+                                                <span className="text-[13px] font-bold uppercase tracking-wider">
                                                     {photo.allowInGallery ? 'In Gallery' : 'Private'}
                                                 </span>
                                             </div>
@@ -1033,7 +1033,7 @@ export default function MoodboardDetailPage() {
                                         >
                                             <MessageCircle className="w-4 h-4" />
                                             {productNotifications[photo.id]?.unreadMessages > 0 && (
-                                                <span className="absolute -top-1 -right-1 flex items-center justify-center bg-red-500 text-white text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full shadow-md animate-pulse">
+                                                <span className="absolute -top-1 -right-1 flex items-center justify-center bg-red-500 text-white text-[13px] font-bold h-4 min-w-[16px] px-1 rounded-full shadow-md animate-pulse">
                                                     {productNotifications[photo.id].unreadMessages}
                                                 </span>
                                             )}

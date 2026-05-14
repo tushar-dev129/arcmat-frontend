@@ -53,7 +53,7 @@ const CompareBar = () => {
                         )
                     })}
                     {comparedProducts.length > 4 && (
-                        <div className="w-10 h-10 rounded-full border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400 text-[10px] font-bold">
+                        <div className="w-10 h-10 rounded-full border-2 border-dashed border-gray-200 bg-gray-50 flex items-center justify-center text-gray-400 text-[13px] font-bold">
                             +{comparedProducts.length - 4}
                         </div>
                     )}
@@ -77,7 +77,7 @@ const CompareBar = () => {
                     >
                         <ArrowRightLeft className="w-4 h-4" />
                         Compare
-                        <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] ml-0.5">
+                        <span className="bg-white/20 px-1.5 py-0.5 rounded text-[13px] ml-0.5">
                             {comparedProducts.length}
                         </span>
                     </button>

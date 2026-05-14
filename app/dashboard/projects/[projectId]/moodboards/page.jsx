@@ -196,14 +196,14 @@ export default function MoodboardsPage() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`flex items-center gap-2 px-6 py-4 text-sm font-bold border-b-2 transition-all relative whitespace-nowrap ${isActive
-                                    ? 'border-[#1a1a2e] text-[#1a1a2e]'
-                                    : 'border-transparent text-gray-400 hover:text-gray-600'
+                                ? 'border-[#1a1a2e] text-[#1a1a2e]'
+                                : 'border-transparent text-gray-400 hover:text-gray-600'
                                 }`}
                         >
                             <tab.icon className={`w-4 h-4 ${isActive ? 'text-[#d9a88a]' : ''}`} />
                             {tab.label}
                             {hasUnread && (
-                                <span className="flex items-center justify-center bg-red-500 text-white text-[10px] font-bold h-4 min-w-[16px] px-1 rounded-full ml-1.5 animate-pulse">
+                                <span className="flex items-center justify-center bg-red-500 text-white text-[13px] font-bold h-4 min-w-[16px] px-1 rounded-full ml-1.5 animate-pulse">
                                     {unreadMessages}
                                 </span>
                             )}

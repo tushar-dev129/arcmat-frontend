@@ -96,11 +96,11 @@ export default function MaterialDiscussionModal({ isOpen, onClose, projectId, sp
                                 <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                     <div className="flex items-center gap-2 mb-1">
                                         <span className="text-xs font-bold text-gray-500">{authorName}</span>
-                                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
+                                        <span className={`text-[13px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700'}`}>
                                             {authorRole}
                                         </span>
                                         {comment.isInternal && (
-                                            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold uppercase bg-amber-100 text-amber-700">
+                                            <span className="text-[13px] px-1.5 py-0.5 rounded-md font-bold uppercase bg-amber-100 text-amber-700">
                                                 Private Note
                                             </span>
                                         )}
@@ -110,7 +110,7 @@ export default function MaterialDiscussionModal({ isOpen, onClose, projectId, sp
                                             <p className="whitespace-pre-wrap">{comment.message}</p>
                                         </div>
                                     </div>
-                                    <span className="text-[10px] text-gray-400 mt-1">
+                                    <span className="text-[13px] text-gray-400 mt-1">
                                         {new Date(comment.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </div>

@@ -291,7 +291,7 @@ export default function BespokeBrandShowcase() {
             {/* Premium Breadcrumb Header */}
             <div className="bg-white border-b border-gray-100/80 sticky top-0 z-[10]">
                 <Container className="py-3.5">
-                    <nav className="flex items-center gap-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                    <nav className="flex items-center gap-2.5 text-[13px] font-bold uppercase tracking-[0.2em] text-gray-400">
                         <span className="h-3 w-[1px] bg-gray-200 mx-1" />
                         <Link href="/bespoke" className="flex items-center gap-1.5 hover:text-[var(--brand-color)] transition-colors group">
                             <ChevronLeft className="h-3.5 w-3.5 -ml-1 transition-transform group-hover:-translate-x-0.5" />
@@ -672,7 +672,7 @@ function ProductsSection({ products, brandName, brandId, productsLoading, setMod
                                 <Image src={item.image} alt={item.name} fill unoptimized className="object-cover mix-blend-multiply group-hover:scale-105 transition-transform duration-500" />
                             </div>
                             <div className="flex flex-col flex-1 p-5">
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{brandName}</p>
+                                <p className="text-[13px] font-bold text-gray-400 uppercase tracking-widest mb-1">{brandName}</p>
                                 <h3 className="text-[14px] font-medium text-gray-900 leading-snug line-clamp-2 py-1 ">{item.name}</h3>
                                 <p className="text-[12px] text-gray-500 mb-4 capitalize">{item.material} {item.category}</p>
                                 <button onClick={() => setModal({ type: "inquiry", ...item })} className="mt-auto flex h-10 w-full items-center justify-center gap-2 bg-[var(--brand-color)] hover:bg-black text-white rounded-lg text-[11px] font-bold uppercase tracking-widest transition-colors">
@@ -696,7 +696,7 @@ function CatalogSection({ items, brandName, setModal }) {
                     <button key={item.id} onClick={() => setModal({ type: "catalog", ...item })} className="group relative w-[220px] shrink-0 text-left bg-white border border-gray-200 rounded-lg p-3 hover:shadow-md hover:border-gray-300 transition-all">
                         <div className="relative h-[270px] w-full bg-gray-100 rounded-[2px] overflow-hidden">
                             {item.cover && <Image src={item.cover} alt={item.title} fill unoptimized className="object-cover group-hover:scale-105 transition-transform duration-500" />}
-                            <div className="absolute top-2 right-2 bg-black text-white px-2 py-1 text-[10px] font-bold uppercase tracking-widest rounded-[2px]">PDF</div>
+                            <div className="absolute top-2 right-2 bg-black text-white px-2 py-1 text-[13px] font-bold uppercase tracking-widest rounded-[2px]">PDF</div>
                         </div>
                         <div className="mt-4 px-1">
                             <p className="text-[13px] font-bold text-gray-900 line-clamp-2">{item.title}</p>
@@ -718,7 +718,7 @@ function NewsSection({ items, brandName, setModal }) {
                     <button key={item.id} onClick={() => setModal({ type: "article", ...item })} className="group text-left flex flex-col">
                         <div className="relative aspect-[16/10] w-full overflow-hidden bg-gray-100 rounded-sm">
                             {item.image && <Image src={item.image} alt={item.title} fill unoptimized className="object-cover" />}
-                            <div className="absolute bottom-2 left-2 bg-[#333] text-white px-2 py-1 text-[10px] font-bold rounded-sm flex items-center gap-1.5">
+                            <div className="absolute bottom-2 left-2 bg-[#333] text-white px-2 py-1 text-[13px] font-bold rounded-sm flex items-center gap-1.5">
                                 <ImageIcon className="h-3 w-3" /> {item.readTime ? parseInt(item.readTime) : "4"}
                             </div>
                         </div>
@@ -800,20 +800,20 @@ function PartnerSection({ items, brandName, setModal }) {
                             )}
                             <p className="text-[12px] text-gray-500 mt-1">{item.location}</p>
                             <div className="flex items-center gap-2 mt-2 mb-3">
-                                <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest">{item.category}</span>
+                                <span className="text-[13px] uppercase font-bold text-gray-400 tracking-widest">{item.category}</span>
                                 {item.verified && <ShieldCheck className="h-3.5 w-3.5 text-green-600" />}
                             </div>
                             {item.href ? (
                                 <Link
                                     href={item.href}
-                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors"
+                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[13px] font-bold uppercase tracking-widest transition-colors"
                                 >
                                     Contact Partner <ArrowRight className="h-3 w-3" />
                                 </Link>
                             ) : (
                                 <button
                                     onClick={() => setModal({ type: "partner", ...item })}
-                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[10px] font-bold uppercase tracking-widest transition-colors"
+                                    className="flex items-center justify-center gap-2 w-full py-2 bg-gray-50 hover:bg-[var(--brand-color)] text-gray-700 hover:text-white rounded-lg border border-gray-200 hover:border-[var(--brand-color)] text-[13px] font-bold uppercase tracking-widest transition-colors"
                                 >
                                     Contact Partner <ArrowRight className="h-3 w-3" />
                                 </button>
@@ -921,28 +921,28 @@ function ContactSection({ template }) {
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <div className="grid sm:grid-cols-2 gap-5">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Full Name</label>
+                                    <label className="text-[13px] font-bold uppercase tracking-wider text-gray-400 ml-1">Full Name</label>
                                     <input required name="name" value={formData.name} onChange={handleChange} type="text" placeholder="John Doe" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Email Address</label>
+                                    <label className="text-[13px] font-bold uppercase tracking-wider text-gray-400 ml-1">Email Address</label>
                                     <input required name="email" value={formData.email} onChange={handleChange} type="email" placeholder="john@example.com" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
                                 </div>
                             </div>
 
                             <div className="grid sm:grid-cols-2 gap-5">
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Phone Number</label>
+                                    <label className="text-[13px] font-bold uppercase tracking-wider text-gray-400 ml-1">Phone Number</label>
                                     <input required name="phone" value={formData.phone} onChange={handleChange} type="tel" placeholder="10-digit Phone Number" maxLength="10" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Location</label>
+                                    <label className="text-[13px] font-bold uppercase tracking-wider text-gray-400 ml-1">Location</label>
                                     <input required name="location" value={formData.location} onChange={handleChange} type="text" placeholder="Mumbai, India" className="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm" />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 ml-1">Your Query</label>
+                                <label className="text-[13px] font-bold uppercase tracking-wider text-gray-400 ml-1">Your Query</label>
                                 <textarea required name="query" value={formData.query} onChange={handleChange} rows="4" placeholder="How can we help you?" className="w-full p-4 rounded-lg bg-gray-50 border border-gray-200 focus:border-[var(--brand-color)] focus:ring-1 focus:ring-[var(--brand-color)] outline-none transition-all text-sm resize-none"></textarea>
                             </div>
 
@@ -968,7 +968,7 @@ function ContactSection({ template }) {
 
                         {socials.length > 0 && (
                             <div className="pt-8 border-t border-gray-200">
-                                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-5">Social Channels</p>
+                                <p className="text-[13px] font-bold uppercase tracking-widest text-gray-400 mb-5">Social Channels</p>
                                 <div className="flex flex-wrap gap-3">
                                     {socials.map((social, i) => {
                                         const Icon = socialIcons[social.key] || Globe;
@@ -996,7 +996,7 @@ function ContactDetail({ icon, label, value }) {
                 {icon}
             </div>
             <div className="min-w-0">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">{label}</p>
+                <p className="text-[13px] font-bold uppercase tracking-widest text-gray-400">{label}</p>
                 <p className="mt-1 text-[15px] font-medium text-[#333] truncate">{value || "Available on request"}</p>
             </div>
         </div>
@@ -1101,7 +1101,7 @@ function DetailModal({ modal, onClose }) {
                                 </div>
                                 {modal.price && (
                                     <div className="inline-block bg-gray-50 border border-gray-200 px-6 py-3 rounded-sm mb-4">
-                                        <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1">Project Value</p>
+                                        <p className="text-[13px] font-bold uppercase tracking-widest text-gray-500 mb-1">Project Value</p>
                                         <p className="text-lg font-bold text-black">
                                             {String(modal.price).includes('₹') || String(modal.price).includes('$')
                                                 ? modal.price

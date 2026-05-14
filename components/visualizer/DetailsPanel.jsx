@@ -131,7 +131,7 @@ export default function DetailsPanel({
                     <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
                 </button> */}
                 <div className="absolute bottom-3 left-3">
-                    <span className="px-2 py-0.5 bg-black/60 text-white text-[10px] font-medium rounded-full backdrop-blur-sm">{badge}</span>
+                    <span className="px-2 py-0.5 bg-black/60 text-white text-[13px] font-medium rounded-full backdrop-blur-sm">{badge}</span>
                 </div>
             </div>
 
@@ -197,8 +197,8 @@ export default function DetailsPanel({
                                             />
                                         )}
                                     </div>
-                                    <span className="text-[10px] text-gray-700 font-semibold text-center leading-tight line-clamp-2 w-full">{variantLabel}</span>
-                                    {variantMeta && <span className="text-[10px] text-gray-500 text-center leading-tight line-clamp-2 w-full">{variantMeta}</span>}
+                                    <span className="text-[13px] text-gray-700 font-semibold text-center leading-tight line-clamp-2 w-full">{variantLabel}</span>
+                                    {variantMeta && <span className="text-[13px] text-gray-500 text-center leading-tight line-clamp-2 w-full">{variantMeta}</span>}
                                     {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-primary" />}
                                 </button>
                             );
@@ -228,7 +228,7 @@ export default function DetailsPanel({
                                 </div>
                                 {projectBudget && !isNaN(Number(projectBudget)) && Number(projectBudget) > 0 && (
                                     <div className="flex flex-col gap-1.5 pt-2 border-t border-orange-200/50 mt-1">
-                                        <div className="flex items-center justify-between text-[10px] font-bold text-orange-600/80">
+                                        <div className="flex items-center justify-between text-[13px] font-bold text-orange-600/80">
                                             <span>Project Budget</span>
                                             <span>{formatCurrency(Number(projectBudget))}</span>
                                         </div>
@@ -251,7 +251,7 @@ export default function DetailsPanel({
                             </div>
 
                             <div className="px-3 py-2 bg-gray-50 border border-gray-100 rounded-xl">
-                                <label className="text-[10px] font-bold text-gray-400 uppercase block mb-1">Project Phase</label>
+                                <label className="text-[13px] font-bold text-gray-400 uppercase block mb-1">Project Phase</label>
                                 <select
                                     value={currentPhase}
                                     onChange={(e) => onPhaseUpdate?.(e.target.value)}
@@ -334,7 +334,7 @@ function BoardItemRow({ item, onUpdateItem }) {
                 </div>
                 <div className="flex flex-col overflow-hidden">
                     <span className="truncate text-gray-900 font-bold text-sm leading-tight">{iName}</span>
-                    <span className="text-[10px] text-gray-400 uppercase tracking-tight">{categoryName}</span>
+                    <span className="text-[13px] text-gray-400 uppercase tracking-tight">{categoryName}</span>
                 </div>
             </div>
             <div className="flex items-end gap-3">
