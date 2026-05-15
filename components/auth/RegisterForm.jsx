@@ -37,9 +37,10 @@ const ROLE_OPTIONS = [
   {
     id: 'contractor',
     label: 'Contractor',
-    description: 'Manage construction, request quotes, and source materials.',
+    description: 'Provide construction and building services for projects.',
     role: 'contractor',
-    icon: Building2,
+    professionalType: 'Contractor / Builder',
+    icon: HardHat,
   },
   {
     id: 'brand',
@@ -61,14 +62,6 @@ const ROLE_OPTIONS = [
     description: 'Register as a bespoke maker for custom project work.',
     role: 'custom_maker',
     icon: Hammer,
-  },
-  {
-    id: 'contractor',
-    label: 'Contractor',
-    description: 'Provide construction and building services for projects.',
-    role: 'contractor',
-    professionalType: 'Contractor / Builder',
-    icon: HardHat,
   },
 ];
 
@@ -97,10 +90,14 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(registerSchema),
     mode: 'onBlur',
+    defaultValues: {
+      profession: '',
+    },
   });
 
   const registerMutation = useRegisterMutation();
@@ -113,6 +110,8 @@ export default function RegisterForm() {
       setSelectedRole(matchingRole);
       if (!matchingRole.needsProfession) {
         setValue('profession', matchingRole.label);
+      } else {
+        setValue('profession', '');
       }
     }
   }, [searchParams, setValue]);
@@ -121,6 +120,8 @@ export default function RegisterForm() {
     setSelectedRole(role);
     if (!role.needsProfession) {
       setValue('profession', role.label);
+    } else {
+      setValue('profession', '');
     }
   };
 
@@ -138,8 +139,8 @@ export default function RegisterForm() {
 
     const finalData = {
       ...data,
-      profession: profession,
-      professionalType: profession,
+      profession: selectedProfession,
+      professionalType: selectedProfession,
       providerType,
     };
 
@@ -239,7 +240,7 @@ export default function RegisterForm() {
           </div>
 
           <div className="grid gap-4 px-0 sm:px-10">
-            {PROFESSIONS.map((prof, index) => {
+            {(selectedRole.professions || []).map((prof, index) => {
               // Map icons to professions
               const Icon = prof.includes('Architect') ? BriefcaseBusiness :
                 prof.includes('Interior') ? UserRound : Hammer;
@@ -598,10 +599,10 @@ export default function RegisterForm() {
                   <select
                     {...register('profession')}
                     className={clsx(
-                      'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all appearance-none bg-white',
-                      errors.profession ? 'border-red-500' : 'border-[#e2e8f0]'
+                      'w-full px-4 py-3.5 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all appearance-none bg-white cursor-pointer',
+                      errors.profession ? 'border-red-500' : 'border-[#e2e8f0]',
+                      watch('profession') ? 'text-[#4a5568]' : 'text-[#a0aec0]'
                     )}
-                    defaultValue=""
                   >
                     <option value="" disabled>Select Profession</option>
                     {(selectedRole.professions || []).map((prof) => (
@@ -610,7 +611,7 @@ export default function RegisterForm() {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a0aec0] pointer-events-none" />
+                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096] pointer-events-none group-hover:text-[#d9a88a] transition-colors" />
                 </div>
                 {errors.profession && <p className="mt-1.5 text-sm text-red-500">{errors.profession.message}</p>}
               </motion.div>

@@ -18,12 +18,17 @@ import {
 import { getImageUrl } from "@/lib/productUtils";
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from '@/components/ui/Toast';
 
 export default function ProjectDetailsPage({ params }) {
     const { projectId } = use(params);
+    const router = useRouter();
     const { data: projectResponse, isLoading, error } = useGetPortfolioItemById(projectId);
+    const { isAuthenticated } = useAuth();
     const project = projectResponse?.data || projectResponse;
     const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -57,6 +62,14 @@ export default function ProjectDetailsPage({ params }) {
 
     const prevImage = () => {
         setActiveImageIndex((prev) => (prev - 1 + project.images.length) % project.images.length);
+    };
+
+    const handleContactClick = (e) => {
+        if (!isAuthenticated) {
+            e.preventDefault();
+            toast.info("Please login to contact the professional", "Authentication Required");
+            router.push("/auth/login");
+        }
     };
 
     return (
@@ -196,13 +209,18 @@ export default function ProjectDetailsPage({ params }) {
                             </div>
 
                             <div className="space-y-3">
-                                <a href={`tel:${project.contractorId?.contact?.phone}`} className="w-full flex items-center justify-center gap-2 py-4 bg-gray-900 text-white rounded-2xl font-bold transition-all hover:bg-gray-800 active:scale-95">
+                                <a 
+                                    href={`tel:${project.contractorId?.contact?.phone}`} 
+                                    onClick={handleContactClick}
+                                    className="w-full flex items-center justify-center gap-2 py-4 bg-gray-900 text-white rounded-2xl font-bold transition-all hover:bg-gray-800 active:scale-95"
+                                >
                                     <Phone className="w-4 h-4" />
                                     Call Professional
                                 </a>
                                 <a
                                     href={`https://wa.me/${project.contractorId?.contact?.whatsapp?.replace(/[^0-9]/g, '')}`}
                                     target="_blank"
+                                    onClick={handleContactClick}
                                     className="w-full flex items-center justify-center gap-2 py-4 bg-[#25D366] text-white rounded-2xl font-bold transition-all hover:opacity-90 active:scale-95"
                                 >
                                     <MessageCircle className="w-4 h-4" />
