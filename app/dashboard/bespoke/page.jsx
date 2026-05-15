@@ -86,7 +86,6 @@ const NAV_LINKS = [
     { id: "projects", label: "Project Showcase", icon: <Layout className="w-4 h-4" /> },
     { id: "products", label: "Products", icon: <Box className="w-4 h-4" /> },
     { id: "network", label: "Network", icon: <Users className="w-4 h-4" /> },
-    { id: "reviews", label: "Reviews", icon: <Star className="w-4 h-4" /> },
     { id: "requests", label: "Requests", icon: <MessageSquare className="w-4 h-4" /> },
 ];
 
@@ -117,12 +116,11 @@ export default function BespokeEditorPage() {
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedRetailers, setSelectedRetailers] = useState([]);
     const [selectedContractors, setSelectedContractors] = useState([]);
-    const [reviews, setReviews] = useState([{ name: "", role: "", rating: 5, comment: "" }]);
     const [heroImage, setHeroImage] = useState(null);
     const [existingGalleryMedia, setExistingGalleryMedia] = useState([]);
     const [galleryMedia, setGalleryMedia] = useState([]);
     const [tags, setTags] = useState("");
-    const [contact, setContact] = useState({ email: "", phone: "", address: "", socials: "" });
+    const [contact, setContact] = useState({ email: "", phone: "", whatsapp: "", website: "", address: "", socials: "" });
     const [collections, setCollections] = useState([]);
     const [catalogs, setCatalogs] = useState([]);
     const [videos, setVideos] = useState([]);
@@ -148,12 +146,13 @@ export default function BespokeEditorPage() {
         setSelectedProducts((bespoke.selectedProductIds || []).map(idOf).filter(Boolean));
         setSelectedRetailers(isCustomMaker ? [] : (bespoke.selectedRetailerIds || []).map(idOf).filter(Boolean));
         setSelectedContractors((bespoke.selectedContractorIds || []).map(idOf).filter(Boolean));
-        setReviews((bespoke.reviews?.length ? bespoke.reviews : [{ name: "", role: "", rating: 5, comment: "" }]));
         setExistingGalleryMedia([...(bespoke.galleryMedia || []), ...(bespoke.customImage ? [bespoke.customImage] : [])].slice(0, 8));
         setTags(arrayToCsv(bespoke.tags || []));
         setContact({
             email: bespoke.contact?.email || "",
             phone: bespoke.contact?.phone || "",
+            whatsapp: bespoke.contact?.whatsapp || "",
+            website: bespoke.contact?.website || brand?.website || "",
             address: bespoke.contact?.address || "",
             socials: arrayToCsv(bespoke.contact?.socials || [])
         });
@@ -189,8 +188,6 @@ export default function BespokeEditorPage() {
         return () => observer.disconnect();
     }, [brand]);
 
-    const activeReviewCount = useMemo(() => reviews.filter((review) => review.name || review.comment).length, [reviews]);
-
     const contractorOptions = useMemo(() => {
         const optionMap = new Map();
         (bespoke.selectedContractorIds || []).forEach((contractor) => {
@@ -217,7 +214,6 @@ export default function BespokeEditorPage() {
         formData.append("bespokeSelectedProductIds", JSON.stringify(selectedProducts));
         formData.append("bespokeSelectedRetailerIds", JSON.stringify(isCustomMaker ? [] : selectedRetailers));
         formData.append("bespokeSelectedContractorIds", JSON.stringify(selectedContractors));
-        formData.append("bespokeReviews", JSON.stringify(reviews));
         formData.append("bespokeExistingGalleryMedia", JSON.stringify(existingGalleryMedia));
         formData.append("bespokeTags", JSON.stringify(csvToArray(tags)));
         formData.append("bespokeContact", JSON.stringify({ ...contact, socials: csvToArray(contact.socials) }));
@@ -312,7 +308,9 @@ export default function BespokeEditorPage() {
                 <Container>
                     <div className="flex flex-row items-center justify-between py-5 px-3 gap-4">
                         <div className="flex flex-col min-w-0">
-                            <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-[#111827] truncate">Bespoke Editor</h1>
+                            <h1 className="text-xl sm:text-3xl font-bold tracking-tight text-[#111827] truncate">
+                                {user?.role === "custom_maker" ? "Custom Maker Editor" : user?.role === "brand" ? "Brand Editor" : "Bespoke Editor"}
+                            </h1>
                             <p className="text-sm sm:text-base font-medium text-[#64748b] mt-1 truncate">Managing <span className="font-semibold text-[#111827]">{brand.name}</span></p>
                         </div>
                         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
@@ -410,7 +408,9 @@ export default function BespokeEditorPage() {
                                             <p className="mt-1 text-xs font-medium text-gray-500">Shown in the Info / Contact section so visitors can reach the brand directly.</p>
                                         </div>
                                         <TextInput label="Contact Email" value={contact.email} onChange={(v) => setContact((c) => ({ ...c, email: v }))} placeholder="studio@brand.com" />
-                                        <TextInput label="Phone Number" value={contact.phone} onChange={(v) => setContact((c) => ({ ...c, phone: v }))} placeholder="+1..." />
+                                        <TextInput label="Phone Number" type="tel" maxLength="10" value={contact.phone} onChange={(v) => setContact((c) => ({ ...c, phone: v.replace(/\D/g, '').slice(0, 10) }))} placeholder="10-digit Number" />
+                                        <TextInput label="WhatsApp Number" type="tel" maxLength="10" value={contact.whatsapp} onChange={(v) => setContact((c) => ({ ...c, whatsapp: v.replace(/\D/g, '').slice(0, 10) }))} placeholder="10-digit Number" />
+                                        <TextInput label="Brand Website" value={contact.website} onChange={(v) => setContact((c) => ({ ...c, website: v }))} placeholder="www.brand.com" />
                                         <div className="sm:col-span-2">
                                             <TextInput label="Headquarters Address" value={contact.address} onChange={(v) => setContact((c) => ({ ...c, address: v }))} placeholder="City, Country" />
                                         </div>
@@ -554,41 +554,6 @@ export default function BespokeEditorPage() {
                             )} />
                         </div>
 
-                        {/* Section 6: Reviews */}
-                        {/* <SectionContainer id="reviews" title="Customer Endorsements" description="Manually input high-value reviews or testimonials to display.">
-                            <div className="space-y-4">
-                                {reviews.map((review, index) => (
-                                    <div key={index} className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition-all hover:shadow-md relative group">
-                                        <button onClick={() => setReviews((c) => c.filter((_, i) => i !== index))} className="absolute top-4 right-4 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <Trash2 className="h-4 w-4" />
-                                        </button>
-                                        <div className="grid gap-4 sm:grid-cols-2 mb-4 pr-8">
-                                            <TextInput label="Reviewer Name" value={review.name} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, name: v } : item))} placeholder="John Doe" />
-                                            <TextInput label="Role / Company" value={review.role} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, role: v } : item))} placeholder="Lead Architect" />
-                                        </div>
-                                        <div className="mb-4">
-                                            <span className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-1.5 block">Rating</span>
-                                            <div className="flex items-center gap-1">
-                                                {[1, 2, 3, 4, 5].map((star) => (
-                                                    <button
-                                                        key={star}
-                                                        type="button"
-                                                        onClick={() => setReviews((c) => c.map((item, i) => i === index ? { ...item, rating: star } : item))}
-                                                        className="focus:outline-none"
-                                                    >
-                                                        <Star className={`h-5 w-5 ${star <= (review.rating || 5) ? "fill-[#eab308] text-[#eab308]" : "fill-gray-200 text-gray-200"} hover:scale-110 transition-transform`} />
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                        <TextareaInput label="Review Text" value={review.comment} onChange={(v) => setReviews((c) => c.map((item, i) => i === index ? { ...item, comment: v } : item))} placeholder="Working with this brand was incredible..." />
-                                    </div>
-                                ))}
-                                <button onClick={() => setReviews((c) => [...c, { name: "", role: "", rating: 5, comment: "" }])} className="w-full py-4 rounded-lg border-2 border-dashed border-gray-300 text-sm font-bold text-gray-500 hover:border-black hover:text-black transition-colors flex items-center justify-center gap-2 bg-gray-50">
-                                    <Plus className="h-4 w-4" /> Add Review
-                                </button>
-                            </div>
-                        </SectionContainer> */}
 
                         {/* Section 7: Requests */}
                         <SectionContainer id="requests" title="Contractor Inbound Requests" description="Contractors applying to feature on your bespoke page.">
@@ -647,10 +612,16 @@ const SectionContainer = ({ id, title, description, children }) => (
     </section>
 );
 
-const TextInput = ({ label, value, onChange, placeholder, helper }) => (
+const TextInput = ({ label, value, onChange, placeholder, helper, ...props }) => (
     <label className="block w-full">
         <span className="text-[14px] font-medium   text-gray-400 mb-2 block ml-1">{label}</span>
-        <input value={value || ""} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full h-12 rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 px-5 text-sm font-medium text-gray-800 placeholder:text-gray-300 outline-none focus:border-primary focus:bg-white transition-all" />
+        <input
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+            className="w-full h-12 rounded-2xl border border-[hsl(30,15%,90%)] bg-gray-50 px-5 text-sm font-medium text-gray-800 placeholder:text-gray-300 outline-none focus:border-primary focus:bg-white transition-all"
+            {...props}
+        />
         {helper && <p className="mt-2 text-[11px] font-medium text-gray-400 ml-1">{helper}</p>}
     </label>
 );

@@ -32,7 +32,6 @@ const tabsRight = [
     ["news", "News"],
     ["videos", "Video"],
     ["retailers", "Resellers"],
-    ["reviews", "Reviews"],
     ["contact", "Info"],
 ];
 
@@ -135,6 +134,12 @@ const parseSocialLink = (social) => {
         return { key: inferSocialKey(label, href), label, href };
     }
     return { key: inferSocialKey(raw), label: raw, href: "" };
+};
+
+const format10DigitNumber = (num) => {
+    if (!num) return "";
+    const cleaned = String(num).replace(/\D/g, "");
+    return cleaned.slice(-10);
 };
 
 const normalizedApiProduct = (item, index) => ({
@@ -254,7 +259,6 @@ export default function BespokeBrandShowcase() {
         if (key === "retailers") return template.partners?.length > 0;
         if (key === "news") return template.news?.length > 0;
         if (key === "videos") return template.videos?.length > 0;
-        if (key === "reviews") return template.reviews?.length > 0;
         return true;
     }), [template]);
 
@@ -317,7 +321,6 @@ export default function BespokeBrandShowcase() {
                 <NewsSection items={template.news} brandName={template.hero.name} setModal={setModal} />
                 <VideoSection items={template.videos} brandName={template.hero.name} setModal={setModal} />
                 <PartnerSection items={template.partners} brandName={template.hero.name} setModal={setModal} />
-                {/* <ReviewSection items={template.reviews} brandName={template.hero.name} /> */}
             </Container>
 
             <ContactSection template={template} />
@@ -433,7 +436,6 @@ function buildBrandPayload(brand, apiProducts = []) {
                 href: item?.slug ? `/contractors/${item.slug}` : null,
             })),
         ],
-        reviews: (bespoke.reviews || []).filter((review) => review?.name || review?.comment || review?.text),
         projects: (bespoke.projects || []).filter(p => p.title || p.mainImage).map((item, index) => ({
             ...item,
             id: `project-${index}`,
@@ -444,7 +446,9 @@ function buildBrandPayload(brand, apiProducts = []) {
         news: normalizeMediaRows(bespoke.news),
         contact: {
             email: bespoke.contact?.email || brand?.userId?.email || "contact@example.com",
-            phone: bespoke.contact?.phone || "",
+            phone: bespoke.contact?.phone || brand?.contact?.phone || brand?.userId?.mobile || "",
+            whatsapp: bespoke.contact?.whatsapp || brand?.contact?.whatsapp || brand?.contact?.phone || brand?.userId?.mobile || "",
+            website: brand?.website || bespoke.contact?.website || "",
             address: bespoke.contact?.address || brand?.shippingAddress?.city || brand?.country || "Global Headquarters",
             socials: bespoke.contact?.socials || [],
         },
@@ -861,6 +865,7 @@ function ContactSection({ template }) {
         location: "",
         query: ""
     });
+    const [showContactInfo, setShowContactInfo] = useState(false);
 
     // Pre-fill form with logged-in user's data
     useEffect(() => {
@@ -962,8 +967,76 @@ function ContactSection({ template }) {
                         </div>
 
                         <div className="grid gap-6">
-
                             <ContactDetail icon={<MapPin className="h-5 w-5" />} label="Headquarters" value={template.contact.address} />
+                        </div>
+
+                        <div className="mt-8">
+                            <button
+                                onClick={() => {
+                                    if (!isAuthenticated) {
+                                        toast.info("Please login to view contact details");
+                                        router.push("/auth/login");
+                                    } else {
+                                        setShowContactInfo(!showContactInfo);
+                                    }
+                                }}
+                                className="w-full flex items-center justify-center gap-2 py-4 bg-white text-gray-800 border-2 border-gray-900 rounded-2xl font-bold transition-all hover:bg-gray-50 active:scale-95 shadow-sm"
+                                style={{ borderColor: 'var(--brand-color)', color: '#4a4a4a' }}
+                            >
+                                <Phone className="w-4 h-4" />
+                                {showContactInfo ? "Hide Contact" : "Show Contact"}
+                            </button>
+
+                            {showContactInfo && (
+                                <div className="mt-6 p-6 bg-[#f8f9fa] rounded-3xl border border-gray-100 space-y-4 animate-in fade-in slide-in-from-top-4 duration-300">
+                                    {template.contact.phone && (
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                                <Phone className="w-4 h-4 text-[#d9a88a]" style={{ color: 'var(--brand-color)' }} />
+                                            </div>
+                                            <span className="text-[15px] font-bold text-gray-700">
+                                                +91 {format10DigitNumber(template.contact.phone)}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {template.contact.email && (
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                                <Mail className="w-4 h-4 text-[#d9a88a]" style={{ color: 'var(--brand-color)' }} />
+                                            </div>
+                                            <span className="text-[15px] font-bold text-gray-700">{template.contact.email}</span>
+                                        </div>
+                                    )}
+                                    {template.contact.whatsapp && (
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                                <MessageCircle className="w-4 h-4 text-[#d9a88a]" style={{ color: 'var(--brand-color)' }} />
+                                            </div>
+                                            <span className="text-[15px] font-bold text-gray-700">
+                                                +91 {format10DigitNumber(template.contact.whatsapp)}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {template.contact.website && (
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                                <Globe className="w-4 h-4 text-[#d9a88a]" style={{ color: 'var(--brand-color)' }} />
+                                            </div>
+                                            <a href={template.contact.website.startsWith('http') ? template.contact.website : `https://${template.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-[15px] font-bold text-gray-700 hover:underline">
+                                                {template.contact.website.replace(/^https?:\/\//, '')}
+                                            </a>
+                                        </div>
+                                    )}
+                                    {template.contact.address && (
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm">
+                                                <MapPin className="w-4 h-4 text-[#d9a88a]" style={{ color: 'var(--brand-color)' }} />
+                                            </div>
+                                            <span className="text-[15px] font-bold text-gray-700">{template.contact.address}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {socials.length > 0 && (
