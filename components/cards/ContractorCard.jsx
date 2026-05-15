@@ -44,7 +44,7 @@ const ContractorCard = ({ contractor }) => {
     };
 
     return (
-        <div className="group relative bg-white rounded-2xl border border-[hsl(30,15%,88%)] hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
+        <Link href={`/contractors/${slug}`} className="group relative bg-white rounded-2xl border border-[hsl(30,15%,88%)] hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden">
 
             {/* Top accent line */}
             <div className="h-1 w-full bg-gradient-to-r from-[hsl(24,49%,70%)] via-[hsl(30,50%,85%)] to-[hsl(24,49%,70%)]" />
@@ -125,15 +125,14 @@ const ContractorCard = ({ contractor }) => {
 
             {/* CTA */}
             <div className="px-5 pb-5 mt-auto">
-                <Link
-                    href={`/contractors/${slug}`}
+                <div
                     className="flex items-center justify-center gap-2 w-full py-2.5 bg-primary hover:bg-[#c99775] text-white text-[11px] font-medium rounded-xl transition-all duration-300 shadow-md shadow-primary/20 active:scale-95"
                 >
                     View Profile
                     <ChevronRight className="w-3.5 h-3.5" />
-                </Link>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 };
 
