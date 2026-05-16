@@ -164,6 +164,46 @@ export const useVerifyOtpMutation = () => {
     });
 };
 
+export const useVerifyLoginOtpMutation = () => {
+    const router = useRouter();
+    const queryClient = useQueryClient();
+    const { setLoading } = useLoader();
+
+    return useMutation({
+        mutationFn: (data) => authService.verifyLoginOtp(data),
+        onSuccess: async (data) => {
+            const responseData = data.data || {};
+            const user = responseData.user;
+            const token = responseData.token;
+
+            setAuthState(user, token);
+            toast.success("Successfully logged in!", "Welcome Back");
+
+            try {
+                await queryClient.invalidateQueries({ queryKey: ['user-info'] });
+            } catch (e) { }
+
+            const role = user?.role;
+            setLoading(true);
+            if (role === 'brand' || role === 'custom_maker' || role === 'vendor' || role === 'retailer' || role === 'admin' || role === 'architect' || role === 'contractor') {
+                router.push('/dashboard');
+            } else {
+                router.push('/');
+            }
+        },
+        onError: (error) => {
+            const message = error?.response?.data?.message || "OTP verification failed";
+            toast.error(message, "Verification Failed");
+        }
+    });
+};
+
+export const useResendLoginOtpMutation = () => {
+    return useMutation({
+        mutationFn: (data) => authService.resendLoginOtp(data),
+    });
+};
+
 export const useRegisterMutation = () => {
     const router = useRouter();
     const { setLoading } = useLoader();
@@ -191,6 +231,12 @@ export const useLoginMutation = () => {
         mutationFn: (credentials) => authService.login(credentials),
         onSuccess: async (data, variables) => {
             const responseData = data.data || {};
+            if (responseData.requireLoginOtp) {
+                toast.success("OTP sent to your email.", "Verify Login");
+                router.push(`/auth/login-otp?email=${encodeURIComponent(responseData.email || variables.email)}`);
+                return;
+            }
+
             const user = responseData.user || {
                 email: variables.email,
                 name: variables.email.split('@')[0],

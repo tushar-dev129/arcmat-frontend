@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import Link from 'next/link';
+import Script from 'next/script';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -10,6 +12,7 @@ import { ClipLoader } from 'react-spinners';
 import clsx from 'clsx';
 import Button from '../ui/Button';
 import BackLink from '../ui/BackLink';
+import { toast } from '@/components/ui/Toast';
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid business email'),
@@ -17,6 +20,12 @@ const loginSchema = z.object({
 });
 
 export default function LoginForm() {
+  const isCaptchaEnabled = process.env.NEXT_PUBLIC_ENABLE_LOGIN_CAPTCHA === 'true';
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '';
+  const turnstileRef = useRef(null);
+  const turnstileWidgetIdRef = useRef(null);
+  const [captchaToken, setCaptchaToken] = useState('');
+
   useEffect(() => {
     clearAuthState();
   }, []);
@@ -34,12 +43,59 @@ export default function LoginForm() {
 
   const loginMutation = useLoginMutation();
 
+  const initializeTurnstile = () => {
+    if (!isCaptchaEnabled) return;
+    if (!turnstileSiteKey) return;
+    if (!window?.turnstile || !turnstileRef.current || turnstileWidgetIdRef.current !== null) return;
+
+    turnstileWidgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+      sitekey: turnstileSiteKey,
+      theme: 'light',
+      callback: (token) => setCaptchaToken(token),
+      'expired-callback': () => setCaptchaToken(''),
+      'error-callback': () => setCaptchaToken(''),
+    });
+  };
+
+  useEffect(() => {
+    if (!isCaptchaEnabled) return;
+    const timer = setInterval(() => {
+      initializeTurnstile();
+      if (turnstileWidgetIdRef.current !== null) {
+        clearInterval(timer);
+      }
+    }, 400);
+
+    return () => clearInterval(timer);
+  }, [isCaptchaEnabled, turnstileSiteKey]);
+
+  useEffect(() => {
+    if (!isCaptchaEnabled) return;
+    if (!loginMutation.isError) return;
+    setCaptchaToken('');
+    if (window?.turnstile && turnstileWidgetIdRef.current !== null) {
+      window.turnstile.reset(turnstileWidgetIdRef.current);
+    }
+  }, [isCaptchaEnabled, loginMutation.isError]);
+
   const onSubmit = (data) => {
-    loginMutation.mutate(data);
+    if (isCaptchaEnabled && !captchaToken) {
+      toast.error('Please complete CAPTCHA before signing in.', 'CAPTCHA required');
+      return;
+    }
+
+    loginMutation.mutate({ ...data, captchaToken: isCaptchaEnabled ? captchaToken : undefined });
   };
 
   return (
     <div className="w-full ">
+      {isCaptchaEnabled && (
+        <Script
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+          strategy="afterInteractive"
+          onLoad={initializeTurnstile}
+        />
+      )}
 
       <div className="flex justify-between items-center w-full h-[76px] mb-[60px]">
         <BackLink href="/" />
@@ -144,12 +200,23 @@ export default function LoginForm() {
             </Link>
           </div>
 
+          {isCaptchaEnabled && (
+            <div className="pt-1">
+              <div ref={turnstileRef} className="min-h-[66px]" />
+              {!turnstileSiteKey && (
+                <p className="text-xs text-red-500 mt-1">
+                  CAPTCHA is not configured. Please contact support.
+                </p>
+              )}
+            </div>
+          )}
+
           <button
             type="submit"
-            disabled={loginMutation.isPending}
+            disabled={loginMutation.isPending || (isCaptchaEnabled && !captchaToken)}
             className={clsx(
               'w-full py-3.5 rounded-lg text-base font-medium text-white transition-all',
-              loginMutation.isPending
+              loginMutation.isPending || (isCaptchaEnabled && !captchaToken)
                 ? "bg-primary/70 cursor-not-allowed"
                 : "bg-primary hover:bg-[#d48b65]"
             )}

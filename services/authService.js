@@ -24,6 +24,16 @@ const authService = {
         return response.data;
     },
 
+    verifyLoginOtp: async (data) => {
+        const response = await api.post('/user/verify-login-otp', data);
+        return response.data;
+    },
+
+    resendLoginOtp: async (data) => {
+        const response = await api.post('/user/resend-login-otp', data);
+        return response.data;
+    },
+
     getUserInfo: async () => {
         const response = await api.get('/user/userinfo');
         return response.data;

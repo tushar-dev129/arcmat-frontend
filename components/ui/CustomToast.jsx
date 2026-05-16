@@ -4,7 +4,7 @@ import React from 'react';
 import { CheckCircle2, AlertCircle, Info, XCircle, X } from 'lucide-react';
 
 const icons = {
-    success: <CheckCircle2 className="w-5 h-5 text-emerald-500" />,
+    success: <CheckCircle2 className="w-5 h-5 text-primary" />,
     error: <XCircle className="w-5 h-5 text-rose-500" />,
     warning: <AlertCircle className="w-5 h-5 text-amber-500" />,
     info: <Info className="w-5 h-5 text-sky-500" />,
