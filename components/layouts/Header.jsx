@@ -21,6 +21,13 @@ import { toast } from '@/components/ui/Toast';
 const MotionFolder = motion(Folder);
 
 const Header = ({ variant = 'default' }) => {
+    const getDisplayRoleLabel = (user) => {
+        if (!user) return '';
+        if (user.role === 'architect') {
+            return user.professionalType || 'Architect';
+        }
+        return user.role || '';
+    };
 
     const isDashboard = variant === 'dashboard';
 
@@ -405,7 +412,7 @@ const Header = ({ variant = 'default' }) => {
                                             <p className="text-sm font-semibold text-[#4D4E58] truncate">{user.name || user.fullName}</p>
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                             {user.role && (
-                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{getDisplayRoleLabel(user)}</p>
                                             )}
                                         </div>
 
@@ -478,7 +485,7 @@ const Header = ({ variant = 'default' }) => {
                                                 {user.name || user.fullName}
                                             </p>
                                             {user.role && (
-                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{user.role}</p>
+                                                <p className="text-[13px] font-medium text-primary uppercase mt-0.5 tracking-wider">{getDisplayRoleLabel(user)}</p>
                                             )}
                                             <p className="text-xs text-gray-400 truncate">{user.email}</p>
                                         </div>

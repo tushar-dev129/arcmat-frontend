@@ -66,6 +66,7 @@ const ProductFilterBar = ({ selectedCategory, setSelectedCategory, onOpenFilters
 
         const uniqueNames = new Set();
         const filtered = nodesToDisplay.filter(cat => {
+            if (cat.name === 'Find Contractors' || cat.name === 'Find Contractor') return false;
             const isDuplicate = uniqueNames.has(cat.name);
             uniqueNames.add(cat.name);
             return !isDuplicate;

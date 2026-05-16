@@ -170,7 +170,13 @@ export default function DashboardPage() {
         if (user?.role === 'retailer') {
             router.push('/dashboard/retailer');
         } else if (user?.role === 'architect') {
-            router.push('/dashboard/architect');
+            if (user?.professionalType === 'Interior Designer') {
+                router.push('/dashboard/interior-designer');
+            } else if (user?.professionalType === 'Landscape Designer') {
+                router.push('/dashboard/landscape-designer');
+            } else {
+                router.push('/dashboard/architect');
+            }
         } else if (user?.role === 'contractor') {
             router.push('/dashboard/contractor');
         }

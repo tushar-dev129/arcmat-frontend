@@ -183,19 +183,33 @@ export default function ProductListPage() {
         return normalizeAvailableAttributes(metadata?.availableAttributes || []);
     }, [metadata]);
 
+    const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+    const toggleFilters = () => {
+        if (window.innerWidth >= 1024) {
+            setIsSidebarCollapsed(!isSidebarCollapsed);
+        } else {
+            setDrawerOpen(true);
+        }
+    };
+
     return (
         <div className="min-h-screen">
             <div className="sticky top-16 z-40">
                 <ProductFilterBar
                     selectedCategory={selectedCategory}
                     setSelectedCategory={handleCategoryChange}
-                    onOpenFilters={() => setDrawerOpen(true)}
+                    onOpenFilters={toggleFilters}
                     categoryCounts={categoryCounts}
                 />
             </div>
 
-            <Container className="flex gap-4 lg:gap-8 py-6">
-                <div className="hidden lg:block w-72 shrink-0 h-[calc(100vh-200px)] sticky top-48 overflow-y-auto no-scrollbar pb-10">
+            <Container className="flex gap-4 lg:gap-8 py-6 transition-all duration-300">
+                <div
+                    className={`hidden lg:block shrink-0 h-[calc(100vh-200px)] sticky top-48 overflow-y-auto no-scrollbar pb-10 transition-all duration-300 ease-in-out ${
+                        isSidebarCollapsed ? 'w-0 opacity-0 overflow-hidden ml-0' : 'w-72 opacity-100'
+                    }`}
+                >
                     <ProductSidebar
                         activeFilters={activeFilters}
                         setActiveFilters={handleFiltersChange}
@@ -208,7 +222,7 @@ export default function ProductListPage() {
                     />
                 </div>
 
-                <main className="flex-1">
+                <main className="flex-1 transition-all duration-300">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-3 ">
                         <CategoryBreadcrumb
                             selectedCategory={selectedCategory}

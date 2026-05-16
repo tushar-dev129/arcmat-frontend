@@ -90,6 +90,8 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     setValue,
+    setError,
+    clearErrors,
     watch,
     formState: { errors },
   } = useForm({
@@ -132,6 +134,11 @@ export default function RegisterForm() {
 
   const onSubmit = (data) => {
     if (!selectedRole) return;
+    if (selectedRole.needsProfession && !data.profession) {
+      setError('profession', { type: 'manual', message: 'Please select a profession' });
+      return;
+    }
+    clearErrors('profession');
 
     const selectedProfession = selectedRole.needsProfession ? data.profession : selectedRole.professionalType;
     const assignedRole = selectedRole.role;
