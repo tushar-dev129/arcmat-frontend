@@ -238,6 +238,7 @@ export default function MarketplaceProfilePage() {
         return contractorGroups.find(c => c._id === formData.categoryId);
     }, [contractorGroups, formData.categoryId]);
 
+    const [isAllIndia, setIsAllIndia] = useState(false);
     const [newArea, setNewArea] = useState("");
     const [attributes, setAttributes] = useState([{ key: '', value: '' }]);
 
@@ -315,6 +316,12 @@ export default function MarketplaceProfilePage() {
                 } else if (mainCat) {
                     setAttributes([{ key: mainCat.name, value: '' }]);
                 }
+            }
+            // Initialize isAllIndia from saved profile
+            if (profile.location?.city?.toLowerCase() === 'all india') {
+                setIsAllIndia(true);
+            } else {
+                setIsAllIndia(false);
             }
         } else if (user) {
             // Pre-fill with existing user data if profile doesn't exist
@@ -1046,37 +1053,127 @@ export default function MarketplaceProfilePage() {
                 {/* Location Section */}
                 <Section title="Location & Service Areas" icon={MapPin}>
                     <div className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Field label="City" icon={MapPin} required={isEditing}>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="location.city"
-                                        value={formData.location.city}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
-                                        placeholder="e.g. Mumbai"
-                                    />
-                                ) : (
-                                    <div className="text-gray-900 font-medium">{formData.location.city || "Not specified"}</div>
+                        {/* All India Toggle */}
+                        {isEditing && (
+                            <div
+                                onClick={() => {
+                                    const next = !isAllIndia;
+                                    setIsAllIndia(next);
+                                    if (next) {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            location: {
+                                                ...prev.location,
+                                                city: 'All India',
+                                                state: 'All India'
+                                            }
+                                        }));
+                                    } else {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            location: {
+                                                ...prev.location,
+                                                city: '',
+                                                state: ''
+                                            }
+                                        }));
+                                    }
+                                }}
+                                className={clsx(
+                                    "flex items-center gap-4 p-4 rounded-2xl border-2 cursor-pointer transition-all duration-300 select-none",
+                                    isAllIndia
+                                        ? "border-primary bg-orange-50 shadow-sm"
+                                        : "border-gray-100 bg-gray-50/50 hover:border-gray-200"
                                 )}
-                            </Field>
+                            >
+                                <div className={clsx(
+                                    "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all duration-200 flex-shrink-0",
+                                    isAllIndia
+                                        ? "bg-primary border-primary"
+                                        : "bg-white border-gray-300"
+                                )}>
+                                    {isAllIndia && (
+                                        <svg className="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    )}
+                                </div>
+                                <div className="flex-1">
+                                    <p className={clsx(
+                                        "text-sm font-bold transition-colors",
+                                        isAllIndia ? "text-primary" : "text-gray-700"
+                                    )}>
+                                        🇮🇳 Operate All India (National Presence)
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-0.5">
+                                        Check this if you offer services across all of India.
+                                    </p>
+                                </div>
+                                {isAllIndia && (
+                                    <span className="px-3 py-1 bg-primary text-white text-[11px] font-bold rounded-full tracking-wider flex-shrink-0">
+                                        NATIONAL
+                                    </span>
+                                )}
+                            </div>
+                        )}
 
-                            <Field label="State" icon={MapPin} required={isEditing}>
-                                {isEditing ? (
-                                    <input
-                                        type="text"
-                                        name="location.state"
-                                        value={formData.location.state}
-                                        onChange={handleChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
-                                        placeholder="e.g. Maharashtra"
-                                    />
-                                ) : (
+                        {/* City and State fields — hidden/disabled when All India is selected */}
+                        {!isAllIndia && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Field label="City" icon={MapPin} required={isEditing}>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="location.city"
+                                            value={formData.location.city}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
+                                            placeholder="e.g. Mumbai"
+                                        />
+                                    ) : (
+                                        <div className="text-gray-900 font-medium">{formData.location.city || "Not specified"}</div>
+                                    )}
+                                </Field>
+
+                                <Field label="State" icon={MapPin} required={isEditing}>
+                                    {isEditing ? (
+                                        <input
+                                            type="text"
+                                            name="location.state"
+                                            value={formData.location.state}
+                                            onChange={handleChange}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[hsl(15,80%,65%)] outline-none transition-all"
+                                            placeholder="e.g. Maharashtra"
+                                        />
+                                    ) : (
+                                        <div className="text-gray-900 font-medium">{formData.location.state || "Not specified"}</div>
+                                    )}
+                                </Field>
+                            </div>
+                        )}
+
+                        {/* Read-only view when All India is active (non-editing mode) */}
+                        {!isEditing && isAllIndia && (
+                            <div className="flex items-center gap-3 p-4 bg-orange-50 rounded-2xl border border-orange-100">
+                                <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
+                                <div>
+                                    <p className="text-sm font-bold text-gray-900">🇮🇳 All India — National Presence</p>
+                                    <p className="text-xs text-gray-400 mt-0.5">This professional serves clients across all of India.</p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* City/State display in read-only mode (non-editing, not All India) */}
+                        {!isEditing && !isAllIndia && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Field label="City" icon={MapPin}>
+                                    <div className="text-gray-900 font-medium">{formData.location.city || "Not specified"}</div>
+                                </Field>
+                                <Field label="State" icon={MapPin}>
                                     <div className="text-gray-900 font-medium">{formData.location.state || "Not specified"}</div>
-                                )}
-                            </Field>
-                        </div>
+                                </Field>
+                            </div>
+                        )}
                     </div>
                 </Section>
             </form>
