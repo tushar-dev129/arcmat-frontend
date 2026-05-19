@@ -259,7 +259,11 @@ export default function ContractorProfilePage({ params }) {
                                         {contractor.location?.city && (
                                             <div className="flex items-center gap-4">
                                                 <MapPin className="w-4 h-4 text-primary" />
-                                                <span className="text-sm font-semibold text-gray-800">{contractor.location.city}, {contractor.location.state}</span>
+                                                <span className="text-sm font-semibold text-gray-800">
+                                                    {contractor.location.city?.toLowerCase() === 'all india'
+                                                        ? 'All India'
+                                                        : `${contractor.location.city}${contractor.location.state ? `, ${contractor.location.state}` : ''}`}
+                                                </span>
                                             </div>
                                         )}
                                     </div>

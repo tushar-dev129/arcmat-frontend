@@ -1103,7 +1103,7 @@ export default function MarketplaceProfilePage() {
                                         "text-sm font-bold transition-colors",
                                         isAllIndia ? "text-primary" : "text-gray-700"
                                     )}>
-                                        🇮🇳 Operate All India (National Presence)
+                                        Operate All India (National Presence)
                                     </p>
                                     <p className="text-xs text-gray-400 mt-0.5">
                                         Check this if you offer services across all of India.
@@ -1157,7 +1157,7 @@ export default function MarketplaceProfilePage() {
                             <div className="flex items-center gap-3 p-4 bg-orange-50 rounded-2xl border border-orange-100">
                                 <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
                                 <div>
-                                    <p className="text-sm font-bold text-gray-900">🇮🇳 All India — National Presence</p>
+                                    <p className="text-sm font-bold text-gray-900">All India — National Presence</p>
                                     <p className="text-xs text-gray-400 mt-0.5">This professional serves clients across all of India.</p>
                                 </div>
                             </div>
