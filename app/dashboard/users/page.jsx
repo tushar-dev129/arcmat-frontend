@@ -35,6 +35,7 @@ const ROLES = [
     { label: 'Brands', value: 'vendor' },
     { label: 'Retailers', value: 'retailer' },
     { label: 'Architects', value: 'architect' },
+    { label: 'Contractors', value: 'contractor' },
 ];
 
 const UserDetailTooltip = ({ user, index, total }) => {
@@ -253,8 +254,150 @@ export default function UsersPage() {
                 </div>
             </div>
 
-            {/* Users Table */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            {/* Mobile View: Responsive Cards Grid */}
+            <div className="grid grid-cols-1 gap-4 md:hidden">
+                {isLoading ? (
+                    Array.from({ length: 4 }).map((_, i) => (
+                        <div key={i} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm animate-pulse space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gray-100"></div>
+                                <div className="flex-1 space-y-2">
+                                    <div className="h-4 bg-gray-100 rounded w-1/3"></div>
+                                    <div className="h-3 bg-gray-100 rounded w-1/4"></div>
+                                </div>
+                            </div>
+                            <div className="space-y-2 border-t border-gray-50 pt-3">
+                                <div className="h-3 bg-gray-100 rounded w-3/4"></div>
+                                <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                            </div>
+                        </div>
+                    ))
+                ) : users.length === 0 ? (
+                    <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm text-center text-gray-500 italic">
+                        No users found matching your criteria.
+                    </div>
+                ) : (
+                    users.map((u) => (
+                        <div key={u._id} className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-orange-50 border border-orange-100 flex items-center justify-center text-primary">
+                                    <UserIcon className="w-5 h-5" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-extrabold text-gray-900 truncate">{u.name}</p>
+                                    <p className="text-[11px] text-gray-400 font-medium mt-0.5">ID: {u._id.slice(-6)}</p>
+                                </div>
+                                <span className={clsx(
+                                    "px-2.5 py-0.5 text-[11px] font-bold rounded-full uppercase border",
+                                    u.role === 'admin' ? "bg-purple-50 text-purple-700 border-purple-100" :
+                                        (u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') ? "bg-blue-50 text-blue-700 border-blue-100" :
+                                            u.role === 'architect' ? "bg-emerald-50 text-emerald-700 border-emerald-100" :
+                                                u.role === 'retailer' ? "bg-amber-50 text-amber-700 border-amber-100" :
+                                                    u.role === 'contractor' ? "bg-sky-50 text-sky-700 border-sky-100" :
+                                                        "bg-gray-50 text-gray-700 border-gray-100"
+                                )}>
+                                    {u.role === 'customer' ? 'User' : (u.role === 'architect' ? 'Designer' : (u.role === 'contractor' ? 'Contractor' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))))}
+                                </span>
+                            </div>
+
+                            <div className="space-y-2.5 text-xs text-gray-600 border-t border-gray-50 pt-3">
+                                <div className="flex justify-between gap-4">
+                                    <span className="text-gray-400 font-medium">Email:</span>
+                                    <span className="font-semibold text-gray-800 break-all select-all text-right">{u.email}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400 font-medium">Mobile:</span>
+                                    <span className="font-semibold text-gray-800">{u.mobile || 'No mobile'}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400 font-medium">Status:</span>
+                                    <div className="flex items-center gap-1">
+                                        {u.isActive === 1 ? (
+                                            <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Active</span>
+                                        ) : (
+                                            <span className="text-[11px] font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded-full border border-red-100">Inactive</span>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span className="text-gray-400 font-medium">Verification:</span>
+                                    <div className="flex items-center gap-1">
+                                        {u.role === 'architect' ? (
+                                            u.isVerified ? (
+                                                <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Admin Verified</span>
+                                            ) : (
+                                                <span className="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Admin Unverified</span>
+                                            )
+                                        ) : (
+                                            u.isEmailVerified === 1 ? (
+                                                <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">Email Verified</span>
+                                            ) : (
+                                                <span className="text-[11px] font-semibold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100">Email Unverified</span>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-wrap justify-end gap-2 border-t border-gray-50 pt-3">
+                                {(u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') && (
+                                    <Link
+                                        href={`/dashboard/products-list/${u._id}`}
+                                        className="p-1.5 text-blue-600 hover:bg-blue-50 border border-blue-100 rounded-lg transition-all text-xs font-semibold flex items-center gap-1"
+                                    >
+                                        <PackageSearch className="w-3.5 h-3.5" /> Products
+                                    </Link>
+                                )}
+                                {u.role === 'architect' && (
+                                    <Link
+                                        href={`/dashboard/projects?architectId=${u._id}`}
+                                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 border border-emerald-100 rounded-lg transition-all text-xs font-semibold flex items-center gap-1"
+                                    >
+                                        <FolderOpen className="w-3.5 h-3.5" /> Projects
+                                    </Link>
+                                )}
+                                {u.role === 'retailer' && (
+                                    <Link
+                                        href={`/dashboard/retailer/inventory/${u._id}`}
+                                        className="p-1.5 text-amber-600 hover:bg-amber-50 border border-amber-100 rounded-lg transition-all text-xs font-semibold flex items-center gap-1"
+                                    >
+                                        <PackageSearch className="w-3.5 h-3.5" /> Inventory
+                                    </Link>
+                                )}
+                                {u.role === 'architect' && (
+                                    <button
+                                        onClick={() => handleToggleVerification(u)}
+                                        className={clsx(
+                                            "p-1.5 rounded-lg border transition-all text-xs font-semibold flex items-center gap-1",
+                                            u.isVerified ? "text-emerald-600 hover:bg-emerald-50 border-emerald-100" : "text-amber-600 hover:bg-amber-50 border-amber-100"
+                                        )}
+                                    >
+                                        {u.isVerified ? "Unverify" : "Verify"}
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => handleToggleStatus(u)}
+                                    className={clsx(
+                                        "p-1.5 rounded-lg border transition-all text-xs font-semibold flex items-center gap-1",
+                                        u.isActive === 1 ? "text-amber-600 hover:bg-amber-50 border-amber-100" : "text-emerald-600 hover:bg-emerald-50 border-emerald-100"
+                                    )}
+                                >
+                                    {u.isActive === 1 ? "Deactivate" : "Activate"}
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteClick(u)}
+                                    className="p-1.5 text-red-600 hover:bg-red-50 border border-red-100 rounded-lg transition-all text-xs font-semibold flex items-center gap-1"
+                                >
+                                    <Trash2 className="w-3.5 h-3.5" /> Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+
+            {/* Desktop View: Classic Table */}
+            <div className="hidden md:block bg-white rounded-xl shadow-sm border border-gray-100">
                 <div className="overflow-x-visible">
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gray-50/50">
@@ -296,17 +439,18 @@ export default function UsersPage() {
                                             <p className="text-xs text-gray-400">{u.mobile || 'No mobile'}</p>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={clsx(
-                                                "px-2.5 py-1 text-[13px] font-bold rounded-full uppercase",
-                                                u.role === 'admin' ? "bg-purple-50 text-purple-700 border border-purple-100" :
-                                                    (u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') ? "bg-blue-50 text-blue-700 border border-blue-100" :
-                                                        u.role === 'architect' ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
-                                                            u.role === 'retailer' ? "bg-amber-50 text-amber-700 border border-amber-100" :
-                                                                "bg-gray-50 text-gray-700 border border-gray-100"
-                                            )}>
-                                                {u.role === 'customer' ? 'User' : (u.role === 'architect' ? 'Designer' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role)))}
-                                            </span>
-                                        </td>
+                                             <span className={clsx(
+                                                 "px-2.5 py-1 text-[13px] font-bold rounded-full uppercase",
+                                                 u.role === 'admin' ? "bg-purple-50 text-purple-700 border border-purple-100" :
+                                                     (u.role === 'brand' || u.role === 'vendor' || u.role === 'custom_maker') ? "bg-blue-50 text-blue-700 border border-blue-100" :
+                                                         u.role === 'architect' ? "bg-emerald-50 text-emerald-700 border border-emerald-100" :
+                                                             u.role === 'retailer' ? "bg-amber-50 text-amber-700 border border-amber-100" :
+                                                                 u.role === 'contractor' ? "bg-sky-50 text-sky-700 border border-sky-100" :
+                                                                     "bg-gray-50 text-gray-700 border border-gray-100"
+                                             )}>
+                                                 {u.role === 'customer' ? 'User' : (u.role === 'architect' ? 'Designer' : (u.role === 'contractor' ? 'Contractor' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))))}
+                                             </span>
+                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex flex-col gap-1.5">
                                                 <div className="flex items-center gap-1.5 font-medium">
@@ -407,20 +551,21 @@ export default function UsersPage() {
                         </tbody>
                     </table>
                 </div>
-
-                {totalItems > 0 && (
-                    <div className="border-t border-gray-100">
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            pageSize={pageSize}
-                            totalItems={totalItems}
-                            onPageChange={setCurrentPage}
-                            onPageSizeChange={(s) => { setPageSize(s); setCurrentPage(1); }}
-                        />
-                    </div>
-                )}
             </div>
+
+            {/* Pagination for both layouts */}
+            {totalItems > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 mt-4 overflow-hidden">
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        pageSize={pageSize}
+                        totalItems={totalItems}
+                        onPageChange={setCurrentPage}
+                        onPageSizeChange={(s) => { setPageSize(s); setCurrentPage(1); }}
+                    />
+                </div>
+            )}
 
             <ConfirmationModal
                 isOpen={isDeleteModalOpen}
