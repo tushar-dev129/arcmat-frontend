@@ -17,7 +17,7 @@ const otpSchema = z.object({
 function VerifyOtpContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const email = searchParams.get('email');
+    const mobile = searchParams.get('mobile');
 
     const [timeLeft, setTimeLeft] = useState(30);
     const [canResend, setCanResend] = useState(false);
@@ -34,11 +34,11 @@ function VerifyOtpContent() {
     const resendOtpMutation = useResendOtpMutation();
 
     useEffect(() => {
-        if (!email) {
-            toast.error('Email not found. Redirecting to register.', 'Error');
-            router.push('/register');
+        if (!mobile) {
+            toast.error('Mobile number not found. Redirecting to register.', 'Error');
+            router.push('/auth/register');
         }
-    }, [email, router]);
+    }, [mobile, router]);
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -50,11 +50,11 @@ function VerifyOtpContent() {
     }, [timeLeft]);
 
     const onSubmit = (data) => {
-        if (!email) return;
+        if (!mobile) return;
 
-        verifyOtpMutation.mutate({ email, otp: data.otp }, {
+        verifyOtpMutation.mutate({ mobile, otp: data.otp }, {
             onSuccess: () => {
-                toast.success('Email verified successfully!', 'Success');
+                toast.success('Mobile verified successfully!', 'Success');
             },
             onError: (error) => {
                 toast.error(error.response?.data?.message || 'Verification failed. Please try again.', 'Verification Failed');
@@ -66,11 +66,11 @@ function VerifyOtpContent() {
 
         toast.info('Resending OTP...', 'Please wait');
 
-        resendOtpMutation.mutate({ email }, {
+        resendOtpMutation.mutate({ mobile }, {
             onSuccess: () => {
                 setTimeLeft(30);
                 setCanResend(false);
-                toast.success('OTP Resent!', 'Check your email');
+                toast.success('OTP Resent!', 'Check your phone');
             },
             onError: (error) => {
                 toast.error(error.response?.data?.message || 'Failed to resend OTP');
@@ -85,9 +85,9 @@ function VerifyOtpContent() {
                     <BackLink href="/auth/register" />
                 </div>
 
-                <h2 className="text-3xl font-semibold text-[#4a5568] mb-2">Verify Your Email</h2>
+                <h2 className="text-3xl font-semibold text-[#4a5568] mb-2">Verify Your Mobile</h2>
                 <p className="text-[#718096] mb-8">
-                    We've sent a 6-digit code to <span className="font-medium text-[#d9a88a]">{email}</span>.
+                    We've sent a 6-digit code to <span className="font-medium text-[#d9a88a]">{mobile}</span>.
                     Please enter it below to verify your account.
                 </p>
 

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import authService from '../services/authService';
+import { initializeSocket, disconnectSocket } from '../lib/socket';
 
 const useAuthStoreBase = create(
   persist(
@@ -34,6 +35,10 @@ const useAuthStoreBase = create(
           activeBrand: brands.length > 0 ? brands[0] : null,
           isLoading: false
         });
+
+        if (token) {
+          initializeSocket(token);
+        }
       },
 
       initializeAuth: async () => {
@@ -45,6 +50,7 @@ const useAuthStoreBase = create(
           if (!token) {
             // No token, ensure we are logged out
             set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+            disconnectSocket();
             return;
           }
 
@@ -69,6 +75,8 @@ const useAuthStoreBase = create(
             isLoading: false
           });
 
+          initializeSocket(token);
+
         } catch (error) {
           // Token invalid or expired
           get().logout();
@@ -87,6 +95,7 @@ const useAuthStoreBase = create(
           isLoading: false
         });
         localStorage.removeItem('auth-storage');
+        disconnectSocket();
       },
 
       fetchUser: async () => {

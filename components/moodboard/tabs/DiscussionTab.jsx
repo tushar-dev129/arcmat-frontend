@@ -94,8 +94,8 @@ export default function DiscussionTab({ projectId, spaceId }) {
                             return (
                                 <div key={comment._id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                     <div className="flex items-center gap-2 mb-1">
-                                        <span className="text-[13px] font-bold uppercase tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
-                                        <span className={`text-[13px] px-1.5 py-0.5 rounded-md font-bold uppercase ${authorRole === 'architect' ? 'bg-indigo-50 text-indigo-600' : 'bg-green-50 text-green-600'}`}>
+                                        <span className="text-[11px] font-bold capitalize tracking-widest text-gray-400">{isMe ? 'You' : authorName}</span>
+                                        <span className={`text-[13px] px-1.5 py-0.5 rounded-md font-bold capitalize ${authorRole === 'architect' ? 'bg-orange-50 text-primary' : 'bg-green-50 text-green-600'}`}>
                                             {authorRole}
                                         </span>
                                         {comment.isInternal && (
@@ -110,7 +110,7 @@ export default function DiscussionTab({ projectId, spaceId }) {
                                         )}
                                     </div>
                                     <div className="group relative flex items-start flex-col gap-1 max-w-[85%]">
-                                        <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${isMe ? 'bg-[#1a1a2e] text-white rounded-tr-sm' : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm shadow-sm'}`}>
+                                        <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${isMe ? 'bg-gray-100 text-gray-900 rounded-tr-sm' : 'bg-white border border-gray-100 text-gray-700 rounded-tl-sm shadow-sm'}`}>
                                             <p className="whitespace-pre-wrap">{comment.message}</p>
                                         </div>
                                     </div>

@@ -4,7 +4,7 @@ const authService = {
     register: async (userData) => {
         const payload = {
             name: userData.name.trim(),
-            email: userData.email.toLowerCase(),
+            email: userData.email ? userData.email.toLowerCase() : undefined,
             mobile: userData.mobile,
             password: userData.password,
             profile: userData.profile || '',
