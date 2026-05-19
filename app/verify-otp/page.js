@@ -9,6 +9,7 @@ import { ClipLoader } from 'react-spinners';
 import clsx from 'clsx';
 import { useVerifyOtpMutation, useResendOtpMutation } from '@/hooks/useAuth';
 import BackLink from '@/components/ui/BackLink';
+import { Mail, Phone } from 'lucide-react';
 
 const otpSchema = z.object({
     otp: z.string().length(6, "OTP must be exactly 6 digits"),
@@ -18,6 +19,8 @@ function VerifyOtpContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const mobile = searchParams.get('mobile');
+    const email = searchParams.get('email');
+    const sendOtpTo = searchParams.get('sendOtpTo') || 'mobile';
 
     const [timeLeft, setTimeLeft] = useState(30);
     const [canResend, setCanResend] = useState(false);
@@ -52,7 +55,7 @@ function VerifyOtpContent() {
     const onSubmit = (data) => {
         if (!mobile) return;
 
-        verifyOtpMutation.mutate({ mobile, otp: data.otp }, {
+        verifyOtpMutation.mutate({ mobile, otp: data.otp, sendOtpTo }, {
             onSuccess: () => {
                 toast.success('Mobile verified successfully!', 'Success');
             },
@@ -63,20 +66,25 @@ function VerifyOtpContent() {
     };
 
     const handleResendOtp = async () => {
-
         toast.info('Resending OTP...', 'Please wait');
 
-        resendOtpMutation.mutate({ mobile }, {
+        resendOtpMutation.mutate({ mobile, sendOtpTo }, {
             onSuccess: () => {
                 setTimeLeft(30);
                 setCanResend(false);
-                toast.success('OTP Resent!', 'Check your phone');
+                if (sendOtpTo === 'email') {
+                    toast.success('OTP Resent!', `Check your email: ${email}`);
+                } else {
+                    toast.success('OTP Resent!', 'Check your phone');
+                }
             },
             onError: (error) => {
                 toast.error(error.response?.data?.message || 'Failed to resend OTP');
             }
         });
     };
+
+    const sentViaEmail = sendOtpTo === 'email' && email;
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#fcf8f6] px-4">
@@ -85,11 +93,27 @@ function VerifyOtpContent() {
                     <BackLink href="/auth/register" />
                 </div>
 
-                <h2 className="text-3xl font-semibold text-[#4a5568] mb-2">Verify Your Mobile</h2>
-                <p className="text-[#718096] mb-8">
-                    We've sent a 6-digit code to <span className="font-medium text-[#d9a88a]">{mobile}</span>.
-                    Please enter it below to verify your account.
-                </p>
+                {/* Icon + Heading */}
+                <div className="flex flex-col items-center mb-6">
+                    <div className={clsx(
+                        "flex items-center justify-center w-14 h-14 rounded-2xl mb-4",
+                        sentViaEmail ? "bg-sky-50 text-sky-500" : "bg-[#fef7f2] text-[#d9a88a]"
+                    )}>
+                        {sentViaEmail
+                            ? <Mail className="w-7 h-7" />
+                            : <Phone className="w-7 h-7" />
+                        }
+                    </div>
+                    <h2 className="text-3xl font-semibold text-[#4a5568] mb-2 text-center">
+                        {sentViaEmail ? "Check Your Email" : "Verify Your Mobile"}
+                    </h2>
+                    <p className="text-[#718096] text-center leading-relaxed">
+                        {sentViaEmail
+                            ? <>We&apos;ve sent a 6-digit code to <span className="font-medium text-[#d9a88a]">{email}</span>. Please enter it below to verify your account.</>
+                            : <>We&apos;ve sent a 6-digit code to <span className="font-medium text-[#d9a88a]">{mobile}</span>. Please enter it below to verify your account.</>
+                        }
+                    </p>
+                </div>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div>
@@ -126,7 +150,7 @@ function VerifyOtpContent() {
 
                     <div className="text-center">
                         <p className="text-[#718096] text-sm">
-                            Didn't receive the code?{' '}
+                            Didn&apos;t receive the code?{' '}
                             <button
                                 type="button"
                                 onClick={handleResendOtp}

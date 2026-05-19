@@ -9,7 +9,7 @@ import { useRegisterMutation } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { ClipLoader } from 'react-spinners';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, ChevronDown, Eye, EyeOff, Hammer, HardHat, Info, Store, UserRound } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BriefcaseBusiness, Building2, ChevronDown, Eye, EyeOff, Hammer, HardHat, Info, Mail, Phone, Store, UserRound } from 'lucide-react';
 import clsx from 'clsx';
 import Button from '@/components/ui/Button';
 import BackLink from '../ui/BackLink';
@@ -85,6 +85,8 @@ export default function RegisterForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedProfession, setSelectedProfession] = useState(null);
+  // Holds pending registration data when both email+mobile provided
+  const [otpChoiceData, setOtpChoiceData] = useState(null);
 
   const {
     register,
@@ -132,6 +134,25 @@ export default function RegisterForm() {
     setValue('profession', prof);
   };
 
+  const buildFinalData = (data) => {
+    const prof = selectedRole.needsProfession ? data.profession : selectedRole.professionalType;
+    const assignedRole = selectedRole.role;
+    const providerType = assignedRole === 'contractor' ? 'contractor' : undefined;
+    let profileUrl = data.profile;
+    if (profileUrl && profileUrl.trim() !== '') {
+      profileUrl = profileUrl.replace(/^(https?:\/\/)?(www\.)?/, '');
+      profileUrl = 'www.' + profileUrl;
+    }
+    return {
+      ...data,
+      profession: prof,
+      professionalType: prof,
+      providerType,
+      profile: profileUrl,
+      role: assignedRole,
+    };
+  };
+
   const onSubmit = (data) => {
     if (!selectedRole) return;
     if (selectedRole.needsProfession && !data.profession) {
@@ -140,24 +161,23 @@ export default function RegisterForm() {
     }
     clearErrors('profession');
 
-    const selectedProfession = selectedRole.needsProfession ? data.profession : selectedRole.professionalType;
-    const assignedRole = selectedRole.role;
-    const providerType = assignedRole === 'contractor' ? 'contractor' : undefined;
+    const finalData = buildFinalData(data);
+    const hasEmail = !!(data.email && data.email.trim());
 
-    const finalData = {
-      ...data,
-      profession: selectedProfession,
-      professionalType: selectedProfession,
-      providerType,
-    };
-
-    let profileUrl = finalData.profile;
-    if (profileUrl && profileUrl.trim() !== '') {
-      profileUrl = profileUrl.replace(/^(https?:\/\/)?(www\.)?/, '');
-      profileUrl = 'www.' + profileUrl;
+    // If both mobile AND email provided, show choice dialog
+    if (hasEmail && data.mobile) {
+      setOtpChoiceData(finalData);
+      return;
     }
 
-    registerMutation.mutate({ ...finalData, profile: profileUrl, role: assignedRole });
+    // Only mobile — default to mobile OTP
+    registerMutation.mutate({ ...finalData, sendOtpTo: 'mobile' });
+  };
+
+  const submitWithOtpChoice = (sendOtpTo) => {
+    if (!otpChoiceData) return;
+    setOtpChoiceData(null);
+    registerMutation.mutate({ ...otpChoiceData, sendOtpTo });
   };
 
   // Helper to determine what to render
@@ -736,6 +756,94 @@ export default function RegisterForm() {
                 </Link>
               </div>
             </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* OTP Destination Choice Overlay */}
+      <AnimatePresence>
+        {otpChoiceData && (
+          <motion.div
+            key="otp-choice-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-br from-[#fef7f2] to-[#f5f0eb] px-8 pt-8 pb-6 text-center">
+                <div className="inline-flex items-center justify-center w-14 h-14 bg-white rounded-2xl shadow-sm mb-4">
+                  <svg className="w-7 h-7 text-[#d9a88a]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-[#2d3748] mb-1">Verify Your Account</h3>
+                <p className="text-[#718096] text-sm leading-relaxed">
+                  Where should we send your 6-digit verification code?
+                </p>
+              </div>
+
+              {/* Options */}
+              <div className="p-6 space-y-3">
+                {/* Mobile Option */}
+                <motion.button
+                  type="button"
+                  onClick={() => submitWithOtpChoice('mobile')}
+                  disabled={registerMutation.isPending}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#eadbd2] bg-white hover:border-[#d9a88a] hover:bg-[#fef7f2] transition-all duration-200 text-left disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-[#f5f0eb] text-[#d9a88a] group-hover:bg-[#d9a88a] group-hover:text-white transition-all duration-200">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-[#2d3748] text-sm">Send to Mobile Number</p>
+                    <p className="text-[#718096] text-xs mt-0.5 truncate">+91 {otpChoiceData?.mobile}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-[#c99775] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 flex-shrink-0" />
+                </motion.button>
+
+                {/* Email Option */}
+                <motion.button
+                  type="button"
+                  onClick={() => submitWithOtpChoice('email')}
+                  disabled={registerMutation.isPending}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-[#eadbd2] bg-white hover:border-sky-400 hover:bg-sky-50 transition-all duration-200 text-left disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  <div className="flex-shrink-0 flex items-center justify-center w-12 h-12 rounded-xl bg-sky-50 text-sky-500 group-hover:bg-sky-500 group-hover:text-white transition-all duration-200">
+                    <Mail className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-[#2d3748] text-sm">Send to Email Address</p>
+                    <p className="text-[#718096] text-xs mt-0.5 truncate">{otpChoiceData?.email}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-sky-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-200 flex-shrink-0" />
+                </motion.button>
+              </div>
+
+              {/* Cancel */}
+              <div className="px-6 pb-6">
+                <button
+                  type="button"
+                  onClick={() => setOtpChoiceData(null)}
+                  disabled={registerMutation.isPending}
+                  className="w-full py-2.5 text-sm text-[#718096] hover:text-[#4a5568] transition-colors font-medium"
+                >
+                  ← Go back and edit
+                </button>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

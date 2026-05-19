@@ -65,7 +65,6 @@ export default function ConfirmationModal({
                     <Button
                         onClick={() => {
                             onConfirm();
-                            onClose();
                         }}
                         className={clsx("text-sm font-semibold py-2 px-4 cursor-pointer", confirmButtonStyles[type])}
                     >

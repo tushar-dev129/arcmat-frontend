@@ -4,6 +4,7 @@ import RoleGuard from '@/components/auth/RoleGuard';
 import Footer from '@/components/layouts/Footer';
 import Header from '@/components/layouts/Header';
 import GlobalAddVariantModal from '@/components/vendor/GlobalAddVariantModal';
+import EmailVerificationBanner from '@/components/ui/EmailVerificationBanner';
 
 export const metadata = {
   title: 'Dashboard - arcmat',
@@ -24,6 +25,7 @@ export default function DashboardLayout({ children }) {
 
           {/* Main Content */}
           <main className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
+            <EmailVerificationBanner />
             <div className="flex-1">
               {children}
             </div>

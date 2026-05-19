@@ -2,9 +2,13 @@ import api from '@/lib/api';
 
 const authService = {
     register: async (userData) => {
+        const normalizedEmail = typeof userData.email === 'string'
+            ? userData.email.trim().toLowerCase()
+            : '';
+
         const payload = {
             name: userData.name.trim(),
-            email: userData.email ? userData.email.toLowerCase() : undefined,
+            email: normalizedEmail || undefined,
             mobile: userData.mobile,
             password: userData.password,
             profile: userData.profile || '',
@@ -12,7 +16,8 @@ const authService = {
             professionalType: userData.professionalType,
             providerType: userData.providerType,
             profession: userData.profession,
-            city: userData.city
+            city: userData.city,
+            sendOtpTo: userData.sendOtpTo || 'mobile',
         };
 
         const response = await api.post('/user/register', payload);
@@ -76,7 +81,17 @@ const authService = {
     updateUser: async (id, data) => {
         const response = await api.patch(`/user/${id}`, data);
         return response.data;
-    }
+    },
+
+    addEmail: async (data) => {
+        const response = await api.post('/user/add-email', data);
+        return response.data;
+    },
+
+    verifyEmailOtp: async (data) => {
+        const response = await api.post('/user/verify-email-otp', data);
+        return response.data;
+    },
 };
 
 export default authService;

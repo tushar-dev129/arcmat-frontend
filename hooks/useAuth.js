@@ -199,12 +199,27 @@ export const useRegisterMutation = () => {
     return useMutation({
         mutationFn: (userData) => authService.register(userData),
         onSuccess: (data, variables) => {
-            toast.success("Verification code sent to mobile.", "Account Created");
-            const mobile = variables.mobile || data?.mobile;
-            if (!variables.email) {
-                toast.info("Email is optional, but add and verify it later to receive email notifications.", "Email Missing");
+            const sentTo = data?.data?.sentTo || 'mobile';
+            const mobile = variables.mobile || data?.data?.mobile;
+            const email = variables.email || data?.data?.email;
+
+            if (sentTo === 'email') {
+                toast.success(`Verification code sent to ${email}.`, "Account Created");
+            } else {
+                toast.success(`Verification code sent to ${mobile}.`, "Account Created");
+                if (!variables.email) {
+                    toast.info("Email is optional, but add and verify it later to receive email notifications.", "Email Missing");
+                }
             }
-            router.push(`/verify-otp?mobile=${encodeURIComponent(mobile)}`);
+
+            const params = new URLSearchParams({ mobile });
+            if (sentTo === 'email' && email) {
+                params.set('email', email);
+                params.set('sendOtpTo', 'email');
+            } else {
+                params.set('sendOtpTo', 'mobile');
+            }
+            router.push(`/verify-otp?${params.toString()}`);
         },
         onError: (error) => {
             const message = error?.response?.data?.message || "Registration failed";
@@ -318,6 +333,23 @@ export const useUpdateUser = () => {
         mutationFn: ({ id, data }) => authService.updateUser(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['users'] });
+        }
+    });
+};
+
+export const useAddEmailMutation = () => {
+    return useMutation({
+        mutationFn: (data) => authService.addEmail(data),
+    });
+};
+
+export const useVerifyEmailOtpMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data) => authService.verifyEmailOtp(data),
+        onSuccess: () => {
+            // Refresh user info so the email verified badge updates everywhere
+            queryClient.invalidateQueries({ queryKey: ['user-info'] });
         }
     });
 };

@@ -163,7 +163,8 @@ export default function UsersPage() {
             await deleteUserMutation.mutateAsync(userToDelete._id);
             toast.success(`User ${userToDelete.name} deleted successfully`);
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to delete user");
+            const errMsg = error.response?.data?.message || error.response?.data?.error || error.message || "Failed to delete user";
+            toast.error(errMsg);
         } finally {
             setIsDeleteModalOpen(false);
             setUserToDelete(null);
