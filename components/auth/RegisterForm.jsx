@@ -68,7 +68,7 @@ const ROLE_OPTIONS = [
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   mobile: z.string().length(10, 'Mobile number must be exactly 10 digits').regex(/^\d+$/, 'Mobile number must contain only digits'),
-  email: z.string().email('Please enter a valid business email'),
+  email: z.string().email('Please enter a valid business email').optional().or(z.literal('')),
   city: z.string().min(2, 'City must be at least 2 characters'),
   profession: z.string().optional(),
   password: z.string().min(6, 'Password must be at least 6 characters'),
@@ -206,6 +206,15 @@ export default function RegisterForm() {
                 </motion.button>
               );
             })}
+            
+
+          </div>
+
+           <div className="flex items-center gap-1 text-[15.6px] text-[#4D4E58]">
+            <span>Already have an account?</span>
+            <Link href="/auth/login" className="underline decoration-1 text-primary/80 underline-offset-2 hover:text-primary">
+              Login
+            </Link>
           </div>
         </motion.div>
       );
@@ -340,7 +349,7 @@ export default function RegisterForm() {
             <div className="relative group">
               <input
                 type="email"
-                placeholder="Email or Business Email"
+                placeholder="Email (Optional)"
                 {...register('email')}
                 className={clsx(
                   'w-full px-5 py-4 pr-12 border rounded-xl text-base text-[#2d3748] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a]/50 focus:border-[#d9a88a] transition-all bg-white/50 group-hover:bg-white',
@@ -458,15 +467,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-full ">
-      <div className="flex justify-between items-center w-full mb-4 h-[76px]">
-        <BackLink 
-          useRouterBack={!selectedRole} 
-          onClick={selectedRole ? (e) => { e.preventDefault(); setSelectedRole(null); } : undefined}
-        />
-        <Button href="/auth/login">Sign In</Button>
-      </div>
-
+    <div className="w-full max-w-full pt-10 pb-8">
       <AnimatePresence mode="wait">
         {!selectedRole ? (
           <motion.div
@@ -486,7 +487,7 @@ export default function RegisterForm() {
               </p>
             </div>
 
-            <div className="grid gap-3 grid-cols-2 px-0 sm:px-10">
+            <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 px-0 sm:px-10">
               {ROLE_OPTIONS.map((role, index) => {
                 const Icon = role.icon;
 
@@ -500,7 +501,7 @@ export default function RegisterForm() {
                     transition={{ duration: 0.24, delay: index * 0.05, ease: 'easeOut' }}
                     whileHover={{ y: -3, scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
-                    className="group flex w-full items-start  gap-4 rounded-lg border border-[#eadbd2] bg-white p-4 text-left shadow-sm transition-all hover:border-[#d9a88a] hover:shadow-md"
+                    className="group flex w-full items-start gap-4 rounded-lg border border-[#eadbd2] bg-white p-4 text-left shadow-sm transition-all hover:border-[#d9a88a] hover:shadow-md"
                   >
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[#f5f0eb] text-[#c99775] transition-colors group-hover:bg-[#d9a88a] group-hover:text-white">
                       <Icon className="h-5 w-5" />
@@ -518,6 +519,13 @@ export default function RegisterForm() {
                 );
               })}
             </div>
+
+            <div className="mt-8 text-center text-[15px] text-[#4d4e58] px-0 sm:px-10">
+              Already have an account?{' '}
+              <Link href="/auth/login" className="font-semibold text-[#d9a88a] hover:text-[#c99775] underline">
+                Sign In
+              </Link>
+            </div>
           </motion.div>
         ) : (
           <motion.div
@@ -528,14 +536,14 @@ export default function RegisterForm() {
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <div className="mb-8 px-0 sm:px-10">
-              {/* <button
+              <button
                 type="button"
                 onClick={() => setSelectedRole(null)}
                 className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#718096] transition-colors hover:text-[#4a5568]"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Change role
-              </button> */}
+              </button>
               <h2 className="text-3xl font-semibold text-[#4a5568] mb-2 md:whitespace-nowrap">
                 Join as a {selectedRole.label}
               </h2>
@@ -544,199 +552,182 @@ export default function RegisterForm() {
               </p>
             </div>
 
-            <div className="space-y-3 px-0 sm:px-10 mb-6">
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg border border-[#e2e8f0] text-[#4a5568] font-medium hover:bg-[#faf7f4] transition-all"
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.5 3.9-5.5 3.9-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 3.9 1.5l2.7-2.6C16.9 3.3 14.6 2.4 12 2.4 6.9 2.4 2.8 6.5 2.8 11.6s4.1 9.2 9.2 9.2c5.3 0 8.8-3.7 8.8-8.9 0-.6-.1-1.1-.2-1.7H12z" />
-                </svg>
-                Continue with Google as {selectedRole.label}
-              </button>
-              <button
-                type="button"
-                className="w-full flex items-center justify-center gap-3 py-3.5 rounded-lg border border-[#e2e8f0] text-[#4a5568] font-medium hover:bg-[#faf7f4] transition-all"
-              >
-                <svg width="18" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M16.37 12.28c.02 2.14 1.87 2.85 1.89 2.86-.01.05-.29 1.01-.96 2-.58.86-1.18 1.72-2.13 1.74-.94.02-1.25-.56-2.33-.56-1.09 0-1.43.54-2.31.58-.91.03-1.6-.92-2.19-1.77-1.2-1.73-2.12-4.89-.89-7.03.61-1.06 1.69-1.73 2.87-1.75.89-.02 1.74.6 2.33.6.59 0 1.68-.74 2.83-.63.48.02 1.83.19 2.7 1.46-.07.05-1.61.94-1.59 2.5zM14.87 6.1c.49-.6.82-1.43.73-2.26-.71.03-1.56.47-2.06 1.07-.45.52-.84 1.36-.73 2.16.79.06 1.58-.4 2.06-.97z" />
-                </svg>
-                Continue with Apple as {selectedRole.label}
-              </button>
-              <p className="text-xs text-[#718096] text-center">Social signup UI is ready. Backend integration pending.</p>
-            </div>
-
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-0 sm:px-10 pb-8">
-        <div>
-          <input
-            type="text"
-            placeholder="Full Name"
-            {...register('name')}
-            className={clsx(
-              'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-              errors.name ? 'border-red-500' : 'border-[#e2e8f0]'
-            )}
-          />
-          {errors.name && <p className="mt-1.5 text-sm text-red-500">{errors.name.message}</p>}
-        </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  {...register('name')}
+                  className={clsx(
+                    'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                    errors.name ? 'border-red-500' : 'border-[#e2e8f0]'
+                  )}
+                />
+                {errors.name && <p className="mt-1.5 text-sm text-red-500">{errors.name.message}</p>}
+              </div>
 
-        <div>
-          <input
-            type="tel"
-            placeholder="Mobile Number"
-            maxLength="10"
-            {...register('mobile')}
+              <div>
+                <input
+                  type="tel"
+                  placeholder="Mobile Number"
+                  maxLength="10"
+                  {...register('mobile')}
+                  className={clsx(
+                    'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                    errors.mobile ? 'border-red-500' : 'border-[#e2e8f0]'
+                  )}
+                />
+                {errors.mobile && <p className="mt-1.5 text-sm text-red-500">{errors.mobile.message}</p>}
+              </div>
 
-            className={clsx(
-              'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-              errors.mobile ? 'border-red-500' : 'border-[#e2e8f0]'
-            )}
-          />
-          {errors.mobile && <p className="mt-1.5 text-sm text-red-500">{errors.mobile.message}</p>}
-        </div>
-
-        <div>
-          <div className="relative">
-            <input
-              type="email"
-              placeholder="Email or Business Email"
-              {...register('email')}
-              className={clsx(
-                'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-                errors.email ? 'border-red-500' : 'border-[#e2e8f0]'
-              )}
-            />
-            <Info className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a0aec0]" />
-          </div>
-          {errors.email && <p className="mt-1.5 text-sm text-red-500">{errors.email.message}</p>}
-        </div>
-
-        {selectedRole.needsProfession && (
-              <motion.div
-                initial={{ opacity: 0, y: -8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.2 }}
-              >
+              <div>
                 <div className="relative">
-                  <select
-                    {...register('profession')}
+                  <input
+                    type="email"
+                    placeholder="Email (Optional)"
+                    {...register('email')}
                     className={clsx(
-                      'w-full px-4 py-3.5 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all appearance-none bg-white cursor-pointer',
-                      errors.profession ? 'border-red-500' : 'border-[#e2e8f0]',
-                      watch('profession') ? 'text-[#4a5568]' : 'text-[#a0aec0]'
+                      'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                      errors.email ? 'border-red-500' : 'border-[#e2e8f0]'
                     )}
-                  >
-                    <option value="" disabled>Select Profession</option>
-                    {(selectedRole.professions || []).map((prof) => (
-                      <option key={prof} value={prof}>
-                        {prof}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096] pointer-events-none group-hover:text-[#d9a88a] transition-colors" />
+                  />
+                  <Info className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#a0aec0]" />
                 </div>
-                {errors.profession && <p className="mt-1.5 text-sm text-red-500">{errors.profession.message}</p>}
-              </motion.div>
-        )}
+                {errors.email && <p className="mt-1.5 text-sm text-red-500">{errors.email.message}</p>}
+              </div>
 
+              {selectedRole.needsProfession && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="relative">
+                    <select
+                      {...register('profession')}
+                      className={clsx(
+                        'w-full px-4 py-3.5 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all appearance-none bg-white cursor-pointer',
+                        errors.profession ? 'border-red-500' : 'border-[#e2e8f0]',
+                        watch('profession') ? 'text-[#4a5568]' : 'text-[#a0aec0]'
+                      )}
+                    >
+                      <option value="" disabled>Select Profession</option>
+                      {(selectedRole.professions || []).map((prof) => (
+                        <option key={prof} value={prof}>
+                          {prof}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#718096] pointer-events-none group-hover:text-[#d9a88a] transition-colors" />
+                  </div>
+                  {errors.profession && <p className="mt-1.5 text-sm text-red-500">{errors.profession.message}</p>}
+                </motion.div>
+              )}
 
-        <div>
-          <input
-            type="text"
-            placeholder="City / Address"
-            {...register('city')}
-            className={clsx(
-              'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-              errors.city ? 'border-red-500' : 'border-[#e2e8f0]'
-            )}
-          />
-          {errors.city && <p className="mt-1.5 text-sm text-red-500">{errors.city.message}</p>}
-        </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="City / Address"
+                  {...register('city')}
+                  className={clsx(
+                    'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                    errors.city ? 'border-red-500' : 'border-[#e2e8f0]'
+                  )}
+                />
+                {errors.city && <p className="mt-1.5 text-sm text-red-500">{errors.city.message}</p>}
+              </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <div className="relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                placeholder="Password"
-                {...register('password')}
-                className={clsx(
-                  'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-                  errors.password ? 'border-red-500' : 'border-[#e2e8f0]'
-                )}
-              />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Password"
+                      {...register('password')}
+                      className={clsx(
+                        'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                        errors.password ? 'border-red-500' : 'border-[#e2e8f0]'
+                      )}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a0aec0] hover:text-[#718096] transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.password && <p className="mt-1.5 text-sm text-red-500">{errors.password.message}</p>}
+                </div>
+
+                <div>
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirm Password"
+                      {...register('confirmPassword')}
+                      className={clsx(
+                        'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                        errors.confirmPassword ? 'border-red-500' : 'border-[#e2e8f0]'
+                      )}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a0aec0] hover:text-[#718096] transition-colors"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className="mt-1.5 text-sm text-red-500">{errors.confirmPassword.message}</p>}
+                </div>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="LinkedIn / Portfolio URL"
+                  {...register('profile')}
+                  className={clsx(
+                    'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
+                    errors.profile ? 'border-red-500' : 'border-[#e2e8f0]'
+                  )}
+                />
+                {errors.profile && <p className="mt-1.5 text-sm text-red-500">{errors.profile.message}</p>}
+              </div>
+
+              <p className="text-sm text-[#718096]">
+                By Clicking "Create Account", You Agree to{' '}
+                <Link href="/terms" className="text-[#4a5568] underline hover:text-[#2d3748]">Our Terms of Use</Link>{' '}
+                and{' '}
+                <Link href="/privacy" className="text-[#4a5568] underline hover:text-[#2d3748]">Privacy Notice</Link>.
+                {' '}Arcmat profile <a href="/Arcmat PDF/Arcmat – Design-Stage Material Specification Framework (1).pdf" download="Arcmat_Design_Stage_Material_Specification_Framework.pdf" className="text-black underline">Download here</a>
+              </p>
+
               <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a0aec0] hover:text-[#718096] transition-colors"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
-            {errors.password && <p className="mt-1.5 text-sm text-red-500">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                placeholder="Confirm Password"
-                {...register('confirmPassword')}
+                type="submit"
+                disabled={registerMutation.isPending}
                 className={clsx(
-                  'w-full px-4 py-3.5 pr-12 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-                  errors.confirmPassword ? 'border-red-500' : 'border-[#e2e8f0]'
+                  'w-full py-3.5 rounded-lg text-base font-medium text-white transition-all',
+                  registerMutation.isPending ? 'bg-[#d9a88a]/70 cursor-not-allowed' : 'bg-[#d9a88a] hover:bg-[#c99775]'
                 )}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#a0aec0] hover:text-[#718096] transition-colors"
               >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {registerMutation.isPending ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <ClipLoader size={18} color="#ffffff" />
+                    <span>Creating Account...</span>
+                  </span>
+                ) : (
+                  `Create Account`
+                )}
               </button>
-            </div>
-            {errors.confirmPassword && <p className="mt-1.5 text-sm text-red-500">{errors.confirmPassword.message}</p>}
-          </div>
-        </div>
 
-        <div>
-          <input
-            type="text"
-            placeholder="LinkedIn / Portfolio URL"
-            {...register('profile')}
-            className={clsx(
-              'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-              errors.profile ? 'border-red-500' : 'border-[#e2e8f0]'
-            )}
-          />
-          {errors.profile && <p className="mt-1.5 text-sm text-red-500">{errors.profile.message}</p>}
-        </div>
-
-        <p className="text-sm text-[#718096]">
-          By Clicking "Create Account", You Agree to{' '}
-          <Link href="/terms" className="text-[#4a5568] underline hover:text-[#2d3748]">Our Terms of Use</Link>{' '}
-          and{' '}
-          <Link href="/privacy" className="text-[#4a5568] underline hover:text-[#2d3748]">Privacy Notice</Link>.
-          {' '}Arcmat profile <a href="/Arcmat PDF/Arcmat – Design-Stage Material Specification Framework (1).pdf" download="Arcmat_Design_Stage_Material_Specification_Framework.pdf" className="text-black underline">Download here</a>
-        </p>
-
-        <button
-          type="submit"
-          disabled={registerMutation.isPending}
-          className={clsx(
-            'w-full py-3.5 rounded-lg text-base font-medium text-white transition-all',
-            registerMutation.isPending ? 'bg-[#d9a88a]/70 cursor-not-allowed' : 'bg-[#d9a88a] hover:bg-[#c99775]'
-          )}
-        >
-          {registerMutation.isPending ? (
-            <span className="flex items-center justify-center gap-2">
-              <ClipLoader size={18} color="#ffffff" />
-              <span>Creating Account...</span>
-            </span>
-          ) : (
-            `Create Account`
-          )}
-        </button>
+              <div className="mt-6 text-center text-[15px] text-[#4d4e58]">
+                Already have an account?{' '}
+                <Link href="/auth/login" className="font-semibold text-[#d9a88a] hover:text-[#c99775] underline">
+                  Sign In
+                </Link>
+              </div>
             </form>
           </motion.div>
         )}

@@ -130,7 +130,7 @@ export const useVerifyOtpMutation = () => {
         onSuccess: async (data) => {
             if (data.data?.requireAdminVerification) {
                 setLoading(false);
-                toast.info("Let admin verify your details first please wait", "Email Verified");
+                toast.info("Let admin verify your details first please wait", "Mobile Verified");
                 router.push('/auth/login');
                 return;
             }
@@ -146,6 +146,14 @@ export const useVerifyOtpMutation = () => {
             try {
                 await queryClient.invalidateQueries({ queryKey: ['user-info'] });
             } catch (e) { }
+
+            if (data.data?.emailVerificationStatus !== 'verified') {
+                const warning =
+                    data.data?.emailVerificationStatus === 'missing'
+                        ? 'Email not added yet. Add and verify email later for email notifications.'
+                        : 'Email is not verified yet.';
+                toast.info(warning, "Email Not Verified");
+            }
 
             if (flow === 'reset') {
                 router.push('/reset-password');
@@ -165,31 +173,9 @@ export const useVerifyOtpMutation = () => {
 };
 
 export const useVerifyLoginOtpMutation = () => {
-    const router = useRouter();
-    const queryClient = useQueryClient();
-    const { setLoading } = useLoader();
-
     return useMutation({
-        mutationFn: (data) => authService.verifyLoginOtp(data),
-        onSuccess: async (data) => {
-            const responseData = data.data || {};
-            const user = responseData.user;
-            const token = responseData.token;
-
-            setAuthState(user, token);
-            toast.success("Successfully logged in!", "Welcome Back");
-
-            try {
-                await queryClient.invalidateQueries({ queryKey: ['user-info'] });
-            } catch (e) { }
-
-            const role = user?.role;
-            setLoading(true);
-            if (role === 'brand' || role === 'custom_maker' || role === 'vendor' || role === 'retailer' || role === 'admin' || role === 'architect' || role === 'contractor') {
-                router.push('/dashboard');
-            } else {
-                router.push('/');
-            }
+        mutationFn: async () => {
+            throw new Error("Login OTP flow has been removed. Please login with mobile and password.");
         },
         onError: (error) => {
             const message = error?.response?.data?.message || "OTP verification failed";
@@ -200,7 +186,9 @@ export const useVerifyLoginOtpMutation = () => {
 
 export const useResendLoginOtpMutation = () => {
     return useMutation({
-        mutationFn: (data) => authService.resendLoginOtp(data),
+        mutationFn: async () => {
+            throw new Error("Login OTP flow has been removed.");
+        },
     });
 };
 
@@ -211,9 +199,12 @@ export const useRegisterMutation = () => {
     return useMutation({
         mutationFn: (userData) => authService.register(userData),
         onSuccess: (data, variables) => {
-            toast.success("Verification code sent to email.", "Account Created");
-            const email = variables.email || data?.email;
-            router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
+            toast.success("Verification code sent to mobile.", "Account Created");
+            const mobile = variables.mobile || data?.mobile;
+            if (!variables.email) {
+                toast.info("Email is optional, but add and verify it later to receive email notifications.", "Email Missing");
+            }
+            router.push(`/verify-otp?mobile=${encodeURIComponent(mobile)}`);
         },
         onError: (error) => {
             const message = error?.response?.data?.message || "Registration failed";
@@ -231,20 +222,22 @@ export const useLoginMutation = () => {
         mutationFn: (credentials) => authService.login(credentials),
         onSuccess: async (data, variables) => {
             const responseData = data.data || {};
-            if (responseData.requireLoginOtp) {
-                toast.success("OTP sent to your email.", "Verify Login");
-                router.push(`/auth/login-otp?email=${encodeURIComponent(responseData.email || variables.email)}`);
-                return;
-            }
-
             const user = responseData.user || {
-                email: variables.email,
-                name: variables.email.split('@')[0],
+                mobile: variables.loginId,
+                name: `User ${String(variables.loginId || "").slice(-4)}`,
                 role: responseData.role
             };
 
             setAuthState(user, responseData.token);
             toast.success("Successfully logged in!", "Welcome Back");
+
+            if (responseData.emailVerificationStatus !== 'verified') {
+                const warning =
+                    responseData.emailVerificationStatus === 'missing'
+                        ? 'Email not added yet. Add and verify email to receive email notifications.'
+                        : 'Email exists but is not verified yet.';
+                toast.info(warning, "Email Not Verified");
+            }
 
             let finalRole = user?.role;
 
@@ -267,7 +260,7 @@ export const useLoginMutation = () => {
         },
         onError: (error) => {
             const is401 = error.message?.includes('401') || error.response?.status === 401;
-            const message = is401 ? 'Invalid email or password' : (error.message || 'Login failed');
+            const message = is401 ? 'Invalid email/mobile or password' : (error.message || 'Login failed');
             toast.error(message, 'Login Failed');
         }
     });

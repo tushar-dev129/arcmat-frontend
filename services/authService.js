@@ -4,7 +4,7 @@ const authService = {
     register: async (userData) => {
         const payload = {
             name: userData.name.trim(),
-            email: userData.email.toLowerCase(),
+            email: userData.email ? userData.email.toLowerCase() : undefined,
             mobile: userData.mobile,
             password: userData.password,
             profile: userData.profile || '',
@@ -21,16 +21,6 @@ const authService = {
 
     login: async (credentials) => {
         const response = await api.post('/user/login', credentials);
-        return response.data;
-    },
-
-    verifyLoginOtp: async (data) => {
-        const response = await api.post('/user/verify-login-otp', data);
-        return response.data;
-    },
-
-    resendLoginOtp: async (data) => {
-        const response = await api.post('/user/resend-login-otp', data);
         return response.data;
     },
 

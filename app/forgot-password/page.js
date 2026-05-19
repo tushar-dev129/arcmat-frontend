@@ -12,7 +12,7 @@ import clsx from 'clsx';
 import { useRouter } from 'next/navigation';
 
 const forgotPasswordSchema = z.object({
-    email: z.string().email('Please enter a valid email address'),
+    mobile: z.string().length(10, 'Please enter a valid 10-digit mobile number').regex(/^\d+$/, 'Mobile number must contain only digits'),
 });
 
 export default function ForgotPasswordPage() {
@@ -26,8 +26,8 @@ export default function ForgotPasswordPage() {
     const onSubmit = (data) => {
         forgotPasswordMutation.mutate(data, {
             onSuccess: () => {
-                toast.success('OTP sent to your email', 'Success');
-                router.push(`/verify-otp?email=${encodeURIComponent(data.email)}&flow=reset`);
+                toast.success('OTP sent to your mobile', 'Success');
+                router.push(`/verify-otp?mobile=${encodeURIComponent(data.mobile)}&flow=reset`);
             },
             onError: (error) => {
                 toast.error(error.response?.data?.message || 'Failed to send OTP', 'Error');
@@ -44,21 +44,22 @@ export default function ForgotPasswordPage() {
 
                 <h2 className="text-3xl font-semibold text-[#4a5568] mb-2">Forgot Password?</h2>
                 <p className="text-[#718096] mb-8">
-                    Enter your email address and we'll send you a 6-digit OTP to reset your password.
+                    Enter your mobile number and we'll send you a 6-digit OTP to reset your password.
                 </p>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                     <div>
                         <input
-                            type="email"
-                            placeholder="Enter your email"
-                            {...register('email')}
+                            type="tel"
+                            maxLength={10}
+                            placeholder="Enter your mobile number"
+                            {...register('mobile')}
                             className={clsx(
                                 'w-full px-4 py-3.5 border rounded-lg text-base text-[#4a5568] placeholder:text-[#a0aec0] focus:outline-none focus:ring-2 focus:ring-[#d9a88a] focus:border-transparent transition-all',
-                                errors.email ? 'border-red-500' : 'border-[#e2e8f0]'
+                                errors.mobile ? 'border-red-500' : 'border-[#e2e8f0]'
                             )}
                         />
-                        {errors.email && <p className="mt-1.5 text-sm text-red-500">{errors.email.message}</p>}
+                        {errors.mobile && <p className="mt-1.5 text-sm text-red-500">{errors.mobile.message}</p>}
                     </div>
 
                     <button
