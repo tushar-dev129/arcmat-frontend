@@ -304,7 +304,7 @@ export default function UsersPage() {
                                                             u.role === 'retailer' ? "bg-amber-50 text-amber-700 border border-amber-100" :
                                                                 "bg-gray-50 text-gray-700 border border-gray-100"
                                             )}>
-                                                {u.role === 'customer' ? 'Designer' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role))}
+                                                {u.role === 'customer' ? 'User' : (u.role === 'architect' ? 'Designer' : (u.role === 'custom_maker' ? 'Custom Maker' : (u.role === 'vendor' || u.role === 'brand' ? 'Brand' : u.role)))}
                                             </span>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
